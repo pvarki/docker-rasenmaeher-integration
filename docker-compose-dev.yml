@@ -8,6 +8,6 @@ services:
       context: ./api
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && poetry install&& uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && poetry install && RM_CFSSL_HOST=http://cfssl uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
     volumes:
       - "./api:/app"
