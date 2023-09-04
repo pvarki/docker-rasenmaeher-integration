@@ -13,3 +13,11 @@ def localhost_api():
 def openapi_version():
     # OpenAPI version, FastAPI version
     return "3.1.0", "0.1.0"
+
+@pytest.fixture
+def testdata():
+    return {
+        "permit_str": "PaulinTaikaKaulinOnKaunis_PaulisMagicPinIsBuuutiful!11!1",
+        "work_id1": "koira",
+        "work_id2": "kissa",
+    }
