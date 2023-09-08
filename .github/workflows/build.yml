@@ -17,12 +17,12 @@ jobs:
       run: docker compose -p rmlocal -f docker-compose-local.yml build
     - name: docker compose up first attempt
       id: compose_up_first
-      run: docker compose -p rmlocal -f docker-compose-local.yml up
+      run: docker compose -p rmlocal -f docker-compose-local.yml up -d --wait
       continue-on-error: true
     - name: docker compose up second attempt
       if: ${{ steps.compose_up_first.outcome == 'failure' }}
       id: compose_up_second
-      run: docker compose -p rmlocal -f docker-compose-local.yml up
+      run: docker compose -p rmlocal -f docker-compose-local.yml up -d --wait
       continue-on-error: true
     - name: docker start rmlocal-rmapi-1
       id: start_rmapi
@@ -61,12 +61,12 @@ jobs:
       run: docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml build
     - name: docker compose up first attempt
       id: compose_up_first
-      run: docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up
+      run: docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up -d --wait
       continue-on-error: true
     - name: docker compose up second attempt
       if: ${{ steps.compose_up_first.outcome == 'failure' }}
       id: compose_up_second
-      run: docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up
+      run: docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up -d --wait
       continue-on-error: true
     - name: docker start rmdev-rmapi-1
       id: start_rmapi
