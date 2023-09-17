@@ -2,9 +2,9 @@ on:
   schedule:
     - cron:  '30 5,17 * * *'
   pull_request:
-  push:
-    branches-ignore:
-      - main
+#  push:
+#    branches-ignore:
+#      - main
 
 jobs:
   rmlocal:
