@@ -16,6 +16,10 @@ jobs:
       with:
         output: swagger-ui
         spec-file: ./openapi.json
+    - name: ls swagger-ui
+      run: |
+        ls ./swagger-ui/
+        ls ./openapi.json
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
