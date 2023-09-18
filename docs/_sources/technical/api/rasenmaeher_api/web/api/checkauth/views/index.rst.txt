@@ -1,0 +1,70 @@
+:py:mod:`rasenmaeher_api.web.api.checkauth.views`
+=================================================
+
+.. py:module:: rasenmaeher_api.web.api.checkauth.views
+
+.. autoapi-nested-parse::
+
+   Info API views.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.checkauth.views.return_jwt_payload
+   rasenmaeher_api.web.api.checkauth.views.return_mtls_payload
+   rasenmaeher_api.web.api.checkauth.views.return_mtlsjwt_payload
+   rasenmaeher_api.web.api.checkauth.views.return_mtlsjwt_payload_permissive
+   rasenmaeher_api.web.api.checkauth.views.return_ldap_connectionstring
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.checkauth.views.router
+
+
+.. py:data:: router
+
+   
+
+.. py:function:: return_jwt_payload(request)
+   :async:
+
+   Method for testing JWT
+
+
+.. py:function:: return_mtls_payload(request)
+   :async:
+
+   Method for testing mTLS
+
+
+.. py:function:: return_mtlsjwt_payload(request)
+   :async:
+
+   Method for testing mTLS and JWT auth
+
+
+.. py:function:: return_mtlsjwt_payload_permissive(request)
+   :async:
+
+   Method for testing mTLS and JWT auth, do not disallow any subjects
+
+
+.. py:function:: return_ldap_connectionstring()
+   :async:
+
+   Method for generating and returning ldap connection string
+
+

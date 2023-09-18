@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RASENMAEHER integrations &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/index.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Components" href="components.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">RASENMAEHER integrations</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <img alt="Build Status" src="https://github.com/pvarki/docker-rasenmaeher-integration/actions/workflows/build.yml/badge.svg" /><section id="rasenmaeher-integrations">
+<h1>RASENMAEHER integrations<a class="headerlink" href="#rasenmaeher-integrations" title="Link to this heading"></a></h1>
+<p>“One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them.”</p>
+<p>Docker compositions, helpers etc to bring it all together into something resembling grand old ones.</p>
+<section id="git-submodules">
+<h2>Git submodules<a class="headerlink" href="#git-submodules" title="Link to this heading"></a></h2>
+<p>When cloning for the first time use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="o">--</span><span class="n">recurse</span><span class="o">-</span><span class="n">submodules</span> <span class="o">-</span><span class="n">j8</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">pvarki</span><span class="o">/</span><span class="n">docker</span><span class="o">-</span><span class="n">rasenmaeher</span><span class="o">-</span><span class="n">integration</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>When updating or checking out branches use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span>
+</pre></div>
+</div>
+<p>And if you forgot to –recurse-submodules run git submodule init to fix things.</p>
+<p>The submodules are repos in their own right, if you plan to make changes into them change
+to the directory and create new branch, commit and push changes as usual under that directory.</p>
+<section id="directories-that-are-submodules">
+<h3>Directories that are submodules<a class="headerlink" href="#directories-that-are-submodules" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p>api <a class="reference external" href="https://github.com/pvarki/python-rasenmaeher-api">https://github.com/pvarki/python-rasenmaeher-api</a></p></li>
+<li><p>cfssl <a class="reference external" href="https://github.com/pvarki/docker-rasenmaeher-cfssl">https://github.com/pvarki/docker-rasenmaeher-cfssl</a></p></li>
+<li><p>fpintegration <a class="reference external" href="https://github.com/pvarki/python-rasenmaeher-rmfpapi">https://github.com/pvarki/python-rasenmaeher-rmfpapi</a></p></li>
+<li><p>keycloak <a class="reference external" href="https://github.com/pvarki/docker-keycloak">https://github.com/pvarki/docker-keycloak</a></p></li>
+<li><p>kw_product_init <a class="reference external" href="https://github.com/pvarki/golang-kraftwerk-init-helper-cli">https://github.com/pvarki/golang-kraftwerk-init-helper-cli</a></p></li>
+<li><p>openldap <a class="reference external" href="https://github.com/pvarki/docker-openldap">https://github.com/pvarki/docker-openldap</a></p></li>
+<li><p>mkcert <a class="reference external" href="https://github.com/pvarki/docker-mkcert">https://github.com/pvarki/docker-mkcert</a></p></li>
+</ul>
+</div></blockquote>
+<section id="running-in-local-development-mode">
+<h4>Running in local development mode<a class="headerlink" href="#running-in-local-development-mode" title="Link to this heading"></a></h4>
+<p>TLDR:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alias</span> <span class="n">rmdev</span><span class="o">=</span><span class="s2">&quot;docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml&quot;</span>
+<span class="n">rmdev</span> <span class="n">build</span>
+<span class="n">rmdev</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alias</span> <span class="n">rmlocal</span><span class="o">=</span><span class="s2">&quot;docker compose -p rmlocal -f docker-compose-local.yml&quot;</span>
+<span class="n">rmlocal</span> <span class="n">build</span>
+<span class="n">rmlocal</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>OpenLDAP and keycloak-init sometimes fail on first start, just run up again.</p>
+<p>IMPORTANT: Only keep either rmlocal or rmdev created at one time or you may have weird network issues
+run “down” for one env before starting the other.</p>
+<p>Remember to run “down -v” if you want to reset the persistent volumes, or if you have weird issues when
+switching between environments.</p>
+<p>The dev version launches all the services and runs rasenmaeher-api in uvicorn reload mode so any edits
+you make under /api will soon be reflected in the running instance.</p>
+</section>
+</section>
+</section>
+<section id="integration-tests">
+<h2>Integration tests<a class="headerlink" href="#integration-tests" title="Link to this heading"></a></h2>
+<p>Pytest is used to handle the integration tests, the requirements are in tests/requirements.txt.
+NOTE: The tests have side-effects and expect a clean database to start with so always make sure
+to run “down -v” for the composition first, then bring it back up before running integration tests.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cfssl.html">CFSSL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fakewerk.html">Fakewerk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="keycloak.html">Keycloak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kw_product_init.html">KW Product Init</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mkcert.html">Mkcert</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nginx.html">Nginx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openldap.html">OpenLDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pg_init.html">PG Init</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technical/api/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="components.html" class="btn btn-neutral float-right" title="Components" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

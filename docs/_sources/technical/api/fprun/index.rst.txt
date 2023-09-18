@@ -1,0 +1,73 @@
+:py:mod:`fprun`
+===============
+
+.. py:module:: fprun
+
+.. autoapi-nested-parse::
+
+   The quickest and dirtiest way to respond something to rasenmaehers product integration requests
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   fprun.check_peer_cert
+   fprun.handle_get_hello
+   fprun.handle_user_crud
+   fprun.handle_fragment
+   fprun.main
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   fprun.LOGGER
+   fprun.loglevel
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: check_peer_cert(request)
+
+   Check the transport for peer cert, raise error if missing
+
+
+.. py:function:: handle_get_hello(request)
+   :async:
+
+   Hello world but check mTLS
+
+
+.. py:function:: handle_user_crud(request)
+   :async:
+
+   Respond with success to all CRUD operations
+
+
+.. py:function:: handle_fragment(request)
+   :async:
+
+   Respond with success to all CRUD operations
+
+
+.. py:function:: main()
+
+   Main entrypoint, return exit code
+
+
+.. py:data:: loglevel
+
+   
+

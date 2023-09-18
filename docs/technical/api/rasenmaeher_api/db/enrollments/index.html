@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.db.enrollments &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/rasenmaeher_api/db/enrollments/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="rasenmaeher_api.db.errors" href="../errors/index.html" />
+    <link rel="prev" title="rasenmaeher_api.db.config" href="../config/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../web/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db.enrollments</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rasenmaeher_api.db.enrollments">
+<span id="rasenmaeher-api-db-enrollments"></span><h1><a class="reference internal" href="#module-rasenmaeher_api.db.enrollments" title="rasenmaeher_api.db.enrollments"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db.enrollments</span></code></a><a class="headerlink" href="#module-rasenmaeher_api.db.enrollments" title="Link to this heading"></a></h1>
+<p>Abstractions for enrollments</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.EnrollmentPool" title="rasenmaeher_api.db.enrollments.EnrollmentPool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentPool</span></code></a></p></td>
+<td><p>Enrollment pools aka links, pk is UUID and comes from basemodel</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.EnrollmentState" title="rasenmaeher_api.db.enrollments.EnrollmentState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentState</span></code></a></p></td>
+<td><p>Enrollment states</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.Enrollment" title="rasenmaeher_api.db.enrollments.Enrollment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Enrollment</span></code></a></p></td>
+<td><p>Enrollments, pk is UUID and comes from basemodel</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.LOGGER" title="rasenmaeher_api.db.enrollments.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.CODE_CHAR_COUNT" title="rasenmaeher_api.db.enrollments.CODE_CHAR_COUNT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CODE_CHAR_COUNT</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.CODE_ALPHABET" title="rasenmaeher_api.db.enrollments.CODE_ALPHABET"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CODE_ALPHABET</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.CODE_MAX_ATTEMPTS" title="rasenmaeher_api.db.enrollments.CODE_MAX_ATTEMPTS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CODE_MAX_ATTEMPTS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.LOGGER">
+<span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.LOGGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.CODE_CHAR_COUNT">
+<span class="sig-name descname"><span class="pre">CODE_CHAR_COUNT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#CODE_CHAR_COUNT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.CODE_CHAR_COUNT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.CODE_ALPHABET">
+<span class="sig-name descname"><span class="pre">CODE_ALPHABET</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#CODE_ALPHABET"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.CODE_ALPHABET" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.CODE_MAX_ATTEMPTS">
+<span class="sig-name descname"><span class="pre">CODE_MAX_ATTEMPTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#CODE_MAX_ATTEMPTS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.CODE_MAX_ATTEMPTS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnrollmentPool</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.BaseModel" title="rasenmaeher_api.db.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.BaseModel</span></code></a></p>
+<p>Enrollment pools aka links, pk is UUID and comes from basemodel</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.__tablename__">
+<span class="sig-name descname"><span class="pre">__tablename__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'enrollmentpools'</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.__tablename__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.__tablename__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.owner">
+<span class="sig-name descname"><span class="pre">owner</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.owner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.owner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.active">
+<span class="sig-name descname"><span class="pre">active</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.active" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.create_enrollment">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_enrollment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.create_enrollment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.create_enrollment" title="Link to this definition"></a></dt>
+<dd><p>Create enrollment from this pool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#rasenmaeher_api.db.enrollments.Enrollment" title="rasenmaeher_api.db.enrollments.Enrollment">Enrollment</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentPool.set_active">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentPool.set_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentPool.set_active" title="Link to this definition"></a></dt>
+<dd><p>Set active and return refreshed object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnrollmentState</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Enrollment states</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentState.PENDING">
+<span class="sig-name descname"><span class="pre">PENDING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentState.PENDING"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentState.PENDING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentState.APPROVED">
+<span class="sig-name descname"><span class="pre">APPROVED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentState.APPROVED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentState.APPROVED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.EnrollmentState.REJECTED">
+<span class="sig-name descname"><span class="pre">REJECTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#EnrollmentState.REJECTED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.EnrollmentState.REJECTED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Enrollment</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.BaseModel" title="rasenmaeher_api.db.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.BaseModel</span></code></a></p>
+<p>Enrollments, pk is UUID and comes from basemodel</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.__tablename__">
+<span class="sig-name descname"><span class="pre">__tablename__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'enrollments'</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.__tablename__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.__tablename__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.approvecode">
+<span class="sig-name descname"><span class="pre">approvecode</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.approvecode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.approvecode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.callsign">
+<span class="sig-name descname"><span class="pre">callsign</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.callsign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.callsign" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.decided_on">
+<span class="sig-name descname"><span class="pre">decided_on</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.decided_on"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.decided_on" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.decided_by">
+<span class="sig-name descname"><span class="pre">decided_by</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.decided_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.decided_by" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.person">
+<span class="sig-name descname"><span class="pre">person</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.person"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.person" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.pool">
+<span class="sig-name descname"><span class="pre">pool</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.pool" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.state">
+<span class="sig-name descname"><span class="pre">state</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.state" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.approve">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">approve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">approver</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.approve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.approve" title="Link to this definition"></a></dt>
+<dd><p>Creates the person record, their certs etc</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>approver</strong> (<a class="reference internal" href="../people/index.html#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>rasenmaeher_api.db.people.Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../people/index.html#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person">rasenmaeher_api.db.people.Person</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.reject">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decider</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.reject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.reject" title="Link to this definition"></a></dt>
+<dd><p>Reject</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>decider</strong> (<a class="reference internal" href="../people/index.html#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>rasenmaeher_api.db.people.Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.by_callsign">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">by_callsign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.by_callsign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.by_callsign" title="Link to this definition"></a></dt>
+<dd><p>Get by callsign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.by_approvecode">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">by_approvecode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.by_approvecode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.by_approvecode" title="Link to this definition"></a></dt>
+<dd><p>Get by approvecode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>code</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.create_for_callsign">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_for_callsign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.create_for_callsign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.create_for_callsign" title="Link to this definition"></a></dt>
+<dd><p>Create a new one with random code for the callsign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>pool</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/uuid.html#uuid.UUID" title="(in Python v3.11)"><em>uuid.UUID</em></a><em>]</em>) – </p></li>
+<li><p><strong>extra</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>Any</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.enrollments.Enrollment.delete">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/enrollments.html#Enrollment.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.enrollments.Enrollment.delete" title="Link to this definition"></a></dt>
+<dd><p>Deletion of enrollments is not allowed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../config/index.html" class="btn btn-neutral float-left" title="rasenmaeher_api.db.config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../errors/index.html" class="btn btn-neutral float-right" title="rasenmaeher_api.db.errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

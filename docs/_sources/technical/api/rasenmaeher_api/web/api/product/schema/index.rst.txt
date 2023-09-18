@@ -1,0 +1,99 @@
+:py:mod:`rasenmaeher_api.web.api.product.schema`
+================================================
+
+.. py:module:: rasenmaeher_api.web.api.product.schema
+
+.. autoapi-nested-parse::
+
+   Schema for product mTLS cert signing
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.product.schema.CertificatesResponse
+   rasenmaeher_api.web.api.product.schema.CertificatesRequest
+   rasenmaeher_api.web.api.product.schema.ReadyRequest
+   rasenmaeher_api.web.api.product.schema.GenericResponse
+
+
+
+
+.. py:class:: CertificatesResponse
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Respond with signed client cert and CA chain
+
+   .. py:attribute:: ca
+      :type: str
+
+      
+
+   .. py:attribute:: certificate
+      :type: str
+
+      
+
+
+.. py:class:: CertificatesRequest
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Request signed cert
+
+   .. py:attribute:: csr
+      :type: str
+
+      
+
+
+.. py:class:: ReadyRequest
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Indicate product API readiness
+
+   .. py:attribute:: product
+      :type: str
+
+      
+
+   .. py:attribute:: apiurl
+      :type: str
+
+      
+
+   .. py:attribute:: url
+      :type: str
+
+      
+
+
+.. py:class:: GenericResponse
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Generic ok/not-ok response
+
+   .. py:attribute:: ok
+      :type: bool
+
+      
+
+   .. py:attribute:: message
+      :type: str
+
+      
+
+
