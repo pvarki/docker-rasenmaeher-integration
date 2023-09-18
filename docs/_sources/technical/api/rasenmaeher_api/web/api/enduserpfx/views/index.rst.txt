@@ -1,0 +1,101 @@
+:py:mod:`rasenmaeher_api.web.api.enduserpfx.views`
+==================================================
+
+.. py:module:: rasenmaeher_api.web.api.enduserpfx.views
+
+.. autoapi-nested-parse::
+
+   Enduser API views.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx
+   rasenmaeher_api.web.api.enduserpfx.views.new_key
+   rasenmaeher_api.web.api.enduserpfx.views.sign_csr
+   rasenmaeher_api.web.api.enduserpfx.views.save_key
+   rasenmaeher_api.web.api.enduserpfx.views.save_pfx
+   rasenmaeher_api.web.api.enduserpfx.views.check_jwt
+   rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs
+   rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.enduserpfx.views.router
+   rasenmaeher_api.web.api.enduserpfx.views.LOGGER
+
+
+.. py:data:: router
+
+   
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: pem_to_pfx(pem_key, pem_cert)
+   :async:
+
+   Convert PEM data to PFX (PKCS12).
+
+
+.. py:function:: new_key(callsign)
+   :async:
+
+   pfx
+
+
+.. py:function:: sign_csr(csr)
+   :async:
+
+   Quick and dirty method to sign CSR from CFSSL
+   params: csr
+   returns: certificate
+
+
+.. py:function:: save_key(pem_key, callsign)
+   :async:
+
+   Save key to file.
+
+
+.. py:function:: save_pfx(pfx, callsign)
+   :async:
+
+   Save PFX to file.
+
+
+.. py:function:: check_jwt(jwt, callsign)
+
+   Sanity checks for JWT payload here
+
+
+.. py:function:: return_enduser_certs(request, callsign, jwt = Depends(JWTBearer(auto_error=True)))
+   :async:
+
+   Method to create key, sign CSR and return PFX
+   :param callsign: OTTER1
+   :returns pfx
+
+
+.. py:function:: check_enduser_bundle_available(request, callsign, jwt = Depends(JWTBearer(auto_error=True)))
+   :async:
+
+   Method to check if bundle is available
+   :param callsign: OTTER1
+   :returns pfx or 404 error
+
+

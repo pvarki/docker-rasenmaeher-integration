@@ -1,0 +1,27 @@
+:py:mod:`rasenmaeher_api.web.api.healthcheck`
+=============================================
+
+.. py:module:: rasenmaeher_api.web.api.healthcheck
+
+.. autoapi-nested-parse::
+
+   healthcheck API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+

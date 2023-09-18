@@ -1,0 +1,28 @@
+:py:mod:`rasenmaeher_api.web.api.product`
+=========================================
+
+.. py:module:: rasenmaeher_api.web.api.product
+
+.. autoapi-nested-parse::
+
+   Product registeration API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   schema/index.rst
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+

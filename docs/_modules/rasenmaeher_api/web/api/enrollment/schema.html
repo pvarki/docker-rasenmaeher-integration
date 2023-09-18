@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/rasenmaeher_api/web/api/enrollment/schema.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../../rasenmaeher_api.html">rasenmaeher_api</a></li>
+      <li class="breadcrumb-item active">rasenmaeher_api.web.api.enrollment.schema</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rasenmaeher_api.web.api.enrollment.schema</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Schema for enrollment.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">Extra</span>
+
+
+<div class="viewcode-block" id="EnrollmentGenVerifiOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentGenVerifiOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment gen verification code out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentGenVerifiOut.verification_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut.verification_code">[docs]</a>
+    <span class="n">verification_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentGenVerifiOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentGenVerifiOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;verification_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] Generated verification code for enrollment.&quot;</span><span class="p">}}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetStateIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentConfigSetStateIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetStateIn.state">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.state">[docs]</a>
+    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetStateIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetStateIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetStateIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;somestate&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentConfigTaskDone">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigTaskDone.success_message">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone.success_message">[docs]</a>
+    <span class="n">success_message</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentConfigTaskDone.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigTaskDone.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;success_message&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Task completed message&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentConfigSetMtlsIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config set mtls schema in&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.mtls_test_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.mtls_test_link">[docs]</a>
+    <span class="n">mtls_test_link</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.set_for_all">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.set_for_all">[docs]</a>
+    <span class="n">set_for_all</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where mtls can be tested&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - Set mtls test link for everyone?&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values2&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentConfigSetDLCertIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.cert_download_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.cert_download_link">[docs]</a>
+    <span class="n">cert_download_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.howto_download_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.howto_download_link">[docs]</a>
+    <span class="n">howto_download_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate package can be downloaded&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where howto info can be downloaded&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values2&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentAddServiceManagementIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentAddServiceManagementIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.new_service_management_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.new_service_management_hash">[docs]</a>
+    <span class="n">new_service_management_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.permissions_str">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.permissions_str">[docs]</a>
+    <span class="n">permissions_str</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for new &#39;service_management_hash&#39;&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Set permission string for new management_hash.&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;asdQWEasd2&quot;</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span>  <span class="c1"># pragma: allowlist secret</span>
+                        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Set permission for new management_hash.&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentStatusIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentStatusIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentStatusIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentStatusOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentStatusOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status check schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentStatusOut.status">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.status">[docs]</a>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentStatusOut.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentStatusOut.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentStatusOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentStatusOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash generated for work_id&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentShowVerificationCodeIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeIn.verification_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn.verification_code">[docs]</a>
+    <span class="n">verification_code</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentShowVerificationCodeOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status check schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.state">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.state">[docs]</a>
+    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.accepted">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.accepted">[docs]</a>
+    <span class="n">accepted</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.locked">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.locked">[docs]</a>
+    <span class="n">locked</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash generated for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;accepted&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Has this been already accepted, empty or &#39;na&#39; == not accepted&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;locked&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Contain info if the enrollment is locked. For unlocked enrollment, it&#39;s empty &#39;&#39;&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentHaveIBeenAcceptedOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentHaveIBeenAcceptedOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentHaveIBeenAcceptedOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status check schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentHaveIBeenAcceptedOut.have_i_been_accepted">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentHaveIBeenAcceptedOut.have_i_been_accepted">[docs]</a>
+    <span class="n">have_i_been_accepted</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentHaveIBeenAcceptedOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentHaveIBeenAcceptedOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentHaveIBeenAcceptedOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentHaveIBeenAcceptedOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;have_i_been_accepted&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - Accepted status. True/False&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInitIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInitIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInitIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInitIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInitIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Plain text enrollment role id&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;taikaponi&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInitOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInitOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInitOut.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentInitOut.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentInitOut.jwt">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.jwt">[docs]</a>
+    <span class="n">jwt</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInitOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInitOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;jwt&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] jwt token needed for later use&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentDeliverIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentDeliverIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment promote in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentDeliverIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentDeliverOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentDeliverOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.cert_download_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.cert_download_link">[docs]</a>
+    <span class="n">cert_download_link</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.howto_download_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.howto_download_link">[docs]</a>
+    <span class="n">howto_download_link</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.mtls_test_link">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.mtls_test_link">[docs]</a>
+    <span class="n">mtls_test_link</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentDeliverOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate package can be downloaded&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate install howto can be downloaded&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link that can be used to test mtls connection&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentAcceptIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentAcceptIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAcceptIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentAcceptIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAcceptIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Enrollment hash string.&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentAcceptOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAcceptOut.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentAcceptOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentAcceptOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentPromoteIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentPromoteIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment promote in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentPromoteIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentPromoteIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentPromoteIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentPromoteIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentDemoteIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentDemoteIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment demote in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentDemoteIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentDemoteIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentDemoteIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentDemoteIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentLockIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentLockIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment lock in schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentLockIn.lock_reason">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.lock_reason">[docs]</a>
+    <span class="n">lock_reason</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentLockIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="EnrollmentLockIn.work_id_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id_hash">[docs]</a>
+    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentLockIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentLockIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentIsInvitecodeActiveIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment check if invitecode is still active&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveIn.invitecode">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn.invitecode">[docs]</a>
+    <span class="n">invitecode</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;invitecode&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Code that can be used to validate enrollment init&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentIsInvitecodeActiveOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveOut.invitecode_is_active">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut.invitecode_is_active">[docs]</a>
+    <span class="n">invitecode_is_active</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentIsInvitecodeActiveOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;invitecode_is_active&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = this code can still be used&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentListOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentListOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment list out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentListOut.work_id_list">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.work_id_list">[docs]</a>
+    <span class="n">work_id_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+
+<div class="viewcode-block" id="EnrollmentListOut.success">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.success">[docs]</a>
+    <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentListOut.reason">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.reason">[docs]</a>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeCreateOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeCreateOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeCreateOut.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeDeactivateIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code deactivate request schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateIn.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Invite code that will be deactivated&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeDeactivateOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code deactivate response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeactivateOut.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateOut.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeActivateIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code activate request schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateIn.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Invite code that will be reactivated&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeActivateOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code activate response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeActivateOut.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateOut.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeEnrollIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Enrollment Invite code request schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Code that is used validate enrollment init for work_id&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeDeleteIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code deactivate request schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteIn.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Invite code that will be removed.&quot;</span><span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentInviteCodeDeleteOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment Invite code deactivate response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentInviteCodeDeleteOut.invite_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteOut.invite_code">[docs]</a>
+    <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

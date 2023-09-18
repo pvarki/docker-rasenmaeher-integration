@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_enrollment &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/tests/test_enrollment.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.test_enrollment</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tests.test_enrollment</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Test enrollment endpoint&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">async_asgi_testclient</span> <span class="kn">import</span> <span class="n">TestClient</span>  <span class="c1"># pylint: disable=import-error</span>
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setstate_success_work_id">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setstate_success_work_id</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-state</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">work_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">koiraid</span> <span class="o">=</span> <span class="n">work_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;testing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">koiraid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-state&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setstate_fail_both_missing">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setstate_fail_both_missing</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-state</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;work_id missing&quot;,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;testing&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-state&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setstate_fail_missing_value">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setstate_fail_missing_value</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-state</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=values are missing from query</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">koiraid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;testing&quot;</span><span class="p">,</span> <span class="s2">&quot;err_something_missing&quot;</span><span class="p">:</span> <span class="n">koiraid</span><span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-state&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setstate_fail_oopsie_state">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setstate_fail_oopsie_state</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-state</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssues1&quot;,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">koiraid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">koiraid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-state&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssues1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setmtlstest_success_work_id">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setmtlstest_success_work_id</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-mtls-test-link</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-mtls-test-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setmtlstest_success_all">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setmtlstest_success_all</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-mtls-test-link</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We need the workids to exist for set_all</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-mtls-test-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setmtlstest_fail">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setmtlstest_fail</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-mtls-test-link</span>
+<span class="sd">    Result should be fail</span>
+<span class="sd">    &#39;Error. Both work_id and work_id_hash are undefined. At least one is required when &#39;set_for_all&#39; is set to False&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-mtls-test-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setmtlstest_fail_oopsie">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setmtlstest_fail_oopsie</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-mtls-test-link</span>
+<span class="sd">    Result should be fail</span>
+<span class="sd">    &#39;Error. Both work_id and work_id_hash are undefined. At least one is required when &#39;set_for_all&#39; is set to True&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># FIXME: Use the ids/hashes from test_user_secrets</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-mtls-test-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_success_work_id">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_success_work_id</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_howto_setdl_success_work_id">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_howto_setdl_success_work_id</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_success_work_idhash">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_success_work_idhash</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissahash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">kissahash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_fail_missing">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_fail_missing</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Both work_id and work_id_hash are undefined or empty. At least one is required&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Both work_id and work_id_hash are undefined or empty. At least one is required&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_fail_permit_oopsie">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_fail_permit_oopsie</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssuecdll1&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssuecdll1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_fail_oopsie_link">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_fail_oopsie_link</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssuecdll1&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssuecdll1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_setdl_fail_oopsie_link2">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_setdl_fail_oopsie_link2</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/set-cert-dl-link</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssuecdll1&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssuecdll1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_add_mgr">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_add_mgr">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_add_mgr</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/add-service-management-hash</span>
+<span class="sd">    Enrollment accept should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;banana&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;beni5666beni5666beni5666beni5666beni5666beni5666beni5666beni5666beni&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/config/add-service-management-hash&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span>
+    <span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_fail_mgr_short">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_fail_mgr_short">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_fail_mgr_short</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/add-service-management-hash</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. new_service_management_hash too short. Needs to be 64 or more.&quot;,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;banana&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;too_short&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/config/add-service-management-hash&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. new_service_management_hash too short. Needs to be 64 or more.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_config_fail_mgr_bad_perm_str">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_config_fail_mgr_bad_perm_str</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /config/add-service-management-hash</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssiim1&quot;, &lt;-- permissions_str sql inject</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;opsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;beni5666beni5666beni5666beni5666beni5666beni5666beni5666beni5666beni&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/config/add-service-management-hash&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssiim1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_accept">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_accept</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /accept</span>
+<span class="sd">    Enrollment accept should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissahash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">kissahash</span><span class="p">,</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;kissa123&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_accept_fail_oopsie_permitstr">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_accept_fail_oopsie_permitstr</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /accept</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssfm1&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;oopsie&#39;%3Boopsie&quot;</span><span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssfewh1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_user_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_accept_fail_wrong_permit">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_accept_fail_wrong_permit</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_user_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /accept</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. &#39;management_hash&#39; doesn&#39;t have rights to accept given &#39;work_id_hash&#39;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissahash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">kissahash</span><span class="p">,</span> <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;wrongenroll&quot;</span><span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_user_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Given userid doesn&#39;t have enough permissions.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_accept_fail_oopsie_enroll">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_accept_fail_oopsie_enroll</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /accept</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_ssfewh1&quot;, &lt;-- sql inject work_id_hash</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;oopsie&#39;%3Boopsie&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssfewh1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_accept_fail_wrong_enroll">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_accept_fail_wrong_enroll</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /accept</span>
+<span class="sd">    Enrollment should fail</span>
+<span class="sd">    reason=&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;,&lt;-- wrong enroll str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;not_foound&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_deliver_kissa">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_kissa">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_deliver_kissa</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /deliver</span>
+<span class="sd">    Result should be success</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissahash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/deliver&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">kissahash</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;cert_download_link&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_deliver_error">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_deliver_error</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /deliver/{work_id_hash}</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. Undefined backend error q_sssfewh1&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/deliver&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;oopsie&#39;%3Boopsie&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_sssfewh1&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_deliver_error_not_found">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error_not_found">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_deliver_error_not_found</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /deliver/{work_id_hash}</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/deliver&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;notfoundhash&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_deliver_error_not_finished">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error_not_finished">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_deliver_error_not_finished</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /deliver/{work_id_hash}</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    reason=&quot;Enrollment is still in progress or it hasn&#39;t been accepted.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">koirahash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/deliver&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">koirahash</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">202</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Enrollment is still in progress or it hasn&#39;t been accepted.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_status_kissa">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_kissa">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_status_kissa</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enrollment status should be 200 !str(none)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/status&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">})</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_status_nope">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_nope">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_status_nope</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enrollment status should be 200 str(&#39;none&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/status&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;notexisting&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;none&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_status_error">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_error">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_status_error</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enrollment status should be 200 str(&#39;none&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/status&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;oopsie&#39;%3Boopsie&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;#test_get_enrollment_status#&quot;</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;###########&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">500</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Undefined backend error q_ssfe3&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_init_missing_values">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init_missing_values">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_init_missing_values</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init should return code 422 for missing json values&quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;missing&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/init&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">422</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_init">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_init</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init should return code 200 and {&#39;success&#39;:True}&quot;&quot;&quot;</span>
+    <span class="n">_enrollment_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
+        <span class="p">[</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">_enrollment_id</span><span class="p">,</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/init&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_init_already_enrolled">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init_already_enrolled">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_init_already_enrolled</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init should return code 200 and {&#39;success&#39;:False}&quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">kissaid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">kissaid</span><span class="p">,</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/init&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. work_id has already active enrollment&quot;</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_list">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_list">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_list</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /enrollment/list</span>
+<span class="sd">    Result should be success and work_id_list not empty</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/list&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;work_id_list&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_get_verification_code">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_get_verification_code">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_get_verification_code</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /generate-verification-code</span>
+<span class="sd">    Result should be successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">koiraid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">koiraid</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/generate-verification-code&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="c1"># LOGGER.debug(&quot;###########&quot;)</span>
+    <span class="c1"># LOGGER.debug(resp)</span>
+    <span class="c1"># LOGGER.debug(resp.json())</span>
+    <span class="c1"># LOGGER.debug(&quot;###########&quot;)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_invitecode_create">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_create">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_invitecode_create</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode/create</span>
+<span class="sd">    Result should succeed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_user_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_invitecode_create_fail">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_create_fail">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_invitecode_create_fail</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_user_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode/create</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;no permissions&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_user_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. Given userid doesn&#39;t have enough permissions.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_invitecode_enroll">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_invitecode_enroll</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode/create</span>
+<span class="sd">    /invitecode/enroll</span>
+<span class="sd">    Result should succeed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">_enrollment_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
+        <span class="p">[</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">json_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;taikaperuna666_</span><span class="si">{</span><span class="n">_enrollment_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/enroll&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;work_id&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;work_id_hash&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_invitecode_enroll_invalid">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_invitecode_enroll_invalid</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode/enroll</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_enrollment_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
+        <span class="p">[</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;taikaperuna666_</span><span class="si">{</span><span class="n">_enrollment_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;this_shouldnt_be&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/enroll&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. invitecode not valid.&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_post_enrollment_invitecode_enroll_already_active">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_enrollment_invitecode_enroll_already_active</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode/create</span>
+<span class="sd">    /invitecode/enroll</span>
+<span class="sd">    Result should fail</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">workids</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">koiraid</span> <span class="o">=</span> <span class="n">workids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">json_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">koiraid</span><span class="p">,</span>
+        <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/enroll&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Error. work_id has already active enrollment&quot;</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_invitecode_check">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_invitecode_check">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_invitecode_check</span><span class="p">(</span>
+    <span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode?invitecode=xxxx</span>
+<span class="sd">    Result should be success</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">workhashes</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+    <span class="n">usermgmnthash</span> <span class="o">=</span> <span class="n">workhashes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">json_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;user_management_hash&quot;</span><span class="p">:</span> <span class="n">usermgmnthash</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;/api/v1/enrollment/invitecode&quot;</span><span class="p">,</span> <span class="n">query_string</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;invitecode&quot;</span><span class="p">:</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>
+    <span class="n">resp_dict</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invitecode_is_active&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;tilauspalvelu_jwt_admin_client&quot;</span><span class="p">,</span> <span class="p">[{</span><span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;xclientcert&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}],</span> <span class="n">indirect</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="test_get_enrollment_invitecode_check_fail">
+<a class="viewcode-back" href="../../technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_invitecode_check_fail">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_enrollment_invitecode_check_fail</span><span class="p">(</span><span class="n">tilauspalvelu_jwt_admin_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    /invitecode?invitecode=xxxx</span>
+<span class="sd">    Result should be invitecode_is_active == False</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/invitecode?invitecode=nope&quot;</span><span class="p">)</span>
+    <span class="n">resp_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;invitecode_is_active&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

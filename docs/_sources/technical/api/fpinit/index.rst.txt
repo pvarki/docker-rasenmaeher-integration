@@ -1,0 +1,81 @@
+:py:mod:`fpinit`
+================
+
+.. py:module:: fpinit
+
+.. autoapi-nested-parse::
+
+   Create server cert and get it signed by CFSSL
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   fpinit.create_keypair
+   fpinit.create_csr
+   fpinit.get_ca
+   fpinit.sign_csr
+   fpinit.main
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   fpinit.LOGGER
+   fpinit.DATAPATH
+   fpinit.loglevel
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: DATAPATH
+
+   
+
+.. py:function:: create_keypair(name)
+
+   Generate a keypair
+
+
+.. py:function:: create_csr(keypair, certname, cnstr, client = False)
+
+   Generate CSR file
+
+
+.. py:function:: get_ca()
+   :async:
+
+   Quick and dirty method to get CA from CFSSL
+   returns: CA certificate
+
+
+.. py:function:: sign_csr(csr)
+   :async:
+
+   Quick and dirty method to sign CSR from CFSSL
+   params: csr
+   returns: certificate
+
+
+.. py:function:: main()
+   :async:
+
+   Main entrypoint, return exit code
+
+
+.. py:data:: loglevel
+
+   
+

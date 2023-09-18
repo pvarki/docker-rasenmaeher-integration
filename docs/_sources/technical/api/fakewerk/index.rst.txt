@@ -1,0 +1,96 @@
+:py:mod:`fakewerk`
+==================
+
+.. py:module:: fakewerk
+
+.. autoapi-nested-parse::
+
+   Emulate KRAFTWERK init
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   fakewerk.get_key_pass
+   fakewerk.ensure_directories
+   fakewerk.create_tilauspalvelu_keypair
+   fakewerk.create_fakeproduct_manifest
+   fakewerk.create_rasenmaeher_manifest
+   fakewerk.main
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   fakewerk.JWTS_COPY_PATH
+   fakewerk.TP_PUBKEY_PATH
+   fakewerk.TP_PRIVKEY_PATH
+   fakewerk.FP_MANIFEST_PATH
+   fakewerk.RM_MANIFEST_PATH
+   fakewerk.LOGGER
+
+
+.. py:data:: JWTS_COPY_PATH
+
+   
+
+.. py:data:: TP_PUBKEY_PATH
+
+   
+
+.. py:data:: TP_PRIVKEY_PATH
+
+   
+
+.. py:data:: FP_MANIFEST_PATH
+
+   
+
+.. py:data:: RM_MANIFEST_PATH
+
+   
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: get_key_pass(keypath)
+
+   read the .pass -file corresponding to the key
+
+
+.. py:function:: ensure_directories()
+
+   Make sure the directories exist
+
+
+.. py:function:: create_tilauspalvelu_keypair()
+
+   Create JWT keypair for fake TILAUSPALVELU
+
+
+.. py:function:: create_fakeproduct_manifest()
+
+   create manisfest for fakeproduct
+
+
+.. py:function:: create_rasenmaeher_manifest()
+
+   create manifest for RASENMAEHER
+
+
+.. py:function:: main()
+
+   Do the needful
+
+

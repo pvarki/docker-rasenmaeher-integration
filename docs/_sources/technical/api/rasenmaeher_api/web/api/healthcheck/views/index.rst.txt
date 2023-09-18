@@ -1,0 +1,66 @@
+:py:mod:`rasenmaeher_api.web.api.healthcheck.views`
+===================================================
+
+.. py:module:: rasenmaeher_api.web.api.healthcheck.views
+
+.. autoapi-nested-parse::
+
+   Healthcheck API views.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.healthcheck.views.request_healthcheck
+   rasenmaeher_api.web.api.healthcheck.views.request_healthcheck_delivery
+   rasenmaeher_api.web.api.healthcheck.views.request_healthcheck_services
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.healthcheck.views.router
+   rasenmaeher_api.web.api.healthcheck.views.LOGGER
+
+
+.. py:data:: router
+
+   
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: request_healthcheck(request)
+   :async:
+
+   Basic health check. Success = 200. Checks the following things.
+   - Local sqlite connection
+
+
+.. py:function:: request_healthcheck_delivery(request)
+   :async:
+
+   Delivery endpoint healthcheck.
+   200 {"state":"ready-for-delivery"}
+   201 {"detail":{"state":"init"}}
+   204 {"detail":{"state":"waiting-for-services"}}
+
+
+.. py:function:: request_healthcheck_services(request)
+   :async:
+
+   Serices endpoint healthcheck.
+   return list of services
+
+

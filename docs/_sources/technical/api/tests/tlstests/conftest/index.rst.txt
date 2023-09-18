@@ -1,0 +1,66 @@
+:py:mod:`tests.tlstests.conftest`
+=================================
+
+.. py:module:: tests.tlstests.conftest
+
+.. autoapi-nested-parse::
+
+   mTLS fixtures
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.tlstests.conftest.datadir
+   tests.tlstests.conftest.keypair
+   tests.tlstests.conftest.csrfile
+   tests.tlstests.conftest.mtlsfiles
+   tests.tlstests.conftest.mtlsclient
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.tlstests.conftest.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: datadir(nice_tmpdir_mod)
+
+   Make sure we have a well known directory structure
+
+
+.. py:function:: keypair(datadir)
+
+   Generate a keypair
+
+
+.. py:function:: csrfile(datadir, keypair)
+
+   Generate CSR file
+
+
+.. py:function:: mtlsfiles(csrfile)
+   :async:
+
+   Return cert, key and ca cert paths, this will sign the CSR again every time due to fixture scoping issues
+
+
+.. py:function:: mtlsclient(mtlsfiles)
+
+   fixture for client session with correct ssl context
+
+

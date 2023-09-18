@@ -1,0 +1,86 @@
+:py:mod:`rasenmaeher_api.db.middleware`
+=======================================
+
+.. py:module:: rasenmaeher_api.db.middleware
+
+.. autoapi-nested-parse::
+
+   Middleware stuff
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.middleware.DBWrapper
+   rasenmaeher_api.db.middleware.DBConnectionMiddleware
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.middleware.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:class:: DBWrapper
+
+
+   Handle app db connection stuff
+
+   .. py:attribute:: gino
+      :type: gino.Gino
+
+      
+
+   .. py:attribute:: config
+      :type: rasenmaeher_api.db.config.DBConfig
+
+      
+
+   .. py:attribute:: init_db
+      :type: bool
+
+      
+
+   .. py:method:: bind_gino(loop = None)
+      :async:
+
+      Bind gino to db
+
+
+   .. py:method:: app_startup_event()
+      :async:
+
+      App startup callback, connect to db or die
+
+
+   .. py:method:: app_shutdown_event()
+      :async:
+
+      On app shutdown close the db connection
+
+
+
+.. py:class:: DBConnectionMiddleware(app, gino, config)
+
+
+   Middleware that handles request connection pooling
+
+   .. py:method:: __call__(scope, receive, send)
+      :async:
+
+
+

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.testhelpers &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/rasenmaeher_api/testhelpers.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../rasenmaeher_api.html">rasenmaeher_api</a></li>
+      <li class="breadcrumb-item active">rasenmaeher_api.testhelpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rasenmaeher_api.testhelpers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Helpers for testing, unit and manual&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">.sqlitedatabase</span> <span class="kn">import</span> <span class="n">sqlite</span> <span class="k">as</span> <span class="n">sqlitewrapper</span>
+
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_test_users">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.create_test_users">[docs]</a>
+<span class="k">def</span> <span class="nf">create_test_users</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a few test users and work ids returns</span>
+<span class="sd">    list of work-ids and their corresponding &quot;hashes&quot;</span>
+
+<span class="sd">    First one has &quot;enrollment&quot; special role</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># copied from the sqlitedb dev init so blame karppo :D</span>
+    <span class="n">work_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">work_hashes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># PONDER: create random ones ?</span>
+    <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;pyteststuff&quot;</span><span class="p">)</span>
+    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;TestikalukalukalukaulinJotainAsdJotainJotainJotain&quot;</span><span class="p">)</span>
+    <span class="c1"># Create test admin credentials</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;ReadyForDelivery&quot;</span><span class="p">,</span>
+        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;somehashwhoaccepted_this&quot;</span><span class="p">,</span>
+        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">management_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;enrollment&quot;</span><span class="p">,</span>
+        <span class="n">active</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kissa&quot;</span><span class="p">)</span>
+    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kissa123&quot;</span><span class="p">)</span>
+    <span class="c1"># Create kissa dummy role</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;ReadyForDelivery&quot;</span><span class="p">,</span>
+        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;somehashwhoaccepted_this&quot;</span><span class="p">,</span>
+        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
+        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;koira&quot;</span><span class="p">)</span>
+    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;koira123&quot;</span><span class="p">)</span>
+    <span class="c1"># Create koira dummy role</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span>
+        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="c1"># Add initial &#39;first time user&#39; hash that has permission to create admin users</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">management_hash</span><span class="o">=</span><span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_first_time_user_hash</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;first-user&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="c1"># Add the &#39;first time user&#39; code to jwt table if not there already</span>
+    <span class="n">_exchange_code</span> <span class="o">=</span> <span class="s2">&quot;HackHackHacatoneillaOnPorakoiraNukkumassa&quot;</span>
+    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_jwt_sel_from_jwt_where_exchange</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_jwt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">claims</span><span class="o">=</span><span class="s1">&#39;{&quot;anon_admin_session&quot;:true}&#39;</span><span class="p">,</span>
+            <span class="n">consumed</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="n">work_id_hash</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="n">work_id</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">,</span>
+            <span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_jwt_update_consumed_where_exchange</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">new_consumed_state</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span>
+        <span class="p">)</span>
+    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">work_ids</span><span class="p">,</span> <span class="n">work_hashes</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
