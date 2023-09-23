@@ -1,0 +1,914 @@
+:py:mod:`rasenmaeher_api.web.api.enrollment.schema`
+===================================================
+
+.. py:module:: rasenmaeher_api.web.api.enrollment.schema
+
+.. autoapi-nested-parse::
+
+   Schema for enrollment.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentHaveIBeenAcceptedOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteOut
+
+
+
+
+.. py:class:: EnrollmentGenVerifiOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment gen verification code out
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: verification_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentConfigSetStateIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config add manager schema in
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: state
+      :type: str
+
+      
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentConfigTaskDone
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config add manager schema out
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: success_message
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentConfigSetMtlsIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config set mtls schema in
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: mtls_test_link
+      :type: str
+
+      
+
+   .. py:attribute:: set_for_all
+      :type: bool
+
+      
+
+   .. py:attribute:: work_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: Optional[str]
+
+      
+
+
+.. py:class:: EnrollmentConfigSetDLCertIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config add manager schema in
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: cert_download_link
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: howto_download_link
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: Optional[str]
+
+      
+
+
+.. py:class:: EnrollmentAddServiceManagementIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config add manager schema in
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: new_service_management_hash
+      :type: str
+
+      
+
+   .. py:attribute:: permissions_str
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentStatusIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment status in schema
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentStatusOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment status check schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: status
+      :type: str
+
+      
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentShowVerificationCodeIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment status in schema
+
+   .. py:attribute:: verification_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentShowVerificationCodeOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment status check schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: state
+      :type: str
+
+      
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+   .. py:attribute:: accepted
+      :type: str
+
+      
+
+   .. py:attribute:: locked
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentHaveIBeenAcceptedOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment status check schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: have_i_been_accepted
+      :type: bool
+
+      
+
+
+.. py:class:: EnrollmentInitIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment init in response schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInitOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment init out response schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+   .. py:attribute:: jwt
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentDeliverIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment promote in schema
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentDeliverOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment init out response schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+   .. py:attribute:: cert_download_link
+      :type: str
+
+      
+
+   .. py:attribute:: howto_download_link
+      :type: str
+
+      
+
+   .. py:attribute:: mtls_test_link
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentAcceptIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment init out response schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentAcceptOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment init out response schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id_hash
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentPromoteIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment promote in schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: Optional[str]
+
+      
+
+
+.. py:class:: EnrollmentDemoteIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment demote in schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: work_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: Optional[str]
+
+      
+
+
+.. py:class:: EnrollmentLockIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment lock in schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: lock_reason
+      :type: str
+
+      
+
+   .. py:attribute:: work_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: work_id_hash
+      :type: Optional[str]
+
+      
+
+
+.. py:class:: EnrollmentIsInvitecodeActiveIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment check if invitecode is still active
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invitecode
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentIsInvitecodeActiveOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment config add manager schema out
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invitecode_is_active
+      :type: bool
+
+      
+
+
+.. py:class:: EnrollmentListOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment list out response schema
+
+   .. py:attribute:: work_id_list
+      :type: List[Dict[Any, Any]]
+
+      
+
+   .. py:attribute:: success
+      :type: bool
+
+      
+
+   .. py:attribute:: reason
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeCreateOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code response schema
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeDeactivateIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code deactivate request schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeDeactivateOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code deactivate response schema
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeActivateIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code activate request schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeActivateOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code activate response schema
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeEnrollIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Enrollment Invite code request schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+   .. py:attribute:: work_id
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeDeleteIn
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code deactivate request schema
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentInviteCodeDeleteOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment Invite code deactivate response schema
+
+   .. py:attribute:: invite_code
+      :type: str
+
+      
+
+

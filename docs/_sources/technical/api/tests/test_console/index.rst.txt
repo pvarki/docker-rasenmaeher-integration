@@ -1,0 +1,30 @@
+:py:mod:`tests.test_console`
+============================
+
+.. py:module:: tests.test_console
+
+.. autoapi-nested-parse::
+
+   Test CLI scripts
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_console.test_version_cli
+
+
+
+.. py:function:: test_version_cli()
+   :async:
+
+   Test the CLI parsing for default version dumping works
+
+

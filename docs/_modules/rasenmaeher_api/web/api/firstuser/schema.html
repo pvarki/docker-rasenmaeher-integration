@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.web.api.firstuser.schema &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/rasenmaeher_api/web/api/firstuser/schema.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.6.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../../../rasenmaeher_api.html">rasenmaeher_api</a></li>
+      <li class="breadcrumb-item active">rasenmaeher_api.web.api.firstuser.schema</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rasenmaeher_api.web.api.firstuser.schema</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Schema for enrollment.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Extra</span>
+
+
+<div class="viewcode-block" id="FirstuserIsActiveOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserIsActiveOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserIsActiveOut.api_is_active">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.api_is_active">[docs]</a>
+    <span class="n">api_is_active</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="FirstuserIsActiveOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserIsActiveOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserIsActiveOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;api_is_active&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = this api (/firstuser) can still be used&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserCheckCodeIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserCheckCodeIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserCheckCodeIn.temp_admin_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.temp_admin_code">[docs]</a>
+    <span class="n">temp_admin_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserCheckCodeIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserCheckCodeIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserCheckCodeIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - temporary init admin users string&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;some_permit_hash_abba_abc&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserCheckCodeOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserCheckCodeOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserCheckCodeOut.code_ok">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.code_ok">[docs]</a>
+    <span class="n">code_ok</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="FirstuserCheckCodeOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserCheckCodeOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserCheckCodeOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;code_ok&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = Requested &#39;first use admin code&#39; was found and can be used.&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserDisableIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserDisableIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDisableIn.permit_str">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.permit_str">[docs]</a>
+    <span class="n">permit_str</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserDisableIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDisableIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserDisableIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;permit_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - admin users string&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;permit_str&quot;</span><span class="p">:</span> <span class="s2">&quot;some_permit_hash_abba_abc&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserDisableOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserDisableOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDisableOut.api_disabled">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.api_disabled">[docs]</a>
+    <span class="n">api_disabled</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="FirstuserDisableOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDisableOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserDisableOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;api_disabled&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = this api (/firstuser) should be disabled now.&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserEnableIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserEnableIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserEnableIn.permit_str">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.permit_str">[docs]</a>
+    <span class="n">permit_str</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserEnableIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserEnableIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserEnableIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;permit_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - admin users string&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;permit_str&quot;</span><span class="p">:</span> <span class="s2">&quot;some_permit_hash_abba_abc&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserEnableOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserEnableOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserEnableOut.api_enabled">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.api_enabled">[docs]</a>
+    <span class="n">api_enabled</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="FirstuserEnableOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserEnableOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserEnableOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;api_enabled&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = this api (/firstuser) should be enabled now.&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserAddAdminIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserAddAdminIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+    <span class="c1"># temp_admin_code: str</span>
+<div class="viewcode-block" id="FirstuserAddAdminIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserAddAdminIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserAddAdminIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserAddAdminIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - id/name for new user that is elevated to admin&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;porakoira666&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserAddAdminOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserAddAdminOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserAddAdminOut.admin_added">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.admin_added">[docs]</a>
+    <span class="n">admin_added</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+<div class="viewcode-block" id="FirstuserAddAdminOut.jwt_exchange_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.jwt_exchange_code">[docs]</a>
+    <span class="n">jwt_exchange_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserAddAdminOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserAddAdminOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserAddAdminOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;admin_added&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = admin user were added&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;jwt_exchange_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Code that can be exchanged to jwt token&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserDeleteAdminIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn.temp_admin_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.temp_admin_code">[docs]</a>
+    <span class="n">temp_admin_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn.work_id">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.work_id">[docs]</a>
+    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - admin users string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - id/name for user that will be deleted&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;first_time_user_secret_or_something&quot;</span><span class="p">,</span> <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;porakoira666&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserDeleteAdminOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserDeleteAdminOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminOut.admin_removed">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.admin_removed">[docs]</a>
+    <span class="n">admin_removed</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="FirstuserDeleteAdminOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserDeleteAdminOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;admin_removed&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - True = admin user were removed&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserListAdminIn">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserListAdminIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserListAdminIn.temp_admin_code">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.temp_admin_code">[docs]</a>
+    <span class="n">temp_admin_code</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="FirstuserListAdminIn.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserListAdminIn.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserListAdminIn.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - temporary init admin users string&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;temp_admin_code&quot;</span><span class="p">:</span> <span class="s2">&quot;some_permit_hash_abba_abc&quot;</span><span class="p">},</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="FirstuserListAdminOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut">[docs]</a>
+<span class="k">class</span> <span class="nc">FirstuserListAdminOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema out&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserListAdminOut.admin_list">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.admin_list">[docs]</a>
+    <span class="n">admin_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="FirstuserListAdminOut.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FirstuserListAdminOut.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="FirstuserListAdminOut.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;admin_list&quot;</span><span class="p">:</span> <span class="s2">&quot;list[str] - list of &#39;admin id&#39;s&#39; found...&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

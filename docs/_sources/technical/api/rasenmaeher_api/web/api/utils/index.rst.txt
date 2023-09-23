@@ -1,0 +1,28 @@
+:py:mod:`rasenmaeher_api.web.api.utils`
+=======================================
+
+.. py:module:: rasenmaeher_api.web.api.utils
+
+.. autoapi-nested-parse::
+
+   Utils API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   schema/index.rst
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+

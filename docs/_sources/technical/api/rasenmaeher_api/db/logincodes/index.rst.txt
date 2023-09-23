@@ -1,0 +1,119 @@
+:py:mod:`rasenmaeher_api.db.logincodes`
+=======================================
+
+.. py:module:: rasenmaeher_api.db.logincodes
+
+.. autoapi-nested-parse::
+
+   DB abstraction for storing nonces etc things needed to prevent re-use of certain tokens
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.logincodes.LoginCode
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.logincodes.LOGGER
+   rasenmaeher_api.db.logincodes.CODE_CHAR_COUNT
+   rasenmaeher_api.db.logincodes.CODE_ALPHABET
+   rasenmaeher_api.db.logincodes.CODE_MAX_ATTEMPTS
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: CODE_CHAR_COUNT
+   :value: 12
+
+   
+
+.. py:data:: CODE_ALPHABET
+
+   
+
+.. py:data:: CODE_MAX_ATTEMPTS
+   :value: 100
+
+   
+
+.. py:class:: LoginCode
+
+
+   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+
+   Track the login codes that can be exchanged for session JWTs
+
+   .. py:class:: Config
+
+
+      Basemodel config
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: __tablename__
+      :value: 'logincodes'
+
+      
+
+   .. py:attribute:: code
+
+      
+
+   .. py:attribute:: auditmeta
+
+      
+
+   .. py:attribute:: used_on
+
+      
+
+   .. py:attribute:: claims
+
+      
+
+   .. py:method:: use_code(code, auditmeta = None)
+      :classmethod:
+      :async:
+
+      Exchange the code for JWT, if it was already used raise error that is also 403, return JWT with the claims
+
+
+   .. py:method:: by_code(code)
+      :classmethod:
+      :async:
+
+      Get by token
+
+
+   .. py:method:: create_for_claims(claims, auditmeta = None)
+      :classmethod:
+      :async:
+
+      Create a new one with random code for the given claims
+
+
+   .. py:method:: delete()
+      :async:
+
+      Deletion of enrollments is not allowed
+
+
+

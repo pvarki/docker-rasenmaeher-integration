@@ -1,0 +1,62 @@
+:py:mod:`rasenmaeher_api.prodcutapihelpers`
+===========================================
+
+.. py:module:: rasenmaeher_api.prodcutapihelpers
+
+.. autoapi-nested-parse::
+
+   Product integration API helpers
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.prodcutapihelpers.check_kraftwerk_manifest
+   rasenmaeher_api.prodcutapihelpers.post_to_all_products
+   rasenmaeher_api.prodcutapihelpers.put_to_all_products
+   rasenmaeher_api.prodcutapihelpers._method_to_all_products
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.prodcutapihelpers.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: check_kraftwerk_manifest()
+
+   Check that settings has manifest
+
+
+.. py:function:: post_to_all_products(url_suffix, data, respose_schema)
+   :async:
+
+   Call given POST endpoint on call products in the manifest
+
+
+.. py:function:: put_to_all_products(url_suffix, data, respose_schema)
+   :async:
+
+   Call given PUT endpoint on call products in the manifest
+
+
+.. py:function:: _method_to_all_products(methodname, url_suffix, data, respose_schema)
+   :async:
+
+   Call given POST endpoint on call products in the manifest
+
+
