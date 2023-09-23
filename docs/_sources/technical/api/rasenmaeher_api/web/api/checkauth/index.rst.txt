@@ -1,0 +1,27 @@
+:py:mod:`rasenmaeher_api.web.api.checkauth`
+===========================================
+
+.. py:module:: rasenmaeher_api.web.api.checkauth
+
+.. autoapi-nested-parse::
+
+   Takreg API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+

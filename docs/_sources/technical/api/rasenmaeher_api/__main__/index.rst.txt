@@ -1,0 +1,29 @@
+:py:mod:`rasenmaeher_api.__main__`
+==================================
+
+.. py:module:: rasenmaeher_api.__main__
+
+.. autoapi-nested-parse::
+
+   Entrypoint module  `python -m rasenmaeher_api`.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.__main__.main
+
+
+
+.. py:function:: main()
+
+   Entrypoint of the application.
+
+

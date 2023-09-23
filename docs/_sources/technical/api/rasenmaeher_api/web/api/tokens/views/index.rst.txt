@@ -1,0 +1,74 @@
+:py:mod:`rasenmaeher_api.web.api.tokens.views`
+==============================================
+
+.. py:module:: rasenmaeher_api.web.api.tokens.views
+
+.. autoapi-nested-parse::
+
+   Views dealing with login tokens issues by/via TILAUSPALVELU
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.tokens.views.exchange_token
+   rasenmaeher_api.web.api.tokens.views.refresh_token
+   rasenmaeher_api.web.api.tokens.views.create_code
+   rasenmaeher_api.web.api.tokens.views.exchange_code
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.tokens.views.router
+   rasenmaeher_api.web.api.tokens.views.LOGGER
+   rasenmaeher_api.web.api.tokens.views.TOKEN_COPY_EXCLUDE_FIELDS
+
+
+.. py:data:: router
+
+   
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: TOKEN_COPY_EXCLUDE_FIELDS
+   :value: ('iat', 'exp', 'iss', 'aud', 'nonce')
+
+   
+
+.. py:function:: exchange_token(req)
+   :async:
+
+   API method for converting TILAUSPALVELU issues single-use JWT to RASENMAEHER session JWT
+
+
+.. py:function:: refresh_token(jwt = Depends(JWTBearer(auto_error=True)))
+   :async:
+
+   Refresh your JWT
+
+
+.. py:function:: create_code(req, jwt = Depends(JWTBearer(auto_error=True)))
+   :async:
+
+   Generate an alphanumeric code that can be exchanged for JWT with the given claims
+
+
+.. py:function:: exchange_code(req)
+   :async:
+
+   Exchange code for JWT
+
+

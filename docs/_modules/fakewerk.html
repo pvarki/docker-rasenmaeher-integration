@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fakewerk &mdash; Rasenmaeher docs 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/fakewerk.html" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fakewerk</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fakewerk</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Emulate KRAFTWERK init&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<span class="kn">from</span> <span class="nn">libadvian.logging</span> <span class="kn">import</span> <span class="n">init_logging</span>
+<span class="kn">from</span> <span class="nn">libadvian.binpackers</span> <span class="kn">import</span> <span class="n">uuid_to_b64</span>
+<span class="kn">from</span> <span class="nn">multikeyjwt.keygen</span> <span class="kn">import</span> <span class="n">generate_keypair</span>
+<span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
+<span class="kn">from</span> <span class="nn">multikeyjwt.config</span> <span class="kn">import</span> <span class="n">Secret</span>
+
+
+<div class="viewcode-block" id="JWTS_COPY_PATH">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.JWTS_COPY_PATH">[docs]</a>
+<span class="n">JWTS_COPY_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/test_jwts&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TP_PUBKEY_PATH">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.TP_PUBKEY_PATH">[docs]</a>
+<span class="n">TP_PUBKEY_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/pvarki/publickeys/tilauspalvelu.pub&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TP_PRIVKEY_PATH">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.TP_PRIVKEY_PATH">[docs]</a>
+<span class="n">TP_PRIVKEY_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/data/persistent/privkeys/tilauspalvelu.key&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FP_MANIFEST_PATH">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.FP_MANIFEST_PATH">[docs]</a>
+<span class="n">FP_MANIFEST_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/pvarki/kraftwerk-init.json&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RM_MANIFEST_PATH">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.RM_MANIFEST_PATH">[docs]</a>
+<span class="n">RM_MANIFEST_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/pvarki/kraftwerk-rasenmaeher-init.json&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_key_pass">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.get_key_pass">[docs]</a>
+<span class="k">def</span> <span class="nf">get_key_pass</span><span class="p">(</span><span class="n">keypath</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;read the .pass -file corresponding to the key&quot;&quot;&quot;</span>
+    <span class="n">pwdfile_path</span> <span class="o">=</span> <span class="n">keypath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pass&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">pwdfile_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;rt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpntr</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fpntr</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_directories">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.ensure_directories">[docs]</a>
+<span class="k">def</span> <span class="nf">ensure_directories</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make sure the directories exist&quot;&quot;&quot;</span>
+    <span class="n">check_dirs</span> <span class="o">=</span> <span class="p">(</span><span class="n">TP_PUBKEY_PATH</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">TP_PRIVKEY_PATH</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pkdir</span> <span class="ow">in</span> <span class="n">check_dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pkdir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating directory </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pkdir</span><span class="p">))</span>
+            <span class="n">pkdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_tilauspalvelu_keypair">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.create_tilauspalvelu_keypair">[docs]</a>
+<span class="k">def</span> <span class="nf">create_tilauspalvelu_keypair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create JWT keypair for fake TILAUSPALVELU&quot;&quot;&quot;</span>
+    <span class="n">pwdfile_path</span> <span class="o">=</span> <span class="n">TP_PRIVKEY_PATH</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.pass&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pwdfile_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">with</span> <span class="n">pwdfile_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpntr</span><span class="p">:</span>
+            <span class="n">fpntr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+    <span class="n">genkey</span><span class="p">,</span> <span class="n">genpub</span> <span class="o">=</span> <span class="n">generate_keypair</span><span class="p">(</span><span class="n">TP_PRIVKEY_PATH</span><span class="p">,</span> <span class="n">get_key_pass</span><span class="p">(</span><span class="n">TP_PRIVKEY_PATH</span><span class="p">))</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">genpub</span><span class="p">,</span> <span class="n">TP_PUBKEY_PATH</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">genkey</span><span class="p">,</span> <span class="n">JWTS_COPY_PATH</span> <span class="o">/</span> <span class="n">genkey</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">genpub</span><span class="p">,</span> <span class="n">JWTS_COPY_PATH</span> <span class="o">/</span> <span class="n">genpub</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">pwdfile_path</span><span class="p">,</span> <span class="n">JWTS_COPY_PATH</span> <span class="o">/</span> <span class="n">pwdfile_path</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_fakeproduct_manifest">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.create_fakeproduct_manifest">[docs]</a>
+<span class="k">def</span> <span class="nf">create_fakeproduct_manifest</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create manisfest for fakeproduct&quot;&quot;&quot;</span>
+    <span class="n">issuer</span> <span class="o">=</span> <span class="n">Issuer</span><span class="p">(</span>
+        <span class="n">privkeypath</span><span class="o">=</span><span class="n">TP_PRIVKEY_PATH</span><span class="p">,</span> <span class="n">keypasswd</span><span class="o">=</span><span class="n">Secret</span><span class="p">(</span><span class="n">get_key_pass</span><span class="p">(</span><span class="n">TP_PRIVKEY_PATH</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">issuer</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">lifetime</span> <span class="o">=</span> <span class="mi">3600</span> <span class="o">*</span> <span class="mi">24</span>  <span class="c1"># 24h</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">issuer</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;fakeproduct&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;csr&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;nonce&quot;</span><span class="p">:</span> <span class="n">uuid_to_b64</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">rm_port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RASENMAEHER_HTTPS_PORT&quot;</span><span class="p">,</span> <span class="s2">&quot;4439&quot;</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span>
+    <span class="p">)</span>
+    <span class="n">rm_host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>  <span class="c1"># pylint: disable=E1101</span>
+        <span class="s2">&quot;RASENMAEHER_HOST&quot;</span><span class="p">,</span> <span class="s2">&quot;localmaeher.pvarki.fi&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rm_port</span> <span class="o">!=</span> <span class="mi">443</span><span class="p">:</span>
+        <span class="n">rm_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">rm_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">rm_port</span><span class="si">}</span><span class="s2">/&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rm_uri</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">rm_host</span><span class="si">}</span><span class="s2">/&quot;</span>
+    <span class="n">mtls_uri</span> <span class="o">=</span> <span class="n">rm_uri</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;https://mtls.&quot;</span><span class="p">)</span>  <span class="c1"># FIXME: Use env etc</span>
+    <span class="n">manifest</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;rasenmaeher&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;init&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;base_uri&quot;</span><span class="p">:</span> <span class="n">rm_uri</span><span class="p">,</span> <span class="s2">&quot;csr_jwt&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">},</span>
+            <span class="s2">&quot;mtls&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;base_uri&quot;</span><span class="p">:</span> <span class="n">mtls_uri</span><span class="p">},</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;product&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;dns&quot;</span><span class="p">:</span> <span class="s2">&quot;fake.localmaeher.pvarki.fi&quot;</span><span class="p">},</span>
+    <span class="p">}</span>
+    <span class="k">with</span> <span class="n">FP_MANIFEST_PATH</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpntr</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">fpntr</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_rasenmaeher_manifest">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.create_rasenmaeher_manifest">[docs]</a>
+<span class="k">def</span> <span class="nf">create_rasenmaeher_manifest</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create manifest for RASENMAEHER&quot;&quot;&quot;</span>
+    <span class="n">fakeproduct_port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PRODUCT_HTTPS_PORT&quot;</span><span class="p">,</span> <span class="s2">&quot;4625&quot;</span><span class="p">)</span>  <span class="c1"># pylint: disable=E1101</span>
+    <span class="p">)</span>
+    <span class="n">manifest</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;dns&quot;</span><span class="p">:</span> <span class="s2">&quot;localmaeher.pvarki.fi&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;fake&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;api&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;https://fake.localmaeher.pvarki.fi:</span><span class="si">{</span><span class="n">fakeproduct_port</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;uri&quot;</span><span class="p">:</span> <span class="s2">&quot;https://fake.localmaeher.pvarki.fi:844/&quot;</span><span class="p">,</span>  <span class="c1"># Not actually there</span>
+                <span class="s2">&quot;certcn&quot;</span><span class="p">:</span> <span class="s2">&quot;fake.localmaeher.pvarki.fi&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="k">with</span> <span class="n">RM_MANIFEST_PATH</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;wt&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fpntr</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">fpntr</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../technical/api/fakewerk/index.html#fakewerk.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Do the needful&quot;&quot;&quot;</span>
+    <span class="n">ensure_directories</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">TP_PUBKEY_PATH</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating TILAUSPALVELU JWT keypair&quot;</span><span class="p">)</span>
+        <span class="n">create_tilauspalvelu_keypair</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing product manifest for RASENMAEHER&quot;</span><span class="p">)</span>
+    <span class="n">create_rasenmaeher_manifest</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Writing product manifest for fakeproduct&quot;</span><span class="p">)</span>
+    <span class="n">create_fakeproduct_manifest</span><span class="p">()</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">init_logging</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
