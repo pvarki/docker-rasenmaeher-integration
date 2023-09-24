@@ -26,7 +26,7 @@ jobs:
       - name: Generate Swagger UI
         uses: Legion2/swagger-ui-action@v1
         with:
-          output: swagger-ui
+          output: ${{ github.workspace }}/swagger-ui
           version: 3.1.0
           spec-file: openapi.json
       - name: List Swagger UI Directory
@@ -34,6 +34,8 @@ jobs:
           ls .
           ls ./swagger-ui/
           cat ./swagger-ui/swagger-config.json
+          cat ./swagger-ui/index.html
+          cat ./swagger-ui/swagger-ui.css
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
