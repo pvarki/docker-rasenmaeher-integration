@@ -1,0 +1,41 @@
+name: OpenAPI JSON to gh-pages (<url>/openapi.json)
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  openapijson_to_gh-pages:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Build openapi.json
+        run: |
+          eval "$(ssh-agent -s)" && export DOCKER_BUILDKIT=1 && docker build --ssh default --target openapi -t rasenmaeher_api:amd64-openapi api/
+          docker run --rm -it --name rasenmaeher_openapijson rasenmaeher_api:amd64-openapi >openapi.json
+          - name: generate swagger ui
+          uses: Legion2/swagger-ui-action@v1
+          with:
+            output: swagger-ui
+            version: 3.1.0
+            spec-file: ./openapi.json
+      - name: List swagger-ui dir
+        run: |
+          ls ./swagger-ui/
+          cat ./swagger-ui/swagger-config.json
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: swagger-ui

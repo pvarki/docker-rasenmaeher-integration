@@ -132,24 +132,6 @@ jobs:
         alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
         dcdev up --wait || ( dcdev logs && exit 1 )
       continue-on-error: true
-    - name: generate openapi.json
-      id: generate_openapijson
-      run: curl http://localhost:8000/api/openapi.json -o openapi.json
-    - name: generate swagger ui
-      uses: Legion2/swagger-ui-action@v1
-      with:
-        output: swagger-ui
-        version: 3.1.0
-        spec-file: ./openapi.json
-    - name: list swagger-ui dir
-      run: |
-        ls ./swagger-ui/
-        cat ./swagger-ui/swagger-config.json
-    - name: deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: swagger-ui
     - name: add test users
       id: add_test_users
       run: |
