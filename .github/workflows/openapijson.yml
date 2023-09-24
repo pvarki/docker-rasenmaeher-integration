@@ -22,7 +22,7 @@ jobs:
       - name: Build openapi.json
         run: |
           eval "$(ssh-agent -s)" && export DOCKER_BUILDKIT=1 && docker build --ssh default --target openapi -t rasenmaeher_api:amd64-openapi api/
-          docker run --rm -it --name rasenmaeher_openapijson rasenmaeher_api:amd64-openapi >openapi.json
+          docker run --rm --name rasenmaeher_openapijson rasenmaeher_api:amd64-openapi >openapi.json
           - name: generate swagger ui
           uses: Legion2/swagger-ui-action@v1
           with:
