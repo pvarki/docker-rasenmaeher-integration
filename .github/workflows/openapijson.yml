@@ -28,6 +28,7 @@ jobs:
         with:
           output: swagger-ui
           spec-file: openapi.json
+          version: ^5.0.0
       #- name: Copy openapi.json to swagger-ui Directory
       #  run: |
       #    mkdir -p ./swagger-ui/
