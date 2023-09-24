@@ -23,12 +23,16 @@ jobs:
         run: |
           eval "$(ssh-agent -s)" && export DOCKER_BUILDKIT=1 && docker build --ssh default --target openapi -t rasenmaeher_api:amd64-openapi api/
           docker run --rm --name rasenmaeher_openapijson rasenmaeher_api:amd64-openapi >openapi.json
-      - name: Generate Swagger UI
-        uses: Legion2/swagger-ui-action@v1
-        with:
-          output: ${{ github.workspace }}/swagger-ui
-          version: 3.1.0
-          spec-file: openapi.json
+      #- name: Generate Swagger UI
+      #  uses: Legion2/swagger-ui-action@v1
+      #  with:
+      #    output: swagger-ui
+      #    version: 3.1.0
+      #    spec-file: openapi.json
+      - name: Copy openapi.json to swagger-ui Directory
+        run: |
+          mkdir -p ./swagger-ui/
+          cp ./openapi.json ./swagger-ui/
       - name: List Swagger UI Directory
         run: |
           ls .
