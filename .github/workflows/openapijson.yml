@@ -2,8 +2,8 @@ name: OpenAPI JSON to gh-pages (<url>/openapi.json)
 
 on:
   pull_request:
-    branches:
-      - main
+    # branches:
+    #  - main
     types:
       - closed
   workflow_dispatch:  # Allow manual triggering
