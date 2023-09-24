@@ -1,12 +1,8 @@
 sequenceDiagram
-    hallintakännykkä->>API: /enrollment/list
-    API->>hallintakännykkä: <users_list>
-    hallintakännykkä->>API: /enrollment/invitecode/create
-    API->>hallintakännykkä: <invite_code>
-    hallintakännykkä->>toinen kännykkä: anna koodi tai näytä QR
-    toinen kännykkä->>hallintakännykkä: /enrollment/invitecode?code=<invite_code>
+    hallintakännykkä->>toinen kännykkä: anna <invite_code> tai näytä QR
+    toinen kännykkä->>API: /enrollment/invitecode?code=<invite_code>
     API->>toinen kännykkä: <invite_code active: true/false>
-    toinen kännykkä->>toinen kännykkä: onko koodi ok?
+    toinen kännykkä->>toinen kännykkä: onko <invite_code> ok?
     toinen kännykkä->>API: /enrollment/invitecode/enroll: {<invite_code>, <work_id>}
     API->>toinen kännykkä: <user_jwt>
     toinen kännykkä->>API: /enrollment/have-I-been-accepted

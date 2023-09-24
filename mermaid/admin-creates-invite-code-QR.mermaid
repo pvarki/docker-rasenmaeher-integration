@@ -1,0 +1,6 @@
+sequenceDiagram
+    hallintakännykkä->>API: /enrollment/list
+    API->>hallintakännykkä: <users_list>
+    hallintakännykkä->>API: /enrollment/invitecode/create
+    API->>hallintakännykkä: <invite_code>
+    hallintakännykkä->>hallintakännykkä: generoi QR {<invite_code>}
