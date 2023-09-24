@@ -10,7 +10,6 @@ on:
 
 jobs:
   openapijson_to_gh-pages:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
