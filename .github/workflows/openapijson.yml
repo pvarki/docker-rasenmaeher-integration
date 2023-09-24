@@ -1,7 +1,6 @@
 name: OpenAPI JSON to gh-pages (<url>/openapi.json)
 
 on:
-  push:
   pull_request:
     # branches:
     #  - main
