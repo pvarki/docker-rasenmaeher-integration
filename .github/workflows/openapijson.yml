@@ -37,9 +37,6 @@ jobs:
         run: |
           ls .
           ls ./swagger-ui/
-          cat ./swagger-ui/swagger-config.json
-          cat ./swagger-ui/index.html
-          cat ./swagger-ui/swagger-ui.css
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
