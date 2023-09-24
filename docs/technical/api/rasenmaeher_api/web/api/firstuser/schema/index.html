@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.web.api.firstuser.schema &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../../../search.html" />
+    <link rel="next" title="rasenmaeher_api.web.api.firstuser.views" href="../views/index.html" />
+    <link rel="prev" title="rasenmaeher_api.web.api.firstuser" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.6.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web.api</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web.api.firstuser</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web.api.firstuser.schema</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-rasenmaeher_api.web.api.firstuser.schema">
+<span id="rasenmaeher-api-web-api-firstuser-schema"></span><h1><a class="reference internal" href="#module-rasenmaeher_api.web.api.firstuser.schema" title="rasenmaeher_api.web.api.firstuser.schema"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web.api.firstuser.schema</span></code></a><a class="headerlink" href="#module-rasenmaeher_api.web.api.firstuser.schema" title="Link to this heading"></a></h1>
+<p>Schema for enrollment.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserIsActiveOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserCheckCodeIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserCheckCodeOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserDisableIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserDisableOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserEnableIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserEnableOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserAddAdminIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserAddAdminOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserDeleteAdminIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserDeleteAdminOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserListAdminIn</span></code></a></p></td>
+<td><p>Enrollment init in response schema</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut" title="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FirstuserListAdminOut</span></code></a></p></td>
+<td><p>Enrollment config add manager schema out</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserIsActiveOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserIsActiveOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserIsActiveOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserIsActiveOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserIsActiveOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.api_is_active">
+<span class="sig-name descname"><span class="pre">api_is_active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserIsActiveOut.api_is_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.api_is_active" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserCheckCodeIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.temp_admin_code">
+<span class="sig-name descname"><span class="pre">temp_admin_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeIn.temp_admin_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.temp_admin_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserCheckCodeOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.code_ok">
+<span class="sig-name descname"><span class="pre">code_ok</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserCheckCodeOut.code_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.code_ok" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserDisableIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.permit_str">
+<span class="sig-name descname"><span class="pre">permit_str</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableIn.permit_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.permit_str" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserDisableOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.api_disabled">
+<span class="sig-name descname"><span class="pre">api_disabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDisableOut.api_disabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.api_disabled" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserEnableIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.permit_str">
+<span class="sig-name descname"><span class="pre">permit_str</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableIn.permit_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.permit_str" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserEnableOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.api_enabled">
+<span class="sig-name descname"><span class="pre">api_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserEnableOut.api_enabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.api_enabled" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserAddAdminIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.work_id">
+<span class="sig-name descname"><span class="pre">work_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminIn.work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.work_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserAddAdminOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.admin_added">
+<span class="sig-name descname"><span class="pre">admin_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut.admin_added"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.admin_added" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.jwt_exchange_code">
+<span class="sig-name descname"><span class="pre">jwt_exchange_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserAddAdminOut.jwt_exchange_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.jwt_exchange_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserDeleteAdminIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.temp_admin_code">
+<span class="sig-name descname"><span class="pre">temp_admin_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn.temp_admin_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.temp_admin_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.work_id">
+<span class="sig-name descname"><span class="pre">work_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminIn.work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.work_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserDeleteAdminOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.admin_removed">
+<span class="sig-name descname"><span class="pre">admin_removed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserDeleteAdminOut.admin_removed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.admin_removed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserListAdminIn</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminIn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment init in response schema</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminIn.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminIn.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminIn.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.temp_admin_code">
+<span class="sig-name descname"><span class="pre">temp_admin_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminIn.temp_admin_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.temp_admin_code" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FirstuserListAdminOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment config add manager schema out</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminOut.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminOut.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.schema_extra">
+<span class="sig-name descname"><span class="pre">schema_extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminOut.Config.schema_extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.schema_extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.admin_list">
+<span class="sig-name descname"><span class="pre">admin_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/firstuser/schema.html#FirstuserListAdminOut.admin_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.admin_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="rasenmaeher_api.web.api.firstuser" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../views/index.html" class="btn btn-neutral float-right" title="rasenmaeher_api.web.api.firstuser.views" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

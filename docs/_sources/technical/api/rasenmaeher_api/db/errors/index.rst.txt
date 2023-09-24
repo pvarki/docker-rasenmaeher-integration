@@ -1,0 +1,78 @@
+:py:mod:`rasenmaeher_api.db.errors`
+===================================
+
+.. py:module:: rasenmaeher_api.db.errors
+
+.. autoapi-nested-parse::
+
+   Errors
+
+
+
+Module Contents
+---------------
+
+.. py:exception:: DBFetchError
+
+
+   Bases: :py:obj:`ValueError`
+
+   Various issues when fetching an object that are input dependent
+
+
+.. py:exception:: NotFound(*args)
+
+
+   Bases: :py:obj:`DBFetchError`, :py:obj:`starlette.exceptions.HTTPException`
+
+   Object was not found
+
+
+.. py:exception:: Deleted(*args)
+
+
+   Bases: :py:obj:`NotFound`
+
+   Object was deleted
+
+
+.. py:exception:: ForbiddenOperation
+
+
+   Bases: :py:obj:`RuntimeError`
+
+   Forbidden operation
+
+
+.. py:exception:: EnrollmentError
+
+
+   Bases: :py:obj:`Exception`
+
+   Baseclass for issues with enrollments
+
+
+.. py:exception:: CallsignReserved(*args)
+
+
+   Bases: :py:obj:`starlette.exceptions.HTTPException`, :py:obj:`EnrollmentError`, :py:obj:`ValueError`
+
+   Callsign is already reserved
+
+
+.. py:exception:: PoolInactive
+
+
+   Bases: :py:obj:`EnrollmentError`, :py:obj:`ForbiddenOperation`
+
+   Inactive pool forbidden operations
+
+
+.. py:exception:: TokenReuse(*args)
+
+
+   Bases: :py:obj:`starlette.exceptions.HTTPException`, :py:obj:`ValueError`
+
+   Token is already reserved
+
+

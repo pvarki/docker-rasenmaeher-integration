@@ -1,0 +1,28 @@
+:py:mod:`rasenmaeher_api.web.api.firstuser`
+===========================================
+
+.. py:module:: rasenmaeher_api.web.api.firstuser
+
+.. autoapi-nested-parse::
+
+   Firstuser API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   schema/index.rst
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+

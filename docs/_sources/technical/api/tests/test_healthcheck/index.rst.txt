@@ -1,0 +1,60 @@
+:py:mod:`tests.test_healthcheck`
+================================
+
+.. py:module:: tests.test_healthcheck
+
+.. autoapi-nested-parse::
+
+   Test healthcheck endpoint
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_healthcheck.test_get_healthcheck
+   tests.test_healthcheck.test_get_healthcheck_delivery
+   tests.test_healthcheck.test_get_healthcheck_services
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_healthcheck.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_get_healthcheck(app_client)
+   :async:
+
+   /healthcheck
+   healthcheck should be success
+
+
+.. py:function:: test_get_healthcheck_delivery(app_client)
+   :async:
+
+   /healthcheck/delivery
+   response status should be 200,201,204
+
+
+.. py:function:: test_get_healthcheck_services(app_client)
+   :async:
+
+   /healthcheck/services
+   Result should be 200
+   There should be at least more than one result on dict...
+
+

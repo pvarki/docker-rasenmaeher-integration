@@ -1,0 +1,198 @@
+:py:mod:`rasenmaeher_api.db.people`
+===================================
+
+.. py:module:: rasenmaeher_api.db.people
+
+.. autoapi-nested-parse::
+
+   Abstractions for people
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.people.Person
+   rasenmaeher_api.db.people.Role
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.people.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:class:: Person
+
+
+   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+
+   People, pk is UUID and comes from basemodel
+
+   NOTE: at some point we want to stop keeping track of people in our own db
+   and only use keycloack as the store for actual users. In any case we need a nice pythonic
+   abstraction layer so implement any queries you need to add as helpers here.
+
+   .. py:class:: Config
+
+
+      Basemodel config
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: __tablename__
+      :value: 'users'
+
+      
+
+   .. py:attribute:: callsign
+
+      
+
+   .. py:attribute:: certspath
+
+      
+
+   .. py:attribute:: extra
+
+      
+
+   .. py:method:: create_with_cert(callsign, extra = None)
+      :classmethod:
+      :abstractmethod:
+      :async:
+
+      Create the cert etc and save the person
+
+
+   .. py:method:: list(include_deleted = False)
+      :classmethod:
+      :async:
+
+      List people
+
+
+   .. py:method:: by_role(role)
+      :classmethod:
+      :async:
+
+      List people that have given role, if role is None list all people
+
+
+   .. py:method:: by_callsign(callsign, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get by callsign
+
+
+   .. py:method:: by_mtlsjwt_payload(payload, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get by MTLSorJWTMiddleWare payload
+
+
+   .. py:method:: get_key_pem()
+      :abstractmethod:
+      :async:
+
+      Read the private key from under certspath and return the PEM
+
+
+   .. py:method:: get_cert_pem()
+      :abstractmethod:
+      :async:
+
+      Read the cert from under certspath and return the PEM
+
+
+   .. py:method:: get_cert_pfx()
+      :abstractmethod:
+      :async:
+
+      Read the cert and private key from under certspath and return the PFX container
+
+
+   .. py:method:: _get_role(role)
+      :async:
+
+      Internal helper for DRY
+
+
+   .. py:method:: has_role(role)
+      :async:
+
+      Check if this user has given role
+
+
+   .. py:method:: assign_role(role)
+      :async:
+
+      Assign a role, return true if role was created, false if it already existed
+
+
+   .. py:method:: remove_role(role)
+      :async:
+
+      Remove a role, return true if role was removed, false if it wasn't assigned
+
+
+
+.. py:class:: Role
+
+
+   Bases: :py:obj:`rasenmaeher_api.db.base.DBModel`
+
+   Give a person a role
+
+   .. py:attribute:: __tablename__
+      :value: 'roles'
+
+      
+
+   .. py:attribute:: __table_args__
+
+      
+
+   .. py:attribute:: pk
+
+      
+
+   .. py:attribute:: created
+
+      
+
+   .. py:attribute:: updated
+
+      
+
+   .. py:attribute:: user
+
+      
+
+   .. py:attribute:: role
+
+      
+
+   .. py:attribute:: _idx
+
+      
+
+
