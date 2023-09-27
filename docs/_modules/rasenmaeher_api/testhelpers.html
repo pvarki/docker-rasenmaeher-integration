@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.testhelpers &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.testhelpers &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -84,8 +84,7 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">.sqlitedatabase</span> <span class="kn">import</span> <span class="n">sqlite</span> <span class="k">as</span> <span class="n">sqlitewrapper</span>
-
+<span class="kn">from</span> <span class="nn">.db</span> <span class="kn">import</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Enrollment</span><span class="p">,</span> <span class="n">LoginCode</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.LOGGER">[docs]</a>
@@ -95,97 +94,58 @@
 
 <div class="viewcode-block" id="create_test_users">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.create_test_users">[docs]</a>
-<span class="k">def</span> <span class="nf">create_test_users</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_test_users</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a few test users and work ids returns</span>
-<span class="sd">    list of work-ids and their corresponding &quot;hashes&quot;</span>
-
-<span class="sd">    First one has &quot;enrollment&quot; special role</span>
+<span class="sd">    list of work-ids and their corresponding jwt tokens</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># copied from the sqlitedb dev init so blame karppo :D</span>
     <span class="n">work_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">work_hashes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">jwt_tokens</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># PONDER: create random ones ?</span>
+    <span class="c1"># Create &quot;anon_admin&quot;, this is also done in /firstuser/add-admin if one not exists yet</span>
+    <span class="c1"># anon_admin is only used to &quot;approve&quot; the newly created admin users. Aka user for &quot;anon_admin_session&quot;.</span>
+    <span class="n">_anon_admin_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">is_callsign_available</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;anon_admin&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_anon_admin_added</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">_anon_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;anon_admin&quot;</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_anon_user</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;anon_admin&quot;</span><span class="p">)</span>
+
+    <span class="n">_anon_admin_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;anon_admin&quot;</span><span class="p">)</span>
+
+    <span class="c1"># CREATE USER secondadmin</span>
+    <span class="c1"># approved, admin role, approved by anon_admin</span>
+    <span class="n">_enrollment_pyteststuff</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;pyteststuff&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">_user_pyteststuff</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_enrollment_pyteststuff</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">_anon_admin_user</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_user_pyteststuff</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="n">_jwt_pyteststuff</span> <span class="o">=</span> <span class="k">await</span> <span class="n">LoginCode</span><span class="o">.</span><span class="n">create_for_claims</span><span class="p">(</span><span class="n">claims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;pyteststuff&quot;</span><span class="p">})</span>
     <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;pyteststuff&quot;</span><span class="p">)</span>
-    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;TestikalukalukalukaulinJotainAsdJotainJotainJotain&quot;</span><span class="p">)</span>
-    <span class="c1"># Create test admin credentials</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;ReadyForDelivery&quot;</span><span class="p">,</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;somehashwhoaccepted_this&quot;</span><span class="p">,</span>
-        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;enrollment&quot;</span><span class="p">,</span>
-        <span class="n">active</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">jwt_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jwt_pyteststuff</span><span class="p">)</span>
 
+    <span class="c1"># CREATE USER secondadmin</span>
+    <span class="c1"># approved, admin role, approved by pyteststuff</span>
+    <span class="n">_enrollment_secondadmin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;secondadmin&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">_user_secondadmin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_enrollment_secondadmin</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">_user_pyteststuff</span><span class="p">)</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_user_secondadmin</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="n">_jwt_secondadmin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">LoginCode</span><span class="o">.</span><span class="n">create_for_claims</span><span class="p">(</span><span class="n">claims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;secondadmin&quot;</span><span class="p">})</span>
+    <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;secondadmin&quot;</span><span class="p">)</span>
+    <span class="n">jwt_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jwt_secondadmin</span><span class="p">)</span>
+
+    <span class="c1"># CREATE USER kissa</span>
+    <span class="c1"># approved, approved by secondadmin</span>
+    <span class="n">_enrollment_kissa</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;kissa&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_enrollment_kissa</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">_user_secondadmin</span><span class="p">)</span>
+    <span class="n">_jwt_kissa</span> <span class="o">=</span> <span class="k">await</span> <span class="n">LoginCode</span><span class="o">.</span><span class="n">create_for_claims</span><span class="p">(</span><span class="n">claims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">})</span>
     <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kissa&quot;</span><span class="p">)</span>
-    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;kissa123&quot;</span><span class="p">)</span>
-    <span class="c1"># Create kissa dummy role</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;ReadyForDelivery&quot;</span><span class="p">,</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;somehashwhoaccepted_this&quot;</span><span class="p">,</span>
-        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;https://www.kuvaton.com/kuvei/asiakkaamme_kissa.jpg&quot;</span><span class="p">,</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">jwt_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jwt_kissa</span><span class="p">)</span>
 
+    <span class="c1"># CREATE USER koira</span>
+    <span class="c1"># not approved</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;koira&quot;</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">_jwt_koira</span> <span class="o">=</span> <span class="k">await</span> <span class="n">LoginCode</span><span class="o">.</span><span class="n">create_for_claims</span><span class="p">(</span><span class="n">claims</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;koira&quot;</span><span class="p">})</span>
     <span class="n">work_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;koira&quot;</span><span class="p">)</span>
-    <span class="n">work_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;koira123&quot;</span><span class="p">)</span>
-    <span class="c1"># Create koira dummy role</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">work_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_hashes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">jwt_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_jwt_koira</span><span class="p">)</span>
 
-    <span class="c1"># Add initial &#39;first time user&#39; hash that has permission to create admin users</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_first_time_user_hash</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;first-user&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">1</span>
-    <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="c1"># TODO CREATE POOL FOR secondadmin</span>
 
-    <span class="c1"># Add the &#39;first time user&#39; code to jwt table if not there already</span>
-    <span class="n">_exchange_code</span> <span class="o">=</span> <span class="s2">&quot;HackHackHacatoneillaOnPorakoiraNukkumassa&quot;</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_jwt_sel_from_jwt_where_exchange</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span><span class="p">)</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_jwt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">claims</span><span class="o">=</span><span class="s1">&#39;{&quot;anon_admin_session&quot;:true}&#39;</span><span class="p">,</span>
-            <span class="n">consumed</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span>
-            <span class="n">work_id_hash</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="n">work_id</span><span class="o">=</span><span class="s2">&quot;NA&quot;</span><span class="p">,</span>
-            <span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">sqlite_jwt_update_consumed_where_exchange</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">new_consumed_state</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="n">exchange_code</span><span class="o">=</span><span class="n">_exchange_code</span>
-        <span class="p">)</span>
-    <span class="n">sqlitewrapper</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">work_ids</span><span class="p">,</span> <span class="n">work_hashes</span></div>
+    <span class="k">return</span> <span class="n">work_ids</span><span class="p">,</span> <span class="n">jwt_tokens</span></div>
 
 </pre></div>
 

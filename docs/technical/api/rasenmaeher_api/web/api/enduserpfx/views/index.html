@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
 </ul>
@@ -109,28 +110,13 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx" title="rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pem_to_pfx</span></code></a>(pem_key, pem_cert)</p></td>
-<td><p>Convert PEM data to PFX (PKCS12).</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.new_key" title="rasenmaeher_api.web.api.enduserpfx.views.new_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_key</span></code></a>(callsign)</p></td>
-<td><p>pfx</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.sign_csr" title="rasenmaeher_api.web.api.enduserpfx.views.sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sign_csr</span></code></a>(csr)</p></td>
-<td><p>Quick and dirty method to sign CSR from CFSSL</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.save_key" title="rasenmaeher_api.web.api.enduserpfx.views.save_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_key</span></code></a>(pem_key, callsign)</p></td>
-<td><p>Save key to file.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.save_pfx" title="rasenmaeher_api.web.api.enduserpfx.views.save_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_pfx</span></code></a>(pfx, callsign)</p></td>
-<td><p>Save PFX to file.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_jwt" title="rasenmaeher_api.web.api.enduserpfx.views.check_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_jwt</span></code></a>(jwt, callsign)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_jwt" title="rasenmaeher_api.web.api.enduserpfx.views.check_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_jwt</span></code></a>(jwt, callsign)</p></td>
 <td><p>Sanity checks for JWT payload here</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs" title="rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_enduser_certs</span></code></a>(request, callsign[, jwt])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs" title="rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_enduser_certs</span></code></a>(request, callsign[, jwt])</p></td>
 <td><p>Method to create key, sign CSR and return PFX</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available" title="rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_enduser_bundle_available</span></code></a>(request, callsign[, jwt])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available" title="rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_enduser_bundle_available</span></code></a>(request, callsign[, jwt])</p></td>
 <td><p>Method to check if bundle is available</p></td>
 </tr>
 </tbody>
@@ -157,87 +143,6 @@
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.LOGGER">
 <span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.LOGGER" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pem_to_pfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pem_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pem_cert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#pem_to_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx" title="Link to this definition"></a></dt>
-<dd><p>Convert PEM data to PFX (PKCS12).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pem_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>pem_cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.new_key">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#new_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.new_key" title="Link to this definition"></a></dt>
-<dd><p>pfx</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[Any, Any]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.sign_csr">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sign_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#sign_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.sign_csr" title="Link to this definition"></a></dt>
-<dd><p>Quick and dirty method to sign CSR from CFSSL
-params: csr
-returns: certificate</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>csr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.save_key">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pem_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#save_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.save_key" title="Link to this definition"></a></dt>
-<dd><p>Save key to file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pem_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.save_pfx">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_pfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#save_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.save_pfx" title="Link to this definition"></a></dt>
-<dd><p>Save PFX to file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pfx</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)"><em>bytes</em></a>) – </p></li>
-<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.check_jwt">

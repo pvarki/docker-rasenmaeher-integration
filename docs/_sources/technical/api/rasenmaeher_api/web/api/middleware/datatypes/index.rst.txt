@@ -1,0 +1,64 @@
+:py:mod:`rasenmaeher_api.web.api.middleware.datatypes`
+======================================================
+
+.. py:module:: rasenmaeher_api.web.api.middleware.datatypes
+
+.. autoapi-nested-parse::
+
+   Data types needed by this module
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayloadType
+   rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload
+
+
+
+
+.. py:class:: MTLSorJWTPayloadType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Valid payload types
+
+   .. py:attribute:: JWT
+      :value: 'jwt'
+
+      
+
+   .. py:attribute:: MTLS
+      :value: 'mtls'
+
+      
+
+
+.. py:class:: MTLSorJWTPayload
+
+
+   payload either from mTLS or JWT auth
+
+   .. py:attribute:: type
+      :type: MTLSorJWTPayloadType
+
+      
+
+   .. py:attribute:: userid
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: payload
+      :type: Union[libpvarki.middleware.mtlsheader.DNDict, multikeyjwt.middleware.jwtbearer.JWTPayload]
+
+      
+
+

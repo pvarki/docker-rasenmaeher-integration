@@ -35,10 +35,9 @@ Attributes
    
 
 .. py:function:: create_test_users()
+   :async:
 
    Create a few test users and work ids returns
-   list of work-ids and their corresponding "hashes"
-
-   First one has "enrollment" special role
+   list of work-ids and their corresponding jwt tokens
 
 

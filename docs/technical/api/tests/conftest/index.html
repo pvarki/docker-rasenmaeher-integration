@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.conftest &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.conftest &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -59,6 +59,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.conftest</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_auth/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_auth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_cfssl</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_console</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_enrollment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_enrollment</span></code></a></li>
@@ -139,6 +140,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_user_client" title="tests.conftest.tilauspalvelu_jwt_user_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_user_client</span></code></a>(issuer_cl, test_user_secrets)</p></td>
 <td><p>Client with normal user JWT</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_user_koira_client" title="tests.conftest.tilauspalvelu_jwt_user_koira_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_user_koira_client</span></code></a>(issuer_cl, ...)</p></td>
+<td><p>Client with normal user JWT</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_without_proper_user_client" title="tests.conftest.tilauspalvelu_jwt_without_proper_user_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_without_proper_user_client</span></code></a>(issuer_cl)</p></td>
+<td><p>Client with normal user JWT</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.mtls_client" title="tests.conftest.mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mtls_client</span></code></a>()</p></td>
 <td><p>Client with mocked NGinx mTLS headers</p></td>
 </tr>
@@ -197,7 +204,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tests.conftest.test_user_secrets">
-<span class="sig-name descname"><span class="pre">test_user_secrets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_env_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#test_user_secrets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.test_user_secrets" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_user_secrets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_env_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#test_user_secrets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.test_user_secrets" title="Link to this definition"></a></dt>
 <dd><p>Create a few test users and work ids returns
 list of work-ids and their corresponding “hashes”</p>
 <p>First one has “enrollment” special role</p>
@@ -307,6 +314,37 @@ list of work-ids and their corresponding “hashes”</p>
 <li><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p></li>
 <li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_user_koira_client">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_user_koira_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_user_koira_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_user_koira_client" title="Link to this definition"></a></dt>
+<dd><p>Client with normal user JWT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p></li>
+<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_without_proper_user_client">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_without_proper_user_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_without_proper_user_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_without_proper_user_client" title="Link to this definition"></a></dt>
+<dd><p>Client with normal user JWT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>

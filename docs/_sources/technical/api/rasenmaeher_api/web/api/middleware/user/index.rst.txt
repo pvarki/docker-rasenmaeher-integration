@@ -1,0 +1,50 @@
+:py:mod:`rasenmaeher_api.web.api.middleware.user`
+=================================================
+
+.. py:module:: rasenmaeher_api.web.api.middleware.user
+
+.. autoapi-nested-parse::
+
+   Middleware to require valid user
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.middleware.user.ValidUser
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.middleware.user.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:class:: ValidUser(*, auto_error = True, require_roles = ())
+
+
+   Bases: :py:obj:`rasenmaeher_api.web.api.middleware.mtls.MTLSorJWT`
+
+   Check that the subject is a valid user
+
+   .. py:method:: __call__(request)
+      :async:
+
+      Call parent and check the userid
+
+
+

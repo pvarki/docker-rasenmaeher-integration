@@ -1,0 +1,48 @@
+:py:mod:`rasenmaeher_api.web.api.middleware.mtls`
+=================================================
+
+.. py:module:: rasenmaeher_api.web.api.middleware.mtls
+
+.. autoapi-nested-parse::
+
+   Middleware to handle mTLS or JWT auth
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.middleware.mtls.MTLSorJWT
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.middleware.mtls.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:class:: MTLSorJWT(*, scheme = 'header', scheme_name = None, description = None, auto_error = True, disallow_jwt_sub = ('tpadminsession', ))
+
+
+   Bases: :py:obj:`fastapi.security.http.HTTPBase`
+
+   Auth either by JWT or mTLS header
+
+   .. py:method:: __call__(request)
+      :async:
+
+
+

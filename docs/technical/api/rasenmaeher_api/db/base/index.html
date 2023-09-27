@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.base &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.db.base &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../web/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
 </ul>
@@ -107,7 +108,7 @@
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.base.BaseModel" title="rasenmaeher_api.db.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseModel</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.base.ORMBaseModel" title="rasenmaeher_api.db.base.ORMBaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ORMBaseModel</span></code></a></p></td>
 <td><p>Baseclass with common fields</p></td>
 </tr>
 </tbody>
@@ -165,38 +166,38 @@
 <dd></dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseModel</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ORMBaseModel</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#rasenmaeher_api.db.base.DBModel" title="rasenmaeher_api.db.base.DBModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DBModel</span></code></a></p>
 <p>Baseclass with common fields</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.__table_args__">
-<span class="sig-name descname"><span class="pre">__table_args__</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.__table_args__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.__table_args__" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.__table_args__">
+<span class="sig-name descname"><span class="pre">__table_args__</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.__table_args__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.__table_args__" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.pk">
-<span class="sig-name descname"><span class="pre">pk</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.pk" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.pk">
+<span class="sig-name descname"><span class="pre">pk</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.pk" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.created">
-<span class="sig-name descname"><span class="pre">created</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.created"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.created" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.created">
+<span class="sig-name descname"><span class="pre">created</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.created"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.created" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.updated">
-<span class="sig-name descname"><span class="pre">updated</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.updated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.updated" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.updated">
+<span class="sig-name descname"><span class="pre">updated</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.updated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.updated" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.deleted">
-<span class="sig-name descname"><span class="pre">deleted</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.deleted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.deleted" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.deleted">
+<span class="sig-name descname"><span class="pre">deleted</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.deleted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.deleted" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.by_pk">
-<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">by_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_deleted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.by_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.by_pk" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.by_pk">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">by_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_deleted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.by_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.by_pk" title="Link to this definition"></a></dt>
 <dd><p>Get by pk</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -212,8 +213,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.base.BaseModel.delete">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#BaseModel.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.BaseModel.delete" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.db.base.ORMBaseModel.delete">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/base.html#ORMBaseModel.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.base.ORMBaseModel.delete" title="Link to this definition"></a></dt>
 <dd><p>override delete method to set the deleted timestamp instead of removing the row</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>

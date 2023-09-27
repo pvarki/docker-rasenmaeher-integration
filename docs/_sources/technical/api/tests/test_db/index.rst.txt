@@ -18,14 +18,19 @@ Functions
 
 .. autoapisummary::
 
+   tests.test_db.ginosession
    tests.test_db.test_dbconfig_env
    tests.test_db.test_dbconfig_defaults
-   tests.test_db.ginosession
    tests.test_db.test_person_crud
    tests.test_db.test_enrollments_crud
    tests.test_db.test_enrollmentpools_crud
+   tests.test_db.test_enrollmentpools_list
+   tests.test_db.test_enrollments_list
    tests.test_db.test_seentokens_crud
    tests.test_db.test_logincodes_crud
+   tests.test_db.test_person_with_cert
+   tests.test_db.test_person_with_cert_cfsslfail
+   tests.test_db.test_person_with_cert_duplicatename
 
 
 
@@ -41,6 +46,12 @@ Attributes
 
    
 
+.. py:function:: ginosession()
+   :async:
+
+   make sure db is bound etc
+
+
 .. py:function:: test_dbconfig_env(monkeypatch)
 
    Test the env loading works without import side effects
@@ -49,12 +60,6 @@ Attributes
 .. py:function:: test_dbconfig_defaults(docker_ip)
 
    Check that the fixture set port and host correctly
-
-
-.. py:function:: ginosession()
-   :async:
-
-   make sure db is bound etc
 
 
 .. py:function:: test_person_crud(ginosession)
@@ -75,6 +80,18 @@ Attributes
    Test the db abstraction enrollments and enrollmentpools
 
 
+.. py:function:: test_enrollmentpools_list(ginosession)
+   :async:
+
+   Test list methods
+
+
+.. py:function:: test_enrollments_list(ginosession)
+   :async:
+
+   Test list methods
+
+
 .. py:function:: test_seentokens_crud(ginosession)
    :async:
 
@@ -85,5 +102,23 @@ Attributes
    :async:
 
    Test the db abstraction for login codes
+
+
+.. py:function:: test_person_with_cert(ginosession)
+   :async:
+
+   Test the cert creation with the classmethod (and revocation)
+
+
+.. py:function:: test_person_with_cert_cfsslfail(ginosession, monkeypatch)
+   :async:
+
+   Test the cert creation with the classmethod with CFSSL failure
+
+
+.. py:function:: test_person_with_cert_duplicatename(ginosession)
+   :async:
+
+   Test the cert creation with the classmethod but reserved callsign
 
 

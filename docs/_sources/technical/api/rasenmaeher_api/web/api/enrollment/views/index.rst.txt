@@ -19,25 +19,15 @@ Functions
 .. autoapisummary::
 
    rasenmaeher_api.web.api.enrollment.views.check_management_permissions
-   rasenmaeher_api.web.api.enrollment.views.update_management_hash_permissions
-   rasenmaeher_api.web.api.enrollment.views.update_invite_code_state
-   rasenmaeher_api.web.api.enrollment.views.is_workid_or_workidhash_given
-   rasenmaeher_api.web.api.enrollment.views.get_hash_with_either_workid_or_hash
-   rasenmaeher_api.web.api.enrollment.views.delete_invite_code_like
    rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_show_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted
-   rasenmaeher_api.web.api.enrollment.views.post_config_set_state
-   rasenmaeher_api.web.api.enrollment.views.post_config_set_mtls_test_link
-   rasenmaeher_api.web.api.enrollment.views.post_config_set_cert_dl_link
-   rasenmaeher_api.web.api.enrollment.views.post_config_add_manager
    rasenmaeher_api.web.api.enrollment.views.request_enrolment_status
    rasenmaeher_api.web.api.enrollment.views.request_enrollment_list
    rasenmaeher_api.web.api.enrollment.views.request_enrollment_init
    rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote
    rasenmaeher_api.web.api.enrollment.views.request_enrollment_demote
    rasenmaeher_api.web.api.enrollment.views.request_enrollment_lock
-   rasenmaeher_api.web.api.enrollment.views.request_enrollment_status
    rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept
    rasenmaeher_api.web.api.enrollment.views.post_invite_code
    rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code
@@ -70,40 +60,10 @@ Attributes
 
    
 
-.. py:function:: check_management_permissions(raise_exeption = False, management_hash = '', work_id = '', special_rule = '', hash_like = False)
+.. py:function:: check_management_permissions(raise_exeption = True, callsign = '', required_role = 'admin')
    :async:
 
-   Simple function to check if management_hash is found and has permissions. Use hash_like to use LIKE instead of =.
-
-
-.. py:function:: update_management_hash_permissions(management_hash, special_rule, active)
-   :async:
-
-   Update the active status of a management hash in the management table
-
-
-.. py:function:: update_invite_code_state(invite_code, active)
-   :async:
-
-   Update the active status of a invite-code in the management table
-
-
-.. py:function:: is_workid_or_workidhash_given(raise_exeption = True, work_id = None, work_id_hash = None)
-   :async:
-
-   Simple function to check if either work_id or work_id_hash has been given.
-
-
-.. py:function:: get_hash_with_either_workid_or_hash(raise_exeption = True, work_id = None, work_id_hash = None)
-   :async:
-
-   Simple function to get/check the work_id_hash and return it as str.
-
-
-.. py:function:: delete_invite_code_like(invite_code)
-   :async:
-
-   Delete invite code like
+   Simple function to check if requester has requested role.
 
 
 .. py:function:: post_generate_verification_code(request)
@@ -126,89 +86,55 @@ Attributes
    Return's True/False in 'have_i_been_accepted'
 
 
-.. py:function:: post_config_set_state(request, request_in = Body(None, examples=[EnrollmentConfigSetStateIn.Config.schema_extra['examples']]))
+.. py:function:: request_enrolment_status(params = Depends())
    :async:
 
-   Update/Set state/status for work_id/user/enrollment using either work_id_hash or work_id.
-
-
-.. py:function:: post_config_set_mtls_test_link(request, request_in = Body(None, examples=[EnrollmentConfigSetMtlsIn.Config.schema_extra['examples']]))
-   :async:
-
-   Set MTLS test link for one or all work_id's
-
-
-.. py:function:: post_config_set_cert_dl_link(request, request_in = Body(None, examples=[EnrollmentConfigSetDLCertIn.Config.schema_extra['examples']]))
-   :async:
-
-   Store certificate or howto download link url for work_id (enrollment) using either work_id or work_id_hash
-
-
-.. py:function:: post_config_add_manager(request, request_in = Body(None, examples=[EnrollmentAddServiceManagementIn.Config.schema_extra['examples']]))
-   :async:
-
-   Add new "management hash" with certain permissions. This is not same as users/work-id's promotion to admin.
-   You should think this as of adding "machine admin permissions". User related admin promotions should
-   be done using /promote and /demote /lock.
-
-
-.. py:function:: request_enrolment_status(request, params = Depends())
-   :async:
-
-   Check the status for given work_id (enrollment). status=None means that there is no enrollment with given work_id
+   /status?callsign=xxxx
+   Check the status for given callsign (enrollment). status=-1 means that there is no enrollment with given callsign
 
 
 .. py:function:: request_enrollment_list(request)
    :async:
 
    /list
-   Return users/work-id's/enrollments. If 'accepted' has something else than '', it has been accepted.
-   Returns a list of dicts, work_id_list = [ {  "work_id":'x', 'work_id_hash':'yy', 'state':'init', 'accepted':'' } ]
+   Return users/callsign/enrollments. If 'accepted' has something else than '', it has been accepted.
+   Returns a list of dicts, callsign_list = [ {  "callsign":'x', 'state':'init', 'approvecode':'' } ]
 
 
 .. py:function:: request_enrollment_init(request, request_in = Body(None, examples=[EnrollmentInitIn.Config.schema_extra['examples']]))
    :async:
 
-   Add new work_id (enrollment) to environment.
+   Add new callsign (enrollment) to environment.
 
 
 .. py:function:: request_enrollment_promote(request, request_in = Body(None, examples=[EnrollmentPromoteIn.Config.schema_extra['examples']]))
    :async:
 
-   "Promote" work_id/user/enrollment to have 'admin' rights
+   "Promote" callsign/user/enrollment to have 'admin' rights
 
 
 .. py:function:: request_enrollment_demote(request, request_in = Body(None, examples=[EnrollmentDemoteIn.Config.schema_extra['examples']]))
    :async:
 
-   "Demote" work_id/user/enrollment from having 'admin' rights. work_id_hash can be used too.
+   "Demote" callsign/user/enrollment from having 'admin' rights. callsign_hash can be used too.
 
 
 .. py:function:: request_enrollment_lock(request, request_in = Body(None, examples=[EnrollmentLockIn.Config.schema_extra['examples']]))
    :async:
 
-   Lock work_id/user/enrollment so it cannot be used anymore.
-
-
-.. py:function:: request_enrollment_status(request, params = Depends())
-   :async:
-
-   Deliver download url link using work_id_hash
+   Lock callsign/user/enrollment so it cannot be used anymore.
 
 
 .. py:function:: post_enrollment_accept(request, request_in = Body(None, examples=[EnrollmentAcceptIn.Config.schema_extra['examples']]))
    :async:
 
-   Accept work_id_hash (work_id/enrollment)
+   Accept callsign_hash (callsign/enrollment)
 
 
 .. py:function:: post_invite_code(request)
    :async:
 
-   Create a new invite code using user_management_hash
-   This method checks for permission user-admin
-   This method checks for existing invite code and updates it if found
-   This method creates invite code if not found
+   Create a new invite code
 
 
 .. py:function:: put_activate_invite_code(request, request_in = Body(None, examples=EnrollmentInviteCodeActivateIn.Config.schema_extra['examples']))
@@ -223,7 +149,7 @@ Attributes
    Deactivate an invite code
 
 
-.. py:function:: delete_invite_code(request, invite_code)
+.. py:function:: delete_invite_code(invite_code)
    :async:
 
    Delete an invite code

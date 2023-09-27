@@ -26,6 +26,7 @@ Submodules
 
    conftest/index.rst
    test_auth/index.rst
+   test_cfssl/index.rst
    test_console/index.rst
    test_db/index.rst
    test_enrollment/index.rst

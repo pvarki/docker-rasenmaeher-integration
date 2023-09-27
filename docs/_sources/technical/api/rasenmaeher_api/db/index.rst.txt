@@ -173,7 +173,7 @@ Attributes
 .. py:class:: Person
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    People, pk is UUID and comes from basemodel
 
@@ -181,14 +181,46 @@ Attributes
    and only use keycloack as the store for actual users. In any case we need a nice pythonic
    abstraction layer so implement any queries you need to add as helpers here.
 
-   .. py:class:: Config
+   .. py:property:: productapidata
+      :type: libpvarki.schemas.product.UserCRUDRequest
+
+      Return a model that is usable with the product integration APIs
 
 
-      Basemodel config
+   .. py:property:: certsubject
+      :type: Dict[str, str]
 
-      .. py:attribute:: extra
+      Return the dict that gets set to cert DN
 
-         
+
+   .. py:property:: privkeyfile
+      :type: pathlib.Path
+
+      Path to the private key
+
+
+   .. py:property:: pfxfile
+      :type: pathlib.Path
+
+      Return a PKCS12 PFX file
+
+
+   .. py:property:: certfile
+      :type: pathlib.Path
+
+      Path to the public cert
+
+
+   .. py:property:: csrfile
+      :type: pathlib.Path
+
+      Path to the CSR file
+
+
+   .. py:property:: pubkeyfile
+      :type: pathlib.Path
+
+      Path to the public key
 
 
    .. py:attribute:: __tablename__
@@ -208,12 +240,27 @@ Attributes
 
       
 
+   .. py:attribute:: revoke_reason
+
+      
+
    .. py:method:: create_with_cert(callsign, extra = None)
       :classmethod:
-      :abstractmethod:
       :async:
 
       Create the cert etc and save the person
+
+
+   .. py:method:: revoke(reason)
+      :async:
+
+      Revokes the cert with given reason and makes user deleted see validate_reason for info on reasons
+
+
+   .. py:method:: delete()
+      :async:
+
+      Revoke the cert on delete
 
 
    .. py:method:: list(include_deleted = False)
@@ -237,6 +284,13 @@ Attributes
       Get by callsign
 
 
+   .. py:method:: is_callsign_available(callsign)
+      :classmethod:
+      :async:
+
+      Is callsign available
+
+
    .. py:method:: by_mtlsjwt_payload(payload, allow_deleted = False)
       :classmethod:
       :async:
@@ -244,23 +298,12 @@ Attributes
       Get by MTLSorJWTMiddleWare payload
 
 
-   .. py:method:: get_key_pem()
-      :abstractmethod:
-      :async:
-
-      Read the private key from under certspath and return the PEM
-
-
    .. py:method:: get_cert_pem()
-      :abstractmethod:
-      :async:
 
       Read the cert from under certspath and return the PEM
 
 
    .. py:method:: get_cert_pfx()
-      :abstractmethod:
-      :async:
 
       Read the cert and private key from under certspath and return the PFX container
 
@@ -287,6 +330,18 @@ Attributes
       :async:
 
       Remove a role, return true if role was removed, false if it wasn't assigned
+
+
+   .. py:method:: roles_set()
+      :async:
+
+      Shorthand
+
+
+   .. py:method:: roles()
+      :async:
+
+      Roles of this person
 
 
 
@@ -334,19 +389,9 @@ Attributes
 .. py:class:: Enrollment
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Enrollments, pk is UUID and comes from basemodel
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'enrollments'
@@ -397,6 +442,13 @@ Attributes
       Reject
 
 
+   .. py:method:: list(by_pool = None)
+      :classmethod:
+      :async:
+
+      List enrollments, optionally by pool (enrollment deletion is not allowed, they can only be rejected)
+
+
    .. py:method:: by_callsign(callsign)
       :classmethod:
       :async:
@@ -409,6 +461,27 @@ Attributes
       :async:
 
       Get by approvecode
+
+
+   .. py:method:: reset_approvecode4callsign(callsign)
+      :classmethod:
+      :async:
+
+      Reset approvecode code for callsign
+
+
+   .. py:method:: reset_approvecode()
+      :async:
+
+      Reset approvecode
+
+
+   .. py:method:: _generate_unused_code()
+      :classmethod:
+      :async:
+
+      Internal helper to generate a code that is free
+      NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed
 
 
    .. py:method:: create_for_callsign(callsign, pool = None, extra = None)
@@ -428,19 +501,9 @@ Attributes
 .. py:class:: EnrollmentPool
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Enrollment pools aka links, pk is UUID and comes from basemodel
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'enrollmentpools'
@@ -459,16 +522,69 @@ Attributes
 
       
 
+   .. py:attribute:: invitecode
+
+      
+
    .. py:method:: create_enrollment(callsign)
       :async:
 
       Create enrollment from this pool
 
 
-   .. py:method:: set_active(state = True)
+   .. py:method:: set_active(state)
       :async:
 
       Set active and return refreshed object
+
+
+   .. py:method:: list(by_owner = None, include_deleted = False)
+      :classmethod:
+      :async:
+
+      List pools, optionally by owner or including deleted pools
+
+
+   .. py:method:: _generate_unused_code()
+      :classmethod:
+      :async:
+
+      Internal helper to generate a code that is free
+      NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed
+
+
+   .. py:method:: create_for_owner(person, extra = None)
+      :classmethod:
+      :async:
+
+      Creates one for given owner
+
+
+   .. py:method:: reset_invitecode()
+      :async:
+
+      Reset invitecode
+
+
+   .. py:method:: by_invitecode(invitecode, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get by invitecode
+
+
+   .. py:method:: by_owner_old_tbremoved(owner_uuid)
+      :classmethod:
+      :async:
+
+      Get by owner UUID
+
+
+   .. py:method:: old_invitecode_for_callsign_tobedeleted(callsign, extra = None)
+      :classmethod:
+      :async:
+
+      Create enrollment pool owned by callsign, or update invitecode for existing one
 
 
 
@@ -498,19 +614,9 @@ Attributes
 .. py:class:: SeenToken
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Store tokens we should see used only once
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'seentokens'
@@ -549,19 +655,9 @@ Attributes
 .. py:class:: LoginCode
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Track the login codes that can be exchanged for session JWTs
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'logincodes'

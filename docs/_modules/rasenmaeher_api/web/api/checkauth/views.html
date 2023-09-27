@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.checkauth.views &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.web.api.checkauth.views &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -88,7 +88,9 @@
 <span class="kn">from</span> <span class="nn">multikeyjwt.middleware</span> <span class="kn">import</span> <span class="n">JWTBearer</span><span class="p">,</span> <span class="n">JWTPayload</span>
 <span class="kn">from</span> <span class="nn">libpvarki.middleware.mtlsheader</span> <span class="kn">import</span> <span class="n">MTLSHeader</span><span class="p">,</span> <span class="n">DNDict</span>
 
-<span class="kn">from</span> <span class="nn">..middleware</span> <span class="kn">import</span> <span class="n">MTLSorJWT</span><span class="p">,</span> <span class="n">MTLSorJWTPayload</span>
+<span class="kn">from</span> <span class="nn">..middleware.mtls</span> <span class="kn">import</span> <span class="n">MTLSorJWT</span>
+<span class="kn">from</span> <span class="nn">..middleware.datatypes</span> <span class="kn">import</span> <span class="n">MTLSorJWTPayload</span>
+<span class="kn">from</span> <span class="nn">..middleware.user</span> <span class="kn">import</span> <span class="n">ValidUser</span>
 
 <div class="viewcode-block" id="router">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.router">[docs]</a>
@@ -128,6 +130,24 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.return_mtlsjwt_payload_permissive">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">return_mtlsjwt_payload_permissive</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MTLSorJWTPayload</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Method for testing mTLS and JWT auth, do not disallow any subjects&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">MTLSorJWTPayload</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/validuser&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">))])</span>
+<div class="viewcode-block" id="return_validuser_payload">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.return_validuser_payload">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">return_validuser_payload</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MTLSorJWTPayload</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Method for the ValidUser middleware&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">MTLSorJWTPayload</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/validuser/admin&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))])</span>
+<div class="viewcode-block" id="return_validadmin_payload">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.return_validadmin_payload">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">return_validadmin_payload</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MTLSorJWTPayload</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Method for the ValidUser middleware with required_roles&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">MTLSorJWTPayload</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="p">)</span></div>
 
 

@@ -1,0 +1,57 @@
+:py:mod:`rasenmaeher_api.cfssl.public`
+======================================
+
+.. py:module:: rasenmaeher_api.cfssl.public
+
+.. autoapi-nested-parse::
+
+   Public things, CA cert, CRL etc
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.public.get_ca
+   rasenmaeher_api.cfssl.public.get_crl
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.public.LOGGER
+   rasenmaeher_api.cfssl.public.CRL_LIFETIME
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: CRL_LIFETIME
+   :value: '1800s'
+
+   
+
+.. py:function:: get_ca()
+   :async:
+
+   Quick and dirty method to get CA from CFSSL
+   returns: CA certificate
+
+
+.. py:function:: get_crl()
+   :async:
+
+   Quick and dirty method to get CRL from CFSSL
+   returns: DER binary encoded Certificate Revocation List
+
+

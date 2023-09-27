@@ -27,6 +27,8 @@ Functions
    tests.conftest.kraftwerk_jwt_client
    tests.conftest.tilauspalvelu_jwt_admin_client
    tests.conftest.tilauspalvelu_jwt_user_client
+   tests.conftest.tilauspalvelu_jwt_user_koira_client
+   tests.conftest.tilauspalvelu_jwt_without_proper_user_client
    tests.conftest.mtls_client
    tests.conftest.unauth_client
    tests.conftest.rm_jwt_client
@@ -62,6 +64,7 @@ Attributes
 
 
 .. py:function:: test_user_secrets(session_env_config)
+   :async:
 
    Create a few test users and work ids returns
    list of work-ids and their corresponding "hashes"
@@ -103,6 +106,18 @@ Attributes
 
 
 .. py:function:: tilauspalvelu_jwt_user_client(issuer_cl, test_user_secrets)
+   :async:
+
+   Client with normal user JWT
+
+
+.. py:function:: tilauspalvelu_jwt_user_koira_client(issuer_cl, test_user_secrets)
+   :async:
+
+   Client with normal user JWT
+
+
+.. py:function:: tilauspalvelu_jwt_without_proper_user_client(issuer_cl)
    :async:
 
    Client with normal user JWT

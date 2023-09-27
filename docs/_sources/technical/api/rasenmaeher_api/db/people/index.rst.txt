@@ -22,6 +22,19 @@ Classes
 
 
 
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.db.people.post_user_crud
+   rasenmaeher_api.db.people.user_created
+   rasenmaeher_api.db.people.user_revoked
+   rasenmaeher_api.db.people.user_promoted
+   rasenmaeher_api.db.people.user_demoted
+   rasenmaeher_api.db.people.pem_to_pfx
+
+
 
 Attributes
 ~~~~~~~~~~
@@ -38,7 +51,7 @@ Attributes
 .. py:class:: Person
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    People, pk is UUID and comes from basemodel
 
@@ -46,14 +59,46 @@ Attributes
    and only use keycloack as the store for actual users. In any case we need a nice pythonic
    abstraction layer so implement any queries you need to add as helpers here.
 
-   .. py:class:: Config
+   .. py:property:: productapidata
+      :type: libpvarki.schemas.product.UserCRUDRequest
+
+      Return a model that is usable with the product integration APIs
 
 
-      Basemodel config
+   .. py:property:: certsubject
+      :type: Dict[str, str]
 
-      .. py:attribute:: extra
+      Return the dict that gets set to cert DN
 
-         
+
+   .. py:property:: privkeyfile
+      :type: pathlib.Path
+
+      Path to the private key
+
+
+   .. py:property:: pfxfile
+      :type: pathlib.Path
+
+      Return a PKCS12 PFX file
+
+
+   .. py:property:: certfile
+      :type: pathlib.Path
+
+      Path to the public cert
+
+
+   .. py:property:: csrfile
+      :type: pathlib.Path
+
+      Path to the CSR file
+
+
+   .. py:property:: pubkeyfile
+      :type: pathlib.Path
+
+      Path to the public key
 
 
    .. py:attribute:: __tablename__
@@ -73,12 +118,27 @@ Attributes
 
       
 
+   .. py:attribute:: revoke_reason
+
+      
+
    .. py:method:: create_with_cert(callsign, extra = None)
       :classmethod:
-      :abstractmethod:
       :async:
 
       Create the cert etc and save the person
+
+
+   .. py:method:: revoke(reason)
+      :async:
+
+      Revokes the cert with given reason and makes user deleted see validate_reason for info on reasons
+
+
+   .. py:method:: delete()
+      :async:
+
+      Revoke the cert on delete
 
 
    .. py:method:: list(include_deleted = False)
@@ -102,6 +162,13 @@ Attributes
       Get by callsign
 
 
+   .. py:method:: is_callsign_available(callsign)
+      :classmethod:
+      :async:
+
+      Is callsign available
+
+
    .. py:method:: by_mtlsjwt_payload(payload, allow_deleted = False)
       :classmethod:
       :async:
@@ -109,23 +176,12 @@ Attributes
       Get by MTLSorJWTMiddleWare payload
 
 
-   .. py:method:: get_key_pem()
-      :abstractmethod:
-      :async:
-
-      Read the private key from under certspath and return the PEM
-
-
    .. py:method:: get_cert_pem()
-      :abstractmethod:
-      :async:
 
       Read the cert from under certspath and return the PEM
 
 
    .. py:method:: get_cert_pfx()
-      :abstractmethod:
-      :async:
 
       Read the cert and private key from under certspath and return the PFX container
 
@@ -152,6 +208,18 @@ Attributes
       :async:
 
       Remove a role, return true if role was removed, false if it wasn't assigned
+
+
+   .. py:method:: roles_set()
+      :async:
+
+      Shorthand
+
+
+   .. py:method:: roles()
+      :async:
+
+      Roles of this person
 
 
 
@@ -194,5 +262,40 @@ Attributes
    .. py:attribute:: _idx
 
       
+
+
+.. py:function:: post_user_crud(userinfo, endpoint_suffix)
+   :async:
+
+   Wrapper to be more DRY in the basic CRUD things
+
+
+.. py:function:: user_created(person)
+   :async:
+
+   New user was created
+
+
+.. py:function:: user_revoked(person)
+   :async:
+
+   Old user was revoked
+
+
+.. py:function:: user_promoted(person)
+   :async:
+
+   Old user was promoted to admin (granted role 'admin')
+
+
+.. py:function:: user_demoted(person)
+   :async:
+
+   Old user was demoted from admin (removed role 'admin')
+
+
+.. py:function:: pem_to_pfx(pem_key, pem_cert)
+
+   Convert PEM data to PFX (PKCS12).
 
 

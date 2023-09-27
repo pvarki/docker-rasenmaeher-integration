@@ -1,0 +1,42 @@
+:py:mod:`rasenmaeher_api.cfssl.mtls`
+====================================
+
+.. py:module:: rasenmaeher_api.cfssl.mtls
+
+.. autoapi-nested-parse::
+
+   mTLS stuff, needs to be away from base to avoid cyclic imports
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.mtls.mtls_session
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.mtls.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: mtls_session()
+   :async:
+
+   mTLS auth session with content-type set
+
+

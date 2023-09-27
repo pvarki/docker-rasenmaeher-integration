@@ -1,0 +1,69 @@
+:py:mod:`tests.test_cfssl`
+==========================
+
+.. py:module:: tests.test_cfssl
+
+.. autoapi-nested-parse::
+
+   Test CFSSL wrappers
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_cfssl.test_get_ca
+   tests.test_cfssl.one_revoked_cert
+   tests.test_cfssl.test_get_crl
+   tests.test_cfssl.test_reasons
+   tests.test_cfssl.test_crl_route
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_cfssl.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_get_ca()
+   :async:
+
+   Test CA fetching
+
+
+.. py:function:: one_revoked_cert(ginosession)
+   :async:
+
+   Make sure we have at least one revoked cert
+
+
+.. py:function:: test_get_crl(one_revoked_cert)
+   :async:
+
+   Test CA fetching
+
+
+.. py:function:: test_reasons()
+
+   Test that validate_reason works as expected
+
+
+.. py:function:: test_crl_route(unauth_client, one_revoked_cert)
+   :async:
+
+   Check that we can get a parseable CRL from the route
+
+

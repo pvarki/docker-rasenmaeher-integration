@@ -18,11 +18,7 @@ Classes
 .. autoapisummary::
 
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut
-   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone
-   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn
-   rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn
-   rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn
@@ -79,38 +75,6 @@ Classes
       
 
 
-.. py:class:: EnrollmentConfigSetStateIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema in
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: state
-      :type: str
-
-      
-
-   .. py:attribute:: work_id
-      :type: str
-
-      
-
-
 .. py:class:: EnrollmentConfigTaskDone
 
 
@@ -138,122 +102,6 @@ Classes
       
 
 
-.. py:class:: EnrollmentConfigSetMtlsIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config set mtls schema in
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: mtls_test_link
-      :type: str
-
-      
-
-   .. py:attribute:: set_for_all
-      :type: bool
-
-      
-
-   .. py:attribute:: work_id
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id_hash
-      :type: Optional[str]
-
-      
-
-
-.. py:class:: EnrollmentConfigSetDLCertIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema in
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: cert_download_link
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: howto_download_link
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id_hash
-      :type: Optional[str]
-
-      
-
-
-.. py:class:: EnrollmentAddServiceManagementIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema in
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: new_service_management_hash
-      :type: str
-
-      
-
-   .. py:attribute:: permissions_str
-      :type: str
-
-      
-
-
 .. py:class:: EnrollmentStatusIn
 
 
@@ -261,7 +109,7 @@ Classes
 
    Enrollment status in schema
 
-   .. py:attribute:: work_id
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -289,16 +137,11 @@ Classes
 
 
    .. py:attribute:: status
-      :type: str
+      :type: int
 
       
 
-   .. py:attribute:: work_id
-      :type: str
-
-      
-
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -343,12 +186,7 @@ Classes
 
       
 
-   .. py:attribute:: work_id
-      :type: str
-
-      
-
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -412,7 +250,7 @@ Classes
          
 
 
-   .. py:attribute:: work_id
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -439,12 +277,7 @@ Classes
          
 
 
-   .. py:attribute:: work_id
-      :type: str
-
-      
-
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -462,7 +295,7 @@ Classes
 
    Enrollment promote in schema
 
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign_hash
       :type: str
 
       
@@ -489,12 +322,12 @@ Classes
          
 
 
-   .. py:attribute:: work_id
+   .. py:attribute:: callsign
       :type: str
 
       
 
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign_hash
       :type: str
 
       
@@ -536,7 +369,7 @@ Classes
          
 
 
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -563,7 +396,7 @@ Classes
          
 
 
-   .. py:attribute:: work_id_hash
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -590,13 +423,8 @@ Classes
          
 
 
-   .. py:attribute:: work_id
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id_hash
-      :type: Optional[str]
+   .. py:attribute:: callsign
+      :type: str
 
       
 
@@ -622,13 +450,8 @@ Classes
          
 
 
-   .. py:attribute:: work_id
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id_hash
-      :type: Optional[str]
+   .. py:attribute:: callsign
+      :type: str
 
       
 
@@ -659,13 +482,8 @@ Classes
 
       
 
-   .. py:attribute:: work_id
-      :type: Optional[str]
-
-      
-
-   .. py:attribute:: work_id_hash
-      :type: Optional[str]
+   .. py:attribute:: callsign
+      :type: str
 
       
 
@@ -731,18 +549,8 @@ Classes
 
    Enrollment list out response schema
 
-   .. py:attribute:: work_id_list
+   .. py:attribute:: callsign_list
       :type: List[Dict[Any, Any]]
-
-      
-
-   .. py:attribute:: success
-      :type: bool
-
-      
-
-   .. py:attribute:: reason
-      :type: str
 
       
 
@@ -866,7 +674,7 @@ Classes
 
       
 
-   .. py:attribute:: work_id
+   .. py:attribute:: callsign
       :type: str
 
       

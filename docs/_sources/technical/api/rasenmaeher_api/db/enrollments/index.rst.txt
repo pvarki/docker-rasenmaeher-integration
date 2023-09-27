@@ -56,19 +56,9 @@ Attributes
 .. py:class:: EnrollmentPool
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Enrollment pools aka links, pk is UUID and comes from basemodel
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'enrollmentpools'
@@ -87,16 +77,69 @@ Attributes
 
       
 
+   .. py:attribute:: invitecode
+
+      
+
    .. py:method:: create_enrollment(callsign)
       :async:
 
       Create enrollment from this pool
 
 
-   .. py:method:: set_active(state = True)
+   .. py:method:: set_active(state)
       :async:
 
       Set active and return refreshed object
+
+
+   .. py:method:: list(by_owner = None, include_deleted = False)
+      :classmethod:
+      :async:
+
+      List pools, optionally by owner or including deleted pools
+
+
+   .. py:method:: _generate_unused_code()
+      :classmethod:
+      :async:
+
+      Internal helper to generate a code that is free
+      NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed
+
+
+   .. py:method:: create_for_owner(person, extra = None)
+      :classmethod:
+      :async:
+
+      Creates one for given owner
+
+
+   .. py:method:: reset_invitecode()
+      :async:
+
+      Reset invitecode
+
+
+   .. py:method:: by_invitecode(invitecode, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get by invitecode
+
+
+   .. py:method:: by_owner_old_tbremoved(owner_uuid)
+      :classmethod:
+      :async:
+
+      Get by owner UUID
+
+
+   .. py:method:: old_invitecode_for_callsign_tobedeleted(callsign, extra = None)
+      :classmethod:
+      :async:
+
+      Create enrollment pool owned by callsign, or update invitecode for existing one
 
 
 
@@ -126,19 +169,9 @@ Attributes
 .. py:class:: Enrollment
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Enrollments, pk is UUID and comes from basemodel
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'enrollments'
@@ -189,6 +222,13 @@ Attributes
       Reject
 
 
+   .. py:method:: list(by_pool = None)
+      :classmethod:
+      :async:
+
+      List enrollments, optionally by pool (enrollment deletion is not allowed, they can only be rejected)
+
+
    .. py:method:: by_callsign(callsign)
       :classmethod:
       :async:
@@ -201,6 +241,27 @@ Attributes
       :async:
 
       Get by approvecode
+
+
+   .. py:method:: reset_approvecode4callsign(callsign)
+      :classmethod:
+      :async:
+
+      Reset approvecode code for callsign
+
+
+   .. py:method:: reset_approvecode()
+      :async:
+
+      Reset approvecode
+
+
+   .. py:method:: _generate_unused_code()
+      :classmethod:
+      :async:
+
+      Internal helper to generate a code that is free
+      NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed
 
 
    .. py:method:: create_for_callsign(callsign, pool = None, extra = None)

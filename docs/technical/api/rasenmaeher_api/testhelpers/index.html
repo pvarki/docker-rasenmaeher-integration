@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.testhelpers &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.testhelpers &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,14 +15,14 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="rasenmaeher_api.user_integrations" href="../user_integrations/index.html" />
-    <link rel="prev" title="rasenmaeher_api.sqlitedatabase" href="../sqlitedatabase/index.html" /> 
+    <link rel="prev" title="rasenmaeher_api.settings" href="../settings/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -62,7 +62,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../mtlsinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.mtlsinit</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../prodcutapihelpers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.prodcutapihelpers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../settings/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.settings</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sqlitedatabase/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.sqlitedatabase</span></code></a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.testhelpers</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../user_integrations/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.user_integrations</span></code></a></li>
 </ul>
@@ -135,10 +134,9 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.testhelpers.create_test_users">
-<span class="sig-name descname"><span class="pre">create_test_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/testhelpers.html#create_test_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.testhelpers.create_test_users" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_test_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/testhelpers.html#create_test_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.testhelpers.create_test_users" title="Link to this definition"></a></dt>
 <dd><p>Create a few test users and work ids returns
-list of work-ids and their corresponding “hashes”</p>
-<p>First one has “enrollment” special role</p>
+list of work-ids and their corresponding jwt tokens</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>], List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]]</p>
@@ -154,7 +152,7 @@ list of work-ids and their corresponding “hashes”</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../sqlitedatabase/index.html" class="btn btn-neutral float-left" title="rasenmaeher_api.sqlitedatabase" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../settings/index.html" class="btn btn-neutral float-left" title="rasenmaeher_api.settings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="../user_integrations/index.html" class="btn btn-neutral float-right" title="rasenmaeher_api.user_integrations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -41,14 +41,14 @@ Attributes
 
    
 
-.. py:function:: request_healthcheck(request)
+.. py:function:: request_healthcheck()
    :async:
 
    Basic health check. Success = 200. Checks the following things.
-   - Local sqlite connection
+   - Local db connection
 
 
-.. py:function:: request_healthcheck_delivery(request)
+.. py:function:: request_healthcheck_delivery()
    :async:
 
    Delivery endpoint healthcheck.
@@ -57,7 +57,7 @@ Attributes
    204 {"detail":{"state":"waiting-for-services"}}
 
 
-.. py:function:: request_healthcheck_services(request)
+.. py:function:: request_healthcheck_services()
    :async:
 
    Serices endpoint healthcheck.

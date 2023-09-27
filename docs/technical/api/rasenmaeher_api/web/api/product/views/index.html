@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
 </ul>
@@ -109,12 +110,6 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.get_ca" title="rasenmaeher_api.web.api.product.views.get_ca"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ca</span></code></a>()</p></td>
-<td><p>Quick and dirty method to get CA from CFSSL</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.sign_csr" title="rasenmaeher_api.web.api.product.views.sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sign_csr</span></code></a>(csr)</p></td>
-<td><p>Quick and dirty method to sign CSR from CFSSL</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr" title="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_ca_and_sign_csr</span></code></a>(request, certs)</p></td>
 <td><p>Used by product integration API to request signing of their mTLS client cert</p></td>
 </tr>
@@ -134,6 +129,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.router" title="rasenmaeher_api.web.api.product.views.router"><code class="xref py py-obj docutils literal notranslate"><span class="pre">router</span></code></a></p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.LOGGER" title="rasenmaeher_api.web.api.product.views.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py data">
@@ -141,33 +139,10 @@
 <span class="sig-name descname"><span class="pre">router</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.router" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.get_ca">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ca</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#get_ca"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.get_ca" title="Link to this definition"></a></dt>
-<dd><p>Quick and dirty method to get CA from CFSSL
-returns: CA certificate</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.sign_csr">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sign_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#sign_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.sign_csr" title="Link to this definition"></a></dt>
-<dd><p>Quick and dirty method to sign CSR from CFSSL
-params: csr
-returns: certificate</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>csr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.LOGGER">
+<span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.LOGGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr">

@@ -1,0 +1,47 @@
+:py:mod:`rasenmaeher_api.cfssl.anoncsr`
+=======================================
+
+.. py:module:: rasenmaeher_api.cfssl.anoncsr
+
+.. autoapi-nested-parse::
+
+   This needs to be separated to avoid circular imports
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.anoncsr.anon_sign_csr
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.anoncsr.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: anon_sign_csr(csr)
+   :async:
+
+   Quick and dirty method to sign CSR from CFSSL.
+
+   This should only used by mtlsinit
+
+   params: csr
+   returns: certificate
+
+

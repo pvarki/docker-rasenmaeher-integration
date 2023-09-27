@@ -12,10 +12,26 @@
 Module Contents
 ---------------
 
+.. py:exception:: BackendError
+
+
+   Bases: :py:obj:`RuntimeError`
+
+   Failure from a dependent backend
+
+
+.. py:exception:: DBError
+
+
+   Bases: :py:obj:`RuntimeError`
+
+   Undefined DB error
+
+
 .. py:exception:: DBFetchError
 
 
-   Bases: :py:obj:`ValueError`
+   Bases: :py:obj:`ValueError`, :py:obj:`DBError`
 
    Various issues when fetching an object that are input dependent
 

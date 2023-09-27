@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.conftest &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.conftest &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -101,8 +101,8 @@
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.web.application</span> <span class="kn">import</span> <span class="n">get_app</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.settings</span> <span class="kn">import</span> <span class="n">settings</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.prodcutapihelpers</span> <span class="kn">import</span> <span class="n">check_kraftwerk_manifest</span>
-<span class="kn">import</span> <span class="nn">rasenmaeher_api.sqlitedatabase</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.testhelpers</span> <span class="kn">import</span> <span class="n">create_test_users</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.mtlsinit</span> <span class="kn">import</span> <span class="n">check_settings_clientpaths</span><span class="p">,</span> <span class="n">CERT_NAME_PREFIX</span>
 
 <span class="n">init_logging</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
 <div class="viewcode-block" id="LOGGER">
@@ -134,17 +134,17 @@
 
 
 
-<span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
 <div class="viewcode-block" id="test_user_secrets">
 <a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.test_user_secrets">[docs]</a>
-<span class="k">def</span> <span class="nf">test_user_secrets</span><span class="p">(</span><span class="n">session_env_config</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_user_secrets</span><span class="p">(</span><span class="n">session_env_config</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a few test users and work ids returns</span>
 <span class="sd">    list of work-ids and their corresponding &quot;hashes&quot;</span>
 
 <span class="sd">    First one has &quot;enrollment&quot; special role</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">session_env_config</span>
-    <span class="k">return</span> <span class="n">create_test_users</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">create_test_users</span><span class="p">()</span></div>
 
 
 
@@ -173,7 +173,7 @@
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">,</span> <span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <div class="viewcode-block" id="session_env_config">
 <a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.session_env_config">[docs]</a>
-<span class="k">def</span> <span class="nf">session_env_config</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">session_env_config</span><span class="p">(</span>  <span class="c1"># pylint: disable=R0915</span>
     <span class="n">monkeysession</span><span class="p">:</span> <span class="n">pytest</span><span class="o">.</span><span class="n">MonkeyPatch</span><span class="p">,</span> <span class="n">docker_ip</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">docker_services</span><span class="p">:</span> <span class="n">Services</span><span class="p">,</span> <span class="n">nice_tmpdir_ses</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;set the JWT auth config&quot;&quot;&quot;</span>
@@ -231,24 +231,21 @@
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;cfssl_host&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">docker_ip</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_CFSSL_HOST&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">cfssl_host</span><span class="p">)</span>
 
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;persistent_data_dir&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessionpersistent</span><span class="p">))</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_PERSISTENT_DATA_DIR&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span>
+
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;LOCAL_CA_CERTS_PATH&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">capath</span><span class="p">))</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;mtls_client_cert_path&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessionfiles</span> <span class="o">/</span> <span class="s2">&quot;rmmtlsclient.pem&quot;</span><span class="p">))</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_MTLS_CLIENT_CERT_PATH&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">)</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;mtls_client_key_path&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessionfiles</span> <span class="o">/</span> <span class="s2">&quot;rmmtlsclient.key&quot;</span><span class="p">))</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_MTLS_CLIENT_KEY_PATH&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">)</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;mtls_client_cert_path&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessionpersistent</span> <span class="o">/</span> <span class="s2">&quot;public&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.pem&quot;</span><span class="p">))</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_MTLS_CLIENT_CERT_PATH&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">))</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;mtls_client_key_path&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessionpersistent</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.key&quot;</span><span class="p">))</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_MTLS_CLIENT_KEY_PATH&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">check_settings_clientpaths</span><span class="p">()</span>
 
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;kraftwerk_manifest_path&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">kfmanifest</span><span class="p">))</span>
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_KRAFTWERK_MANIFEST_PATH&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_path</span><span class="p">)</span>
         <span class="c1"># force manifest reload</span>
         <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;kraftwerk_manifest_bool&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">check_kraftwerk_manifest</span><span class="p">()</span>
-
-        <span class="c1"># Make *sure* we always use fresh db</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;sqlite_filepath_prod&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sqlitepath</span><span class="p">))</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_SQLITE_FILEPATH_PROD&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_filepath_prod</span><span class="p">)</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;sqlite_filepath_dev&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">sqlitepath</span><span class="p">))</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_SQLITE_FILEPATH_DEV&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_filepath_prod</span><span class="p">)</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">rasenmaeher_api</span><span class="o">.</span><span class="n">sqlitedatabase</span><span class="p">,</span> <span class="s2">&quot;sqlite&quot;</span><span class="p">,</span> <span class="n">rasenmaeher_api</span><span class="o">.</span><span class="n">sqlitedatabase</span><span class="o">.</span><span class="n">SqliteDB</span><span class="p">())</span>
 
         <span class="k">yield</span> <span class="kc">None</span></div>
 
@@ -290,7 +287,7 @@
 
 
 
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">()</span>
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
 <div class="viewcode-block" id="tilauspalvelu_jwt_admin_client">
 <a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_admin_client">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">tilauspalvelu_jwt_admin_client</span><span class="p">(</span>
@@ -312,7 +309,7 @@
 
 
 
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">()</span>
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
 <div class="viewcode-block" id="tilauspalvelu_jwt_user_client">
 <a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_user_client">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">tilauspalvelu_jwt_user_client</span><span class="p">(</span>
@@ -321,10 +318,49 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Client with normal user JWT&quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
         <span class="n">work_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
-        <span class="n">koira_id</span> <span class="o">=</span> <span class="n">work_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">kissa_id</span> <span class="o">=</span> <span class="n">work_ids</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">issuer_cl</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">kissa_id</span><span class="p">,</span>
+                <span class="s2">&quot;anon_admin_session&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s2">&quot;nonce&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="k">yield</span> <span class="n">instance</span></div>
+
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="tilauspalvelu_jwt_user_koira_client">
+<a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_user_koira_client">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tilauspalvelu_jwt_user_koira_client</span><span class="p">(</span>
+    <span class="n">issuer_cl</span><span class="p">:</span> <span class="n">Issuer</span><span class="p">,</span> <span class="n">test_user_secrets</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Client with normal user JWT&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
+        <span class="n">work_ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">test_user_secrets</span>
+        <span class="n">koira_id</span> <span class="o">=</span> <span class="n">work_ids</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="n">token</span> <span class="o">=</span> <span class="n">issuer_cl</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">koira_id</span><span class="p">,</span>
+                <span class="s2">&quot;nonce&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="k">yield</span> <span class="n">instance</span></div>
+
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="tilauspalvelu_jwt_without_proper_user_client">
+<a class="viewcode-back" href="../../technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_without_proper_user_client">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">tilauspalvelu_jwt_without_proper_user_client</span><span class="p">(</span><span class="n">issuer_cl</span><span class="p">:</span> <span class="n">Issuer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Client with normal user JWT&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">issuer_cl</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;nosuchusershouldbefound&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;anon_admin_session&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="s2">&quot;nonce&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
             <span class="p">}</span>

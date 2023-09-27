@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_enrollment &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.test_enrollment &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -59,6 +59,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../conftest/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.conftest</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_auth/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_auth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_cfssl</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_console</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_db</span></code></a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_enrollment</span></code></a></li>
@@ -112,131 +113,92 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id" title="tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setstate_success_work_id</span></code></a>(...)</p></td>
-<td><p>/config/set-state</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_enroll_verif_code" title="tests.test_enrollment.test_enroll_verif_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_enroll_verif_code</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - verification code should succeed</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing" title="tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setstate_fail_both_missing</span></code></a>(...)</p></td>
-<td><p>/config/set-state</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_enroll_verif_code_fail_no_jwt" title="tests.test_enrollment.test_enroll_verif_code_fail_no_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_enroll_verif_code_fail_no_jwt</span></code></a>(unauth_client)</p></td>
+<td><p>Test - No JWT --&gt; fail</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value" title="tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setstate_fail_missing_value</span></code></a>(...)</p></td>
-<td><p>/config/set-state</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_enroll_show_verif_code" title="tests.test_enrollment.test_enroll_show_verif_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_enroll_show_verif_code</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - show verification code info</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state" title="tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setstate_fail_oopsie_state</span></code></a>(...)</p></td>
-<td><p>/config/set-state</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_enroll_show_verifcode_bad_code" title="tests.test_enrollment.test_enroll_show_verifcode_bad_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_enroll_show_verifcode_bad_code</span></code></a>(...)</p></td>
+<td><p>Test - show verification code info</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id" title="tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setmtlstest_success_work_id</span></code></a>(...)</p></td>
-<td><p>/config/set-mtls-test-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_show_verifcode_no_jwt" title="tests.test_enrollment.test_show_verifcode_no_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_show_verifcode_no_jwt</span></code></a>(unauth_client)</p></td>
+<td><p>Test - no JWT, should fail</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all" title="tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setmtlstest_success_all</span></code></a>(...)</p></td>
-<td><p>/config/set-mtls-test-link</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_show_verifcode_no_permission" title="tests.test_enrollment.test_show_verifcode_no_permission"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_show_verifcode_no_permission</span></code></a>(...)</p></td>
+<td><p>Test - no such code --&gt; fail</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail" title="tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setmtlstest_fail</span></code></a>(...)</p></td>
-<td><p>/config/set-mtls-test-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_show_verifcode_sub_is_bonkers" title="tests.test_enrollment.test_show_verifcode_sub_is_bonkers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_show_verifcode_sub_is_bonkers</span></code></a>(...)</p></td>
+<td><p>Test - sub in JWT cannot be found</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie" title="tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setmtlstest_fail_oopsie</span></code></a>(...)</p></td>
-<td><p>/config/set-mtls-test-link</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_have_i_been_accepted_yes" title="tests.test_enrollment.test_have_i_been_accepted_yes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_have_i_been_accepted_yes</span></code></a>(...)</p></td>
+<td><p>Test - have i been accepted, yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id" title="tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_success_work_id</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_have_i_been_accepted_no" title="tests.test_enrollment.test_have_i_been_accepted_no"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_have_i_been_accepted_no</span></code></a>(...)</p></td>
+<td><p>Test - have i been accepted, no</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id" title="tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_howto_setdl_success_work_id</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_have_i_been_accepted_no_jwt" title="tests.test_enrollment.test_have_i_been_accepted_no_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_have_i_been_accepted_no_jwt</span></code></a>(unauth_client)</p></td>
+<td><p>Test - have i been - no JWt</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash" title="tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_success_work_idhash</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_status_koira" title="tests.test_enrollment.test_status_koira"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_status_koira</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - get status</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing" title="tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_fail_missing</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_status_not_found" title="tests.test_enrollment.test_status_not_found"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_status_not_found</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - no such status</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie" title="tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_fail_permit_oopsie</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_list_as_adm" title="tests.test_enrollment.test_list_as_adm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_as_adm</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - list enrollments</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link" title="tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_fail_oopsie_link</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_list_as_usr" title="tests.test_enrollment.test_list_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - list enrollments as normal user</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2" title="tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_setdl_fail_oopsie_link2</span></code></a>(...)</p></td>
-<td><p>/config/set-cert-dl-link</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_init" title="tests.test_enrollment.test_post_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_init</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - init new user</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_add_mgr" title="tests.test_enrollment.test_post_enrollment_config_add_mgr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_add_mgr</span></code></a>(...)</p></td>
-<td><p>/config/add-service-management-hash</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_init_as_usr" title="tests.test_enrollment.test_init_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_init_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - init as normal user --&gt; fail</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_fail_mgr_short" title="tests.test_enrollment.test_post_enrollment_config_fail_mgr_short"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_fail_mgr_short</span></code></a>(...)</p></td>
-<td><p>/config/add-service-management-hash</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_promote_demote" title="tests.test_enrollment.test_promote_demote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_promote_demote</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - promote user</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str" title="tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_config_fail_mgr_bad_perm_str</span></code></a>(...)</p></td>
-<td><p>/config/add-service-management-hash</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_promote_as_usr" title="tests.test_enrollment.test_promote_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_promote_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - promote user, no permissions</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_accept" title="tests.test_enrollment.test_post_enrollment_accept"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_accept</span></code></a>(...)</p></td>
-<td><p>/accept</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_lock" title="tests.test_enrollment.test_lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_lock</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - lock</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr" title="tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_accept_fail_oopsie_permitstr</span></code></a>(...)</p></td>
-<td><p>/accept</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_lock_as_usr" title="tests.test_enrollment.test_lock_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_lock_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - lock as normal use</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit" title="tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_accept_fail_wrong_permit</span></code></a>(...)</p></td>
-<td><p>/accept</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_accept" title="tests.test_enrollment.test_accept"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_accept</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - accept enrollment</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll" title="tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_accept_fail_oopsie_enroll</span></code></a>(...)</p></td>
-<td><p>/accept</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_accept_as_usr" title="tests.test_enrollment.test_accept_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_accept_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - accept, no permissions -&gt; fail</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll" title="tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_accept_fail_wrong_enroll</span></code></a>(...)</p></td>
-<td><p>/accept</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_accept_no_such_user" title="tests.test_enrollment.test_accept_no_such_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_accept_no_such_user</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - accept a ghost</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_deliver_kissa" title="tests.test_enrollment.test_get_enrollment_deliver_kissa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_deliver_kissa</span></code></a>(...)</p></td>
-<td><p>/deliver</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_invitecode_create" title="tests.test_enrollment.test_invitecode_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_invitecode_create</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - create invite code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_deliver_error" title="tests.test_enrollment.test_get_enrollment_deliver_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_deliver_error</span></code></a>(...)</p></td>
-<td><p>/deliver/{work_id_hash}</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_create_as_usr" title="tests.test_enrollment.test_create_as_usr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_create_as_usr</span></code></a>(tilauspalvelu_jwt_user_client)</p></td>
+<td><p>Test - normal user create invite code --&gt; fail</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_deliver_error_not_found" title="tests.test_enrollment.test_get_enrollment_deliver_error_not_found"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_deliver_error_not_found</span></code></a>(...)</p></td>
-<td><p>/deliver/{work_id_hash}</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_invitecode_dectivate" title="tests.test_enrollment.test_invitecode_dectivate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_invitecode_dectivate</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - deactivate invite code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_deliver_error_not_finished" title="tests.test_enrollment.test_get_enrollment_deliver_error_not_finished"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_deliver_error_not_finished</span></code></a>(...)</p></td>
-<td><p>/deliver/{work_id_hash}</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_invitecode_activate" title="tests.test_enrollment.test_invitecode_activate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_invitecode_activate</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - activate invite code</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_status_kissa" title="tests.test_enrollment.test_get_enrollment_status_kissa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_status_kissa</span></code></a>(...)</p></td>
-<td><p>Enrollment status should be 200 !str(none)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_invite_code" title="tests.test_enrollment.test_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_invite_code</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Test - check invite code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_status_nope" title="tests.test_enrollment.test_get_enrollment_status_nope"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_status_nope</span></code></a>(...)</p></td>
-<td><p>Enrollment status should be 200 str('none')</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_status_error" title="tests.test_enrollment.test_get_enrollment_status_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_status_error</span></code></a>(...)</p></td>
-<td><p>Enrollment status should be 200 str('none')</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_init_missing_values" title="tests.test_enrollment.test_post_enrollment_init_missing_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_init_missing_values</span></code></a>(...)</p></td>
-<td><p>Enrollment init should return code 422 for missing json values</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_init" title="tests.test_enrollment.test_post_enrollment_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_init</span></code></a>(...)</p></td>
-<td><p>Enrollment init should return code 200 and {'success':True}</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_init_already_enrolled" title="tests.test_enrollment.test_post_enrollment_init_already_enrolled"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_init_already_enrolled</span></code></a>(...)</p></td>
-<td><p>Enrollment init should return code 200 and {'success':False}</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_list" title="tests.test_enrollment.test_get_enrollment_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_list</span></code></a>(...)</p></td>
-<td><p>/enrollment/list</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_get_verification_code" title="tests.test_enrollment.test_post_enrollment_get_verification_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_get_verification_code</span></code></a>(...)</p></td>
-<td><p>/generate-verification-code</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_invitecode_create" title="tests.test_enrollment.test_post_enrollment_invitecode_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_invitecode_create</span></code></a>(...)</p></td>
-<td><p>/invitecode/create</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_invitecode_create_fail" title="tests.test_enrollment.test_post_enrollment_invitecode_create_fail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_invitecode_create_fail</span></code></a>(...)</p></td>
-<td><p>/invitecode/create</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll" title="tests.test_enrollment.test_post_enrollment_invitecode_enroll"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_invitecode_enroll</span></code></a>(...)</p></td>
-<td><p>/invitecode/create</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid" title="tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_invitecode_enroll_invalid</span></code></a>(...)</p></td>
-<td><p>/invitecode/enroll</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active" title="tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_enrollment_invitecode_enroll_already_active</span></code></a>(...)</p></td>
-<td><p>/invitecode/create</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_invitecode_check" title="tests.test_enrollment.test_get_enrollment_invitecode_check"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_invitecode_check</span></code></a>(...)</p></td>
-<td><p>/invitecode?invitecode=xxxx</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_enrollment.test_get_enrollment_invitecode_check_fail" title="tests.test_enrollment.test_get_enrollment_invitecode_check_fail"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_enrollment_invitecode_check_fail</span></code></a>(...)</p></td>
-<td><p>/invitecode?invitecode=xxxx</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_enrollment.test_enroll_with_invite_code" title="tests.test_enrollment.test_enroll_with_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_enroll_with_invite_code</span></code></a>(...)</p></td>
+<td><p>Test - enroll with invite code</p></td>
 </tr>
 </tbody>
 </table>
@@ -256,29 +218,9 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setstate_success_work_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setstate_success_work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id" title="Link to this definition"></a></dt>
-<dd><p>/config/set-state
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setstate_fail_both_missing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setstate_fail_both_missing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing" title="Link to this definition"></a></dt>
-<dd><p>/config/set-state
-Result should fail
-reason=”work_id missing”,</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_enroll_verif_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_enroll_verif_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_enroll_verif_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_enroll_verif_code" title="Link to this definition"></a></dt>
+<dd><p>Test - verification code should succeed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
@@ -290,17 +232,12 @@ reason=”work_id missing”,</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setstate_fail_missing_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setstate_fail_missing_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value" title="Link to this definition"></a></dt>
-<dd><p>/config/set-state
-Result should fail
-reason=values are missing from query</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_enroll_verif_code_fail_no_jwt">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_enroll_verif_code_fail_no_jwt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_enroll_verif_code_fail_no_jwt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_enroll_verif_code_fail_no_jwt" title="Link to this definition"></a></dt>
+<dd><p>Test - No JWT –&gt; fail</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -309,66 +246,9 @@ reason=values are missing from query</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setstate_fail_oopsie_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setstate_fail_oopsie_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state" title="Link to this definition"></a></dt>
-<dd><p>/config/set-state
-Result should fail
-reason=”Error. Undefined backend error q_ssues1”,</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setmtlstest_success_work_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setmtlstest_success_work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id" title="Link to this definition"></a></dt>
-<dd><p>/config/set-mtls-test-link
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setmtlstest_success_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setmtlstest_success_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all" title="Link to this definition"></a></dt>
-<dd><p>/config/set-mtls-test-link
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setmtlstest_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setmtlstest_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail" title="Link to this definition"></a></dt>
-<dd><p>/config/set-mtls-test-link
-Result should be fail
-‘Error. Both work_id and work_id_hash are undefined. At least one is required when ‘set_for_all’ is set to False’</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_enroll_show_verif_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_enroll_show_verif_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_enroll_show_verif_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_enroll_show_verif_code" title="Link to this definition"></a></dt>
+<dd><p>Test - show verification code info</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
@@ -380,84 +260,9 @@ Result should be fail
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setmtlstest_fail_oopsie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setmtlstest_fail_oopsie"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie" title="Link to this definition"></a></dt>
-<dd><p>/config/set-mtls-test-link
-Result should be fail
-‘Error. Both work_id and work_id_hash are undefined. At least one is required when ‘set_for_all’ is set to True’</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_success_work_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_success_work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_howto_setdl_success_work_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_howto_setdl_success_work_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_success_work_idhash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_success_work_idhash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_fail_missing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_fail_missing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should fail
-reason=”Error. Both work_id and work_id_hash are undefined or empty. At least one is required”</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_enroll_show_verifcode_bad_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_enroll_show_verifcode_bad_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_enroll_show_verifcode_bad_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_enroll_show_verifcode_bad_code" title="Link to this definition"></a></dt>
+<dd><p>Test - show verification code info</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
@@ -469,17 +274,12 @@ reason=”Error. Both work_id and work_id_hash are undefined or empty. At least 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_fail_permit_oopsie</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_fail_permit_oopsie"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should fail
-reason=”Error. Undefined backend error q_ssuecdll1”</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_show_verifcode_no_jwt">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_show_verifcode_no_jwt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_show_verifcode_no_jwt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_show_verifcode_no_jwt" title="Link to this definition"></a></dt>
+<dd><p>Test - no JWT, should fail</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -488,402 +288,9 @@ reason=”Error. Undefined backend error q_ssuecdll1”</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_fail_oopsie_link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_fail_oopsie_link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should fail
-reason=”Error. Undefined backend error q_ssuecdll1”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_setdl_fail_oopsie_link2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_setdl_fail_oopsie_link2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2" title="Link to this definition"></a></dt>
-<dd><p>/config/set-cert-dl-link
-Result should fail
-reason=”Error. Undefined backend error q_ssuecdll1”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_add_mgr">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_add_mgr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_add_mgr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_add_mgr" title="Link to this definition"></a></dt>
-<dd><p>/config/add-service-management-hash
-Enrollment accept should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_fail_mgr_short">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_fail_mgr_short</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_fail_mgr_short"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_fail_mgr_short" title="Link to this definition"></a></dt>
-<dd><p>/config/add-service-management-hash
-Enrollment should fail
-reason=”Error. new_service_management_hash too short. Needs to be 64 or more.”,</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_config_fail_mgr_bad_perm_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_config_fail_mgr_bad_perm_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str" title="Link to this definition"></a></dt>
-<dd><p>/config/add-service-management-hash
-Enrollment should fail
-reason=”Error. Undefined backend error q_ssiim1”, &lt;– permissions_str sql inject</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_accept">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_accept"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_accept" title="Link to this definition"></a></dt>
-<dd><p>/accept
-Enrollment accept should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_accept_fail_oopsie_permitstr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_accept_fail_oopsie_permitstr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr" title="Link to this definition"></a></dt>
-<dd><p>/accept
-Enrollment should fail
-reason=”Error. Undefined backend error q_ssfm1”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_accept_fail_wrong_permit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_accept_fail_wrong_permit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit" title="Link to this definition"></a></dt>
-<dd><p>/accept
-Enrollment should fail
-reason=”Error. ‘management_hash’ doesn’t have rights to accept given ‘work_id_hash’”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_accept_fail_oopsie_enroll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_accept_fail_oopsie_enroll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll" title="Link to this definition"></a></dt>
-<dd><p>/accept
-Enrollment should fail
-reason=”Error. Undefined backend error q_ssfewh1”, &lt;– sql inject work_id_hash</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_accept_fail_wrong_enroll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_accept_fail_wrong_enroll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll" title="Link to this definition"></a></dt>
-<dd><p>/accept
-Enrollment should fail
-reason=”Error. ‘work_id_hash’ not found from database.”,&lt;– wrong enroll str</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_deliver_kissa">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_deliver_kissa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_deliver_kissa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_deliver_kissa" title="Link to this definition"></a></dt>
-<dd><p>/deliver
-Result should be success</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_deliver_error">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_deliver_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_deliver_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_deliver_error" title="Link to this definition"></a></dt>
-<dd><p>/deliver/{work_id_hash}
-Result should fail
-reason=”Error. Undefined backend error q_sssfewh1”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_deliver_error_not_found">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_deliver_error_not_found</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_deliver_error_not_found"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_deliver_error_not_found" title="Link to this definition"></a></dt>
-<dd><p>/deliver/{work_id_hash}
-Result should fail
-reason=”Error. ‘work_id_hash’ not found from database.”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_deliver_error_not_finished">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_deliver_error_not_finished</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_deliver_error_not_finished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_deliver_error_not_finished" title="Link to this definition"></a></dt>
-<dd><p>/deliver/{work_id_hash}
-Result should fail
-reason=”Enrollment is still in progress or it hasn’t been accepted.”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_status_kissa">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_status_kissa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_status_kissa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_status_kissa" title="Link to this definition"></a></dt>
-<dd><p>Enrollment status should be 200 !str(none)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_status_nope">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_status_nope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_status_nope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_status_nope" title="Link to this definition"></a></dt>
-<dd><p>Enrollment status should be 200 str(‘none’)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_status_error">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_status_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_status_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_status_error" title="Link to this definition"></a></dt>
-<dd><p>Enrollment status should be 200 str(‘none’)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_init_missing_values">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_init_missing_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_init_missing_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_init_missing_values" title="Link to this definition"></a></dt>
-<dd><p>Enrollment init should return code 422 for missing json values</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_init">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_init" title="Link to this definition"></a></dt>
-<dd><p>Enrollment init should return code 200 and {‘success’:True}</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_init_already_enrolled">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_init_already_enrolled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_init_already_enrolled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_init_already_enrolled" title="Link to this definition"></a></dt>
-<dd><p>Enrollment init should return code 200 and {‘success’:False}</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_list">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_list" title="Link to this definition"></a></dt>
-<dd><p>/enrollment/list
-Result should be success and work_id_list not empty</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_get_verification_code">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_get_verification_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_get_verification_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_get_verification_code" title="Link to this definition"></a></dt>
-<dd><p>/generate-verification-code
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_invitecode_create">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_invitecode_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_invitecode_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_invitecode_create" title="Link to this definition"></a></dt>
-<dd><p>/invitecode/create
-Result should succeed</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_invitecode_create_fail">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_invitecode_create_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_invitecode_create_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_invitecode_create_fail" title="Link to this definition"></a></dt>
-<dd><p>/invitecode/create
-Result should fail</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_show_verifcode_no_permission">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_show_verifcode_no_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_show_verifcode_no_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_show_verifcode_no_permission" title="Link to this definition"></a></dt>
+<dd><p>Test - no such code –&gt; fail</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
@@ -895,17 +302,12 @@ Result should fail</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_invitecode_enroll">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_invitecode_enroll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_invitecode_enroll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll" title="Link to this definition"></a></dt>
-<dd><p>/invitecode/create
-/invitecode/enroll
-Result should succeed</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_show_verifcode_sub_is_bonkers">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_show_verifcode_sub_is_bonkers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_without_proper_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_show_verifcode_sub_is_bonkers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_show_verifcode_sub_is_bonkers" title="Link to this definition"></a></dt>
+<dd><p>Test - sub in JWT cannot be found</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_without_proper_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -914,10 +316,51 @@ Result should succeed</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_invitecode_enroll_invalid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_invitecode_enroll_invalid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid" title="Link to this definition"></a></dt>
-<dd><p>/invitecode/enroll
-Result should fail</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_have_i_been_accepted_yes">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_have_i_been_accepted_yes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_have_i_been_accepted_yes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_have_i_been_accepted_yes" title="Link to this definition"></a></dt>
+<dd><p>Test - have i been accepted, yes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_have_i_been_accepted_no">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_have_i_been_accepted_no</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_koira_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_have_i_been_accepted_no"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_have_i_been_accepted_no" title="Link to this definition"></a></dt>
+<dd><p>Test - have i been accepted, no</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_koira_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_have_i_been_accepted_no_jwt">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_have_i_been_accepted_no_jwt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_have_i_been_accepted_no_jwt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_have_i_been_accepted_no_jwt" title="Link to this definition"></a></dt>
+<dd><p>Test - have i been - no JWt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_status_koira">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_status_koira</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_status_koira"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_status_koira" title="Link to this definition"></a></dt>
+<dd><p>Test - get status</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
@@ -929,50 +372,253 @@ Result should fail</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_enrollment_invitecode_enroll_already_active</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_enrollment_invitecode_enroll_already_active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active" title="Link to this definition"></a></dt>
-<dd><p>/invitecode/create
-/invitecode/enroll
-Result should fail</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_invitecode_check">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_invitecode_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_invitecode_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_invitecode_check" title="Link to this definition"></a></dt>
-<dd><p>/invitecode?invitecode=xxxx
-Result should be success</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_enrollment.test_get_enrollment_invitecode_check_fail">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_enrollment_invitecode_check_fail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_get_enrollment_invitecode_check_fail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_get_enrollment_invitecode_check_fail" title="Link to this definition"></a></dt>
-<dd><p>/invitecode?invitecode=xxxx
-Result should be invitecode_is_active == False</p>
+<dt class="sig sig-object py" id="tests.test_enrollment.test_status_not_found">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_status_not_found</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_status_not_found"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_status_not_found" title="Link to this definition"></a></dt>
+<dd><p>Test - no such status</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_list_as_adm">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_list_as_adm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_list_as_adm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_list_as_adm" title="Link to this definition"></a></dt>
+<dd><p>Test - list enrollments</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_list_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_list_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_list_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_list_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - list enrollments as normal user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_post_init">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_post_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_post_init" title="Link to this definition"></a></dt>
+<dd><p>Test - init new user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_init_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_init_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_init_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_init_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - init as normal user –&gt; fail</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_promote_demote">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_promote_demote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_promote_demote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_promote_demote" title="Link to this definition"></a></dt>
+<dd><p>Test - promote user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_promote_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_promote_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_promote_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_promote_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - promote user, no permissions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_lock">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_lock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_lock" title="Link to this definition"></a></dt>
+<dd><p>Test - lock</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_lock_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_lock_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_lock_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_lock_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - lock as normal use</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_accept">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_accept"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_accept" title="Link to this definition"></a></dt>
+<dd><p>Test - accept enrollment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_accept_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_accept_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_accept_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_accept_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - accept, no permissions -&gt; fail</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_accept_no_such_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_accept_no_such_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_accept_no_such_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_accept_no_such_user" title="Link to this definition"></a></dt>
+<dd><p>Test - accept a ghost</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_invitecode_create">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_invitecode_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_invitecode_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_invitecode_create" title="Link to this definition"></a></dt>
+<dd><p>Test - create invite code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_create_as_usr">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_create_as_usr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_user_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_create_as_usr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_create_as_usr" title="Link to this definition"></a></dt>
+<dd><p>Test - normal user create invite code –&gt; fail</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_user_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_invitecode_dectivate">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_invitecode_dectivate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_invitecode_dectivate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_invitecode_dectivate" title="Link to this definition"></a></dt>
+<dd><p>Test - deactivate invite code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_invitecode_activate">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_invitecode_activate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_invitecode_activate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_invitecode_activate" title="Link to this definition"></a></dt>
+<dd><p>Test - activate invite code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_invite_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_invite_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_invite_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_invite_code" title="Link to this definition"></a></dt>
+<dd><p>Test - check invite code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_enrollment.test_enroll_with_invite_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_enroll_with_invite_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_enrollment.html#test_enroll_with_invite_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_enrollment.test_enroll_with_invite_code" title="Link to this definition"></a></dt>
+<dd><p>Test - enroll with invite code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+<li><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>

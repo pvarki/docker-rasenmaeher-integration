@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -81,9 +81,9 @@
              
   <h1>Source code for rasenmaeher_api.web.api.enrollment.schema</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Schema for enrollment.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">Extra</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Extra</span>
 
 
 <div class="viewcode-block" id="EnrollmentGenVerifiOut">
@@ -108,58 +108,6 @@
 <div class="viewcode-block" id="EnrollmentGenVerifiOut.Config.schema_extra">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;verification_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] Generated verification code for enrollment.&quot;</span><span class="p">}}</span></div>
-</div>
-</div>
-
-
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn">[docs]</a>
-<span class="k">class</span> <span class="nc">EnrollmentConfigSetStateIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn.state">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.state">[docs]</a>
-    <span class="n">state</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
-
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn.Config">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn.Config.extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetStateIn.Config.schema_extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config.schema_extra">[docs]</a>
-        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;somestate&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-            <span class="p">]</span>
-        <span class="p">}</span></div>
 </div>
 </div>
 
@@ -196,211 +144,14 @@
 
 
 
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn">[docs]</a>
-<span class="k">class</span> <span class="nc">EnrollmentConfigSetMtlsIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config set mtls schema in&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.mtls_test_link">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.mtls_test_link">[docs]</a>
-    <span class="n">mtls_test_link</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.set_for_all">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.set_for_all">[docs]</a>
-    <span class="n">set_for_all</span><span class="p">:</span> <span class="nb">bool</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.Config">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.Config.extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetMtlsIn.Config.schema_extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config.schema_extra">[docs]</a>
-        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where mtls can be tested&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="s2">&quot;[bool] - Set mtls test link for everyone?&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values2&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;set_for_all&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-            <span class="p">]</span>
-        <span class="p">}</span></div>
-</div>
-</div>
-
-
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn">[docs]</a>
-<span class="k">class</span> <span class="nc">EnrollmentConfigSetDLCertIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.cert_download_link">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.cert_download_link">[docs]</a>
-    <span class="n">cert_download_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.howto_download_link">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.howto_download_link">[docs]</a>
-    <span class="n">howto_download_link</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.Config">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.Config.extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-
-<div class="viewcode-block" id="EnrollmentConfigSetDLCertIn.Config.schema_extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config.schema_extra">[docs]</a>
-        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate package can be downloaded&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where howto info can be downloaded&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str]&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values2&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;https://kuvaton.com/kissa123.jpg&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-            <span class="p">]</span>
-        <span class="p">}</span></div>
-</div>
-</div>
-
-
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn">[docs]</a>
-<span class="k">class</span> <span class="nc">EnrollmentAddServiceManagementIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment config add manager schema in&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.new_service_management_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.new_service_management_hash">[docs]</a>
-    <span class="n">new_service_management_hash</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.permissions_str">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.permissions_str">[docs]</a>
-    <span class="n">permissions_str</span><span class="p">:</span> <span class="nb">str</span></div>
-
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.Config">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.Config.extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-
-<div class="viewcode-block" id="EnrollmentAddServiceManagementIn.Config.schema_extra">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config.schema_extra">[docs]</a>
-        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for new &#39;service_management_hash&#39;&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Set permission string for new management_hash.&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;new_service_management_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;asdQWEasd2&quot;</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span>  <span class="c1"># pragma: allowlist secret</span>
-                        <span class="s2">&quot;permissions_str&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Set permission for new management_hash.&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-            <span class="p">]</span>
-        <span class="p">}</span></div>
-</div>
-</div>
-
-
-
 <div class="viewcode-block" id="EnrollmentStatusIn">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn">[docs]</a>
 <span class="k">class</span> <span class="nc">EnrollmentStatusIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment status in schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentStatusIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentStatusIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 </div>
 
 
@@ -412,15 +163,11 @@
 
 <div class="viewcode-block" id="EnrollmentStatusOut.status">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.status">[docs]</a>
-    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">int</span></div>
 
-<div class="viewcode-block" id="EnrollmentStatusOut.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentStatusOut.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentStatusOut.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentStatusOut.Config">
@@ -436,9 +183,8 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash generated for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[int] - Current state of enrollment&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span></div>
 </div>
@@ -467,13 +213,9 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.state">[docs]</a>
     <span class="n">state</span><span class="p">:</span> <span class="nb">str</span></div>
 
-<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 <div class="viewcode-block" id="EnrollmentShowVerificationCodeOut.accepted">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.accepted">[docs]</a>
@@ -498,8 +240,7 @@
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Current state of enrollment&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash generated for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;accepted&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Has this been already accepted, empty or &#39;na&#39; == not accepted&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;locked&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Contain info if the enrollment is locked. For unlocked enrollment, it&#39;s empty &#39;&#39;&quot;</span><span class="p">,</span>
             <span class="p">}</span>
@@ -545,9 +286,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentInitIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init in response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentInitIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentInitIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentInitIn.Config">
@@ -568,7 +309,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Plain text enrollment role id&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Plain text enrollment role id&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -576,7 +317,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;taikaponi&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;taikaponi&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>
@@ -591,13 +332,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentInitOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentInitOut.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
-
-<div class="viewcode-block" id="EnrollmentInitOut.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentInitOut.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 <div class="viewcode-block" id="EnrollmentInitOut.jwt">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.jwt">[docs]</a>
@@ -617,8 +354,7 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;jwt&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] jwt token needed for later use&quot;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span></div>
@@ -632,9 +368,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentDeliverIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment promote in schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentDeliverIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentDeliverIn.callsign_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn.callsign_hash">[docs]</a>
+    <span class="n">callsign_hash</span><span class="p">:</span> <span class="nb">str</span></div>
 </div>
 
 
@@ -644,13 +380,13 @@
 <span class="k">class</span> <span class="nc">EnrollmentDeliverOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentDeliverOut.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentDeliverOut.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
-<div class="viewcode-block" id="EnrollmentDeliverOut.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentDeliverOut.callsign_hash">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.callsign_hash">[docs]</a>
+    <span class="n">callsign_hash</span><span class="p">:</span> <span class="nb">str</span></div>
 
 <div class="viewcode-block" id="EnrollmentDeliverOut.cert_download_link">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.cert_download_link">[docs]</a>
@@ -678,8 +414,8 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for callsign&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;cert_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate package can be downloaded&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;howto_download_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link where certificate install howto can be downloaded&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;mtls_test_link&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Link that can be used to test mtls connection&quot;</span><span class="p">,</span>
@@ -695,9 +431,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentAcceptIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentAcceptIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentAcceptIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentAcceptIn.Config">
@@ -718,7 +454,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Enrollment hash string.&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Enrollment callsign.&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -726,7 +462,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>
@@ -741,9 +477,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment init out response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentAcceptOut.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentAcceptOut.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentAcceptOut.Config">
@@ -759,7 +495,7 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Username/callsign/callsign&quot;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span></div>
 </div>
@@ -772,13 +508,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentPromoteIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment promote in schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentPromoteIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentPromoteIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+<div class="viewcode-block" id="EnrollmentPromoteIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentPromoteIn.Config">
@@ -799,8 +531,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -808,7 +539,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>
@@ -823,13 +554,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentDemoteIn</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment demote in schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentDemoteIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentDemoteIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+<div class="viewcode-block" id="EnrollmentDemoteIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentDemoteIn.Config">
@@ -850,8 +577,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -859,7 +585,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>
@@ -878,13 +604,9 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.lock_reason">[docs]</a>
     <span class="n">lock_reason</span><span class="p">:</span> <span class="nb">str</span></div>
 
-<div class="viewcode-block" id="EnrollmentLockIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="EnrollmentLockIn.work_id_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id_hash">[docs]</a>
-    <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+<div class="viewcode-block" id="EnrollmentLockIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentLockIn.Config">
@@ -905,8 +627,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Hash string for work_id&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
@@ -914,7 +635,7 @@
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>
@@ -991,17 +712,9 @@
 <span class="k">class</span> <span class="nc">EnrollmentListOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment list out response schema&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EnrollmentListOut.work_id_list">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.work_id_list">[docs]</a>
-    <span class="n">work_id_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
-
-<div class="viewcode-block" id="EnrollmentListOut.success">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.success">[docs]</a>
-    <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="EnrollmentListOut.reason">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.reason">[docs]</a>
-    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="EnrollmentListOut.callsign_list">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.callsign_list">[docs]</a>
+    <span class="n">callsign_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
 </div>
 
 
@@ -1113,9 +826,9 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.invite_code">[docs]</a>
     <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span></div>
 
-<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.work_id">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.work_id">[docs]</a>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span></div>
+<div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.callsign">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.callsign">[docs]</a>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentInviteCodeEnrollIn.Config">
@@ -1132,8 +845,8 @@
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Code that is used validate enrollment init for work_id&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/workname&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Code that is used validate enrollment init for callsign&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">]</span>
         <span class="p">}</span></div>

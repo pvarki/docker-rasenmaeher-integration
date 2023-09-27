@@ -17,7 +17,7 @@ Classes
 
 .. autoapisummary::
 
-   rasenmaeher_api.db.base.BaseModel
+   rasenmaeher_api.db.base.ORMBaseModel
 
 
 
@@ -59,7 +59,7 @@ Attributes
 
    
 
-.. py:class:: BaseModel
+.. py:class:: ORMBaseModel
 
 
    Bases: :py:obj:`DBModel`

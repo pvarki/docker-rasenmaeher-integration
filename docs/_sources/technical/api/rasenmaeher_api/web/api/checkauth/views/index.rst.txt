@@ -22,6 +22,8 @@ Functions
    rasenmaeher_api.web.api.checkauth.views.return_mtls_payload
    rasenmaeher_api.web.api.checkauth.views.return_mtlsjwt_payload
    rasenmaeher_api.web.api.checkauth.views.return_mtlsjwt_payload_permissive
+   rasenmaeher_api.web.api.checkauth.views.return_validuser_payload
+   rasenmaeher_api.web.api.checkauth.views.return_validadmin_payload
    rasenmaeher_api.web.api.checkauth.views.return_ldap_connectionstring
 
 
@@ -60,6 +62,18 @@ Attributes
    :async:
 
    Method for testing mTLS and JWT auth, do not disallow any subjects
+
+
+.. py:function:: return_validuser_payload(request)
+   :async:
+
+   Method for the ValidUser middleware
+
+
+.. py:function:: return_validadmin_payload(request)
+   :async:
+
+   Method for the ValidUser middleware with required_roles
 
 
 .. py:function:: return_ldap_connectionstring()

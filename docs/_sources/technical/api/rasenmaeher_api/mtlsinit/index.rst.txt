@@ -18,9 +18,8 @@ Functions
 
 .. autoapisummary::
 
+   rasenmaeher_api.mtlsinit.check_settings_clientpaths
    rasenmaeher_api.mtlsinit.check_mtls_init
-   rasenmaeher_api.mtlsinit.create_keypair
-   rasenmaeher_api.mtlsinit.create_csr
    rasenmaeher_api.mtlsinit.mtls_init
    rasenmaeher_api.mtlsinit.get_session_winit
 
@@ -32,25 +31,26 @@ Attributes
 .. autoapisummary::
 
    rasenmaeher_api.mtlsinit.LOGGER
+   rasenmaeher_api.mtlsinit.CERT_NAME_PREFIX
 
 
 .. py:data:: LOGGER
 
    
 
+.. py:data:: CERT_NAME_PREFIX
+   :value: 'rm_mtls_client'
+
+   
+
+.. py:function:: check_settings_clientpaths()
+
+   Make sure the paths are defined, to defaults if needed, return True if setting was changed
+
+
 .. py:function:: check_mtls_init()
 
    Check if we have the cert and key
-
-
-.. py:function:: create_keypair()
-
-   Generate a keypair
-
-
-.. py:function:: create_csr(keypair)
-
-   Generate CSR file
 
 
 .. py:function:: mtls_init()

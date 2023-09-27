@@ -20,7 +20,6 @@ Functions
 
    rasenmaeher_api.web.api.utils.views.request_utils_ldap_conn_string
    rasenmaeher_api.web.api.utils.views.request_utils_keycloak_conn_string
-   rasenmaeher_api.web.api.utils.views.get_crl
    rasenmaeher_api.web.api.utils.views.return_crl
 
 
@@ -30,8 +29,13 @@ Attributes
 
 .. autoapisummary::
 
+   rasenmaeher_api.web.api.utils.views.LOGGER
    rasenmaeher_api.web.api.utils.views.router
 
+
+.. py:data:: LOGGER
+
+   
 
 .. py:data:: router
 
@@ -46,20 +50,12 @@ Attributes
 .. py:function:: request_utils_keycloak_conn_string()
    :async:
 
-   TODO ldap-conn-string
-
-
-.. py:function:: get_crl()
-   :async:
-
-   Quick and dirty method to get CA from CFSSL
-   returns: CA certificate
+   TODO keycloak-conn-string
 
 
 .. py:function:: return_crl()
    :async:
 
-   Method for TAK sign CSR and request CA
-   params: csr
+   Get the CRL from CFSSL
 
 

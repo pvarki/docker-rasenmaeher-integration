@@ -37,19 +37,9 @@ Attributes
 .. py:class:: SeenToken
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Store tokens we should see used only once
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'seentokens'

@@ -15,6 +15,7 @@ Subpackages
    enrollment/index.rst
    firstuser/index.rst
    healthcheck/index.rst
+   middleware/index.rst
    product/index.rst
    tokens/index.rst
    utils/index.rst
@@ -26,7 +27,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   middleware/index.rst
    router/index.rst
 
 

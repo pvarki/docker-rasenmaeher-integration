@@ -18,13 +18,9 @@ Functions
 
 .. autoapisummary::
 
-   tests.test_firstuser.test_get_firstuser
-   tests.test_firstuser.test_get_check_code
-   tests.test_firstuser.test_post_add_admin
-   tests.test_firstuser.test_get_list_admin
-   tests.test_firstuser.test_post_delete_admin
-   tests.test_firstuser.test_post_add_disable
-   tests.test_firstuser.test_post_add_enable
+   tests.test_firstuser.test_code_exchange_and_admin_creation
+   tests.test_firstuser.test_code_exchange_bad_code
+   tests.test_firstuser.test_post_with_admin_client
 
 
 
@@ -40,52 +36,21 @@ Attributes
 
    
 
-.. py:function:: test_get_firstuser(tilauspalvelu_jwt_client)
+.. py:function:: test_code_exchange_and_admin_creation(unauth_client)
    :async:
 
-   /firstuser/is-active
-   Result should be success
+   Firstuser route to test token exchange to admin user
 
 
-.. py:function:: test_get_check_code(tilauspalvelu_jwt_client)
+.. py:function:: test_code_exchange_bad_code(unauth_client)
    :async:
 
-   /firstuser/check-code
-   Result should be success
+   Firstuser route fail using incorrect code
 
 
-.. py:function:: test_post_add_admin(tilauspalvelu_jwt_client)
+.. py:function:: test_post_with_admin_client(tilauspalvelu_jwt_admin_client)
    :async:
 
-   /firstuser/add-admin
-   Result should be successful
-
-
-.. py:function:: test_get_list_admin(tilauspalvelu_jwt_client)
-   :async:
-
-   /firstuser/list-admin
-   Result should be success
-
-
-.. py:function:: test_post_delete_admin(tilauspalvelu_jwt_client)
-   :async:
-
-   /firstuser/delete-admin
-   Result should be successful
-
-
-.. py:function:: test_post_add_disable(tilauspalvelu_jwt_client)
-   :async:
-
-   /firstuser/disable
-   Result should be successful
-
-
-.. py:function:: test_post_add_enable(tilauspalvelu_jwt_client)
-   :async:
-
-   /firstuser/enable
    Result should be successful
 
 

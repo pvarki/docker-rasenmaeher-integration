@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.logincodes &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.db.logincodes &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../web/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
 </ul>
@@ -154,19 +155,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.logincodes.LoginCode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LoginCode</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/logincodes.html#LoginCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.logincodes.LoginCode" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.BaseModel" title="rasenmaeher_api.db.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.ORMBaseModel" title="rasenmaeher_api.db.base.ORMBaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.ORMBaseModel</span></code></a></p>
 <p>Track the login codes that can be exchanged for session JWTs</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.logincodes.LoginCode.Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/logincodes.html#LoginCode.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.logincodes.LoginCode.Config" title="Link to this definition"></a></dt>
-<dd><p>Basemodel config</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.logincodes.LoginCode.Config.extra">
-<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/logincodes.html#LoginCode.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.logincodes.LoginCode.Config.extra" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.logincodes.LoginCode.__tablename__">
 <span class="sig-name descname"><span class="pre">__tablename__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logincodes'</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/logincodes.html#LoginCode.__tablename__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.logincodes.LoginCode.__tablename__" title="Link to this definition"></a></dt>

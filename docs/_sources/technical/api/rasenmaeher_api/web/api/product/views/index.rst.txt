@@ -18,8 +18,6 @@ Functions
 
 .. autoapisummary::
 
-   rasenmaeher_api.web.api.product.views.get_ca
-   rasenmaeher_api.web.api.product.views.sign_csr
    rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr
    rasenmaeher_api.web.api.product.views.renew_csr
    rasenmaeher_api.web.api.product.views.signal_ready
@@ -32,26 +30,16 @@ Attributes
 .. autoapisummary::
 
    rasenmaeher_api.web.api.product.views.router
+   rasenmaeher_api.web.api.product.views.LOGGER
 
 
 .. py:data:: router
 
    
 
-.. py:function:: get_ca()
-   :async:
+.. py:data:: LOGGER
 
-   Quick and dirty method to get CA from CFSSL
-   returns: CA certificate
-
-
-.. py:function:: sign_csr(csr)
-   :async:
-
-   Quick and dirty method to sign CSR from CFSSL
-   params: csr
-   returns: certificate
-
+   
 
 .. py:function:: return_ca_and_sign_csr(request, certs)
    :async:

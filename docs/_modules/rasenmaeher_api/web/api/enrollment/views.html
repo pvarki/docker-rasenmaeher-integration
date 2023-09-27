@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -81,22 +81,20 @@
              
   <h1>Source code for rasenmaeher_api.web.api.enrollment.views</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Enrollment API views.&quot;&quot;&quot;</span>  <span class="c1"># pylint: disable=too-many-lines</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.web.api.enrollment.schema</span> <span class="kn">import</span> <span class="p">(</span>
+
+
+<span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">EnrollmentConfigTaskDone</span><span class="p">,</span>
     <span class="n">EnrollmentStatusIn</span><span class="p">,</span>
     <span class="n">EnrollmentStatusOut</span><span class="p">,</span>
     <span class="n">EnrollmentAcceptIn</span><span class="p">,</span>
     <span class="n">EnrollmentAcceptOut</span><span class="p">,</span>
-    <span class="n">EnrollmentAddServiceManagementIn</span><span class="p">,</span>
-    <span class="n">EnrollmentConfigSetDLCertIn</span><span class="p">,</span>
-    <span class="n">EnrollmentConfigSetStateIn</span><span class="p">,</span>
-    <span class="n">EnrollmentConfigSetMtlsIn</span><span class="p">,</span>
     <span class="n">EnrollmentGenVerifiOut</span><span class="p">,</span>
     <span class="n">EnrollmentShowVerificationCodeIn</span><span class="p">,</span>
     <span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">,</span>
@@ -105,8 +103,6 @@
     <span class="n">EnrollmentPromoteIn</span><span class="p">,</span>
     <span class="n">EnrollmentInitIn</span><span class="p">,</span>
     <span class="n">EnrollmentInitOut</span><span class="p">,</span>
-    <span class="n">EnrollmentDeliverIn</span><span class="p">,</span>
-    <span class="n">EnrollmentDeliverOut</span><span class="p">,</span>
     <span class="n">EnrollmentDemoteIn</span><span class="p">,</span>
     <span class="n">EnrollmentLockIn</span><span class="p">,</span>
     <span class="n">EnrollmentIsInvitecodeActiveIn</span><span class="p">,</span>
@@ -119,9 +115,10 @@
     <span class="n">EnrollmentInviteCodeDeactivateIn</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">..middleware</span> <span class="kn">import</span> <span class="n">MTLSorJWT</span>
-<span class="kn">from</span> <span class="nn">....settings</span> <span class="kn">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">....sqlitedatabase</span> <span class="kn">import</span> <span class="n">sqlite</span>
+<span class="kn">from</span> <span class="nn">..middleware.mtls</span> <span class="kn">import</span> <span class="n">MTLSorJWT</span>
+<span class="kn">from</span> <span class="nn">....db</span> <span class="kn">import</span> <span class="n">Person</span>
+<span class="kn">from</span> <span class="nn">....db</span> <span class="kn">import</span> <span class="n">Enrollment</span><span class="p">,</span> <span class="n">EnrollmentPool</span>
+<span class="kn">from</span> <span class="nn">....db.errors</span> <span class="kn">import</span> <span class="n">NotFound</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.LOGGER">[docs]</a>
@@ -141,194 +138,27 @@
 <div class="viewcode-block" id="check_management_permissions">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.check_management_permissions">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">check_management_permissions</span><span class="p">(</span>
-    <span class="n">raise_exeption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">management_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">work_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">special_rule</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">hash_like</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">raise_exeption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">required_role</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;admin&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simple function to check if management_hash is found and has permissions. Use hash_like to use LIKE instead of =.</span>
+<span class="sd">    Simple function to check if requester has requested role.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># If management hash is not provided, try to use one pro</span>
-    <span class="k">if</span> <span class="n">management_hash</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">work_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. check_management_permissions() both work_id and management_hash are empty&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">management_hash</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">management_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-            <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-        <span class="p">)</span>
 
-    <span class="c1"># Get special_rules=&#39;first-user from managment</span>
-    <span class="k">if</span> <span class="n">hash_like</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management_where_hash_like_and_special_rule</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">special_rules</span><span class="o">=</span><span class="n">special_rule</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">management_hash</span>
-        <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management_where_hash_and_special_rule_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">special_rules</span><span class="o">=</span><span class="n">special_rule</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">management_hash</span>
-        <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="n">is_admin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user</span><span class="o">.</span><span class="n">has_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="n">required_role</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_sssfmwhasrl1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">special_rule</span> <span class="o">==</span> <span class="s2">&quot;invite-code&quot;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="n">raise_exeption</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Given userid doesn&#39;t have enough permissions.&quot;</span>
+    <span class="c1"># Raise exeption if</span>
+    <span class="k">if</span> <span class="n">raise_exeption</span> <span class="ow">and</span> <span class="n">is_admin</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. User doesn&#39;t have required permissions. See system logs.&quot;</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Missing permissions! User id/hash : </span><span class="si">{}</span><span class="s2">, required permissions that are missing </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">management_hash</span><span class="p">,</span> <span class="n">special_rule</span>
+            <span class="s2">&quot;Missing role from user : &#39;</span><span class="si">{}</span><span class="s2">&#39;. Required permissions that are missing : &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">callsign</span><span class="p">,</span> <span class="n">required_role</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="kc">False</span></div>
-
-
-
-<div class="viewcode-block" id="update_management_hash_permissions">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.update_management_hash_permissions">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">update_management_hash_permissions</span><span class="p">(</span><span class="n">management_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">special_rule</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update the active status of a management hash in the management table</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># convert bool to int</span>
-    <span class="k">if</span> <span class="n">active</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">active_int</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">active_int</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_management_state</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">management_hash</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="n">special_rule</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="n">active_int</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssumha1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="update_invite_code_state">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.update_invite_code_state">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">update_invite_code_state</span><span class="p">(</span><span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update the active status of a invite-code in the management table</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># convert bool to int</span>
-    <span class="k">if</span> <span class="n">active</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">active_int</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">active_int</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">update_management_hash_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="n">active_int</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssumha1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="is_workid_or_workidhash_given">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.is_workid_or_workidhash_given">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">is_workid_or_workidhash_given</span><span class="p">(</span>
-    <span class="n">raise_exeption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simple function to check if either work_id or work_id_hash has been given.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">work_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">work_id</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="n">work_id_hash</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">work_id_hash</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="n">work_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">work_id_hash</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Both work_id and work_id_hash are undefined or empty. At least one is required&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">_reason</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">raise_exeption</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">False</span>
-
-    <span class="k">return</span> <span class="kc">True</span></div>
-
-
-
-<div class="viewcode-block" id="get_hash_with_either_workid_or_hash">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.get_hash_with_either_workid_or_hash">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-    <span class="n">raise_exeption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simple function to get/check the work_id_hash and return it as str.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">work_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">work_id</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">work_id_hash</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">work_id_hash</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">if</span> <span class="n">work_id_hash</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">work_id_hash</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">work_id</span><span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error func_ssfewhx24&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">_reason</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Dafug, more than one hit in results...&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">_reason</span><span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Wont do. Requested work_id or work_id_hash not found...&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">_reason</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">raise_exeption</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
-
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span></div>
-
-
-
-<div class="viewcode-block" id="delete_invite_code_like">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.delete_invite_code_like">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">delete_invite_code_like</span><span class="p">(</span><span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Delete invite code like</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_del_from_management_where_hash_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssumha1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="kc">True</span></div>
+    <span class="k">return</span> <span class="n">is_admin</span></div>
 
 
 
@@ -341,29 +171,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update/Generate verification_code to database for given jwt/mtls</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span>
-
-    <span class="n">_verification_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
-        <span class="p">[</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_verification_code</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="n">_verification_code</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span>
-    <span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error ssuevc1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
+    <span class="n">_verification_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">reset_approvecode4callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">EnrollmentGenVerifiOut</span><span class="p">(</span><span class="n">verification_code</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_verification_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
@@ -386,36 +194,16 @@
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="c1"># Get the code from db</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_verification_code</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">verification_code</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">verification_code</span><span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qsssfmewvc1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Code not found.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qsssfewh1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_approvecode</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">verification_code</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">state</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span>
-        <span class="n">locked</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">8</span><span class="p">],</span>
+        <span class="n">callsign</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span>
+        <span class="n">state</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;????&quot;</span><span class="p">,</span>
+        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;????&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -431,202 +219,13 @@
 <span class="sd">    Return&#39;s True/False in &#39;have_i_been_accepted&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_user_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span>
+    <span class="n">enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
 
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">_user_hash</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_sssfewh2&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="c1"># See state values in db/enrollment.py:EnrollmentState</span>
+    <span class="k">if</span> <span class="n">enrollment</span><span class="o">.</span><span class="n">decided_by</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EnrollmentHaveIBeenAcceptedOut</span><span class="p">(</span><span class="n">have_i_been_accepted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">EnrollmentHaveIBeenAcceptedOut</span><span class="p">(</span><span class="n">have_i_been_accepted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
-
-
-
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/config/set-state&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
-<div class="viewcode-block" id="post_config_set_state">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_config_set_state">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_config_set_state</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">request_in</span><span class="p">:</span> <span class="n">EnrollmentConfigSetStateIn</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span>
-        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentConfigSetStateIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
-    <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update/Set state/status for work_id/user/enrollment using either work_id_hash or work_id.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">await</span> <span class="n">is_workid_or_workidhash_given</span><span class="p">(</span><span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_state</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">state</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssues1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;State was set&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="c1"># mtls_test_link</span>
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/config/set-mtls-test-link&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
-<div class="viewcode-block" id="post_config_set_mtls_test_link">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_config_set_mtls_test_link">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_config_set_mtls_test_link</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">request_in</span><span class="p">:</span> <span class="n">EnrollmentConfigSetMtlsIn</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span>
-        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentConfigSetMtlsIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
-    <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set MTLS test link for one or all work_id&#39;s</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">set_for_all</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Both work_id and work_id_hash are undefined. At least one is required when </span><span class="se">\</span>
-<span class="s2">&#39;set_for_all&#39; is set to False&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">set_for_all</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_mtls_test_link_all</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtls_test_link</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">mtls_test_link</span><span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-            <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-        <span class="p">)</span>
-
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_mtls_test_link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">mtls_test_link</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">mtls_test_link</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssuemtl1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Test link was set&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/config/set-cert-dl-link&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
-<div class="viewcode-block" id="post_config_set_cert_dl_link">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_config_set_cert_dl_link">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_config_set_cert_dl_link</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">request_in</span><span class="p">:</span> <span class="n">EnrollmentConfigSetDLCertIn</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span>
-        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentConfigSetDLCertIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
-    <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Store certificate or howto download link url for work_id (enrollment) using either work_id or work_id_hash</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;asdasd </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">))</span>
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">is_workid_or_workidhash_given</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">cert_download_link</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">request_in</span><span class="o">.</span><span class="n">howto_download_link</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Both cert_download_link and howto_download_link are undefined. At least one is required&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
-
-    <span class="n">_admin_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span><span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">_admin_hash</span><span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">cert_download_link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_cert_dl_link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span>
-            <span class="n">cert_download_link</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">cert_download_link</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="n">_success2</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">howto_download_link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_cert_howto_dl_link</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span>
-            <span class="n">howto_download_link</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">howto_download_link</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">_success2</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">_success2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssuecdll1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Cert DL link was set&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/config/add-service-management-hash&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
-<div class="viewcode-block" id="post_config_add_manager">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_config_add_manager">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_config_add_manager</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">request_in</span><span class="p">:</span> <span class="n">EnrollmentAddServiceManagementIn</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span>
-        <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentAddServiceManagementIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
-    <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add new &quot;management hash&quot; with certain permissions. This is not same as users/work-id&#39;s promotion to admin.</span>
-<span class="sd">    You should think this as of adding &quot;machine admin permissions&quot;. User related admin promotions should</span>
-<span class="sd">    be done using /promote and /demote /lock.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO, REFAK, SERVICE&#39;s SHOULD BE ADDES AS enrollments and added then special permissions if needed...</span>
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">request_in</span><span class="o">.</span><span class="n">new_service_management_hash</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">64</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. new_service_management_hash too short. Needs to be 64 or more.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">new_service_management_hash</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">permissions_str</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">1</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssiim1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Service management hash added&quot;</span><span class="p">)</span></div>
 
 
 
@@ -634,34 +233,18 @@
 <div class="viewcode-block" id="request_enrolment_status">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrolment_status">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrolment_status</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">EnrollmentStatusIn</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentStatusOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check the status for given work_id (enrollment). status=None means that there is no enrollment with given work_id</span>
+<span class="sd">    /status?callsign=xxxx</span>
+<span class="sd">    Check the status for given callsign (enrollment). status=-1 means that there is no enrollment with given callsign</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">work_id</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssfe3&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">_work_id_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_status</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-        <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error sssfe2&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentStatusOut</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">_status</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">EnrollmentStatusOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EnrollmentStatusOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
 
@@ -673,31 +256,21 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentListOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    /list</span>
-<span class="sd">    Return users/work-id&#39;s/enrollments. If &#39;accepted&#39; has something else than &#39;&#39;, it has been accepted.</span>
-<span class="sd">    Returns a list of dicts, work_id_list = [ {  &quot;work_id&quot;:&#39;x&#39;, &#39;work_id_hash&#39;:&#39;yy&#39;, &#39;state&#39;:&#39;init&#39;, &#39;accepted&#39;:&#39;&#39; } ]</span>
+<span class="sd">    Return users/callsign/enrollments. If &#39;accepted&#39; has something else than &#39;&#39;, it has been accepted.</span>
+<span class="sd">    Returns a list of dicts, callsign_list = [ {  &quot;callsign&quot;:&#39;x&#39;, &#39;state&#39;:&#39;init&#39;, &#39;approvecode&#39;:&#39;&#39; } ]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_all</span><span class="o">.</span><span class="n">format</span><span class="p">()</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">_enroll_list</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssfea1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="n">_result_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="n">_enroll_list</span><span class="p">:</span>
+        <span class="n">_result_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">approvecode</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">state</span><span class="p">})</span>
 
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentListOut</span><span class="p">(</span><span class="n">work_id_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-    <span class="n">_work_id_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">_result</span><span class="p">:</span>
-        <span class="n">_work_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;work_id&quot;</span><span class="p">:</span> <span class="n">_id</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;work_id_hash&quot;</span><span class="p">:</span> <span class="n">_id</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">_id</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;accepted&quot;</span><span class="p">:</span> <span class="n">_id</span><span class="p">[</span><span class="mi">3</span><span class="p">]})</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentListOut</span><span class="p">(</span><span class="n">work_id_list</span><span class="o">=</span><span class="n">_work_id_list</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentListOut</span><span class="p">(</span><span class="n">callsign_list</span><span class="o">=</span><span class="n">_result_list</span><span class="p">)</span></div>
 
 
 
@@ -712,56 +285,18 @@
     <span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInitOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add new work_id (enrollment) to environment.</span>
+<span class="sd">    Add new callsign (enrollment) to environment.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="c1"># First check if there is already enrollment for requested workid</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="c1"># TODO ADD POOL NAME CHECK</span>
 
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error sssfe1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="n">_new_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
 
-    <span class="c1"># Skip enrollment if work_id already used</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. work_id has already active enrollment&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
-        <span class="p">[</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span>
-        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error ssiie1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">_new_enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
 
@@ -776,56 +311,22 @@
     <span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;Promote&quot; work_id/user/enrollment to have &#39;admin&#39; rights</span>
+<span class="sd">    &quot;Promote&quot; callsign/user/enrollment to have &#39;admin&#39; rights</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="k">await</span> <span class="n">is_workid_or_workidhash_given</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
+    <span class="n">_role_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_role_added</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Promote done&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Check if the hash is already in database.</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">management_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">)</span>
-    <span class="n">_success2</span><span class="p">,</span> <span class="n">_result2</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error sssfm3&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;enrollment&quot;</span> <span class="ow">in</span> <span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given work_id already has elevated permissions.&quot;</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_management_rules</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">special_rules</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">:enrollment&quot;</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qsumr1&quot;</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">management_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;enrollment&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">1</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qssiim2&quot;</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Promote done&quot;</span><span class="p">)</span></div>
+    <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign already has elevated permissions.&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
 
 
 
@@ -840,58 +341,21 @@
     <span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    &quot;Demote&quot; work_id/user/enrollment from having &#39;admin&#39; rights. work_id_hash can be used too.</span>
+<span class="sd">    &quot;Demote&quot; callsign/user/enrollment from having &#39;admin&#39; rights. callsign_hash can be used too.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-    <span class="k">await</span> <span class="n">is_workid_or_workidhash_given</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="n">_role_removed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">remove_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_role_removed</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Demote done&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Check if the hash is already in database.</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">management_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">)</span>
-    <span class="n">_success2</span><span class="p">,</span> <span class="n">_result2</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error sssfm4&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given work_id/work_id_hash doesn&#39;t have any privileges to take away. Skipping...&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="s2">&quot;enrollment&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given work_id/work_id_hash doesn&#39;t have &#39;enrollment&#39; privileges to take away. Skipping...&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="c1"># If the updated _new_rules is empty. Remove the whole hash from db</span>
-    <span class="n">_new_rules</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;enrollment&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;::&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_new_rules</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_del_from_management_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">management_hash</span><span class="o">=</span><span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qssdfmwhs1&quot;</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_management_rules</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">special_rules</span><span class="o">=</span><span class="n">_new_rules</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">_result2</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qsumr2&quot;</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Demote done&quot;</span><span class="p">)</span></div>
+    <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign_hash doesn&#39;t have &#39;admin&#39; privileges to take away.&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
 
 
 
@@ -906,74 +370,18 @@
     <span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lock work_id/user/enrollment so it cannot be used anymore.</span>
+<span class="sd">    Lock callsign/user/enrollment so it cannot be used anymore.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-    <span class="k">await</span> <span class="n">is_workid_or_workidhash_given</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">lock_reason</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;lock_reason cannot be empty.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_enrollment_locked_state</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">locked</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">lock_reason</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error qsuels1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="n">_admin_person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">_usr_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">_usr_enrollment</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="n">decider</span><span class="o">=</span><span class="n">_admin_person</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Lock task done&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/deliver&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentDeliverOut</span><span class="p">)</span>
-<div class="viewcode-block" id="request_enrollment_status">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_status">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_status</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">params</span><span class="p">:</span> <span class="n">EnrollmentDeliverIn</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentDeliverOut</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Deliver download url link using work_id_hash</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">work_id_hash</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_sssfewh1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;ReadyForDelivery&quot;</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Enrollment is still in progress or it hasn&#39;t been accepted.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">202</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentDeliverOut</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">work_id_hash</span><span class="p">,</span>
-        <span class="n">cert_download_link</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">],</span>
-        <span class="n">howto_download_link</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">],</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="n">_result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">6</span><span class="p">],</span>
-    <span class="p">)</span></div>
 
 
 
@@ -988,41 +396,18 @@
     <span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentAcceptOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Accept work_id_hash (work_id/enrollment)</span>
+<span class="sd">    Accept callsign_hash (callsign/enrollment)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment_where_hash</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
+    <span class="n">_admin_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">_pending_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="n">_new_approved_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_pending_enrollment</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">_admin_user</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssfewh1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. &#39;work_id_hash&#39; not found from database.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="n">_admin_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_accept_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">_admin_hash</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span>
-    <span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error q_ssuae1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">work_id_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id_hash</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">_new_approved_user</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span></div>
 
 
 
@@ -1033,48 +418,17 @@
     <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a new invite code using user_management_hash</span>
-<span class="sd">    This method checks for permission user-admin</span>
-<span class="sd">    This method checks for existing invite code and updates it if found</span>
-<span class="sd">    This method creates invite code if not found</span>
+<span class="sd">    Create a new invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Veriy that the user has permissions to create invite codes ??? is user-admin</span>
+    <span class="c1"># Veriy that the user has permissions to create invite codes</span>
     <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_admin_hash</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_hash_with_either_workid_or_hash</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">)</span>
+    <span class="n">_pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">old_invitecode_for_callsign_tobedeleted</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
 
-    <span class="c1"># Check does the user have existing invite code that matches their management hash</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">management_hash</span><span class="o">=</span><span class="n">_admin_hash</span><span class="p">,</span>
-        <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span>
-        <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Random string for invite-code eg. GLXBT0</span>
-    <span class="n">_invite_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_uppercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">8</span><span class="p">))</span>  <span class="c1"># nosec B311</span>
-    <span class="c1"># Update existing code if existing LIKE management_hash and invite-code</span>
-    <span class="k">if</span> <span class="n">_existing_invite_code</span><span class="p">:</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_update_from_management_where_management_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span>
-            <span class="n">new_management_hash</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_admin_hash</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">_invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">management_hash</span><span class="o">=</span><span class="n">_admin_hash</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Create a new invite code for management_hash_GLXBT0</span>
-        <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_management</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">management_hash</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_admin_hash</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">_invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">special_rules</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="mi">1</span>
-        <span class="p">)</span>
-        <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">_pool</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span></div>
 
 
 
@@ -1091,26 +445,15 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Activate an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
+    <span class="n">_activated_obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;enrollment&quot;</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_activated_obj</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
 
-    <span class="c1"># Check if there is an invite code matching the one in request</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_existing_invite_code</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invite code not found or deactivated&quot;</span><span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management_where_hash_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
-    <span class="n">_success2</span><span class="p">,</span> <span class="n">_result2</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="c1"># Activate the invite code</span>
-    <span class="k">await</span> <span class="n">update_invite_code_state</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span></div>
+    <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Unable to activate given invitecode.&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
 
 
 
@@ -1127,26 +470,15 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deactivate an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Check requester permissions</span>
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
+    <span class="n">_deactivated_obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># Check if there is an invite code matching the one in request</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_deactivated_obj</span><span class="o">.</span><span class="n">active</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="s2">&quot;DISABLED&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">_existing_invite_code</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invite code not found or deactivated&quot;</span><span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_management_where_hash_like</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
-    <span class="n">_success2</span><span class="p">,</span> <span class="n">_result2</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="c1"># Deactivate the invite code</span>
-    <span class="k">await</span> <span class="n">update_invite_code_state</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span></div>
+    <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Unable to deactivate given invitecode.&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
 
 
 
@@ -1154,29 +486,14 @@
 <div class="viewcode-block" id="delete_invite_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.delete_invite_code">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_invite_code</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+    <span class="c1"># request: Request,</span>
     <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Check requester permissions</span>
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">work_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span>
-    <span class="p">)</span>
-
-    <span class="c1"># Check if there is an invite code matching the one in request</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_existing_invite_code</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invite code not found&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Delete the invite code</span>
-    <span class="k">await</span> <span class="n">delete_invite_code_like</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">invite_code</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">invite_code</span><span class="p">)</span></div>
+    <span class="c1"># TODO</span>
+    <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;TODO</span><span class="si">{</span><span class="n">invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 
@@ -1190,16 +507,13 @@
 <span class="sd">    /invitecode?invitecode=xxx</span>
 <span class="sd">    Returns true/false if the code is usable or not</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Check if there is a invite code matching the one in request</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">invitecode</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_existing_invite_code</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentIsInvitecodeActiveOut</span><span class="p">(</span><span class="n">invitecode_is_active</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentIsInvitecodeActiveOut</span><span class="p">(</span><span class="n">invitecode_is_active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">EnrollmentIsInvitecodeActiveOut</span><span class="p">(</span><span class="n">invitecode_is_active</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">EnrollmentIsInvitecodeActiveOut</span><span class="p">(</span><span class="n">invitecode_is_active</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
 
 
@@ -1217,63 +531,29 @@
 <span class="sd">    Enroll with an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Check if there is a invite code matching the one in request</span>
-    <span class="n">_existing_invite_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">management_hash</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">,</span> <span class="n">special_rule</span><span class="o">=</span><span class="s2">&quot;invite-code&quot;</span><span class="p">,</span> <span class="n">hash_like</span><span class="o">=</span><span class="kc">True</span>
-    <span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_existing_invite_code</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. invitecode not valid.&quot;</span>
+    <span class="c1"># CHECK IF INVITE CODE CAN BE USED</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">active</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. invitecode disabled.&quot;</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
 
-    <span class="c1"># First check if there is already enrollment for requested workid</span>
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_sel_from_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">)</span>
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error sssfe1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="c1"># Skip enrollment if work_id already used</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_result</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. work_id has already active enrollment&quot;</span>
+    <span class="c1"># CHECK THAT THE CALLSIGN CAN BE USED</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
+        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. callsign/callsign already taken.&quot;</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+        <span class="k">pass</span>
 
-    <span class="n">_work_id_hash</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="c1"># [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.</span>
-        <span class="p">[</span>
-            <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">)</span>  <span class="c1"># nosec B311 - pseudo-random is good enough</span>
-            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
-
-    <span class="n">_q</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">sqlite_insert_into_enrollment</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span>
-        <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span>
-        <span class="n">state</span><span class="o">=</span><span class="s2">&quot;init&quot;</span><span class="p">,</span>
-        <span class="n">accepted</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-        <span class="n">cert_dl_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">cert_howto_dl_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">mtls_test_link</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">verification_code</span><span class="o">=</span><span class="s2">&quot;na&quot;</span><span class="p">,</span>
-        <span class="n">locked</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="n">_success</span><span class="p">,</span> <span class="n">_result</span> <span class="o">=</span> <span class="n">sqlite</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">_q</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">_success</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Undefined backend error ssiie1&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="n">enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create_enrollment</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
     <span class="c1"># Create JWT token for user</span>
-    <span class="n">_claims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">}</span>
+    <span class="n">_claims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">}</span>
     <span class="n">_new_jwt</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span><span class="n">_claims</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">work_id</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">work_id</span><span class="p">,</span> <span class="n">work_id_hash</span><span class="o">=</span><span class="n">_work_id_hash</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">_new_jwt</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">_new_jwt</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.base &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.db.base &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -117,36 +117,36 @@
 
 
 
-<div class="viewcode-block" id="BaseModel">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel">[docs]</a>
-<span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">DBModel</span><span class="p">):</span>  <span class="c1"># type: ignore[misc] # pylint: disable=R0903</span>
+<div class="viewcode-block" id="ORMBaseModel">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel">[docs]</a>
+<span class="k">class</span> <span class="nc">ORMBaseModel</span><span class="p">(</span><span class="n">DBModel</span><span class="p">):</span>  <span class="c1"># type: ignore[misc] # pylint: disable=R0903</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Baseclass with common fields&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BaseModel.__table_args__">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.__table_args__">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.__table_args__">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.__table_args__">[docs]</a>
     <span class="n">__table_args__</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;schema&quot;</span><span class="p">:</span> <span class="s2">&quot;raesenmaeher&quot;</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="BaseModel.pk">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.pk">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.pk">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.pk">[docs]</a>
     <span class="n">pk</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">saUUID</span><span class="p">(),</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseModel.created">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.created">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.created">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.created">[docs]</a>
     <span class="n">created</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">sa</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">timezone</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseModel.updated">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.updated">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.updated">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.updated">[docs]</a>
     <span class="n">updated</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">sa</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">timezone</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">onupdate</span><span class="o">=</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="BaseModel.deleted">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.deleted">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.deleted">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.deleted">[docs]</a>
     <span class="n">deleted</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">sa</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">timezone</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="BaseModel.by_pk">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.by_pk">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.by_pk">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.by_pk">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">by_pk</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pkin</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">],</span> <span class="n">allow_deleted</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get by pk&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pkin</span><span class="p">,</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">):</span>
@@ -164,8 +164,8 @@
         <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BaseModel.delete">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.delete">[docs]</a>
+<div class="viewcode-block" id="ORMBaseModel.delete">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.delete">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;override delete method to set the deleted timestamp instead of removing the row&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">deleted</span><span class="o">=</span><span class="n">utcnow</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>

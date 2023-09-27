@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.people &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.db.people &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -55,6 +55,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
 <li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../web/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.web</span></code></a></li>
 </ul>
@@ -116,6 +117,31 @@
 </tbody>
 </table>
 </section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.post_user_crud" title="rasenmaeher_api.db.people.post_user_crud"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_user_crud</span></code></a>(userinfo, endpoint_suffix)</p></td>
+<td><p>Wrapper to be more DRY in the basic CRUD things</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.user_created" title="rasenmaeher_api.db.people.user_created"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_created</span></code></a>(person)</p></td>
+<td><p>New user was created</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.user_revoked" title="rasenmaeher_api.db.people.user_revoked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_revoked</span></code></a>(person)</p></td>
+<td><p>Old user was revoked</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.user_promoted" title="rasenmaeher_api.db.people.user_promoted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_promoted</span></code></a>(person)</p></td>
+<td><p>Old user was promoted to admin (granted role 'admin')</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.user_demoted" title="rasenmaeher_api.db.people.user_demoted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_demoted</span></code></a>(person)</p></td>
+<td><p>Old user was demoted from admin (removed role 'admin')</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.db.people.pem_to_pfx" title="rasenmaeher_api.db.people.pem_to_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pem_to_pfx</span></code></a>(pem_key, pem_cert)</p></td>
+<td><p>Convert PEM data to PFX (PKCS12).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="attributes">
 <h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
@@ -133,20 +159,86 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Person</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.BaseModel" title="rasenmaeher_api.db.base.BaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.BaseModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#rasenmaeher_api.db.base.ORMBaseModel" title="rasenmaeher_api.db.base.ORMBaseModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api.db.base.ORMBaseModel</span></code></a></p>
 <p>People, pk is UUID and comes from basemodel</p>
 <p>NOTE: at some point we want to stop keeping track of people in our own db
 and only use keycloack as the store for actual users. In any case we need a nice pythonic
 abstraction layer so implement any queries you need to add as helpers here.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.Config" title="Link to this definition"></a></dt>
-<dd><p>Basemodel config</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.Config.extra">
-<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.Config.extra" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.productapidata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">productapidata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">libpvarki.schemas.product.UserCRUDRequest</span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.productapidata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.productapidata" title="Link to this definition"></a></dt>
+<dd><p>Return a model that is usable with the product integration APIs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>libpvarki.schemas.product.UserCRUDRequest</p>
+</dd>
+</dl>
+</dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.certsubject">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">certsubject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.certsubject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.certsubject" title="Link to this definition"></a></dt>
+<dd><p>Return the dict that gets set to cert DN</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.privkeyfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">privkeyfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.privkeyfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.privkeyfile" title="Link to this definition"></a></dt>
+<dd><p>Path to the private key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.pfxfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pfxfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.pfxfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.pfxfile" title="Link to this definition"></a></dt>
+<dd><p>Return a PKCS12 PFX file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.certfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">certfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.certfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.certfile" title="Link to this definition"></a></dt>
+<dd><p>Path to the public cert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.csrfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">csrfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.csrfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.csrfile" title="Link to this definition"></a></dt>
+<dd><p>Path to the CSR file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.pubkeyfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pubkeyfile</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.pubkeyfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.pubkeyfile" title="Link to this definition"></a></dt>
+<dd><p>Path to the public key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -169,9 +261,14 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 <span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.extra" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.revoke_reason">
+<span class="sig-name descname"><span class="pre">revoke_reason</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.revoke_reason"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.revoke_reason" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.create_with_cert">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_with_cert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.create_with_cert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.create_with_cert" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_with_cert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.create_with_cert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.create_with_cert" title="Link to this definition"></a></dt>
 <dd><p>Create the cert etc and save the person</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -182,6 +279,31 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person">Person</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.revoke">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">revoke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reason</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.revoke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.revoke" title="Link to this definition"></a></dt>
+<dd><p>Revokes the cert with given reason and makes user deleted see validate_reason for info on reasons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reason</strong> (<em>rasenmaeher_api.cfssl.private.ReasonTypes</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.delete">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.delete" title="Link to this definition"></a></dt>
+<dd><p>Revoke the cert on delete</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -232,13 +354,27 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.is_callsign_available">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_callsign_available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.is_callsign_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.is_callsign_available" title="Link to this definition"></a></dt>
+<dd><p>Is callsign available</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.by_mtlsjwt_payload">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">by_mtlsjwt_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_deleted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.by_mtlsjwt_payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.by_mtlsjwt_payload" title="Link to this definition"></a></dt>
 <dd><p>Get by MTLSorJWTMiddleWare payload</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>payload</strong> (<a class="reference internal" href="../../web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayload" title="rasenmaeher_api.web.api.middleware.MTLSorJWTPayload"><em>rasenmaeher_api.web.api.middleware.MTLSorJWTPayload</em></a>) – </p></li>
+<li><p><strong>payload</strong> (<a class="reference internal" href="../../web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload" title="rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload"><em>rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload</em></a>) – </p></li>
 <li><p><strong>allow_deleted</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – </p></li>
 </ul>
 </dd>
@@ -249,19 +385,8 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.get_key_pem">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_key_pem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.get_key_pem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.get_key_pem" title="Link to this definition"></a></dt>
-<dd><p>Read the private key from under certspath and return the PEM</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.get_cert_pem">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cert_pem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.get_cert_pem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.get_cert_pem" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_cert_pem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.get_cert_pem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.get_cert_pem" title="Link to this definition"></a></dt>
 <dd><p>Read the cert from under certspath and return the PEM</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -272,7 +397,7 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.get_cert_pfx">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cert_pfx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.get_cert_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.get_cert_pfx" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_cert_pfx</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.get_cert_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.get_cert_pfx" title="Link to this definition"></a></dt>
 <dd><p>Read the cert and private key from under certspath and return the PFX container</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -337,6 +462,28 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.roles_set">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roles_set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.roles_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.roles_set" title="Link to this definition"></a></dt>
+<dd><p>Shorthand</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Set[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.Person.roles">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Person.roles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Person.roles" title="Link to this definition"></a></dt>
+<dd><p>Roles of this person</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>AsyncGenerator[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -384,6 +531,96 @@ abstraction layer so implement any queries you need to add as helpers here.</p>
 <span class="sig-name descname"><span class="pre">_idx</span></span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#Role._idx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.Role._idx" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.post_user_crud">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_user_crud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userinfo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint_suffix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#post_user_crud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.post_user_crud" title="Link to this definition"></a></dt>
+<dd><p>Wrapper to be more DRY in the basic CRUD things</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>userinfo</strong> (<em>libpvarki.schemas.product.UserCRUDRequest</em>) – </p></li>
+<li><p><strong>endpoint_suffix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.user_created">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_created</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#user_created"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.user_created" title="Link to this definition"></a></dt>
+<dd><p>New user was created</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>person</strong> (<a class="reference internal" href="#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.user_revoked">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_revoked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#user_revoked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.user_revoked" title="Link to this definition"></a></dt>
+<dd><p>Old user was revoked</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>person</strong> (<a class="reference internal" href="#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.user_promoted">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_promoted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#user_promoted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.user_promoted" title="Link to this definition"></a></dt>
+<dd><p>Old user was promoted to admin (granted role ‘admin’)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>person</strong> (<a class="reference internal" href="#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.user_demoted">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_demoted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">person</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#user_demoted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.user_demoted" title="Link to this definition"></a></dt>
+<dd><p>Old user was demoted from admin (removed role ‘admin’)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>person</strong> (<a class="reference internal" href="#rasenmaeher_api.db.people.Person" title="rasenmaeher_api.db.people.Person"><em>Person</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.db.people.pem_to_pfx">
+<span class="sig-name descname"><span class="pre">pem_to_pfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pem_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pem_cert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/db/people.html#pem_to_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.db.people.pem_to_pfx" title="Link to this definition"></a></dt>
+<dd><p>Convert PEM data to PFX (PKCS12).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pem_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>pem_cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

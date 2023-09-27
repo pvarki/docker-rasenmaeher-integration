@@ -17,48 +17,12 @@ Classes
 
 .. autoapisummary::
 
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut
    rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn
    rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut
    rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn
    rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn
-   rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut
 
 
-
-
-.. py:class:: FirstuserIsActiveOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema out
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: api_is_active
-      :type: bool
-
-      
 
 
 .. py:class:: FirstuserCheckCodeIn
@@ -115,114 +79,6 @@ Classes
       
 
 
-.. py:class:: FirstuserDisableIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment init in response schema
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: permit_str
-      :type: str
-
-      
-
-
-.. py:class:: FirstuserDisableOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema out
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: api_disabled
-      :type: bool
-
-      
-
-
-.. py:class:: FirstuserEnableIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment init in response schema
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: permit_str
-      :type: str
-
-      
-
-
-.. py:class:: FirstuserEnableOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema out
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: api_enabled
-      :type: bool
-
-      
-
-
 .. py:class:: FirstuserAddAdminIn
 
 
@@ -244,7 +100,7 @@ Classes
          
 
 
-   .. py:attribute:: work_id
+   .. py:attribute:: callsign
       :type: str
 
       
@@ -278,119 +134,6 @@ Classes
 
    .. py:attribute:: jwt_exchange_code
       :type: str
-
-      
-
-
-.. py:class:: FirstuserDeleteAdminIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment init in response schema
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: temp_admin_code
-      :type: str
-
-      
-
-   .. py:attribute:: work_id
-      :type: str
-
-      
-
-
-.. py:class:: FirstuserDeleteAdminOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema out
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: admin_removed
-      :type: bool
-
-      
-
-
-.. py:class:: FirstuserListAdminIn
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment init in response schema
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: temp_admin_code
-      :type: str
-
-      
-
-
-.. py:class:: FirstuserListAdminOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment config add manager schema out
-
-   .. py:class:: Config
-
-
-      Example values for schema
-
-      .. py:attribute:: extra
-
-         
-
-      .. py:attribute:: schema_extra
-
-         
-
-
-   .. py:attribute:: admin_list
-      :type: List[Dict[Any, Any]]
 
       
 

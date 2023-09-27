@@ -1,0 +1,100 @@
+:py:mod:`rasenmaeher_api.cfssl.base`
+====================================
+
+.. py:module:: rasenmaeher_api.cfssl.base
+
+.. autoapi-nested-parse::
+
+   Base helpers etc
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.base.get_result
+   rasenmaeher_api.cfssl.base.get_result_cert
+   rasenmaeher_api.cfssl.base.base_url
+   rasenmaeher_api.cfssl.base.anon_session
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.base.LOGGER
+   rasenmaeher_api.cfssl.base.DEFAULT_TIMEOUT
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: DEFAULT_TIMEOUT
+   :value: 2.0
+
+   
+
+.. py:exception:: CFSSLError
+
+
+   Bases: :py:obj:`RuntimeError`
+
+   CFSSL errors
+
+
+.. py:exception:: NoResult
+
+
+   Bases: :py:obj:`CFSSLError`, :py:obj:`ValueError`
+
+   Did not get any result
+
+
+.. py:exception:: ErrorResult
+
+
+   Bases: :py:obj:`CFSSLError`, :py:obj:`ValueError`
+
+   Did not get any result
+
+
+.. py:exception:: NoValue
+
+
+   Bases: :py:obj:`CFSSLError`, :py:obj:`ValueError`
+
+   Did not get expected values
+
+
+.. py:function:: get_result(response)
+   :async:
+
+   Get the result part
+
+
+.. py:function:: get_result_cert(response)
+   :async:
+
+   Shorthand for checking the response and getting the cert
+
+
+.. py:function:: base_url()
+
+   Construct the base url
+
+
+.. py:function:: anon_session()
+   :async:
+
+   Anonymous session with content-type set
+
+

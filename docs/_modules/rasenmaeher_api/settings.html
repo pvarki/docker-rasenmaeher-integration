@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.settings &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.settings &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -272,14 +272,19 @@
     <span class="n">cfssl_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8888&quot;</span></div>
 
 
+<div class="viewcode-block" id="Settings.persistent_data_dir">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.persistent_data_dir">[docs]</a>
+    <span class="n">persistent_data_dir</span> <span class="o">=</span> <span class="s2">&quot;/data/persistent&quot;</span></div>
+
+
     <span class="c1"># mtls</span>
 <div class="viewcode-block" id="Settings.mtls_client_cert_path">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.mtls_client_cert_path">[docs]</a>
-    <span class="n">mtls_client_cert_path</span> <span class="o">=</span> <span class="s2">&quot;/data/persistent/rmmtlsclient.pem&quot;</span></div>
+    <span class="n">mtls_client_cert_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Settings.mtls_client_key_path">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.mtls_client_key_path">[docs]</a>
-    <span class="n">mtls_client_key_path</span> <span class="o">=</span> <span class="s2">&quot;/data/persistent/rmmtlsclient.key&quot;</span></div>
+    <span class="n">mtls_client_key_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Settings.mtls_client_cert_cn">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.mtls_client_cert_cn">[docs]</a>
@@ -316,376 +321,11 @@
 <div class="viewcode-block" id="Settings.ldap_client_secret">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.ldap_client_secret">[docs]</a>
     <span class="n">ldap_client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-
-    <span class="c1"># Initial shared secret between services (provided by kraftwerk)</span>
-<div class="viewcode-block" id="Settings.sqlite_init_management_hash">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_init_management_hash">[docs]</a>
-    <span class="n">sqlite_init_management_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PaulinTaikaKaulinOnKaunis_PaulisMagicPinIsBuuutiful!11!1&quot;</span></div>
-
-    <span class="c1"># Initial &#39;One time&#39; code used to create first admin accounts (provided by kraftwerk)</span>
-    <span class="c1"># TODO REMOVE sqlite_first_time_user_hash</span>
-<div class="viewcode-block" id="Settings.sqlite_first_time_user_hash">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_first_time_user_hash">[docs]</a>
-    <span class="n">sqlite_first_time_user_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PerPerPerjantaiPulloParisee&quot;</span></div>
-
-    <span class="c1"># Initial &#39;One time&#39; code used to get temporary jwt token for admin account</span>
-<div class="viewcode-block" id="Settings.one_time_admin_code">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.one_time_admin_code">[docs]</a>
-    <span class="n">one_time_admin_code</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;HackHackHacatoneillaOnPorakoiraNukkumassa&quot;</span></div>
-
-
-    <span class="c1"># Sqlite configurations</span>
-<div class="viewcode-block" id="Settings.sqlite_filepath_prod">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_filepath_prod">[docs]</a>
-    <span class="n">sqlite_filepath_prod</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/data/persistent/sqlite/rm_db.sql&quot;</span>  <span class="c1"># nosec B108 - &quot;hardcoded_tmp_directory&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_filepath_dev">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_filepath_dev">[docs]</a>
-    <span class="n">sqlite_filepath_dev</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/tmp/rm_db.sql&quot;</span>  <span class="c1"># nosec B108 - &quot;hardcoded_tmp_directory&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_enrollement_table_schema">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_enrollement_table_schema">[docs]</a>
-    <span class="n">sqlite_enrollement_table_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS enrollment (</span>
-<span class="s2">                                        id integer PRIMARY KEY AUTOINCREMENT,</span>
-<span class="s2">                                        work_id text NOT NULL,</span>
-<span class="s2">                                        work_id_hash text NOT NULL,</span>
-<span class="s2">                                        state text NOT NULL,</span>
-<span class="s2">                                        accepted text NOT NULL,</span>
-<span class="s2">                                        cert_dl_link text NOT NULL,</span>
-<span class="s2">                                        cert_howto_dl_link text NOT NULL,</span>
-<span class="s2">                                        mtls_test_link text NOT NULL,</span>
-<span class="s2">                                        verification_code text NOT NULL,</span>
-<span class="s2">                                        locked text NOT NULL,</span>
-<span class="s2">                                        UNIQUE(work_id)</span>
-<span class="s2">                                    ); &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_management_table_schema">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_management_table_schema">[docs]</a>
-    <span class="n">sqlite_management_table_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS management (</span>
-<span class="s2">                                        id integer PRIMARY KEY AUTOINCREMENT,</span>
-<span class="s2">                                        management_hash text NOT NULL,</span>
-<span class="s2">                                        special_rules text NOT NULL,</span>
-<span class="s2">                                        active INT NOT NULL CHECK (active IN (0, 1)),</span>
-<span class="s2">                                        UNIQUE(management_hash)</span>
-<span class="s2">                                    ); &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_services_table_schema">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_services_table_schema">[docs]</a>
-    <span class="n">sqlite_services_table_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; CREATE TABLE IF NOT EXISTS services (</span>
-<span class="s2">                                        id integer PRIMARY KEY AUTOINCREMENT,</span>
-<span class="s2">                                        service_name text NOT NULL,</span>
-<span class="s2">                                        init_state text NOT NULL,</span>
-<span class="s2">                                        endpoint_proto_host_port text NOT NULL,</span>
-<span class="s2">                                        healthcheck_url text NOT NULL,</span>
-<span class="s2">                                        healthcheck_headers text NOT NULL,</span>
-<span class="s2">                                        UNIQUE(service_name)</span>
-<span class="s2">                                    ); &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_jwt_table_schema">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_table_schema">[docs]</a>
-    <span class="n">sqlite_jwt_table_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;CREATE TABLE IF NOT EXISTS jwt (</span>
-<span class="s2">                                    id integer PRIMARY KEY AUTOINCREMENT,</span>
-<span class="s2">                                    claims text NOT NULL,</span>
-<span class="s2">                                    consumed text NOT NULL,</span>
-<span class="s2">                                    work_id_hash text NOT NULL,</span>
-<span class="s2">                                    work_id text NOT NULL,</span>
-<span class="s2">                                    exchange_code text NOT NULL</span>
-<span class="s2">                                ); &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_insert_into_services">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_services">[docs]</a>
-    <span class="n">sqlite_insert_into_services</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; INSERT OR REPLACE INTO services</span>
-<span class="s2">                                        (service_name,</span>
-<span class="s2">                                        init_state,</span>
-<span class="s2">                                        endpoint_proto_host_port,</span>
-<span class="s2">                                        healthcheck_url,</span>
-<span class="s2">                                        healthcheck_headers</span>
-<span class="s2">                                        )</span>
-<span class="s2">                                        VALUES(</span>
-<span class="s2">                                            &#39;</span><span class="si">{service_name}</span><span class="s2">&#39;,</span>
-<span class="s2">                                            &#39;</span><span class="si">{init_state}</span><span class="s2">&#39;,</span>
-<span class="s2">                                            &#39;</span><span class="si">{endpoint_proto_host_port}</span><span class="s2">&#39;,</span>
-<span class="s2">                                            &#39;</span><span class="si">{healthcheck_url}</span><span class="s2">&#39;,</span>
-<span class="s2">                                            &#39;</span><span class="si">{healthcheck_headers}</span><span class="s2">&#39;</span>
-<span class="s2">                                        )</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_services">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_services">[docs]</a>
-    <span class="n">sqlite_sel_from_services</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT service_name, init_state, endpoint_proto_host_port,</span>
-<span class="s2">                                         healthcheck_url, healthcheck_headers</span>
-<span class="s2">                                    FROM services</span>
-<span class="s2">                                ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_insert_into_enrollment">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_enrollment">[docs]</a>
-    <span class="n">sqlite_insert_into_enrollment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; INSERT INTO enrollment</span>
-<span class="s2">                                        (work_id, work_id_hash, state, accepted, cert_dl_link, cert_howto_dl_link, mtls_test_link, verification_code, locked)</span>
-<span class="s2">                                        VALUES(</span>
-<span class="s2">                                        &#39;</span><span class="si">{work_id}</span><span class="s2">&#39;,&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;,&#39;</span><span class="si">{state}</span><span class="s2">&#39;, &#39;</span><span class="si">{accepted}</span><span class="s2">&#39;, &#39;</span><span class="si">{cert_dl_link}</span><span class="s2">&#39;,</span>
-<span class="s2">                                        &#39;</span><span class="si">{cert_howto_dl_link}</span><span class="s2">&#39;, &#39;</span><span class="si">{mtls_test_link}</span><span class="s2">&#39;, &#39;</span><span class="si">{verification_code}</span><span class="s2">&#39;,&#39;</span><span class="si">{locked}</span><span class="s2">&#39;</span>
-<span class="s2">                                        )</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_insert_into_management">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_management">[docs]</a>
-    <span class="n">sqlite_insert_into_management</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; INSERT OR REPLACE INTO management</span>
-<span class="s2">                                        (management_hash, special_rules, active)</span>
-<span class="s2">                                        VALUES(&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;,&#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;,&#39;</span><span class="si">{active}</span><span class="s2">&#39;)</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_insert_into_jwt">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_jwt">[docs]</a>
-    <span class="n">sqlite_insert_into_jwt</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; INSERT INTO jwt</span>
-<span class="s2">                                    (claims, consumed, work_id_hash, work_id, exchange_code)</span>
-<span class="s2">                                    VALUES(&#39;</span><span class="si">{claims}</span><span class="s2">&#39;,&#39;</span><span class="si">{consumed}</span><span class="s2">&#39;,&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;,&#39;</span><span class="si">{work_id}</span><span class="s2">&#39;,&#39;</span><span class="si">{exchange_code}</span><span class="s2">&#39;)</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_enrollment">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment">[docs]</a>
-    <span class="n">sqlite_sel_from_enrollment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT</span>
-<span class="s2">    work_id, work_id_hash, state, accepted, cert_dl_link, cert_howto_dl_link, mtls_test_link, verification_code, locked</span>
-<span class="s2">                                        FROM enrollment</span>
-<span class="s2">                                        WHERE work_id=&#39;</span><span class="si">{work_id}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_enrollment_all">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_all">[docs]</a>
-    <span class="n">sqlite_sel_from_enrollment_all</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT</span>
-<span class="s2">    work_id, work_id_hash, state, accepted, cert_dl_link, cert_howto_dl_link, mtls_test_link, verification_code, locked</span>
-<span class="s2">                                        FROM enrollment</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_enrollment_where_hash">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_where_hash">[docs]</a>
-    <span class="n">sqlite_sel_from_enrollment_where_hash</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT</span>
-<span class="s2">    work_id, work_id_hash, state, accepted, cert_dl_link, cert_howto_dl_link, mtls_test_link, verification_code, locked</span>
-<span class="s2">                                        FROM enrollment</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_management">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management">[docs]</a>
-    <span class="n">sqlite_sel_from_management</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT management_hash, special_rules, active FROM management</span>
-<span class="s2">                                        WHERE management_hash=&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_management_where_hash_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_like">[docs]</a>
-    <span class="n">sqlite_sel_from_management_where_hash_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT management_hash, special_rules, active FROM management</span>
-<span class="s2">                                    WHERE management_hash LIKE &#39;%</span><span class="si">{management_hash}</span><span class="s2">%&#39;</span>
-<span class="s2">                                ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_management_where_hash_and_special_rule_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_and_special_rule_like">[docs]</a>
-    <span class="n">sqlite_sel_from_management_where_hash_and_special_rule_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        SELECT management_hash, special_rules, active FROM management</span>
-<span class="s2">                                        WHERE special_rules LIKE &#39;%</span><span class="si">{special_rules}</span><span class="s2">%&#39;</span>
-<span class="s2">                                        AND management_hash=&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_management_where_hash_like_and_special_rule">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_like_and_special_rule">[docs]</a>
-    <span class="n">sqlite_sel_from_management_where_hash_like_and_special_rule</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        SELECT management_hash, special_rules, active FROM management</span>
-<span class="s2">                                        WHERE special_rules=&#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                        AND management_hash LIKE &#39;%</span><span class="si">{management_hash}</span><span class="s2">%&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_management_where_special_rule_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_special_rule_like">[docs]</a>
-    <span class="n">sqlite_sel_from_management_where_special_rule_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        SELECT management_hash, special_rules, active FROM management</span>
-<span class="s2">                                        WHERE special_rules LIKE &#39;%</span><span class="si">{special_rules}</span><span class="s2">%&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_sel_from_enrollment_where_verification_code">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_where_verification_code">[docs]</a>
-    <span class="n">sqlite_sel_from_enrollment_where_verification_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT work_id_hash</span>
-<span class="s2">                                        FROM enrollment</span>
-<span class="s2">                                        WHERE verification_code=&#39;</span><span class="si">{verification_code}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_del_from_management_where_special_rule_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_special_rule_like">[docs]</a>
-    <span class="n">sqlite_del_from_management_where_special_rule_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        DELETE FROM management</span>
-<span class="s2">                                        WHERE special_rules LIKE &#39;%</span><span class="si">{special_rules}</span><span class="s2">%&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_from_management_where_special_rule_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_from_management_where_special_rule_like">[docs]</a>
-    <span class="n">sqlite_update_from_management_where_special_rule_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        UPDATE management</span>
-<span class="s2">                                        SET special_rules=&#39;</span><span class="si">{new_special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE special_rules LIKE &#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_from_management_where_management_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_from_management_where_management_like">[docs]</a>
-    <span class="n">sqlite_update_from_management_where_management_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        UPDATE management</span>
-<span class="s2">                                        SET management_hash=&#39;</span><span class="si">{new_management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE special_rules=&#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                        AND management_hash LIKE &#39;</span><span class="si">{management_hash}</span><span class="s2">_%&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_del_from_management_where_hash">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_hash">[docs]</a>
-    <span class="n">sqlite_del_from_management_where_hash</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        DELETE FROM management</span>
-<span class="s2">                                        WHERE management_hash=&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_del_from_management_where_hash_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_hash_like">[docs]</a>
-    <span class="n">sqlite_del_from_management_where_hash_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                                        DELETE FROM management</span>
-<span class="s2">                                        WHERE management_hash LIKE &#39;%</span><span class="si">{management_hash}</span><span class="s2">%&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_del_from_enrollment_where_hash">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_enrollment_where_hash">[docs]</a>
-    <span class="n">sqlite_del_from_enrollment_where_hash</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DELETE FROM enrollment</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-    <span class="c1"># FIXME: Does not reflect table schema</span>
-<div class="viewcode-block" id="Settings.sqlite_update_management_rules">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_management_rules">[docs]</a>
-    <span class="n">sqlite_update_management_rules</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE management</span>
-<span class="s2">                                        SET special_rules=&#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_management_state">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_management_state">[docs]</a>
-    <span class="n">sqlite_update_management_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE management</span>
-<span class="s2">                                    SET active = &#39;</span><span class="si">{active}</span><span class="s2">&#39;</span>
-<span class="s2">                                    WHERE management_hash = &#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    AND special_rules = &#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.update_management_hash_like">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.update_management_hash_like">[docs]</a>
-    <span class="n">update_management_hash_like</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE management</span>
-<span class="s2">                                SET active = &#39;</span><span class="si">{active}</span><span class="s2">&#39;</span>
-<span class="s2">                                WHERE management_hash LIKE &#39;%</span><span class="si">{management_hash}</span><span class="s2">%&#39;</span>
-<span class="s2">                                AND special_rules = &#39;</span><span class="si">{special_rules}</span><span class="s2">&#39;</span>
-<span class="s2">                                ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_accept_enrollment">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_accept_enrollment">[docs]</a>
-    <span class="n">sqlite_update_accept_enrollment</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET accepted=&#39;</span><span class="si">{management_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_cert_dl_link">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_cert_dl_link">[docs]</a>
-    <span class="n">sqlite_update_enrollment_cert_dl_link</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET cert_dl_link=&#39;</span><span class="si">{cert_download_link}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_cert_howto_dl_link">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_cert_howto_dl_link">[docs]</a>
-    <span class="n">sqlite_update_enrollment_cert_howto_dl_link</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET cert_howto_dl_link=&#39;</span><span class="si">{howto_download_link}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_mtls_test_link">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_mtls_test_link">[docs]</a>
-    <span class="n">sqlite_update_enrollment_mtls_test_link</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET mtls_test_link=&#39;</span><span class="si">{mtls_test_link}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_mtls_test_link_all">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_mtls_test_link_all">[docs]</a>
-    <span class="n">sqlite_update_enrollment_mtls_test_link_all</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET mtls_test_link=&#39;</span><span class="si">{mtls_test_link}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash IS NOT NULL</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_state">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_state">[docs]</a>
-    <span class="n">sqlite_update_enrollment_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET state=&#39;</span><span class="si">{state}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39; OR work_id=&#39;</span><span class="si">{work_id}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_verification_code">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_verification_code">[docs]</a>
-    <span class="n">sqlite_update_enrollment_verification_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET verification_code=&#39;</span><span class="si">{verification_code}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_update_enrollment_locked_state">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_locked_state">[docs]</a>
-    <span class="n">sqlite_update_enrollment_locked_state</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE enrollment</span>
-<span class="s2">                                        SET locked=&#39;</span><span class="si">{locked}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE work_id_hash=&#39;</span><span class="si">{work_id_hash}</span><span class="s2">&#39;</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_healtcheck_query">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_healtcheck_query">[docs]</a>
-    <span class="n">sqlite_healtcheck_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT id</span>
-<span class="s2">                                        FROM management</span>
-<span class="s2">                                        LIMIT 2</span>
-<span class="s2">                                    ;&quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="Settings.sqlite_jwt_sel_from_jwt_where_exchange">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_sel_from_jwt_where_exchange">[docs]</a>
-    <span class="n">sqlite_jwt_sel_from_jwt_where_exchange</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT id, claims, consumed, work_id_hash, work_id, exchange_code</span>
-<span class="s2">                                        FROM jwt</span>
-<span class="s2">                                        WHERE exchange_code=&#39;</span><span class="si">{exchange_code}</span><span class="s2">&#39;</span>
-<span class="s2">                                    &quot;&quot;&quot;</span></div>
-
-<div class="viewcode-block" id="Settings.sqlite_jwt_update_consumed_where_exchange">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_update_consumed_where_exchange">[docs]</a>
-    <span class="n">sqlite_jwt_update_consumed_where_exchange</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;UPDATE jwt</span>
-<span class="s2">                                        SET consumed=&#39;</span><span class="si">{new_consumed_state}</span><span class="s2">&#39;</span>
-<span class="s2">                                        WHERE exchange_code=&#39;</span><span class="si">{exchange_code}</span><span class="s2">&#39;</span>
-<span class="s2">                                    &quot;&quot;&quot;</span></div>
 </div>
 
+
+    <span class="c1"># Initial &#39;One time&#39; code used to get temporary jwt token for admin account</span>
+    <span class="c1"># one_time_admin_code: str = &quot;HackHackHacatoneillaOnPorakoiraNukkumassa&quot;</span>
 
 
 <div class="viewcode-block" id="settings">

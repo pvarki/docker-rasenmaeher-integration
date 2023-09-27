@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_firstuser &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.test_firstuser &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -59,6 +59,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../conftest/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.conftest</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_auth/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_auth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_cfssl</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_console</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_enrollment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_enrollment</span></code></a></li>
@@ -112,26 +113,14 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_get_firstuser" title="tests.test_firstuser.test_get_firstuser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_firstuser</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/is-active</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_code_exchange_and_admin_creation" title="tests.test_firstuser.test_code_exchange_and_admin_creation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_code_exchange_and_admin_creation</span></code></a>(unauth_client)</p></td>
+<td><p>Firstuser route to test token exchange to admin user</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_firstuser.test_get_check_code" title="tests.test_firstuser.test_get_check_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_check_code</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/check-code</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_firstuser.test_code_exchange_bad_code" title="tests.test_firstuser.test_code_exchange_bad_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_code_exchange_bad_code</span></code></a>(unauth_client)</p></td>
+<td><p>Firstuser route fail using incorrect code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_post_add_admin" title="tests.test_firstuser.test_post_add_admin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_add_admin</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/add-admin</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_firstuser.test_get_list_admin" title="tests.test_firstuser.test_get_list_admin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_get_list_admin</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/list-admin</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_post_delete_admin" title="tests.test_firstuser.test_post_delete_admin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_delete_admin</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/delete-admin</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_firstuser.test_post_add_disable" title="tests.test_firstuser.test_post_add_disable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_add_disable</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/disable</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_post_add_enable" title="tests.test_firstuser.test_post_add_enable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_add_enable</span></code></a>(tilauspalvelu_jwt_client)</p></td>
-<td><p>/firstuser/enable</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_firstuser.test_post_with_admin_client" title="tests.test_firstuser.test_post_with_admin_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_post_with_admin_client</span></code></a>(tilauspalvelu_jwt_admin_client)</p></td>
+<td><p>Result should be successful</p></td>
 </tr>
 </tbody>
 </table>
@@ -151,13 +140,12 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_get_firstuser">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_firstuser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_get_firstuser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_get_firstuser" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/is-active
-Result should be success</p>
+<dt class="sig sig-object py" id="tests.test_firstuser.test_code_exchange_and_admin_creation">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_code_exchange_and_admin_creation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_code_exchange_and_admin_creation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_code_exchange_and_admin_creation" title="Link to this definition"></a></dt>
+<dd><p>Firstuser route to test token exchange to admin user</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+<dd class="field-odd"><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -166,13 +154,12 @@ Result should be success</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_get_check_code">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_check_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_get_check_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_get_check_code" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/check-code
-Result should be success</p>
+<dt class="sig sig-object py" id="tests.test_firstuser.test_code_exchange_bad_code">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_code_exchange_bad_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_code_exchange_bad_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_code_exchange_bad_code" title="Link to this definition"></a></dt>
+<dd><p>Firstuser route fail using incorrect code</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+<dd class="field-odd"><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -181,73 +168,12 @@ Result should be success</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_post_add_admin">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_add_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_post_add_admin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_post_add_admin" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/add-admin
-Result should be successful</p>
+<dt class="sig sig-object py" id="tests.test_firstuser.test_post_with_admin_client">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_with_admin_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_admin_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_post_with_admin_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_post_with_admin_client" title="Link to this definition"></a></dt>
+<dd><p>Result should be successful</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_get_list_admin">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_get_list_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_get_list_admin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_get_list_admin" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/list-admin
-Result should be success</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_post_delete_admin">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_delete_admin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_post_delete_admin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_post_delete_admin" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/delete-admin
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_post_add_disable">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_add_disable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_post_add_disable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_post_add_disable" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/disable
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.test_firstuser.test_post_add_enable">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_post_add_enable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tilauspalvelu_jwt_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_firstuser.html#test_post_add_enable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_firstuser.test_post_add_enable" title="Link to this definition"></a></dt>
-<dd><p>/firstuser/enable
-Result should be successful</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tilauspalvelu_jwt_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+<dd class="field-odd"><p><strong>tilauspalvelu_jwt_admin_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>

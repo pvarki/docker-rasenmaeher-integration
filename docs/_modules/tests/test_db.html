@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_db &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.test_db &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -82,16 +82,29 @@
 <span></span><span class="sd">&quot;&quot;&quot;DB specific tests&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">pytest</span>
 <span class="kn">import</span> <span class="nn">pytest_asyncio</span>
 <span class="kn">from</span> <span class="nn">libadvian.binpackers</span> <span class="kn">import</span> <span class="n">uuid_to_b64</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Verifier</span>
+<span class="kn">import</span> <span class="nn">cryptography.x509</span>
 
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.db</span> <span class="kn">import</span> <span class="n">DBConfig</span><span class="p">,</span> <span class="n">Person</span><span class="p">,</span> <span class="n">Enrollment</span><span class="p">,</span> <span class="n">EnrollmentState</span><span class="p">,</span> <span class="n">EnrollmentPool</span><span class="p">,</span> <span class="n">SeenToken</span><span class="p">,</span> <span class="n">LoginCode</span>
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.db.base</span> <span class="kn">import</span> <span class="n">init_db</span><span class="p">,</span> <span class="n">bind_config</span>
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.db.errors</span> <span class="kn">import</span> <span class="n">NotFound</span><span class="p">,</span> <span class="n">Deleted</span><span class="p">,</span> <span class="n">CallsignReserved</span><span class="p">,</span> <span class="n">ForbiddenOperation</span><span class="p">,</span> <span class="n">PoolInactive</span><span class="p">,</span> <span class="n">TokenReuse</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.db.errors</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NotFound</span><span class="p">,</span>
+    <span class="n">Deleted</span><span class="p">,</span>
+    <span class="n">CallsignReserved</span><span class="p">,</span>
+    <span class="n">ForbiddenOperation</span><span class="p">,</span>
+    <span class="n">PoolInactive</span><span class="p">,</span>
+    <span class="n">TokenReuse</span><span class="p">,</span>
+    <span class="n">BackendError</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.jwtinit</span> <span class="kn">import</span> <span class="n">jwt_init</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.mtlsinit</span> <span class="kn">import</span> <span class="n">mtls_init</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.cfssl.public</span> <span class="kn">import</span> <span class="n">get_crl</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.db.base</span> <span class="kn">import</span> <span class="n">init_db</span><span class="p">,</span> <span class="n">bind_config</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.LOGGER">[docs]</a>
@@ -99,6 +112,16 @@
 
 
 <span class="c1"># pylint: disable=W0621</span>
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ginosession">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.ginosession">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">ginosession</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;make sure db is bound etc&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">bind_config</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">init_db</span><span class="p">()</span></div>
+
 
 
 <div class="viewcode-block" id="test_dbconfig_env">
@@ -128,16 +151,6 @@
     <span class="n">config</span> <span class="o">=</span> <span class="n">DBConfig</span><span class="p">()</span>
     <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">port</span> <span class="o">==</span> <span class="mi">5542</span>
     <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">host</span> <span class="o">==</span> <span class="n">docker_ip</span></div>
-
-
-
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<div class="viewcode-block" id="ginosession">
-<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.ginosession">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">ginosession</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;make sure db is bound etc&quot;&quot;&quot;</span>
-    <span class="k">await</span> <span class="n">bind_config</span><span class="p">()</span>
-    <span class="k">await</span> <span class="n">init_db</span><span class="p">()</span></div>
 
 
 
@@ -206,6 +219,7 @@
 <span class="k">async</span> <span class="k">def</span> <span class="nf">test_enrollments_crud</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the db abstraction enrollments&quot;&quot;&quot;</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="c1"># Done this way to avoid the cost of the certificate workflow, you should never do this outside of unittests</span>
     <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;MEGAMAN00a&quot;</span><span class="p">,</span> <span class="n">certspath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
     <span class="k">await</span> <span class="n">person</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
     <span class="c1"># refresh</span>
@@ -220,6 +234,12 @@
     <span class="n">obj3</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">obj3</span><span class="o">.</span><span class="n">callsign</span> <span class="o">==</span> <span class="n">obj</span><span class="o">.</span><span class="n">callsign</span>
 
+    <span class="n">old_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">approvecode</span><span class="p">)</span>
+    <span class="n">new_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">reset_approvecode</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">old_code</span> <span class="o">!=</span> <span class="n">new_code</span>
+    <span class="n">new_new_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">reset_approvecode4callsign</span><span class="p">(</span><span class="s2">&quot;PORA22b&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">new_new_code</span> <span class="o">!=</span> <span class="n">new_code</span>
+
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">CallsignReserved</span><span class="p">):</span>
         <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="s2">&quot;PORA22b&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">ForbiddenOperation</span><span class="p">):</span>
@@ -229,9 +249,12 @@
     <span class="n">obj4</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">uuid_to_b64</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
     <span class="k">assert</span> <span class="n">obj4</span><span class="o">.</span><span class="n">decided_on</span>
     <span class="k">assert</span> <span class="n">obj4</span><span class="o">.</span><span class="n">decided_by</span> <span class="o">==</span> <span class="n">person</span><span class="o">.</span><span class="n">pk</span>
-    <span class="k">assert</span> <span class="n">obj4</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">EnrollmentState</span><span class="o">.</span><span class="n">REJECTED</span></div>
+    <span class="k">assert</span> <span class="n">obj4</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">EnrollmentState</span><span class="o">.</span><span class="n">REJECTED</span>
 
-    <span class="c1"># Approval is missing functionality in person class</span>
+    <span class="n">obj5</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="s2">&quot;ERAPPROVTEST01a&quot;</span><span class="p">)</span>
+    <span class="n">person2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj5</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">person2</span><span class="o">.</span><span class="n">callsign</span> <span class="o">==</span> <span class="s2">&quot;ERAPPROVTEST01a&quot;</span></div>
+
 
 
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
@@ -240,9 +263,11 @@
 <span class="k">async</span> <span class="k">def</span> <span class="nf">test_enrollmentpools_crud</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the db abstraction enrollments and enrollmentpools&quot;&quot;&quot;</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="c1"># Done this way to avoid the cost of the certificate workflow, you should never do this outside of unittests</span>
     <span class="n">person</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;POOLBOYa&quot;</span><span class="p">,</span> <span class="n">certspath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
     <span class="k">await</span> <span class="n">person</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-    <span class="n">pool</span> <span class="o">=</span> <span class="n">EnrollmentPool</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;jonnet&quot;</span><span class="p">:</span> <span class="s2">&quot;ei tiiä&quot;</span><span class="p">})</span>
+    <span class="c1"># Done this way to test low level things, you should always use EnrollmentPool.create_for_owner</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">EnrollmentPool</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;jonnet&quot;</span><span class="p">:</span> <span class="s2">&quot;ei tiiä&quot;</span><span class="p">},</span> <span class="n">invitecode</span><span class="o">=</span><span class="s2">&quot;12313123&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
     <span class="c1"># refresh</span>
     <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
@@ -263,7 +288,79 @@
     <span class="c1"># refresh</span>
     <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">allow_deleted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">Deleted</span><span class="p">):</span>
-        <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">create_enrollment</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span></div>
+        <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">create_enrollment</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+
+    <span class="n">pool2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">create_for_owner</span><span class="p">(</span><span class="n">person</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">pool2</span><span class="o">.</span><span class="n">invitecode</span>
+    <span class="n">old_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">pool2</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span>
+    <span class="n">new_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pool2</span><span class="o">.</span><span class="n">reset_invitecode</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">old_code</span> <span class="o">!=</span> <span class="n">new_code</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_enrollmentpools_list">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_enrollmentpools_list">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_enrollmentpools_list</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test list methods&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="c1"># Done this way to avoid the cost of the certificate workflow, you should never do this outside of unittests</span>
+    <span class="n">owner1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;MASTER666a&quot;</span><span class="p">,</span> <span class="n">certspath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+    <span class="k">await</span> <span class="n">owner1</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+    <span class="n">owner2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="s2">&quot;BLASTER999a&quot;</span><span class="p">,</span> <span class="n">certspath</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+    <span class="k">await</span> <span class="n">owner2</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">create_for_owner</span><span class="p">(</span><span class="n">owner2</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">create_for_owner</span><span class="p">(</span><span class="n">owner1</span><span class="p">)</span>
+
+    <span class="n">all_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">list</span><span class="p">()}</span>
+    <span class="n">owner1_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">by_owner</span><span class="o">=</span><span class="n">owner1</span><span class="p">)}</span>
+    <span class="n">owner2_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">by_owner</span><span class="o">=</span><span class="n">owner2</span><span class="p">)}</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">owner1_codes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">owner2_codes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">owner1_codes</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">owner2_codes</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">owner1_codes</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">owner2_codes</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">owner1_codes</span><span class="p">:</span>
+        <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">pool</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">owner1</span><span class="o">.</span><span class="n">pk</span>
+
+    <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">owner2_codes</span><span class="p">:</span>
+        <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">pool</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">owner2</span><span class="o">.</span><span class="n">pk</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_enrollments_list">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_enrollments_list">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_enrollments_list</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test list methods&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="c1"># FIXME: should use fixtures instead of trusting on side effects from previous tests</span>
+    <span class="c1"># Created in test_enrollmentpools_list</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="s2">&quot;MASTER666a&quot;</span><span class="p">)</span>
+    <span class="n">active_codes</span> <span class="o">=</span> <span class="p">[</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">by_owner</span><span class="o">=</span><span class="n">owner</span><span class="p">)</span> <span class="k">if</span> <span class="n">pool</span><span class="o">.</span><span class="n">active</span><span class="p">]</span>
+    <span class="n">pool1</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">active_codes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">pool2</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">active_codes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()))</span>
+        <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool1</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="n">pool</span><span class="o">=</span><span class="n">pool2</span><span class="p">)</span>
+
+    <span class="n">all_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">enr</span><span class="o">.</span><span class="n">approvecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">enr</span> <span class="ow">in</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">()}</span>
+    <span class="n">pool1_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">enr</span><span class="o">.</span><span class="n">approvecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">enr</span> <span class="ow">in</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">by_pool</span><span class="o">=</span><span class="n">pool1</span><span class="p">)}</span>
+    <span class="n">pool2_codes</span> <span class="o">=</span> <span class="p">{</span><span class="n">enr</span><span class="o">.</span><span class="n">approvecode</span> <span class="k">async</span> <span class="k">for</span> <span class="n">enr</span> <span class="ow">in</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">by_pool</span><span class="o">=</span><span class="n">pool2</span><span class="p">)}</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">15</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool1_codes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool2_codes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+    <span class="k">assert</span> <span class="n">pool1_codes</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">pool2_codes</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">all_codes</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">pool1_codes</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">pool2_codes</span><span class="p">)</span></div>
 
 
 
@@ -317,6 +414,73 @@
 
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">TokenReuse</span><span class="p">):</span>
         <span class="k">await</span> <span class="n">LoginCode</span><span class="o">.</span><span class="n">use_code</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_person_with_cert">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_person_with_cert</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the cert creation with the classmethod (and revocation)&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;BINGO01a&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;kissa&quot;</span><span class="p">:</span> <span class="s2">&quot;puuma&quot;</span><span class="p">})</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">privkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">pubkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">certfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="n">old_crl</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">x509</span><span class="o">.</span><span class="n">load_der_x509_crl</span><span class="p">(</span><span class="k">await</span> <span class="n">get_crl</span><span class="p">())</span>
+    <span class="n">old_crl_serials</span> <span class="o">=</span> <span class="p">{</span><span class="n">revcert</span><span class="o">.</span><span class="n">serial_number</span> <span class="k">for</span> <span class="n">revcert</span> <span class="ow">in</span> <span class="n">old_crl</span><span class="p">}</span>
+    <span class="k">await</span> <span class="n">person</span><span class="o">.</span><span class="n">revoke</span><span class="p">(</span><span class="s2">&quot;key_compromise&quot;</span><span class="p">)</span>
+    <span class="n">new_crl</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">x509</span><span class="o">.</span><span class="n">load_der_x509_crl</span><span class="p">(</span><span class="k">await</span> <span class="n">get_crl</span><span class="p">())</span>
+    <span class="n">new_crl_serials</span> <span class="o">=</span> <span class="p">{</span><span class="n">revcert</span><span class="o">.</span><span class="n">serial_number</span> <span class="k">for</span> <span class="n">revcert</span> <span class="ow">in</span> <span class="n">new_crl</span><span class="p">}</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;old_crl=</span><span class="si">{}</span><span class="s2"> new_crl=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">old_crl_serials</span><span class="p">,</span> <span class="n">new_crl_serials</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">old_crl_serials</span> <span class="o">!=</span> <span class="n">new_crl_serials</span>
+    <span class="n">refresh</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="s2">&quot;BINGO01a&quot;</span><span class="p">,</span> <span class="n">allow_deleted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">refresh</span><span class="o">.</span><span class="n">deleted</span>
+    <span class="k">assert</span> <span class="n">refresh</span><span class="o">.</span><span class="n">revoke_reason</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_person_with_cert_cfsslfail">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert_cfsslfail">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_person_with_cert_cfsslfail</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="n">monkeypatch</span><span class="p">:</span> <span class="n">pytest</span><span class="o">.</span><span class="n">MonkeyPatch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the cert creation with the classmethod with CFSSL failure&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
+    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
+    <span class="n">old_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+    <span class="k">with</span> <span class="n">monkeypatch</span><span class="o">.</span><span class="n">context</span><span class="p">()</span> <span class="k">as</span> <span class="n">mpatch</span><span class="p">:</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;cfssl_host&quot;</span><span class="p">,</span> <span class="s2">&quot;http://nosuchost&quot;</span><span class="p">)</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_CFSSL_HOST&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">cfssl_host</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">BackendError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;BONGO01a&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;kissa&quot;</span><span class="p">:</span> <span class="s2">&quot;puuma&quot;</span><span class="p">})</span>
+        <span class="n">new_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">new_files</span> <span class="o">==</span> <span class="n">old_files</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">NotFound</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="s2">&quot;BONGO01a&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_person_with_cert_duplicatename">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert_duplicatename">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_person_with_cert_duplicatename</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the cert creation with the classmethod but reserved callsign&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
+    <span class="n">callsign</span> <span class="o">=</span> <span class="s2">&quot;RUOSKA23a&quot;</span>
+    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
+    <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">privkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">pubkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">certfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+    <span class="n">old_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">old_files</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">CallsignReserved</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="n">new_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">new_files</span> <span class="o">==</span> <span class="n">old_files</span></div>
 
 </pre></div>
 

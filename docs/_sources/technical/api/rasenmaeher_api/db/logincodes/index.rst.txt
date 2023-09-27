@@ -54,19 +54,9 @@ Attributes
 .. py:class:: LoginCode
 
 
-   Bases: :py:obj:`rasenmaeher_api.db.base.BaseModel`
+   Bases: :py:obj:`rasenmaeher_api.db.base.ORMBaseModel`
 
    Track the login codes that can be exchanged for session JWTs
-
-   .. py:class:: Config
-
-
-      Basemodel config
-
-      .. py:attribute:: extra
-
-         
-
 
    .. py:attribute:: __tablename__
       :value: 'logincodes'

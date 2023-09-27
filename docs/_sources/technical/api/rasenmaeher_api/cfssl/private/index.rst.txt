@@ -1,0 +1,75 @@
+:py:mod:`rasenmaeher_api.cfssl.private`
+=======================================
+
+.. py:module:: rasenmaeher_api.cfssl.private
+
+.. autoapi-nested-parse::
+
+   Private apis
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.private.sign_csr
+   rasenmaeher_api.cfssl.private.validate_reason
+   rasenmaeher_api.cfssl.private.revoke_pem
+   rasenmaeher_api.cfssl.private.revoke_serial
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.cfssl.private.LOGGER
+   rasenmaeher_api.cfssl.private.ReasonTypes
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: ReasonTypes
+
+   
+
+.. py:function:: sign_csr(csr)
+   :async:
+
+   Quick and dirty method to sign CSR from CFSSL
+   params: csr
+   returns: certificate
+
+
+.. py:function:: validate_reason(reason)
+
+   Resolve the given reason into the actual flag
+
+
+.. py:function:: revoke_pem(pem, reason)
+   :async:
+
+   Read the serial number from the PEM cert and call revoke_serial
+   Reason must be one of the enumerations of cryptography.x509.ReasonFlags
+
+   If path is given it's read_text()d
+
+
+.. py:function:: revoke_serial(serialno, authority_key_id, reason)
+   :async:
+
+   Call the CFSSL revoke endpoint
+
+   authority_key_id must be formatted in the way CFSSL expects it
+   Reason must be one of the enumerations of cryptography.x509.ReasonFlags or it's string values (see REASONS_BY_VALUE)
+
+

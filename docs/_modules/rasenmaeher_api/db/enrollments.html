@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.enrollments &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>rasenmaeher_api.db.enrollments &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -81,20 +81,18 @@
              
   <h1>Source code for rasenmaeher_api.db.enrollments</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Abstractions for enrollments&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">AsyncGenerator</span>
 <span class="kn">import</span> <span class="nn">string</span>
 <span class="kn">import</span> <span class="nn">secrets</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">enum</span>
-<span class="kn">import</span> <span class="nn">uuid</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Extra</span>
-
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">sqlalchemy.dialects.postgresql</span> <span class="kn">import</span> <span class="n">JSONB</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.dialects.postgresql</span> <span class="kn">import</span> <span class="n">UUID</span> <span class="k">as</span> <span class="n">saUUID</span>
 <span class="kn">import</span> <span class="nn">sqlalchemy</span> <span class="k">as</span> <span class="nn">sa</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">utcnow</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">ORMBaseModel</span><span class="p">,</span> <span class="n">utcnow</span><span class="p">,</span> <span class="n">db</span>
 <span class="kn">from</span> <span class="nn">.people</span> <span class="kn">import</span> <span class="n">Person</span>
 <span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">ForbiddenOperation</span><span class="p">,</span> <span class="n">CallsignReserved</span><span class="p">,</span> <span class="n">NotFound</span><span class="p">,</span> <span class="n">Deleted</span><span class="p">,</span> <span class="n">PoolInactive</span>
 
@@ -118,7 +116,7 @@
 
 <div class="viewcode-block" id="EnrollmentPool">
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool">[docs]</a>
-<span class="k">class</span> <span class="nc">EnrollmentPool</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=R0903</span>
+<span class="k">class</span> <span class="nc">EnrollmentPool</span><span class="p">(</span><span class="n">ORMBaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=R0903</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment pools aka links, pk is UUID and comes from basemodel&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EnrollmentPool.__tablename__">
@@ -138,16 +136,11 @@
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.extra">[docs]</a>
     <span class="n">extra</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">JSONB</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Passed on to the enrollments</span></div>
 
-
-<div class="viewcode-block" id="EnrollmentPool.Config">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=R0903</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Basemodel config&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="EnrollmentPool.Config.extra">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-</div>
+<div class="viewcode-block" id="EnrollmentPool.invitecode">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.invitecode">[docs]</a>
+    <span class="n">invitecode</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">sa</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>  <span class="c1"># More human writeable identifier than the UUID</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentPool.create_enrollment">
@@ -158,15 +151,136 @@
             <span class="k">raise</span> <span class="n">PoolInactive</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleted</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">Deleted</span><span class="p">(</span><span class="s2">&quot;Can&#39;t create enrollments on deleted pools&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentPool.set_active">
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.set_active">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">set_active</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set active and return refreshed object&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">allow_deleted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool.list">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.list">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">list</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">by_owner</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Person</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">include_deleted</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="s2">&quot;EnrollmentPool&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List pools, optionally by owner or including deleted pools&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>  <span class="c1"># Cursors need transaction</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">query</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">include_deleted</span><span class="p">:</span>
+                    <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                        <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">deleted</span> <span class="o">==</span> <span class="kc">None</span>  <span class="c1"># pylint: disable=C0121 ; # &quot;is None&quot; will create invalid query</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">by_owner</span><span class="p">:</span>
+                    <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">by_owner</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+                <span class="k">async</span> <span class="k">for</span> <span class="n">pool</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">created</span><span class="p">)</span><span class="o">.</span><span class="n">gino</span><span class="o">.</span><span class="n">iterate</span><span class="p">():</span>
+                    <span class="k">yield</span> <span class="n">pool</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool._generate_unused_code">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool._generate_unused_code">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_generate_unused_code</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal helper to generate a code that is free</span>
+<span class="sd">        NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed&quot;&quot;&quot;</span>
+        <span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">secrets</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">CODE_ALPHABET</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CODE_CHAR_COUNT</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">attempt</span> <span class="o">&gt;</span> <span class="n">CODE_MAX_ATTEMPTS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find unused code&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">code</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool.create_for_owner">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.create_for_owner">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_for_owner</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">person</span><span class="p">:</span> <span class="n">Person</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates one for given owner&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>  <span class="c1"># do it in a transaction so we can&#39;t have races with codes</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_generate_unused_code</span><span class="p">()</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">EnrollmentPool</span><span class="p">(</span>
+                    <span class="n">invitecode</span><span class="o">=</span><span class="n">code</span><span class="p">,</span>
+                    <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">owner</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                    <span class="n">extra</span><span class="o">=</span><span class="n">extra</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+                <span class="c1"># refresh</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnrollmentPool.reset_invitecode">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.reset_invitecode">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset_invitecode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset invitecode&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>  <span class="c1"># do it in a transaction so we can&#39;t have races with codes</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">_generate_unused_code</span><span class="p">()</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">code</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool.by_invitecode">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.by_invitecode">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">by_invitecode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">invitecode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">allow_deleted</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get by invitecode&quot;&quot;&quot;</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">invitecode</span> <span class="o">==</span> <span class="n">invitecode</span><span class="p">)</span><span class="o">.</span><span class="n">gino</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">deleted</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_deleted</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Deleted</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div>
+
+
+    <span class="c1"># FIXME: same owner can have multiple pools, see list above</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool.by_owner_old_tbremoved">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.by_owner_old_tbremoved">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">by_owner_old_tbremoved</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">owner_uuid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get by owner UUID&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">owner</span> <span class="o">==</span> <span class="n">owner_uuid</span><span class="p">)</span><span class="o">.</span><span class="n">gino</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NotFound</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">EnrollmentPool</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span></div>
+
+
+    <span class="c1"># FIXME: This needs to go, firstly there may be multiple pools by same owner secondly the API user needs to know</span>
+    <span class="c1">#        beforehand whether they are creating or updating something</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="EnrollmentPool.old_invitecode_for_callsign_tobedeleted">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.old_invitecode_for_callsign_tobedeleted">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">old_invitecode_for_callsign_tobedeleted</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create enrollment pool owned by callsign, or update invitecode for existing one&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">_owner</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">)</span>
+
+        <span class="n">_invitecode</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">secrets</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">CODE_ALPHABET</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CODE_CHAR_COUNT</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">existing_obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_owner_old_tbremoved</span><span class="p">(</span><span class="n">owner_uuid</span><span class="o">=</span><span class="n">_owner</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">existing_obj</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">_invitecode</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">EnrollmentPool</span><span class="p">(</span><span class="n">owner</span><span class="o">=</span><span class="n">_owner</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">extra</span><span class="p">,</span> <span class="n">invitecode</span><span class="o">=</span><span class="n">_invitecode</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_owner_old_tbremoved</span><span class="p">(</span><span class="n">owner_uuid</span><span class="o">=</span><span class="n">_owner</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span></div>
 </div>
 
 
@@ -193,7 +307,7 @@
 
 <div class="viewcode-block" id="Enrollment">
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment">[docs]</a>
-<span class="k">class</span> <span class="nc">Enrollment</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=R0903</span>
+<span class="k">class</span> <span class="nc">Enrollment</span><span class="p">(</span><span class="n">ORMBaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=R0903</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollments, pk is UUID and comes from basemodel&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Enrollment.__tablename__">
@@ -234,25 +348,18 @@
     <span class="n">extra</span> <span class="o">=</span> <span class="n">sa</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">JSONB</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">server_default</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Passed on to the Persons</span></div>
 
 
-<div class="viewcode-block" id="Enrollment.Config">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.Config">[docs]</a>
-    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=R0903</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Basemodel config&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Enrollment.Config.extra">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.Config.extra">[docs]</a>
-        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
-</div>
-
-
 <div class="viewcode-block" id="Enrollment.approve">
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.approve">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">approve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">approver</span><span class="p">:</span> <span class="n">Person</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Person</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates the person record, their certs etc&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Do in a transaction so rollback on DB failures</span>
-        <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">EnrollmentState</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span> <span class="n">decided_by</span><span class="o">=</span><span class="n">approver</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">decided_on</span><span class="o">=</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">person</span></div>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="c1"># Do in transaction so things get rolled back if shit hits the fan</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="n">state</span><span class="o">=</span><span class="n">EnrollmentState</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span> <span class="n">decided_by</span><span class="o">=</span><span class="n">approver</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">decided_on</span><span class="o">=</span><span class="n">utcnow</span><span class="p">,</span> <span class="n">person</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pk</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">person</span></div>
 
 
 <div class="viewcode-block" id="Enrollment.reject">
@@ -260,6 +367,20 @@
     <span class="k">async</span> <span class="k">def</span> <span class="nf">reject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decider</span><span class="p">:</span> <span class="n">Person</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reject&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="n">EnrollmentState</span><span class="o">.</span><span class="n">REJECTED</span><span class="p">,</span> <span class="n">decided_by</span><span class="o">=</span><span class="n">decider</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">decided_on</span><span class="o">=</span><span class="n">utcnow</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Enrollment.list">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.list">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">by_pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EnrollmentPool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="s2">&quot;Enrollment&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List enrollments, optionally by pool (enrollment deletion is not allowed, they can only be rejected)&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>  <span class="c1"># Cursors need transaction</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+                <span class="n">query</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">query</span>
+                <span class="k">if</span> <span class="n">by_pool</span><span class="p">:</span>
+                    <span class="n">query</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">Enrollment</span><span class="o">.</span><span class="n">pool</span> <span class="o">==</span> <span class="n">by_pool</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+                <span class="k">async</span> <span class="k">for</span> <span class="n">enrollment</span> <span class="ow">in</span> <span class="n">query</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">Enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span><span class="o">.</span><span class="n">gino</span><span class="o">.</span><span class="n">iterate</span><span class="p">():</span>
+                    <span class="k">yield</span> <span class="n">enrollment</span></div>
 
 
     <span class="nd">@classmethod</span>
@@ -291,18 +412,34 @@
 
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="Enrollment.create_for_callsign">
-<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.create_for_callsign">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_for_callsign</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new one with random code for the callsign&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Do this in a transaction to avoid race conditions</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="n">CallsignReserved</span><span class="p">()</span>
-        <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
-            <span class="k">pass</span>
+<div class="viewcode-block" id="Enrollment.reset_approvecode4callsign">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.reset_approvecode4callsign">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset_approvecode4callsign</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset approvecode code for callsign&quot;&quot;&quot;</span>
+        <span class="c1"># FIXME: I doubt there really is much need for this unless the same get and call to reset</span>
+        <span class="c1">#        is done in many places</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;deprecated&quot;</span><span class="p">,</span> <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">reset_approvecode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Enrollment.reset_approvecode">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.reset_approvecode">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset_approvecode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset approvecode&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>  <span class="c1"># do it in a transaction so we can&#39;t have races with codes</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">_generate_unused_code</span><span class="p">()</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">approvecode</span><span class="o">=</span><span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">code</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Enrollment._generate_unused_code">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment._generate_unused_code">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_generate_unused_code</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal helper to generate a code that is free</span>
+<span class="sd">        NOTE: This MUST ONLY be used inside a transaction for nothing is guaranteed&quot;&quot;&quot;</span>
         <span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -313,16 +450,37 @@
                 <span class="k">break</span>
             <span class="k">if</span> <span class="n">attempt</span> <span class="o">&gt;</span> <span class="n">CODE_MAX_ATTEMPTS</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t find unused code&quot;</span><span class="p">)</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="p">(</span>
-            <span class="n">approvecode</span><span class="o">=</span><span class="n">code</span><span class="p">,</span>
-            <span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">=</span><span class="n">EnrollmentState</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
-            <span class="n">extra</span><span class="o">=</span><span class="n">extra</span><span class="p">,</span>
-            <span class="n">pool</span><span class="o">=</span><span class="n">pool</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
-        <span class="c1"># refresh</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">code</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Enrollment.create_for_callsign">
+<a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.enrollments.Enrollment.create_for_callsign">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">create_for_callsign</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pool</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EnrollmentPool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new one with random code for the callsign&quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>  <span class="c1"># do it in a transaction so we can&#39;t have races with codes</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">CallsignReserved</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="n">code</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_generate_unused_code</span><span class="p">()</span>
+                <span class="n">poolpk</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">pool</span><span class="p">:</span>
+                    <span class="n">poolpk</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">pk</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="p">(</span>
+                    <span class="n">approvecode</span><span class="o">=</span><span class="n">code</span><span class="p">,</span>
+                    <span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">,</span>
+                    <span class="n">state</span><span class="o">=</span><span class="n">EnrollmentState</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+                    <span class="n">extra</span><span class="o">=</span><span class="n">extra</span><span class="p">,</span>
+                    <span class="n">pool</span><span class="o">=</span><span class="n">poolpk</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+                <span class="c1"># refresh</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Enrollment.delete">

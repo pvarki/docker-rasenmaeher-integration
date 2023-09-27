@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_auth &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>tests.test_auth &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="../../_static/documentation_options.js?v=2bd037f0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -80,15 +80,53 @@
              
   <h1>Source code for tests.test_auth</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Test the supported authentication methods&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">pytest_asyncio</span>
 <span class="kn">from</span> <span class="nn">async_asgi_testclient</span> <span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
 
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.db</span> <span class="kn">import</span> <span class="n">Person</span>
+
+<span class="kn">from</span> <span class="nn">.test_db</span> <span class="kn">import</span> <span class="n">ginosession</span>  <span class="c1"># pylint: disable=W0611</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.LOGGER">[docs]</a>
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+<span class="c1"># pylint: disable=W0621</span>
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="two_users">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.two_users">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">two_users</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;First one is normal, second is admin&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="n">normal</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;TestNormalUser&quot;</span><span class="p">)</span>
+    <span class="n">admin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;TestAdminUser&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">admin</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">normal</span><span class="p">,</span> <span class="n">admin</span></div>
+
+
+
+<div class="viewcode-block" id="check_response">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.check_response">[docs]</a>
+<span class="k">def</span> <span class="nf">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">expect_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check the response&quot;&quot;&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resp=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;payload=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+    <span class="k">assert</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
+    <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">expect_type</span>
+    <span class="k">assert</span> <span class="s2">&quot;userid&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
+    <span class="k">assert</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">payload</span><span class="p">)</span></div>
 
 
 
@@ -157,14 +195,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test JWT-or-mTLS -check endpoint with JWT authenticated client&quot;&quot;&quot;</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">tilauspalvelu_jwt_client</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/mtls_or_jwt/permissive&quot;</span><span class="p">)</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resp=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;payload=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
-    <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;jwt&quot;</span>
-    <span class="k">assert</span> <span class="s2">&quot;userid&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
-    <span class="k">assert</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;jwt&quot;</span><span class="p">)</span>
     <span class="n">subload</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">]</span>
     <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">subload</span><span class="p">[</span><span class="s2">&quot;sub&quot;</span><span class="p">]</span></div>
 
@@ -191,16 +222,84 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test JWT-or-mTLS -check endpoint with mTLS authenticated client&quot;&quot;&quot;</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">mtls_client</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/mtls_or_jwt&quot;</span><span class="p">)</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resp=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;payload=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
-    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
-    <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;mtls&quot;</span>
-    <span class="k">assert</span> <span class="s2">&quot;userid&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
-    <span class="k">assert</span> <span class="s2">&quot;payload&quot;</span> <span class="ow">in</span> <span class="n">payload</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;mtls&quot;</span><span class="p">)</span>
     <span class="n">subload</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;payload&quot;</span><span class="p">]</span>
     <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">subload</span><span class="p">[</span><span class="s2">&quot;CN&quot;</span><span class="p">]</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_valid_user_mtls">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_user_mtls">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_valid_user_mtls</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">two_users</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the valid user endpoint with valid and invalid CNs&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">two_users</span><span class="p">:</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X-ClientCert-DN&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;CN=</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">callsign</span><span class="si">}</span><span class="s2">,O=N/A&quot;</span><span class="p">})</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser&quot;</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;mtls&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span>
+    <span class="c1"># Invalid user should fail</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X-ClientCert-DN&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;CN=</span><span class="si">{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="si">}</span><span class="s2">,O=N/A&quot;</span><span class="p">})</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_valid_user_jwt">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_user_jwt">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_valid_user_jwt</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">two_users</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the valid user endpoint with valid and invalid subs&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">two_users</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">({</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span><span class="p">})</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser&quot;</span><span class="p">)</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;jwt&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span>
+    <span class="c1"># Invalid user should fail</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">({</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())})</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_valid_admin_mtls">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_admin_mtls">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_valid_admin_mtls</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">two_users</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the valid user endpoint with admin and non-admin CNs&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">two_users</span><span class="p">:</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X-ClientCert-DN&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;CN=</span><span class="si">{</span><span class="n">user</span><span class="o">.</span><span class="n">callsign</span><span class="si">}</span><span class="s2">,O=N/A&quot;</span><span class="p">})</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser/admin&quot;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resp=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span> <span class="o">==</span> <span class="s2">&quot;TestNormalUser&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span>
+            <span class="k">continue</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;mtls&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_valid_admin_jwt">
+<a class="viewcode-back" href="../../technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_admin_jwt">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_valid_admin_jwt</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">two_users</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Person</span><span class="p">,</span> <span class="n">Person</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the valid user endpoint with admin and non-admin subs&quot;&quot;&quot;</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">two_users</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">({</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span><span class="p">})</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/check-auth/validuser/admin&quot;</span><span class="p">)</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;resp=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span> <span class="o">==</span> <span class="s2">&quot;TestNormalUser&quot;</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span>
+            <span class="k">continue</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="s2">&quot;jwt&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;userid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">callsign</span></div>
 
 </pre></div>
 

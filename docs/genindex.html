@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; Rasenmaeher docs 0.6.0 documentation</title>
+  <title>Index &mdash; Rasenmaeher docs 0.6.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=8fa8b3e9"></script>
+        <script src="_static/documentation_options.js?v=2bd037f0"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.0
+                0.6.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -112,12 +112,14 @@
       <li><a href="technical/api/rasenmaeher_api/db/middleware/index.html#rasenmaeher_api.db.middleware.DBConnectionMiddleware.__call__">__call__() (DBConnectionMiddleware method)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWT.__call__">(MTLSorJWT method)</a>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/mtls/index.html#rasenmaeher_api.web.api.middleware.mtls.MTLSorJWT.__call__">(MTLSorJWT method)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/user/index.html#rasenmaeher_api.web.api.middleware.user.ValidUser.__call__">(ValidUser method)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.__post_init__">__post_init__() (DBConfig method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.__post_init__">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.__table_args__">__table_args__ (BaseModel attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.__table_args__">__table_args__ (ORMBaseModel attribute)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.__table_args__">(Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.__table_args__">[1]</a>
@@ -141,6 +143,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/index.html#rasenmaeher_api.__version__">__version__ (in module rasenmaeher_api)</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment._generate_unused_code">_generate_unused_code() (Enrollment class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment._generate_unused_code">[1]</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool._generate_unused_code">(EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool._generate_unused_code">[1]</a>
+</li>
+      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person._get_role">_get_role() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person._get_role">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role._idx">_idx (Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role._idx">[1]</a>
@@ -169,26 +177,20 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.admin_added">admin_added (FirstuserAddAdminOut attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.admin_list">admin_list (FirstuserListAdminOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.anon_session">anon_session() (in module rasenmaeher_api.cfssl.base)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.admin_removed">admin_removed (FirstuserDeleteAdminOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/anoncsr/index.html#rasenmaeher_api.cfssl.anoncsr.anon_sign_csr">anon_sign_csr() (in module rasenmaeher_api.cfssl.anoncsr)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.api_client_cert_header">api_client_cert_header (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.api_disabled">api_disabled (FirstuserDisableOut attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.api_enabled">api_enabled (FirstuserEnableOut attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.api_healthcheck_headers">api_healthcheck_headers (Settings attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.api_healthcheck_proto">api_healthcheck_proto (Settings attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.api_healthcheck_url">api_healthcheck_url (Settings attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.api_is_active">api_is_active (FirstuserIsActiveOut attribute)</a>
-</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/router/index.html#rasenmaeher_api.web.api.router.api_router">api_router (in module rasenmaeher_api.web.api.router)</a>
 </li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.app_client">app_client() (in module tests.conftest)</a>
@@ -219,7 +221,9 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel">BaseModel (class in rasenmaeher_api.db.base)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.BackendError">BackendError</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.base_url">base_url() (in module rasenmaeher_api.cfssl.base)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.bind_config">bind_config() (in module rasenmaeher_api.db)</a>
 
@@ -241,9 +245,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.by_code">by_code() (LoginCode class method)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.by_code">[1]</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.by_invitecode">by_invitecode() (EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.by_invitecode">[1]</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.by_mtlsjwt_payload">by_mtlsjwt_payload() (Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.by_mtlsjwt_payload">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.by_pk">by_pk() (BaseModel class method)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.by_owner_old_tbremoved">by_owner_old_tbremoved() (EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.by_owner_old_tbremoved">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.by_pk">by_pk() (ORMBaseModel class method)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.by_role">by_role() (Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.by_role">[1]</a>
 </li>
@@ -260,17 +268,51 @@
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.callsign">callsign (Enrollment attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.callsign">[1]</a>
 
       <ul>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.callsign">(EnrollmentAcceptIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.callsign">(EnrollmentAcceptOut attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.callsign">(EnrollmentDeliverOut attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.callsign">(EnrollmentDemoteIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.callsign">(EnrollmentInitIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.callsign">(EnrollmentInitOut attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.callsign">(EnrollmentInviteCodeEnrollIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.callsign">(EnrollmentLockIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.callsign">(EnrollmentPromoteIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.callsign">(EnrollmentShowVerificationCodeOut attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn.callsign">(EnrollmentStatusIn attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.callsign">(EnrollmentStatusOut attribute)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.callsign">(FirstuserAddAdminIn attribute)</a>
+</li>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.callsign">(Person attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.callsign">[1]</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.CallsignReserved">CallsignReserved</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.cert_download_link">cert_download_link (EnrollmentConfigSetDLCertIn attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn.callsign_hash">callsign_hash (EnrollmentDeliverIn attribute)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.cert_download_link">(EnrollmentDeliverOut attribute)</a>
+        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.callsign_hash">(EnrollmentDeliverOut attribute)</a>
 </li>
       </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.callsign_list">callsign_list (EnrollmentListOut attribute)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.CallsignReserved">CallsignReserved</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.cert_download_link">cert_download_link (EnrollmentDeliverOut attribute)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.CERT_NAME_PREFIX">CERT_NAME_PREFIX (in module rasenmaeher_api.mtlsinit)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.certfile">certfile (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.certfile">[1]</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesResponse.certificate">certificate (CertificatesResponse attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesRequest">CertificatesRequest (class in rasenmaeher_api.web.api.product.schema)</a>
@@ -283,13 +325,15 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.certspath">certspath (Person attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.certspath">[1]</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.certsubject">certsubject (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.certsubject">[1]</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.cfssl_host">cfssl_host (Settings attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.cfssl_port">cfssl_port (Settings attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available">check_enduser_bundle_available() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.CFSSLError">CFSSLError</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.check_if_api_is_active">check_if_api_is_active() (in module rasenmaeher_api.web.api.firstuser.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available">check_enduser_bundle_available() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.check_jwt">check_jwt() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
 </li>
@@ -299,6 +343,8 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.check_management_permissions">check_management_permissions() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.check_mtls_init">check_mtls_init() (in module rasenmaeher_api.mtlsinit)</a>
 </li>
       <li><a href="technical/api/fprun/index.html#fprun.check_peer_cert">check_peer_cert() (in module fprun)</a>
@@ -307,7 +353,9 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.check_public_keys">check_public_keys() (in module rasenmaeher_api.jwtinit)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.SqliteDB.check_sqlitedatabase">check_sqlitedatabase() (SqliteDB method)</a>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.check_response">check_response() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.check_settings_clientpaths">check_settings_clientpaths() (in module rasenmaeher_api.mtlsinit)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.claims">claims (LoginCode attribute)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.claims">[1]</a>
 
@@ -323,22 +371,16 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeRequestResponse.code">(LoginCodeRequestResponse attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.CODE_ALPHABET">CODE_ALPHABET (in module rasenmaeher_api.db.enrollments)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.CODE_ALPHABET">(in module rasenmaeher_api.db.logincodes)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.CODE_ALPHABET">(in module rasenmaeher_api.web.api.firstuser.views)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.CODE_CHAR_COUNT">CODE_CHAR_COUNT (in module rasenmaeher_api.db.enrollments)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.CODE_CHAR_COUNT">(in module rasenmaeher_api.db.logincodes)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.CODE_CHAR_COUNT">(in module rasenmaeher_api.web.api.firstuser.views)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.CODE_MAX_ATTEMPTS">CODE_MAX_ATTEMPTS (in module rasenmaeher_api.db.enrollments)</a>
@@ -358,11 +400,7 @@
       <li><a href="technical/api/rasenmaeher_api/web/api/tokens/views/index.html#rasenmaeher_api.web.api.tokens.views.create_code">create_code() (in module rasenmaeher_api.web.api.tokens.views)</a>
 </li>
       <li><a href="technical/api/fpinit/index.html#fpinit.create_csr">create_csr() (in module fpinit)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.create_csr">(in module rasenmaeher_api.mtlsinit)</a>
 </li>
-      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.create_enrollment">create_enrollment() (EnrollmentPool method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.create_enrollment">[1]</a>
 </li>
       <li><a href="technical/api/fakewerk/index.html#fakewerk.create_fakeproduct_manifest">create_fakeproduct_manifest() (in module fakewerk)</a>
@@ -371,15 +409,11 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.create_for_claims">create_for_claims() (LoginCode class method)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.create_for_claims">[1]</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.create_for_owner">create_for_owner() (EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.create_for_owner">[1]</a>
+</li>
       <li><a href="technical/api/fpinit/index.html#fpinit.create_keypair">create_keypair() (in module fpinit)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.create_keypair">(in module rasenmaeher_api.mtlsinit)</a>
 </li>
-      </ul></li>
       <li><a href="technical/api/fakewerk/index.html#fakewerk.create_rasenmaeher_manifest">create_rasenmaeher_manifest() (in module fakewerk)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.SqliteDB.create_sqlitedatabase">create_sqlitedatabase() (SqliteDB method)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.create_test_users">create_test_users() (in module rasenmaeher_api.testhelpers)</a>
 </li>
@@ -387,13 +421,17 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.create_with_cert">create_with_cert() (Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.create_with_cert">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.created">created (BaseModel attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.created">created (ORMBaseModel attribute)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.created">(Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.created">[1]</a>
 </li>
       </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#rasenmaeher_api.cfssl.public.CRL_LIFETIME">CRL_LIFETIME (in module rasenmaeher_api.cfssl.public)</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesRequest.csr">csr (CertificatesRequest attribute)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.csrfile">csrfile (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.csrfile">[1]</a>
 </li>
       <li><a href="technical/api/tests/tlstests/conftest/index.html#tests.tlstests.conftest.csrfile">csrfile() (in module tests.tlstests.conftest)</a>
 </li>
@@ -425,6 +463,8 @@
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/middleware/index.html#rasenmaeher_api.db.middleware.DBConnectionMiddleware">DBConnectionMiddleware (class in rasenmaeher_api.db.middleware)</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.DBError">DBError</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.DBFetchError">DBFetchError</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.DBModel">DBModel (in module rasenmaeher_api.db.base)</a>
@@ -443,23 +483,25 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.DEFAULT_PUB_PATH">DEFAULT_PUB_PATH (in module rasenmaeher_api.jwtinit)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.delete">delete() (BaseModel method)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.DEFAULT_TIMEOUT">DEFAULT_TIMEOUT (in module rasenmaeher_api.cfssl.base)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.delete">delete() (Enrollment method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.delete">[1]</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.delete">(Enrollment method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.delete">[1]</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.delete">(LoginCode method)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.delete">[1]</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.delete">(ORMBaseModel method)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.delete">(Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.delete">[1]</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken.delete">(SeenToken method)</a>, <a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken.delete">[1]</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.delete_invite_code">delete_invite_code() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.delete_invite_code_like">delete_invite_code_like() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.Deleted">Deleted</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.deleted">deleted (BaseModel attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.deleted">deleted (ORMBaseModel attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.driver">driver (DBConfig attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.driver">[1]</a>
 </li>
@@ -483,12 +525,6 @@
         <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment">(class in rasenmaeher_api.db.enrollments)</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.Config">Enrollment.Config (class in rasenmaeher_api.db)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.Config">(class in rasenmaeher_api.db.enrollments)</a>
-</li>
-      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/index.html#rasenmaeher_api.web.api.enrollment.ENROLLMENT_ROUTER">ENROLLMENT_ROUTER (in module rasenmaeher_api.web.api.enrollment)</a>
 
       <ul>
@@ -502,22 +538,6 @@
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut">EnrollmentAcceptOut (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config">EnrollmentAcceptOut.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn">EnrollmentAddServiceManagementIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config">EnrollmentAddServiceManagementIn.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn">EnrollmentConfigSetDLCertIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config">EnrollmentConfigSetDLCertIn.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn">EnrollmentConfigSetMtlsIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config">EnrollmentConfigSetMtlsIn.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn">EnrollmentConfigSetStateIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config">EnrollmentConfigSetStateIn.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone">EnrollmentConfigTaskDone (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
@@ -595,22 +615,16 @@
         <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool">(class in rasenmaeher_api.db.enrollments)</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.Config">EnrollmentPool.Config (class in rasenmaeher_api.db)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.Config">(class in rasenmaeher_api.db.enrollments)</a>
-</li>
-      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn">EnrollmentPromoteIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.Config">EnrollmentPromoteIn.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn">EnrollmentShowVerificationCodeIn (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut">EnrollmentShowVerificationCodeOut (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.Config">EnrollmentShowVerificationCodeOut.Config (class in rasenmaeher_api.web.api.enrollment.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentState">EnrollmentState (class in rasenmaeher_api.db)</a>
@@ -637,6 +651,8 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.LogLevel.ERROR">ERROR (LogLevel attribute)</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.ErrorResult">ErrorResult</a>
+</li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.event_loop">event_loop() (in module tests.conftest)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/tokens/views/index.html#rasenmaeher_api.web.api.tokens.views.exchange_code">exchange_code() (in module rasenmaeher_api.web.api.tokens.views)</a>
@@ -650,19 +666,9 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.extra">(Enrollment attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.extra">[1]</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.Config.extra">(Enrollment.Config attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.Config.extra">[1]</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.Config.extra">(EnrollmentAcceptIn.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config.extra">(EnrollmentAcceptOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config.extra">(EnrollmentAddServiceManagementIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config.extra">(EnrollmentConfigSetDLCertIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config.extra">(EnrollmentConfigSetMtlsIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config.extra">(EnrollmentConfigSetStateIn.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone.Config.extra">(EnrollmentConfigTaskDone.Config attribute)</a>
 </li>
@@ -694,8 +700,6 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.extra">(EnrollmentPool attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.extra">[1]</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.Config.extra">(EnrollmentPool.Config attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.Config.extra">[1]</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.Config.extra">(EnrollmentPromoteIn.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.Config.extra">(EnrollmentShowVerificationCodeOut.Config attribute)</a>
@@ -710,37 +714,13 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.extra">(FirstuserCheckCodeOut.Config attribute)</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.extra">(FirstuserDeleteAdminIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.extra">(FirstuserDeleteAdminOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.extra">(FirstuserDisableIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.extra">(FirstuserDisableOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.extra">(FirstuserEnableIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.extra">(FirstuserEnableOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.extra">(FirstuserIsActiveOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.extra">(FirstuserListAdminIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.extra">(FirstuserListAdminOut.Config attribute)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.JWTExchangeRequestResponse.Config.extra">(JWTExchangeRequestResponse.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.Config.extra">(LoginCode.Config attribute)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.Config.extra">[1]</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeCreateRequest.Config.extra">(LoginCodeCreateRequest.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeRequestResponse.Config.extra">(LoginCodeRequestResponse.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.extra">(Person attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.extra">[1]</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.Config.extra">(Person.Config attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.Config.extra">[1]</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken.Config.extra">(SeenToken.Config attribute)</a>, <a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken.Config.extra">[1]</a>
 </li>
       </ul></li>
   </ul></td>
@@ -770,47 +750,11 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.Config">FirstuserCheckCodeIn.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut">FirstuserCheckCodeOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config">FirstuserCheckCodeOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn">FirstuserDeleteAdminIn (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config">FirstuserDeleteAdminIn.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut">FirstuserDeleteAdminOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config">FirstuserDeleteAdminOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn">FirstuserDisableIn (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config">FirstuserDisableIn.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut">FirstuserDisableOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config">FirstuserDisableOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn">FirstuserEnableIn (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config">FirstuserEnableIn.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut">FirstuserEnableOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config">FirstuserEnableOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut">FirstuserIsActiveOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config">FirstuserIsActiveOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn">FirstuserListAdminIn (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config">FirstuserListAdminIn.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut">FirstuserListAdminOut (class in rasenmaeher_api.web.api.firstuser.schema)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config">FirstuserListAdminOut.Config (class in rasenmaeher_api.web.api.firstuser.schema)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.ForbiddenOperation">ForbiddenOperation</a>
 </li>
@@ -852,7 +796,7 @@
       <li><a href="technical/api/fpinit/index.html#fpinit.get_ca">get_ca() (in module fpinit)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.views.get_ca">(in module rasenmaeher_api.web.api.product.views)</a>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#rasenmaeher_api.cfssl.public.get_ca">(in module rasenmaeher_api.cfssl.public)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.get_cert_pem">get_cert_pem() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.get_cert_pem">[1]</a>
@@ -863,23 +807,19 @@
 </li>
       <li><a href="technical/api/tests/test_tokens/index.html#tests.test_tokens.get_code">get_code() (in module tests.test_tokens)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.views.get_crl">get_crl() (in module rasenmaeher_api.web.api.utils.views)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.get_hash_with_either_workid_or_hash">get_hash_with_either_workid_or_hash() (in module rasenmaeher_api.web.api.enrollment.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#rasenmaeher_api.cfssl.public.get_crl">get_crl() (in module rasenmaeher_api.cfssl.public)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.get_invite_codes">get_invite_codes() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.get_is_active">get_is_active() (in module rasenmaeher_api.web.api.firstuser.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/console/index.html#rasenmaeher_api.console.get_jwt">get_jwt() (in module rasenmaeher_api.console)</a>
 </li>
       <li><a href="technical/api/fakewerk/index.html#fakewerk.get_key_pass">get_key_pass() (in module fakewerk)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.get_key_pem">get_key_pem() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.get_key_pem">[1]</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.get_result">get_result() (in module rasenmaeher_api.cfssl.base)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.get_list_admin">get_list_admin() (in module rasenmaeher_api.web.api.firstuser.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.get_result_cert">get_result_cert() (in module rasenmaeher_api.cfssl.base)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.get_session_winit">get_session_winit() (in module rasenmaeher_api.mtlsinit)</a>
 </li>
@@ -911,12 +851,8 @@
         <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.host">(Settings attribute)</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.howto_download_link">howto_download_link (EnrollmentConfigSetDLCertIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.howto_download_link">(EnrollmentDeliverOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.howto_download_link">howto_download_link (EnrollmentDeliverOut attribute)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -956,10 +892,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn.invitecode">invitecode (EnrollmentIsInvitecodeActiveIn attribute)</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.invitecode">(EnrollmentPool attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.invitecode">[1]</a>
 </li>
+      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut.invitecode_is_active">invitecode_is_active (EnrollmentIsInvitecodeActiveOut attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.is_workid_or_workidhash_given">is_workid_or_workidhash_given() (in module rasenmaeher_api.web.api.enrollment.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.is_callsign_available">is_callsign_available() (Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.is_callsign_available">[1]</a>
 </li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.issuer_cl">issuer_cl() (in module tests.conftest)</a>
 </li>
@@ -975,7 +915,7 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.JWTExchangeRequestResponse.jwt">(JWTExchangeRequestResponse attribute)</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayloadType.JWT">JWT (MTLSorJWTPayloadType attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayloadType.JWT">JWT (MTLSorJWTPayloadType attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminOut.jwt_exchange_code">jwt_exchange_code (FirstuserAddAdminOut attribute)</a>
 </li>
@@ -1059,8 +999,14 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.LdapConnString">LdapConnString (class in rasenmaeher_api.web.api.utils.schema)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.list">list() (Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.list">[1]</a>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.list">list() (Enrollment class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.list">[1]</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.list">(EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.list">[1]</a>
 </li>
+        <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.list">(Person class method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.list">[1]</a>
+</li>
+      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.lock_reason">lock_reason (EnrollmentLockIn attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.locked">locked (EnrollmentShowVerificationCodeOut attribute)</a>
@@ -1077,6 +1023,16 @@
         <li><a href="technical/api/fpinit/index.html#fpinit.LOGGER">(in module fpinit)</a>
 </li>
         <li><a href="technical/api/fprun/index.html#fprun.LOGGER">(in module fprun)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/anoncsr/index.html#rasenmaeher_api.cfssl.anoncsr.LOGGER">(in module rasenmaeher_api.cfssl.anoncsr)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.LOGGER">(in module rasenmaeher_api.cfssl.base)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/mtls/index.html#rasenmaeher_api.cfssl.mtls.LOGGER">(in module rasenmaeher_api.cfssl.mtls)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.LOGGER">(in module rasenmaeher_api.cfssl.private)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#rasenmaeher_api.cfssl.public.LOGGER">(in module rasenmaeher_api.cfssl.public)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/console/index.html#rasenmaeher_api.console.LOGGER">(in module rasenmaeher_api.console)</a>
 </li>
@@ -1102,8 +1058,6 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.LOGGER">(in module rasenmaeher_api.settings)</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.LOGGER">(in module rasenmaeher_api.sqlitedatabase)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/testhelpers/index.html#rasenmaeher_api.testhelpers.LOGGER">(in module rasenmaeher_api.testhelpers)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.LOGGER">(in module rasenmaeher_api.user_integrations)</a>
@@ -1116,13 +1070,23 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/healthcheck/views/index.html#rasenmaeher_api.web.api.healthcheck.views.LOGGER">(in module rasenmaeher_api.web.api.healthcheck.views)</a>
 </li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/mtls/index.html#rasenmaeher_api.web.api.middleware.mtls.LOGGER">(in module rasenmaeher_api.web.api.middleware.mtls)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/user/index.html#rasenmaeher_api.web.api.middleware.user.LOGGER">(in module rasenmaeher_api.web.api.middleware.user)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.views.LOGGER">(in module rasenmaeher_api.web.api.product.views)</a>
+</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/views/index.html#rasenmaeher_api.web.api.tokens.views.LOGGER">(in module rasenmaeher_api.web.api.tokens.views)</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.views.LOGGER">(in module rasenmaeher_api.web.api.utils.views)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/application/index.html#rasenmaeher_api.web.application.LOGGER">(in module rasenmaeher_api.web.application)</a>
 </li>
         <li><a href="technical/api/tests/conftest/index.html#tests.conftest.LOGGER">(in module tests.conftest)</a>
 </li>
         <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.LOGGER">(in module tests.test_auth)</a>
+</li>
+        <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.LOGGER">(in module tests.test_cfssl)</a>
 </li>
         <li><a href="technical/api/tests/test_db/index.html#tests.test_db.LOGGER">(in module tests.test_db)</a>
 </li>
@@ -1151,12 +1115,6 @@
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode">(class in rasenmaeher_api.db.logincodes)</a>
-</li>
-      </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.Config">LoginCode.Config (class in rasenmaeher_api.db)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.Config">(class in rasenmaeher_api.db.logincodes)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeCreateRequest">LoginCodeCreateRequest (class in rasenmaeher_api.web.api.tokens.schema)</a>
@@ -1211,6 +1169,18 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/__main__/index.html#module-rasenmaeher_api.__main__">rasenmaeher_api.__main__</a>
 </li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/index.html#module-rasenmaeher_api.cfssl">rasenmaeher_api.cfssl</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/anoncsr/index.html#module-rasenmaeher_api.cfssl.anoncsr">rasenmaeher_api.cfssl.anoncsr</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#module-rasenmaeher_api.cfssl.base">rasenmaeher_api.cfssl.base</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/mtls/index.html#module-rasenmaeher_api.cfssl.mtls">rasenmaeher_api.cfssl.mtls</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#module-rasenmaeher_api.cfssl.private">rasenmaeher_api.cfssl.private</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#module-rasenmaeher_api.cfssl.public">rasenmaeher_api.cfssl.public</a>
+</li>
         <li><a href="technical/api/rasenmaeher_api/console/index.html#module-rasenmaeher_api.console">rasenmaeher_api.console</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#module-rasenmaeher_api.db">rasenmaeher_api.db</a>
@@ -1238,8 +1208,6 @@
         <li><a href="technical/api/rasenmaeher_api/prodcutapihelpers/index.html#module-rasenmaeher_api.prodcutapihelpers">rasenmaeher_api.prodcutapihelpers</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/settings/index.html#module-rasenmaeher_api.settings">rasenmaeher_api.settings</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#module-rasenmaeher_api.sqlitedatabase">rasenmaeher_api.sqlitedatabase</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/testhelpers/index.html#module-rasenmaeher_api.testhelpers">rasenmaeher_api.testhelpers</a>
 </li>
@@ -1275,6 +1243,12 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#module-rasenmaeher_api.web.api.middleware">rasenmaeher_api.web.api.middleware</a>
 </li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#module-rasenmaeher_api.web.api.middleware.datatypes">rasenmaeher_api.web.api.middleware.datatypes</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/mtls/index.html#module-rasenmaeher_api.web.api.middleware.mtls">rasenmaeher_api.web.api.middleware.mtls</a>
+</li>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/user/index.html#module-rasenmaeher_api.web.api.middleware.user">rasenmaeher_api.web.api.middleware.user</a>
+</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/product/index.html#module-rasenmaeher_api.web.api.product">rasenmaeher_api.web.api.product</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#module-rasenmaeher_api.web.api.product.schema">rasenmaeher_api.web.api.product.schema</a>
@@ -1302,6 +1276,8 @@
         <li><a href="technical/api/tests/conftest/index.html#module-tests.conftest">tests.conftest</a>
 </li>
         <li><a href="technical/api/tests/test_auth/index.html#module-tests.test_auth">tests.test_auth</a>
+</li>
+        <li><a href="technical/api/tests/test_cfssl/index.html#module-tests.test_cfssl">tests.test_cfssl</a>
 </li>
         <li><a href="technical/api/tests/test_console/index.html#module-tests.test_console">tests.test_console</a>
 </li>
@@ -1332,7 +1308,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayloadType.MTLS">MTLS (MTLSorJWTPayloadType attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayloadType.MTLS">MTLS (MTLSorJWTPayloadType attribute)</a>
 </li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.mtls_client">mtls_client() (in module tests.conftest)</a>
 </li>
@@ -1344,21 +1320,19 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.mtls_init">mtls_init() (in module rasenmaeher_api.mtlsinit)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.mtls_test_link">mtls_test_link (EnrollmentConfigSetMtlsIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.mtls_test_link">(EnrollmentDeliverOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/mtls/index.html#rasenmaeher_api.cfssl.mtls.mtls_session">mtls_session() (in module rasenmaeher_api.cfssl.mtls)</a>
 </li>
-      </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.mtls_test_link">mtls_test_link (EnrollmentDeliverOut attribute)</a>
+</li>
       <li><a href="technical/api/tests/tlstests/conftest/index.html#tests.tlstests.conftest.mtlsclient">mtlsclient() (in module tests.tlstests.conftest)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/conftest/index.html#tests.tlstests.conftest.mtlsfiles">mtlsfiles() (in module tests.tlstests.conftest)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWT">MTLSorJWT (class in rasenmaeher_api.web.api.middleware)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/mtls/index.html#rasenmaeher_api.web.api.middleware.mtls.MTLSorJWT">MTLSorJWT (class in rasenmaeher_api.web.api.middleware.mtls)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayload">MTLSorJWTPayload (class in rasenmaeher_api.web.api.middleware)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload">MTLSorJWTPayload (class in rasenmaeher_api.web.api.middleware.datatypes)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayloadType">MTLSorJWTPayloadType (class in rasenmaeher_api.web.api.middleware)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayloadType">MTLSorJWTPayloadType (class in rasenmaeher_api.web.api.middleware.datatypes)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1366,21 +1340,21 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.new_key">new_key() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.new_service_management_hash">new_service_management_hash (EnrollmentAddServiceManagementIn attribute)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/index.html#rasenmaeher_api.web.api.enrollment.NO_JWT_ENROLLMENT_ROUTER">NO_JWT_ENROLLMENT_ROUTER (in module rasenmaeher_api.web.api.enrollment)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.NO_JWT_ENROLLMENT_ROUTER">(in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
       </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.NoResult">NoResult</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/errors/index.html#rasenmaeher_api.db.errors.NotFound">NotFound</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.LogLevel.NOTSET">NOTSET (LogLevel attribute)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#rasenmaeher_api.cfssl.base.NoValue">NoValue</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1388,10 +1362,14 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.one_time_admin_code">one_time_admin_code (Settings attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.old_invitecode_for_callsign_tobedeleted">old_invitecode_for_callsign_tobedeleted() (EnrollmentPool class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.old_invitecode_for_callsign_tobedeleted">[1]</a>
+</li>
+      <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.one_revoked_cert">one_revoked_cert() (in module tests.test_cfssl)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel">ORMBaseModel (class in rasenmaeher_api.db.base)</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.owner">owner (EnrollmentPool attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.owner">[1]</a>
 </li>
   </ul></td>
@@ -1402,20 +1380,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.password">password (DBConfig attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.password">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayload.payload">payload (MTLSorJWTPayload attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload.payload">payload (MTLSorJWTPayload attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.pem_to_pfx">pem_to_pfx() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.pem_to_pfx">pem_to_pfx() (in module rasenmaeher_api.db.people)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentState.PENDING">PENDING (EnrollmentState attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentState.PENDING">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.permissions_str">permissions_str (EnrollmentAddServiceManagementIn attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.persistent_data_dir">persistent_data_dir (Settings attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.permit_str">permit_str (FirstuserDisableIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.permit_str">(FirstuserEnableIn attribute)</a>
-</li>
-      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person">Person (class in rasenmaeher_api.db)</a>
 
       <ul>
@@ -1424,13 +1396,9 @@
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.person">person (Enrollment attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.person">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.Config">Person.Config (class in rasenmaeher_api.db)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.Config">(class in rasenmaeher_api.db.people)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.pfxfile">pfxfile (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.pfxfile">[1]</a>
 </li>
-      </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.pk">pk (BaseModel attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.pk">pk (ORMBaseModel attribute)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.pk">(Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.pk">[1]</a>
@@ -1454,20 +1422,6 @@
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.post_admin_add">post_admin_add() (in module rasenmaeher_api.web.api.firstuser.views)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_config_add_manager">post_config_add_manager() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_config_set_cert_dl_link">post_config_set_cert_dl_link() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_config_set_mtls_test_link">post_config_set_mtls_test_link() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_config_set_state">post_config_set_state() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.post_delete_admin">post_delete_admin() (in module rasenmaeher_api.web.api.firstuser.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.post_disable">post_disable() (in module rasenmaeher_api.web.api.firstuser.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/views/index.html#rasenmaeher_api.web.api.firstuser.views.post_enable">post_enable() (in module rasenmaeher_api.web.api.firstuser.views)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_enroll_invite_code">post_enroll_invite_code() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept">post_enrollment_accept() (in module rasenmaeher_api.web.api.enrollment.views)</a>
@@ -1477,6 +1431,14 @@
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.post_invite_code">post_invite_code() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/prodcutapihelpers/index.html#rasenmaeher_api.prodcutapihelpers.post_to_all_products">post_to_all_products() (in module rasenmaeher_api.prodcutapihelpers)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.post_user_crud">post_user_crud() (in module rasenmaeher_api.db.people)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.privkeyfile">privkeyfile (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.privkeyfile">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.productapidata">productapidata (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.productapidata">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.pubkeyfile">pubkeyfile (Person property)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.pubkeyfile">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code">put_activate_invite_code() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
@@ -1502,6 +1464,48 @@
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/__main__/index.html#module-rasenmaeher_api.__main__">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/index.html#module-rasenmaeher_api.cfssl">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl.anoncsr
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/anoncsr/index.html#module-rasenmaeher_api.cfssl.anoncsr">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl.base
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/base/index.html#module-rasenmaeher_api.cfssl.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl.mtls
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/mtls/index.html#module-rasenmaeher_api.cfssl.mtls">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl.private
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#module-rasenmaeher_api.cfssl.private">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.cfssl.public
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/public/index.html#module-rasenmaeher_api.cfssl.public">module</a>
 </li>
       </ul></li>
       <li>
@@ -1600,13 +1604,6 @@
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/settings/index.html#module-rasenmaeher_api.settings">module</a>
-</li>
-      </ul></li>
-      <li>
-    rasenmaeher_api.sqlitedatabase
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#module-rasenmaeher_api.sqlitedatabase">module</a>
 </li>
       </ul></li>
       <li>
@@ -1729,6 +1726,29 @@
 </li>
       </ul></li>
       <li>
+    rasenmaeher_api.web.api.middleware.datatypes
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#module-rasenmaeher_api.web.api.middleware.datatypes">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.web.api.middleware.mtls
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/mtls/index.html#module-rasenmaeher_api.web.api.middleware.mtls">module</a>
+</li>
+      </ul></li>
+      <li>
+    rasenmaeher_api.web.api.middleware.user
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/web/api/middleware/user/index.html#module-rasenmaeher_api.web.api.middleware.user">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     rasenmaeher_api.web.api.product
 
       <ul>
@@ -1742,8 +1762,6 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#module-rasenmaeher_api.web.api.product.schema">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     rasenmaeher_api.web.api.product.views
 
@@ -1809,14 +1827,14 @@
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/console/index.html#rasenmaeher_api.console.rasenmaeher_api_cli">rasenmaeher_api_cli() (in module rasenmaeher_api.console)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.reason">reason (EnrollmentListOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.KeyCloakConnString.reason">reason (KeyCloakConnString attribute)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.KeyCloakConnString.reason">(KeyCloakConnString attribute)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.LdapConnString.reason">(LdapConnString attribute)</a>
 </li>
       </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.ReasonTypes">ReasonTypes (in module rasenmaeher_api.cfssl.private)</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/tokens/views/index.html#rasenmaeher_api.web.api.tokens.views.refresh_token">refresh_token() (in module rasenmaeher_api.web.api.tokens.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.reject">reject() (Enrollment method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.reject">[1]</a>
@@ -1839,8 +1857,6 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote">request_enrollment_promote() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.request_enrollment_status">request_enrollment_status() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.request_enrolment_status">request_enrolment_status() (in module rasenmaeher_api.web.api.enrollment.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted">request_have_i_been_accepted() (in module rasenmaeher_api.web.api.enrollment.views)</a>
@@ -1856,6 +1872,12 @@
       <li><a href="technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.views.request_utils_keycloak_conn_string">request_utils_keycloak_conn_string() (in module rasenmaeher_api.web.api.utils.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.views.request_utils_ldap_conn_string">request_utils_ldap_conn_string() (in module rasenmaeher_api.web.api.utils.views)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.reset_approvecode">reset_approvecode() (Enrollment method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.reset_approvecode">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.reset_approvecode4callsign">reset_approvecode4callsign() (Enrollment class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.reset_approvecode4callsign">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.reset_invitecode">reset_invitecode() (EnrollmentPool method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.reset_invitecode">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.retry_interval">retry_interval (DBConfig attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.retry_interval">[1]</a>
 </li>
@@ -1877,6 +1899,18 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.views.return_mtlsjwt_payload_permissive">return_mtlsjwt_payload_permissive() (in module rasenmaeher_api.web.api.checkauth.views)</a>
 </li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.views.return_validadmin_payload">return_validadmin_payload() (in module rasenmaeher_api.web.api.checkauth.views)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/checkauth/views/index.html#rasenmaeher_api.web.api.checkauth.views.return_validuser_payload">return_validuser_payload() (in module rasenmaeher_api.web.api.checkauth.views)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.revoke">revoke() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.revoke">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.revoke_pem">revoke_pem() (in module rasenmaeher_api.cfssl.private)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.revoke_reason">revoke_reason (Person attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.revoke_reason">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.revoke_serial">revoke_serial() (in module rasenmaeher_api.cfssl.private)</a>
+</li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.rm_jwt_client">rm_jwt_client() (in module tests.conftest)</a>
 </li>
       <li><a href="technical/api/fakewerk/index.html#fakewerk.RM_MANIFEST_PATH">RM_MANIFEST_PATH (in module fakewerk)</a>
@@ -1888,6 +1922,10 @@
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.role">role (Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.role">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.roles">roles() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.roles">[1]</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Person.roles_set">roles_set() (Person method)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Person.roles_set">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/checkauth/index.html#rasenmaeher_api.web.api.checkauth.router">router (in module rasenmaeher_api.web.api.checkauth)</a>
 
@@ -1919,18 +1957,12 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.views.router">(in module rasenmaeher_api.web.api.utils.views)</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.SqliteDB.run_command">run_command() (SqliteDB method)</a>
-</li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.save_key">save_key() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.save_pfx">save_pfx() (in module rasenmaeher_api.web.api.enduserpfx.views)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesRequest.Config.schema_extra">schema_extra (CertificatesRequest.Config attribute)</a>
 
       <ul>
@@ -1939,14 +1971,6 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.Config.schema_extra">(EnrollmentAcceptIn.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.Config.schema_extra">(EnrollmentAcceptOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAddServiceManagementIn.Config.schema_extra">(EnrollmentAddServiceManagementIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.Config.schema_extra">(EnrollmentConfigSetDLCertIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.Config.schema_extra">(EnrollmentConfigSetMtlsIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.Config.schema_extra">(EnrollmentConfigSetStateIn.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigTaskDone.Config.schema_extra">(EnrollmentConfigTaskDone.Config attribute)</a>
 </li>
@@ -1990,24 +2014,6 @@
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeOut.Config.schema_extra">(FirstuserCheckCodeOut.Config attribute)</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.Config.schema_extra">(FirstuserDeleteAdminIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminOut.Config.schema_extra">(FirstuserDeleteAdminOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableIn.Config.schema_extra">(FirstuserDisableIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDisableOut.Config.schema_extra">(FirstuserDisableOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableIn.Config.schema_extra">(FirstuserEnableIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserEnableOut.Config.schema_extra">(FirstuserEnableOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserIsActiveOut.Config.schema_extra">(FirstuserIsActiveOut.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.Config.schema_extra">(FirstuserListAdminIn.Config attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminOut.Config.schema_extra">(FirstuserListAdminOut.Config attribute)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.JWTExchangeRequestResponse.Config.schema_extra">(JWTExchangeRequestResponse.Config attribute)</a>
 </li>
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeCreateRequest.Config.schema_extra">(LoginCodeCreateRequest.Config attribute)</a>
@@ -2015,16 +2021,12 @@
         <li><a href="technical/api/rasenmaeher_api/web/api/tokens/schema/index.html#rasenmaeher_api.web.api.tokens.schema.LoginCodeRequestResponse.Config.schema_extra">(LoginCodeRequestResponse.Config attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken">SeenToken (class in rasenmaeher_api.db)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken">(class in rasenmaeher_api.db.nonces)</a>
-</li>
-      </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken.Config">SeenToken.Config (class in rasenmaeher_api.db)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken.Config">(class in rasenmaeher_api.db.nonces)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sentry_dsn">sentry_dsn (Settings attribute)</a>
@@ -2035,8 +2037,6 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.EnrollmentPool.set_active">set_active() (EnrollmentPool method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.EnrollmentPool.set_active">[1]</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.set_for_all">set_for_all (EnrollmentConfigSetMtlsIn attribute)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings">Settings (class in rasenmaeher_api.settings)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.settings">settings (in module rasenmaeher_api.settings)</a>
@@ -2046,120 +2046,26 @@
       <li><a href="technical/api/fpinit/index.html#fpinit.sign_csr">sign_csr() (in module fpinit)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.views.sign_csr">(in module rasenmaeher_api.web.api.enduserpfx.views)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.views.sign_csr">(in module rasenmaeher_api.web.api.product.views)</a>
+        <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.sign_csr">(in module rasenmaeher_api.cfssl.private)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.views.signal_ready">signal_ready() (in module rasenmaeher_api.web.api.product.views)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.singleton">singleton() (DBConfig class method)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.singleton">[1]</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.sqlite">sqlite (in module rasenmaeher_api.sqlitedatabase)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_enrollment_where_hash">sqlite_del_from_enrollment_where_hash (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_hash">sqlite_del_from_management_where_hash (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_hash_like">sqlite_del_from_management_where_hash_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_del_from_management_where_special_rule_like">sqlite_del_from_management_where_special_rule_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_enrollement_table_schema">sqlite_enrollement_table_schema (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_filepath_dev">sqlite_filepath_dev (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_filepath_prod">sqlite_filepath_prod (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_first_time_user_hash">sqlite_first_time_user_hash (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_healtcheck_query">sqlite_healtcheck_query (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_init_management_hash">sqlite_init_management_hash (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_enrollment">sqlite_insert_into_enrollment (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_jwt">sqlite_insert_into_jwt (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_management">sqlite_insert_into_management (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_insert_into_services">sqlite_insert_into_services (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_sel_from_jwt_where_exchange">sqlite_jwt_sel_from_jwt_where_exchange (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_table_schema">sqlite_jwt_table_schema (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_jwt_update_consumed_where_exchange">sqlite_jwt_update_consumed_where_exchange (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_management_table_schema">sqlite_management_table_schema (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment">sqlite_sel_from_enrollment (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_all">sqlite_sel_from_enrollment_all (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_where_hash">sqlite_sel_from_enrollment_where_hash (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_enrollment_where_verification_code">sqlite_sel_from_enrollment_where_verification_code (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management">sqlite_sel_from_management (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_and_special_rule_like">sqlite_sel_from_management_where_hash_and_special_rule_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_like">sqlite_sel_from_management_where_hash_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_hash_like_and_special_rule">sqlite_sel_from_management_where_hash_like_and_special_rule (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_management_where_special_rule_like">sqlite_sel_from_management_where_special_rule_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_sel_from_services">sqlite_sel_from_services (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_services_table_schema">sqlite_services_table_schema (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_accept_enrollment">sqlite_update_accept_enrollment (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_cert_dl_link">sqlite_update_enrollment_cert_dl_link (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_cert_howto_dl_link">sqlite_update_enrollment_cert_howto_dl_link (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_locked_state">sqlite_update_enrollment_locked_state (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_mtls_test_link">sqlite_update_enrollment_mtls_test_link (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_mtls_test_link_all">sqlite_update_enrollment_mtls_test_link_all (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_state">sqlite_update_enrollment_state (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_enrollment_verification_code">sqlite_update_enrollment_verification_code (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_from_management_where_management_like">sqlite_update_from_management_where_management_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_from_management_where_special_rule_like">sqlite_update_from_management_where_special_rule_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_management_rules">sqlite_update_management_rules (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.sqlite_update_management_state">sqlite_update_management_state (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.SqliteDB">SqliteDB (class in rasenmaeher_api.sqlitedatabase)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.ssl">ssl (DBConfig attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.ssl">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/enrollments/index.html#rasenmaeher_api.db.enrollments.Enrollment.state">state (Enrollment attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Enrollment.state">[1]</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.state">(EnrollmentConfigSetStateIn attribute)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.state">(EnrollmentShowVerificationCodeOut attribute)</a>
 </li>
       </ul></li>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.status">status (EnrollmentStatusOut attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.success">success (EnrollmentListOut attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.KeyCloakConnString.success">success (KeyCloakConnString attribute)</a>
 
       <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.KeyCloakConnString.success">(KeyCloakConnString attribute)</a>
-</li>
         <li><a href="technical/api/rasenmaeher_api/web/api/utils/schema/index.html#rasenmaeher_api.web.api.utils.schema.LdapConnString.success">(LdapConnString attribute)</a>
 </li>
       </ul></li>
@@ -2172,24 +2078,28 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserCheckCodeIn.temp_admin_code">temp_admin_code (FirstuserCheckCodeIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.temp_admin_code">(FirstuserDeleteAdminIn attribute)</a>
 </li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserListAdminIn.temp_admin_code">(FirstuserListAdminIn attribute)</a>
-</li>
-      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.TEMP_DIR">TEMP_DIR (in module rasenmaeher_api.settings)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/sqlitedatabase/index.html#rasenmaeher_api.sqlitedatabase.TEMP_DIR">(in module rasenmaeher_api.sqlitedatabase)</a>
 </li>
-      </ul></li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_accept">test_accept() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_accept_as_usr">test_accept_as_usr() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_accept_no_such_user">test_accept_no_such_user() (in module tests.test_enrollment)</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.test_api_client_cert_header_value">test_api_client_cert_header_value (Settings attribute)</a>
+</li>
+      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_code_exchange_and_admin_creation">test_code_exchange_and_admin_creation() (in module tests.test_firstuser)</a>
+</li>
+      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_code_exchange_bad_code">test_code_exchange_bad_code() (in module tests.test_firstuser)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_jwt_init/index.html#tests.tlstests.test_jwt_init.test_create">test_create() (in module tests.tlstests.test_jwt_init)</a>
 </li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_create_as_usr">test_create_as_usr() (in module tests.test_enrollment)</a>
+</li>
       <li><a href="technical/api/tests/tlstests/test_jwt_init/index.html#tests.tlstests.test_jwt_init.test_create_password">test_create_password() (in module tests.tlstests.test_jwt_init)</a>
+</li>
+      <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_crl_route">test_crl_route() (in module tests.test_cfssl)</a>
 </li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_dbconfig_defaults">test_dbconfig_defaults() (in module tests.test_db)</a>
 </li>
@@ -2197,39 +2107,33 @@
 </li>
       <li><a href="technical/api/tests/tlstests/test_jwt_init/index.html#tests.tlstests.test_jwt_init.test_empty_response">test_empty_response() (in module tests.tlstests.test_jwt_init)</a>
 </li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_enroll_show_verif_code">test_enroll_show_verif_code() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_enroll_show_verifcode_bad_code">test_enroll_show_verifcode_bad_code() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_enroll_verif_code">test_enroll_verif_code() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_enroll_verif_code_fail_no_jwt">test_enroll_verif_code_fail_no_jwt() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_enroll_with_invite_code">test_enroll_with_invite_code() (in module tests.test_enrollment)</a>
+</li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_enrollmentpools_crud">test_enrollmentpools_crud() (in module tests.test_db)</a>
+</li>
+      <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_enrollmentpools_list">test_enrollmentpools_list() (in module tests.test_db)</a>
 </li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_enrollments_crud">test_enrollments_crud() (in module tests.test_db)</a>
 </li>
+      <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_enrollments_list">test_enrollments_list() (in module tests.test_db)</a>
+</li>
       <li><a href="technical/api/tests/tlstests/test_productapi/index.html#tests.tlstests.test_productapi.test_failure_is_none">test_failure_is_none() (in module tests.tlstests.test_productapi)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_get_check_code">test_get_check_code() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_get_ca">test_get_ca() (in module tests.test_cfssl)</a>
 </li>
       <li><a href="technical/api/tests/test_tokens/index.html#tests.test_tokens.test_get_code">test_get_code() (in module tests.test_tokens)</a>
 </li>
       <li><a href="technical/api/tests/test_tokens/index.html#tests.test_tokens.test_get_code_422">test_get_code_422() (in module tests.test_tokens)</a>
 </li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error">test_get_enrollment_deliver_error() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error_not_finished">test_get_enrollment_deliver_error_not_finished() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_error_not_found">test_get_enrollment_deliver_error_not_found() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_deliver_kissa">test_get_enrollment_deliver_kissa() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_invitecode_check">test_get_enrollment_invitecode_check() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_invitecode_check_fail">test_get_enrollment_invitecode_check_fail() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_list">test_get_enrollment_list() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_error">test_get_enrollment_status_error() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_kissa">test_get_enrollment_status_kissa() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_get_enrollment_status_nope">test_get_enrollment_status_nope() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_get_firstuser">test_get_firstuser() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_get_crl">test_get_crl() (in module tests.test_cfssl)</a>
 </li>
       <li><a href="technical/api/tests/test_healthcheck/index.html#tests.test_healthcheck.test_get_healthcheck">test_get_healthcheck() (in module tests.test_healthcheck)</a>
 </li>
@@ -2237,17 +2141,31 @@
 </li>
       <li><a href="technical/api/tests/test_healthcheck/index.html#tests.test_healthcheck.test_get_healthcheck_services">test_get_healthcheck_services() (in module tests.test_healthcheck)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_get_list_admin">test_get_list_admin() (in module tests.test_firstuser)</a>
-</li>
       <li><a href="technical/api/tests/test_rasenmaeher_api/index.html#tests.test_rasenmaeher_api.test_get_openapi_json">test_get_openapi_json() (in module tests.test_rasenmaeher_api)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_rminit_session/index.html#tests.tlstests.test_rminit_session.test_get_session">test_get_session() (in module tests.tlstests.test_rminit_session)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_caroutes/index.html#tests.tlstests.test_caroutes.test_have_csrfile">test_have_csrfile() (in module tests.tlstests.test_caroutes)</a>
 </li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_have_i_been_accepted_no">test_have_i_been_accepted_no() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_have_i_been_accepted_no_jwt">test_have_i_been_accepted_no_jwt() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_have_i_been_accepted_yes">test_have_i_been_accepted_yes() (in module tests.test_enrollment)</a>
+</li>
       <li><a href="technical/api/tests/tlstests/test_caroutes/index.html#tests.tlstests.test_caroutes.test_have_mtlscert">test_have_mtlscert() (in module tests.tlstests.test_caroutes)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_productapi/index.html#tests.tlstests.test_productapi.test_hello">test_hello() (in module tests.tlstests.test_productapi)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_init_as_usr">test_init_as_usr() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_invite_code">test_invite_code() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_invitecode_activate">test_invitecode_activate() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_invitecode_create">test_invitecode_create() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_invitecode_dectivate">test_invitecode_dectivate() (in module tests.test_enrollment)</a>
 </li>
       <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_jwt_both_notp">test_jwt_both_notp() (in module tests.test_auth)</a>
 </li>
@@ -2256,6 +2174,14 @@
       <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_jwt_jwt">test_jwt_jwt() (in module tests.test_auth)</a>
 </li>
       <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_jwt_mtls">test_jwt_mtls() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_list_as_adm">test_list_as_adm() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_list_as_usr">test_list_as_usr() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_lock">test_lock() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_lock_as_usr">test_lock_as_usr() (in module tests.test_enrollment)</a>
 </li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_logincodes_crud">test_logincodes_crud() (in module tests.test_db)</a>
 </li>
@@ -2267,89 +2193,43 @@
 </li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_person_crud">test_person_crud() (in module tests.test_db)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_post_add_admin">test_post_add_admin() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert">test_person_with_cert() (in module tests.test_db)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_post_add_disable">test_post_add_disable() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert_cfsslfail">test_person_with_cert_cfsslfail() (in module tests.test_db)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_post_add_enable">test_post_add_enable() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_person_with_cert_duplicatename">test_person_with_cert_duplicatename() (in module tests.test_db)</a>
 </li>
-      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_post_delete_admin">test_post_delete_admin() (in module tests.test_firstuser)</a>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_init">test_post_init() (in module tests.test_enrollment)</a>
 </li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept">test_post_enrollment_accept() (in module tests.test_enrollment)</a>
+      <li><a href="technical/api/tests/test_firstuser/index.html#tests.test_firstuser.test_post_with_admin_client">test_post_with_admin_client() (in module tests.test_firstuser)</a>
 </li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_enroll">test_post_enrollment_accept_fail_oopsie_enroll() (in module tests.test_enrollment)</a>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_promote_as_usr">test_promote_as_usr() (in module tests.test_enrollment)</a>
 </li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_oopsie_permitstr">test_post_enrollment_accept_fail_oopsie_permitstr() (in module tests.test_enrollment)</a>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_promote_demote">test_promote_demote() (in module tests.test_enrollment)</a>
 </li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_enroll">test_post_enrollment_accept_fail_wrong_enroll() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_accept_fail_wrong_permit">test_post_enrollment_accept_fail_wrong_permit() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_add_mgr">test_post_enrollment_config_add_mgr() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_fail_mgr_bad_perm_str">test_post_enrollment_config_fail_mgr_bad_perm_str() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_fail_mgr_short">test_post_enrollment_config_fail_mgr_short() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_howto_setdl_success_work_id">test_post_enrollment_config_howto_setdl_success_work_id() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_missing">test_post_enrollment_config_setdl_fail_missing() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link">test_post_enrollment_config_setdl_fail_oopsie_link() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_oopsie_link2">test_post_enrollment_config_setdl_fail_oopsie_link2() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_fail_permit_oopsie">test_post_enrollment_config_setdl_fail_permit_oopsie() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_id">test_post_enrollment_config_setdl_success_work_id() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setdl_success_work_idhash">test_post_enrollment_config_setdl_success_work_idhash() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail">test_post_enrollment_config_setmtlstest_fail() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_fail_oopsie">test_post_enrollment_config_setmtlstest_fail_oopsie() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_all">test_post_enrollment_config_setmtlstest_success_all() (in module tests.test_enrollment)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setmtlstest_success_work_id">test_post_enrollment_config_setmtlstest_success_work_id() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_both_missing">test_post_enrollment_config_setstate_fail_both_missing() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_missing_value">test_post_enrollment_config_setstate_fail_missing_value() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_fail_oopsie_state">test_post_enrollment_config_setstate_fail_oopsie_state() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_config_setstate_success_work_id">test_post_enrollment_config_setstate_success_work_id() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_get_verification_code">test_post_enrollment_get_verification_code() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init">test_post_enrollment_init() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init_already_enrolled">test_post_enrollment_init_already_enrolled() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_init_missing_values">test_post_enrollment_init_missing_values() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_create">test_post_enrollment_invitecode_create() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_create_fail">test_post_enrollment_invitecode_create_fail() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll">test_post_enrollment_invitecode_enroll() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll_already_active">test_post_enrollment_invitecode_enroll_already_active() (in module tests.test_enrollment)</a>
-</li>
-      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_post_enrollment_invitecode_enroll_invalid">test_post_enrollment_invitecode_enroll_invalid() (in module tests.test_enrollment)</a>
+      <li><a href="technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_reasons">test_reasons() (in module tests.test_cfssl)</a>
 </li>
       <li><a href="technical/api/tests/test_tokens/index.html#tests.test_tokens.test_refresh_jwt">test_refresh_jwt() (in module tests.test_tokens)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/tests/tlstests/test_jwt_init/index.html#tests.tlstests.test_jwt_init.test_rm_jwt_session">test_rm_jwt_session() (in module tests.tlstests.test_jwt_init)</a>
 </li>
       <li><a href="technical/api/tests/test_db/index.html#tests.test_db.test_seentokens_crud">test_seentokens_crud() (in module tests.test_db)</a>
 </li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_show_verifcode_no_jwt">test_show_verifcode_no_jwt() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_show_verifcode_no_permission">test_show_verifcode_no_permission() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_show_verifcode_sub_is_bonkers">test_show_verifcode_sub_is_bonkers() (in module tests.test_enrollment)</a>
+</li>
       <li><a href="technical/api/tests/tlstests/test_caroutes/index.html#tests.tlstests.test_caroutes.test_sign">test_sign() (in module tests.tlstests.test_caroutes)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_caroutes/index.html#tests.tlstests.test_caroutes.test_sign_twice">test_sign_twice() (in module tests.tlstests.test_caroutes)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_status_koira">test_status_koira() (in module tests.test_enrollment)</a>
+</li>
+      <li><a href="technical/api/tests/test_enrollment/index.html#tests.test_enrollment.test_status_not_found">test_status_not_found() (in module tests.test_enrollment)</a>
 </li>
       <li><a href="technical/api/tests/test_tokens/index.html#tests.test_tokens.test_use_code">test_use_code() (in module tests.test_tokens)</a>
 </li>
@@ -2362,6 +2242,14 @@
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.test_user_secrets">test_user_secrets() (in module tests.conftest)</a>
 </li>
       <li><a href="technical/api/tests/tlstests/test_productapi/index.html#tests.tlstests.test_productapi.test_user_update">test_user_update() (in module tests.tlstests.test_productapi)</a>
+</li>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_admin_jwt">test_valid_admin_jwt() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_admin_mtls">test_valid_admin_mtls() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_user_jwt">test_valid_user_jwt() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.test_valid_user_mtls">test_valid_user_mtls() (in module tests.test_auth)</a>
 </li>
       <li><a href="technical/api/tests/test_rasenmaeher_api/index.html#tests.test_rasenmaeher_api.test_version">test_version() (in module tests.test_rasenmaeher_api)</a>
 </li>
@@ -2386,6 +2274,13 @@
 
       <ul>
         <li><a href="technical/api/tests/test_auth/index.html#module-tests.test_auth">module</a>
+</li>
+      </ul></li>
+      <li>
+    tests.test_cfssl
+
+      <ul>
+        <li><a href="technical/api/tests/test_cfssl/index.html#module-tests.test_cfssl">module</a>
 </li>
       </ul></li>
       <li>
@@ -2485,6 +2380,10 @@
 </li>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_user_client">tilauspalvelu_jwt_user_client() (in module tests.conftest)</a>
 </li>
+      <li><a href="technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_user_koira_client">tilauspalvelu_jwt_user_koira_client() (in module tests.conftest)</a>
+</li>
+      <li><a href="technical/api/tests/conftest/index.html#tests.conftest.tilauspalvelu_jwt_without_proper_user_client">tilauspalvelu_jwt_without_proper_user_client() (in module tests.conftest)</a>
+</li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken.token">token (SeenToken attribute)</a>, <a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken.token">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/web/api/tokens/views/index.html#rasenmaeher_api.web.api.tokens.views.TOKEN_COPY_EXCLUDE_FIELDS">TOKEN_COPY_EXCLUDE_FIELDS (in module rasenmaeher_api.web.api.tokens.views)</a>
@@ -2495,7 +2394,9 @@
 </li>
       <li><a href="technical/api/fakewerk/index.html#fakewerk.TP_PUBKEY_PATH">TP_PUBKEY_PATH (in module fakewerk)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayload.type">type (MTLSorJWTPayload attribute)</a>
+      <li><a href="technical/api/tests/test_auth/index.html#tests.test_auth.two_users">two_users() (in module tests.test_auth)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload.type">type (MTLSorJWTPayload attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2505,13 +2406,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.unauth_client">unauth_client() (in module tests.conftest)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.update_invite_code_state">update_invite_code_state() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.update_management_hash_like">update_management_hash_like (Settings attribute)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.views.update_management_hash_permissions">update_management_hash_permissions() (in module rasenmaeher_api.web.api.enrollment.views)</a>
-</li>
-      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.BaseModel.updated">updated (BaseModel attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.ORMBaseModel.updated">updated (ORMBaseModel attribute)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.updated">(Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.updated">[1]</a>
@@ -2527,8 +2422,6 @@
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.SeenToken.use_token">use_token() (SeenToken class method)</a>, <a href="technical/api/rasenmaeher_api/db/nonces/index.html#rasenmaeher_api.db.nonces.SeenToken.use_token">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.LoginCode.used_on">used_on (LoginCode attribute)</a>, <a href="technical/api/rasenmaeher_api/db/logincodes/index.html#rasenmaeher_api.db.logincodes.LoginCode.used_on">[1]</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/config/index.html#rasenmaeher_api.db.config.DBConfig.user">user (DBConfig attribute)</a>, <a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.DBConfig.user">[1]</a>
@@ -2537,17 +2430,33 @@
         <li><a href="technical/api/rasenmaeher_api/db/index.html#rasenmaeher_api.db.Role.user">(Role attribute)</a>, <a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.Role.user">[1]</a>
 </li>
       </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_created">user_created() (in module rasenmaeher_api.user_integrations)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.user_created">user_created() (in module rasenmaeher_api.db.people)</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_created">(in module rasenmaeher_api.user_integrations)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_demoted">user_demoted() (in module rasenmaeher_api.user_integrations)</a>
+      </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.user_demoted">user_demoted() (in module rasenmaeher_api.db.people)</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_demoted">(in module rasenmaeher_api.user_integrations)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_promoted">user_promoted() (in module rasenmaeher_api.user_integrations)</a>
+      </ul></li>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.user_promoted">user_promoted() (in module rasenmaeher_api.db.people)</a>
+
+      <ul>
+        <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_promoted">(in module rasenmaeher_api.user_integrations)</a>
 </li>
+      </ul></li>
       <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_removed">user_removed() (in module rasenmaeher_api.user_integrations)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.people.user_revoked">user_revoked() (in module rasenmaeher_api.db.people)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/user_integrations/index.html#rasenmaeher_api.user_integrations.user_updated">user_updated() (in module rasenmaeher_api.user_integrations)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/index.html#rasenmaeher_api.web.api.middleware.MTLSorJWTPayload.userid">userid (MTLSorJWTPayload attribute)</a>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/datatypes/index.html#rasenmaeher_api.web.api.middleware.datatypes.MTLSorJWTPayload.userid">userid (MTLSorJWTPayload attribute)</a>
 </li>
       <li><a href="technical/api/rasenmaeher_api/db/base/index.html#rasenmaeher_api.db.base.utcnow">utcnow (in module rasenmaeher_api.db.base)</a>
 </li>
@@ -2557,14 +2466,18 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="technical/api/rasenmaeher_api/cfssl/private/index.html#rasenmaeher_api.cfssl.private.validate_reason">validate_reason() (in module rasenmaeher_api.cfssl.private)</a>
+</li>
+      <li><a href="technical/api/rasenmaeher_api/web/api/middleware/user/index.html#rasenmaeher_api.web.api.middleware.user.ValidUser">ValidUser (class in rasenmaeher_api.web.api.middleware.user)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentGenVerifiOut.verification_code">verification_code (EnrollmentGenVerifiOut attribute)</a>
 
       <ul>
         <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeIn.verification_code">(EnrollmentShowVerificationCodeIn attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/tests/conftest/index.html#tests.conftest.verifier">verifier() (in module tests.conftest)</a>
 </li>
   </ul></td>
@@ -2575,68 +2488,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.LogLevel.WARNING">WARNING (LogLevel attribute)</a>
 </li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id">work_id (EnrollmentConfigSetDLCertIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id">(EnrollmentConfigSetMtlsIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetStateIn.work_id">(EnrollmentConfigSetStateIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id">(EnrollmentDeliverOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id">(EnrollmentDemoteIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.work_id">(EnrollmentInitIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id">(EnrollmentInitOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn.work_id">(EnrollmentInviteCodeEnrollIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id">(EnrollmentLockIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id">(EnrollmentPromoteIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id">(EnrollmentShowVerificationCodeOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusIn.work_id">(EnrollmentStatusIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id">(EnrollmentStatusOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserAddAdminIn.work_id">(FirstuserAddAdminIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/firstuser/schema/index.html#rasenmaeher_api.web.api.firstuser.schema.FirstuserDeleteAdminIn.work_id">(FirstuserDeleteAdminIn attribute)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.work_id_hash">work_id_hash (EnrollmentAcceptIn attribute)</a>
-
-      <ul>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptOut.work_id_hash">(EnrollmentAcceptOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetDLCertIn.work_id_hash">(EnrollmentConfigSetDLCertIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentConfigSetMtlsIn.work_id_hash">(EnrollmentConfigSetMtlsIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverIn.work_id_hash">(EnrollmentDeliverIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDeliverOut.work_id_hash">(EnrollmentDeliverOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentDemoteIn.work_id_hash">(EnrollmentDemoteIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.work_id_hash">(EnrollmentInitOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentLockIn.work_id_hash">(EnrollmentLockIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPromoteIn.work_id_hash">(EnrollmentPromoteIn attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentShowVerificationCodeOut.work_id_hash">(EnrollmentShowVerificationCodeOut attribute)</a>
-</li>
-        <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentStatusOut.work_id_hash">(EnrollmentStatusOut attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.work_id_list">work_id_list (EnrollmentListOut attribute)</a>
-</li>
       <li><a href="technical/api/rasenmaeher_api/settings/index.html#rasenmaeher_api.settings.Settings.workers_count">workers_count (Settings attribute)</a>
 </li>
   </ul></td>

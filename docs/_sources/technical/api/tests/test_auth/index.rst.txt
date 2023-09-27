@@ -18,6 +18,8 @@ Functions
 
 .. autoapisummary::
 
+   tests.test_auth.two_users
+   tests.test_auth.check_response
    tests.test_auth.test_jwt_jwt
    tests.test_auth.test_mtls_jwt
    tests.test_auth.test_mtls_mtls
@@ -25,6 +27,10 @@ Functions
    tests.test_auth.test_jwt_both_permissive
    tests.test_auth.test_jwt_both_notp
    tests.test_auth.test_mtls_both
+   tests.test_auth.test_valid_user_mtls
+   tests.test_auth.test_valid_user_jwt
+   tests.test_auth.test_valid_admin_mtls
+   tests.test_auth.test_valid_admin_jwt
 
 
 
@@ -39,6 +45,17 @@ Attributes
 .. py:data:: LOGGER
 
    
+
+.. py:function:: two_users(ginosession)
+   :async:
+
+   First one is normal, second is admin
+
+
+.. py:function:: check_response(resp, expect_type)
+
+   Check the response
+
 
 .. py:function:: test_jwt_jwt(tilauspalvelu_jwt_client)
    :async:
@@ -80,5 +97,29 @@ Attributes
    :async:
 
    Test JWT-or-mTLS -check endpoint with mTLS authenticated client
+
+
+.. py:function:: test_valid_user_mtls(unauth_client, two_users)
+   :async:
+
+   Test the valid user endpoint with valid and invalid CNs
+
+
+.. py:function:: test_valid_user_jwt(unauth_client, two_users)
+   :async:
+
+   Test the valid user endpoint with valid and invalid subs
+
+
+.. py:function:: test_valid_admin_mtls(unauth_client, two_users)
+   :async:
+
+   Test the valid user endpoint with admin and non-admin CNs
+
+
+.. py:function:: test_valid_admin_jwt(unauth_client, two_users)
+   :async:
+
+   Test the valid user endpoint with admin and non-admin subs
 
 
