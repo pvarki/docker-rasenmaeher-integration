@@ -282,6 +282,11 @@ Classes
 
       
 
+   .. py:attribute:: approvecode
+      :type: str
+
+      
+
    .. py:attribute:: jwt
       :type: str
 
@@ -370,6 +375,11 @@ Classes
 
 
    .. py:attribute:: callsign
+      :type: str
+
+      
+
+   .. py:attribute:: approvecode
       :type: str
 
       

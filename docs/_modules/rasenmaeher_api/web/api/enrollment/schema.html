@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.1 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.3 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
+        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.1
+                0.6.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -83,7 +83,7 @@
 <span></span><span class="sd">&quot;&quot;&quot;Schema for enrollment.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Extra</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Extra</span><span class="p">,</span> <span class="n">Field</span>
 
 
 <div class="viewcode-block" id="EnrollmentGenVerifiOut">
@@ -288,7 +288,7 @@
 
 <div class="viewcode-block" id="EnrollmentInitIn.callsign">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.callsign">[docs]</a>
-    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Callsign to create enrollment for&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentInitIn.Config">
@@ -304,14 +304,6 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This containts **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Plain text enrollment role id&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
                 <span class="p">{</span>
                     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
@@ -334,11 +326,17 @@
 
 <div class="viewcode-block" id="EnrollmentInitOut.callsign">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.callsign">[docs]</a>
-    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Callsign for which the enrollment got initialized&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentInitOut.approvecode">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.approvecode">[docs]</a>
+    <span class="n">approvecode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Code used to approve the enrollment, must be delivered to an admin&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EnrollmentInitOut.jwt">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.jwt">[docs]</a>
-    <span class="n">jwt</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">jwt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;JWT that allows client to check enrollment approval status and fetc mTLS certs when approved&quot;</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentInitOut.Config">
@@ -354,8 +352,9 @@
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut.Config.schema_extra">[docs]</a>
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;example&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] User defined username/id/callsign&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;jwt&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] jwt token needed for later use&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;OTTER01a&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="s2">&quot;12DFEE34555&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;jwt&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span></div>
 </div>
@@ -433,7 +432,13 @@
 
 <div class="viewcode-block" id="EnrollmentAcceptIn.callsign">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.callsign">[docs]</a>
-    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Callsign to approve&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentAcceptIn.approvecode">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentAcceptIn.approvecode">[docs]</a>
+    <span class="n">approvecode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Approval code for the callsign, this must have been delivered by the person to be enrolled&quot;</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="EnrollmentAcceptIn.Config">
@@ -450,19 +455,12 @@
         <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Description text&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This contains **description** of values.&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;[str] - Enrollment callsign.&quot;</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
                     <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;with_values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Example values&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;**Example** values.&quot;</span><span class="p">,</span>
                     <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
                         <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa123&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="s2">&quot;HGRTR43267&quot;</span><span class="p">,</span>
                     <span class="p">},</span>
                 <span class="p">},</span>
             <span class="p">]</span>

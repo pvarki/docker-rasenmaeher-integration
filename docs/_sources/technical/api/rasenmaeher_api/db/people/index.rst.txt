@@ -32,7 +32,6 @@ Functions
    rasenmaeher_api.db.people.user_revoked
    rasenmaeher_api.db.people.user_promoted
    rasenmaeher_api.db.people.user_demoted
-   rasenmaeher_api.db.people.pem_to_pfx
 
 
 
@@ -127,6 +126,12 @@ Attributes
       :async:
 
       Create the cert etc and save the person
+
+
+   .. py:method:: create_pfx()
+      :async:
+
+      Put cert and key to PKCS12 container
 
 
    .. py:method:: revoke(reason)
@@ -292,10 +297,5 @@ Attributes
    :async:
 
    Old user was demoted from admin (removed role 'admin')
-
-
-.. py:function:: pem_to_pfx(pem_key, pem_cert)
-
-   Convert PEM data to PFX (PKCS12).
 
 

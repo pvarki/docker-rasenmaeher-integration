@@ -31,6 +31,7 @@ Functions
    tests.test_db.test_person_with_cert
    tests.test_db.test_person_with_cert_cfsslfail
    tests.test_db.test_person_with_cert_duplicatename
+   tests.test_db.test_pfx_parse
 
 
 
@@ -120,5 +121,11 @@ Attributes
    :async:
 
    Test the cert creation with the classmethod but reserved callsign
+
+
+.. py:function:: test_pfx_parse(ginosession)
+   :async:
+
+   Test that the PFX file gets done
 
 

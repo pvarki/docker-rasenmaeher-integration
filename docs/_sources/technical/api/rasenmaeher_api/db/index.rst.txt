@@ -251,6 +251,12 @@ Attributes
       Create the cert etc and save the person
 
 
+   .. py:method:: create_pfx()
+      :async:
+
+      Put cert and key to PKCS12 container
+
+
    .. py:method:: revoke(reason)
       :async:
 

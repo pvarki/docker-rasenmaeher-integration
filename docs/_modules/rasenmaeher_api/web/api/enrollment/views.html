@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.1 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.3 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=2bd037f0"></script>
+        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.1
+                0.6.3
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -294,9 +294,11 @@
 
     <span class="c1"># TODO ADD POOL NAME CHECK</span>
 
-    <span class="n">_new_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">_new_enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+    <span class="n">new_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{})</span>
+    <span class="c1"># Create JWT token for user</span>
+    <span class="n">claims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">}</span>
+    <span class="n">new_jwt</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span><span class="n">claims</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">new_enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">new_jwt</span><span class="p">,</span> <span class="n">approvecode</span><span class="o">=</span><span class="n">new_enrollment</span><span class="o">.</span><span class="n">approvecode</span><span class="p">)</span></div>
 
 
 
@@ -320,13 +322,13 @@
 
     <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
-    <span class="n">_role_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">_role_added</span><span class="p">:</span>
+    <span class="n">role_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">role_added</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Promote done&quot;</span><span class="p">)</span>
 
-    <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign already has elevated permissions.&quot;</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span></div>
+    <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign already has elevated permissions.&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">reason</span><span class="p">))</span>
+    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">reason</span><span class="p">)</span></div>
 
 
 
@@ -403,11 +405,13 @@
         <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">_admin_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
-    <span class="n">_pending_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
-    <span class="n">_new_approved_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_pending_enrollment</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">_admin_user</span><span class="p">)</span>
+    <span class="n">admin_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
+    <span class="n">pending_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">approvecode</span> <span class="o">!=</span> <span class="n">pending_enrollment</span><span class="o">.</span><span class="n">approvecode</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid approval code for this enrollment&quot;</span><span class="p">)</span>
+    <span class="n">new_approved_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pending_enrollment</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">admin_user</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">_new_approved_user</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">new_approved_user</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span></div>
 
 
 
@@ -550,10 +554,10 @@
     <span class="n">enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">create_enrollment</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
     <span class="c1"># Create JWT token for user</span>
-    <span class="n">_claims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">}</span>
-    <span class="n">_new_jwt</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span><span class="n">_claims</span><span class="p">)</span>
+    <span class="n">claims</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">}</span>
+    <span class="n">new_jwt</span> <span class="o">=</span> <span class="n">Issuer</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span><span class="n">claims</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">_new_jwt</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentInitOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="n">jwt</span><span class="o">=</span><span class="n">new_jwt</span><span class="p">,</span> <span class="n">approvecode</span><span class="o">=</span><span class="n">enrollment</span><span class="o">.</span><span class="n">approvecode</span><span class="p">)</span></div>
 
 </pre></div>
 
