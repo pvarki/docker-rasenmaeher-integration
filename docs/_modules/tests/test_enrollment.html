@@ -494,7 +494,6 @@
     <span class="n">resp_dict</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;callsign&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="c1"># ACCEPT - ALREADY ACCEPTED</span>
     <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">tilauspalvelu_jwt_admin_client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/api/v1/enrollment/accept&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">json_dict</span><span class="p">)</span>
@@ -735,7 +734,6 @@
     <span class="n">resp_dict</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">resp_dict</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
-    <span class="k">assert</span> <span class="n">resp_dict</span><span class="p">[</span><span class="s2">&quot;callsign&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span>
 
     <span class="c1"># Fetch the PFX</span>
     <span class="n">unauth_client</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">enrique_jwt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>

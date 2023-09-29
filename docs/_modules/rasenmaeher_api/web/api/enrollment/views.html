@@ -88,13 +88,11 @@
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
 
-
+<span class="kn">from</span> <span class="nn">libpvarki.schemas.generic</span> <span class="kn">import</span> <span class="n">OperationResultResponse</span>
 <span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">EnrollmentConfigTaskDone</span><span class="p">,</span>
     <span class="n">EnrollmentStatusIn</span><span class="p">,</span>
     <span class="n">EnrollmentStatusOut</span><span class="p">,</span>
     <span class="n">EnrollmentAcceptIn</span><span class="p">,</span>
-    <span class="n">EnrollmentAcceptOut</span><span class="p">,</span>
     <span class="n">EnrollmentGenVerifiOut</span><span class="p">,</span>
     <span class="n">EnrollmentShowVerificationCodeIn</span><span class="p">,</span>
     <span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">,</span>
@@ -109,9 +107,7 @@
     <span class="n">EnrollmentIsInvitecodeActiveOut</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeEnrollIn</span><span class="p">,</span>
-    <span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeActivateIn</span><span class="p">,</span>
-    <span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeDeactivateIn</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">,</span>
 <span class="p">)</span>
@@ -222,6 +218,7 @@
     <span class="n">enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
 
     <span class="c1"># See state values in db/enrollment.py:EnrollmentState</span>
+
     <span class="k">if</span> <span class="n">enrollment</span><span class="o">.</span><span class="n">decided_by</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">EnrollmentHaveIBeenAcceptedOut</span><span class="p">(</span><span class="n">have_i_been_accepted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -302,7 +299,7 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/promote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/promote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_promote">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_promote">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_promote</span><span class="p">(</span>
@@ -311,7 +308,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentPromoteIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;Promote&quot; callsign/user/enrollment to have &#39;admin&#39; rights</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -324,7 +321,7 @@
 
     <span class="n">role_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">role_added</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Promote done&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;Promote done&quot;</span><span class="p">)</span>
 
     <span class="n">reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign already has elevated permissions.&quot;</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">reason</span><span class="p">))</span>
@@ -332,7 +329,7 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/demote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/demote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_demote">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_demote">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_demote</span><span class="p">(</span>
@@ -341,7 +338,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentDemoteIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;Demote&quot; callsign/user/enrollment from having &#39;admin&#39; rights. callsign_hash can be used too.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -353,7 +350,7 @@
     <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="n">_role_removed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">remove_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">_role_removed</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Demote done&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;Demote done&quot;</span><span class="p">)</span>
 
     <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Given callsign/callsign_hash doesn&#39;t have &#39;admin&#39; privileges to take away.&quot;</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
@@ -361,7 +358,7 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/lock&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentConfigTaskDone</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/lock&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_lock">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_lock">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_lock</span><span class="p">(</span>
@@ -370,7 +367,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentLockIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lock callsign/user/enrollment so it cannot be used anymore.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -383,11 +380,11 @@
     <span class="n">_usr_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">_usr_enrollment</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="n">decider</span><span class="o">=</span><span class="n">_admin_person</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">EnrollmentConfigTaskDone</span><span class="p">(</span><span class="n">success_message</span><span class="o">=</span><span class="s2">&quot;Lock task done&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;Lock task done&quot;</span><span class="p">)</span></div>
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/accept&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentAcceptOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/accept&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="post_enrollment_accept">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_enrollment_accept">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">post_enrollment_accept</span><span class="p">(</span>
@@ -396,7 +393,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentAcceptIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentAcceptOut</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Accept callsign_hash (callsign/enrollment)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -411,7 +408,7 @@
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid approval code for this enrollment&quot;</span><span class="p">)</span>
     <span class="n">new_approved_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pending_enrollment</span><span class="o">.</span><span class="n">approve</span><span class="p">(</span><span class="n">approver</span><span class="o">=</span><span class="n">admin_user</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">EnrollmentAcceptOut</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">new_approved_user</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Approved </span><span class="si">{</span><span class="n">new_approved_user</span><span class="o">.</span><span class="n">callsign</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
 
@@ -436,7 +433,7 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/invitecode/activate&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/invitecode/activate&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="put_activate_invite_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.put_activate_invite_code">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">put_activate_invite_code</span><span class="p">(</span>
@@ -445,7 +442,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="n">EnrollmentInviteCodeActivateIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Activate an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -453,7 +450,7 @@
     <span class="n">_activated_obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">_activated_obj</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentInviteCodeActivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Activated </span><span class="si">{</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Unable to activate given invitecode.&quot;</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
@@ -461,7 +458,7 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/invitecode/deactivate&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;/invitecode/deactivate&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="put_deactivate_invite_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.put_deactivate_invite_code">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">put_deactivate_invite_code</span><span class="p">(</span>
@@ -470,7 +467,7 @@
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="n">EnrollmentInviteCodeDeactivateIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">],</span>
     <span class="p">),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deactivate an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -478,7 +475,7 @@
     <span class="n">_deactivated_obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="n">state</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">_deactivated_obj</span><span class="o">.</span><span class="n">active</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeactivateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="s2">&quot;DISABLED&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Disabled </span><span class="si">{</span><span class="n">request_in</span><span class="o">.</span><span class="n">invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Unable to deactivate given invitecode.&quot;</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
