@@ -21,6 +21,7 @@ Functions
    rasenmaeher_api.prodcutapihelpers.check_kraftwerk_manifest
    rasenmaeher_api.prodcutapihelpers.post_to_all_products
    rasenmaeher_api.prodcutapihelpers.put_to_all_products
+   rasenmaeher_api.prodcutapihelpers.get_from_all_products
    rasenmaeher_api.prodcutapihelpers._method_to_all_products
 
 
@@ -52,6 +53,12 @@ Attributes
    :async:
 
    Call given PUT endpoint on call products in the manifest
+
+
+.. py:function:: get_from_all_products(url_suffix, respose_schema)
+   :async:
+
+   Call given GET endpoint on call products in the manifest
 
 
 .. py:function:: _method_to_all_products(methodname, url_suffix, data, respose_schema)

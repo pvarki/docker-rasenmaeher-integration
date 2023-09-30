@@ -1,0 +1,54 @@
+:py:mod:`rasenmaeher_api.web.api.instructions.views`
+====================================================
+
+.. py:module:: rasenmaeher_api.web.api.instructions.views
+
+.. autoapi-nested-parse::
+
+   Instruction routes
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.instructions.views.admin_instruction_fragment
+   rasenmaeher_api.web.api.instructions.views.user_instruction_fragment
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.instructions.views.LOGGER
+   rasenmaeher_api.web.api.instructions.views.router
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: router
+
+   
+
+.. py:function:: admin_instruction_fragment()
+   :async:
+
+   Return admin instructions
+
+
+.. py:function:: user_instruction_fragment(request)
+   :async:
+
+   Return end-user instructions
+
+

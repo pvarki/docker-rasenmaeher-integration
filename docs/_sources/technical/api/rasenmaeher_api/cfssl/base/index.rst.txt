@@ -20,6 +20,7 @@ Functions
 
    rasenmaeher_api.cfssl.base.get_result
    rasenmaeher_api.cfssl.base.get_result_cert
+   rasenmaeher_api.cfssl.base.get_result_bundle
    rasenmaeher_api.cfssl.base.base_url
    rasenmaeher_api.cfssl.base.anon_session
 
@@ -82,6 +83,12 @@ Attributes
 
 
 .. py:function:: get_result_cert(response)
+   :async:
+
+   Shorthand for checking the response and getting the cert
+
+
+.. py:function:: get_result_bundle(response)
    :async:
 
    Shorthand for checking the response and getting the cert

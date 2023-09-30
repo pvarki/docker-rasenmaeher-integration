@@ -18,7 +18,6 @@ Functions
 
 .. autoapisummary::
 
-   rasenmaeher_api.web.api.enrollment.views.check_management_permissions
    rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_show_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted
@@ -60,12 +59,6 @@ Attributes
 
    
 
-.. py:function:: check_management_permissions(raise_exeption = True, callsign = '', required_role = 'admin')
-   :async:
-
-   Simple function to check if requester has requested role.
-
-
 .. py:function:: post_generate_verification_code(request)
    :async:
 
@@ -93,7 +86,7 @@ Attributes
    Check the status for given callsign (enrollment). status=-1 means that there is no enrollment with given callsign
 
 
-.. py:function:: request_enrollment_list(request)
+.. py:function:: request_enrollment_list()
    :async:
 
    /list
@@ -101,7 +94,7 @@ Attributes
    Returns a list of dicts, callsign_list = [ {  "callsign":'x', 'state':'init', 'approvecode':'' } ]
 
 
-.. py:function:: request_enrollment_init(request, request_in = Body(None, examples=[EnrollmentInitIn.Config.schema_extra['examples']]))
+.. py:function:: request_enrollment_init(request_in = Body(None, examples=[EnrollmentInitIn.Config.schema_extra['examples']]))
    :async:
 
    Add new callsign (enrollment) to environment.

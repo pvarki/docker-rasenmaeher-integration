@@ -1,0 +1,51 @@
+:py:mod:`rasenmaeher_api.web.api.instructions.schema`
+=====================================================
+
+.. py:module:: rasenmaeher_api.web.api.instructions.schema
+
+.. autoapi-nested-parse::
+
+   Instruction response schemas
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments
+
+
+
+
+.. py:class:: AllProdcutsInstructionFragments
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Fragments for all products
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: fragments
+      :type: Dict[str, Optional[libpvarki.schemas.product.UserInstructionFragment]]
+
+      
+
+

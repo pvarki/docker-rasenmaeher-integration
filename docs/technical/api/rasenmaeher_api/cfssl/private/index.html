@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.cfssl.private &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.cfssl.private &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -111,14 +111,20 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.sign_csr" title="rasenmaeher_api.cfssl.private.sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sign_csr</span></code></a>(csr)</p></td>
 <td><p>Quick and dirty method to sign CSR from CFSSL</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.validate_reason" title="rasenmaeher_api.cfssl.private.validate_reason"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_reason</span></code></a>(reason)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.sign_ocsp" title="rasenmaeher_api.cfssl.private.sign_ocsp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sign_ocsp</span></code></a>(cert[, status])</p></td>
+<td><p>Call ocspsign endpoint</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.validate_reason" title="rasenmaeher_api.cfssl.private.validate_reason"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_reason</span></code></a>(reason)</p></td>
 <td><p>Resolve the given reason into the actual flag</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.revoke_pem" title="rasenmaeher_api.cfssl.private.revoke_pem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_pem</span></code></a>(pem, reason)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.revoke_pem" title="rasenmaeher_api.cfssl.private.revoke_pem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_pem</span></code></a>(pem, reason)</p></td>
 <td><p>Read the serial number from the PEM cert and call revoke_serial</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.revoke_serial" title="rasenmaeher_api.cfssl.private.revoke_serial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_serial</span></code></a>(serialno, authority_key_id, reason)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.revoke_serial" title="rasenmaeher_api.cfssl.private.revoke_serial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_serial</span></code></a>(serialno, authority_key_id, reason)</p></td>
 <td><p>Call the CFSSL revoke endpoint</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.private.certadd_pem" title="rasenmaeher_api.cfssl.private.certadd_pem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">certadd_pem</span></code></a>(pem[, status])</p></td>
+<td><p>Read the serial number from the PEM cert and call certadd</p></td>
 </tr>
 </tbody>
 </table>
@@ -157,6 +163,23 @@ returns: certificate</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.cfssl.private.sign_ocsp">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sign_ocsp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'good'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/cfssl/private.html#sign_ocsp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.cfssl.private.sign_ocsp" title="Link to this definition"></a></dt>
+<dd><p>Call ocspsign endpoint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>
@@ -210,6 +233,25 @@ Reason must be one of the enumerations of cryptography.x509.ReasonFlags or it’
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.cfssl.private.certadd_pem">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">certadd_pem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'good'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/cfssl/private.html#certadd_pem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.cfssl.private.certadd_pem" title="Link to this definition"></a></dt>
+<dd><p>Read the serial number from the PEM cert and call certadd
+endpoint</p>
+<p>If path is given it’s read_text()d</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pem</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) – </p></li>
+<li><p><strong>status</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
 </dd>
 </dl>
 </dd></dl>

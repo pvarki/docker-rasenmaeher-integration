@@ -1,0 +1,49 @@
+:py:mod:`tests.usersapis.test_fragments`
+========================================
+
+.. py:module:: tests.usersapis.test_fragments
+
+.. autoapi-nested-parse::
+
+   Testthe fixtures
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_fragments.test_admin_fragment
+   tests.usersapis.test_fragments.test_user_fragment
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_fragments.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_admin_fragment(admin_mtls_client)
+   :async:
+
+   Test admin fragment
+
+
+.. py:function:: test_user_fragment(user_mtls_client)
+   :async:
+
+   Test user framgent
+
+

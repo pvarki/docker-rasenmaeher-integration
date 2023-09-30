@@ -1,0 +1,25 @@
+:py:mod:`tests.usersapis`
+=========================
+
+.. py:module:: tests.usersapis
+
+.. autoapi-nested-parse::
+
+   Test things with users initialized properly via the full login flow
+
+   See: https://github.com/pvarki/python-rasenmaeher-api/issues/4
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   conftest/index.rst
+   test_fixtures/index.rst
+   test_fragments/index.rst
+   test_people/index.rst
+
+

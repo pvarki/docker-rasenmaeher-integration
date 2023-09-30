@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -81,7 +81,7 @@
              
   <h1>Source code for rasenmaeher_api.web.api.enrollment.views</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Enrollment API views.&quot;&quot;&quot;</span>  <span class="c1"># pylint: disable=too-many-lines</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 
@@ -112,6 +112,7 @@
     <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">..middleware.mtls</span> <span class="kn">import</span> <span class="n">MTLSorJWT</span>
+<span class="kn">from</span> <span class="nn">..middleware.user</span> <span class="kn">import</span> <span class="n">ValidUser</span>
 <span class="kn">from</span> <span class="nn">....db</span> <span class="kn">import</span> <span class="n">Person</span>
 <span class="kn">from</span> <span class="nn">....db</span> <span class="kn">import</span> <span class="n">Enrollment</span><span class="p">,</span> <span class="n">EnrollmentPool</span>
 <span class="kn">from</span> <span class="nn">....db.errors</span> <span class="kn">import</span> <span class="n">NotFound</span>
@@ -131,33 +132,6 @@
 
 
 
-<div class="viewcode-block" id="check_management_permissions">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.check_management_permissions">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">check_management_permissions</span><span class="p">(</span>
-    <span class="n">raise_exeption</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">required_role</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;admin&quot;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simple function to check if requester has requested role.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">callsign</span><span class="p">)</span>
-    <span class="n">is_admin</span> <span class="o">=</span> <span class="k">await</span> <span class="n">user</span><span class="o">.</span><span class="n">has_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="n">required_role</span><span class="p">)</span>
-
-    <span class="c1"># Raise exeption if</span>
-    <span class="k">if</span> <span class="n">raise_exeption</span> <span class="ow">and</span> <span class="n">is_admin</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. User doesn&#39;t have required permissions. See system logs.&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Missing role from user : &#39;</span><span class="si">{}</span><span class="s2">&#39;. Required permissions that are missing : &#39;</span><span class="si">{}</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">callsign</span><span class="p">,</span> <span class="n">required_role</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">is_admin</span></div>
-
-
-
 <span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/generate-verification-code&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentGenVerifiOut</span><span class="p">)</span>
 <div class="viewcode-block" id="post_generate_verification_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_generate_verification_code">[docs]</a>
@@ -172,12 +146,15 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/show-verification-code-info&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/show-verification-code-info&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_show_verification_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_show_verification_code">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_show_verification_code</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">params</span><span class="p">:</span> <span class="n">EnrollmentShowVerificationCodeIn</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(),</span>
+    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">EnrollmentShowVerificationCodeIn</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">()</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentShowVerificationCodeOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    /show-verification-code-info?verification_code=jaddajaa</span>
@@ -188,10 +165,6 @@
         <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Verification code cannot be empty or na&quot;</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
 
     <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_approvecode</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">verification_code</span><span class="p">)</span>
 
@@ -245,21 +218,19 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/list&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentListOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/list&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentListOut</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_list">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_list">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_list</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentListOut</span><span class="p">:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EnrollmentListOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    /list</span>
 <span class="sd">    Return users/callsign/enrollments. If &#39;accepted&#39; has something else than &#39;&#39;, it has been accepted.</span>
 <span class="sd">    Returns a list of dicts, callsign_list = [ {  &quot;callsign&quot;:&#39;x&#39;, &#39;state&#39;:&#39;init&#39;, &#39;approvecode&#39;:&#39;&#39; } ]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
 
     <span class="n">_enroll_list</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 
@@ -271,11 +242,14 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/init&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInitOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/init&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInitOut</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_init">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_init">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_init</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
     <span class="n">request_in</span><span class="p">:</span> <span class="n">EnrollmentInitIn</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
         <span class="kc">None</span><span class="p">,</span>
         <span class="n">examples</span><span class="o">=</span><span class="p">[</span><span class="n">EnrollmentInitIn</span><span class="o">.</span><span class="n">Config</span><span class="o">.</span><span class="n">schema_extra</span><span class="p">[</span><span class="s2">&quot;examples&quot;</span><span class="p">]],</span>
@@ -284,10 +258,6 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add new callsign (enrollment) to environment.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
 
     <span class="c1"># TODO ADD POOL NAME CHECK</span>
 
@@ -299,7 +269,11 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/promote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/promote&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_promote">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_promote">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_promote</span><span class="p">(</span>
@@ -313,10 +287,6 @@
 <span class="sd">    &quot;Promote&quot; callsign/user/enrollment to have &#39;admin&#39; rights</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
-
     <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
 
     <span class="n">role_added</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
@@ -329,7 +299,11 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/demote&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/demote&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_demote">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_demote">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_demote</span><span class="p">(</span>
@@ -343,10 +317,6 @@
 <span class="sd">    &quot;Demote&quot; callsign/user/enrollment from having &#39;admin&#39; rights. callsign_hash can be used too.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
-
     <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="n">_role_removed</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">remove_role</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">_role_removed</span><span class="p">:</span>
@@ -358,7 +328,11 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/lock&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/lock&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="request_enrollment_lock">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.request_enrollment_lock">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">request_enrollment_lock</span><span class="p">(</span>
@@ -372,10 +346,6 @@
 <span class="sd">    Lock callsign/user/enrollment so it cannot be used anymore.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
-
     <span class="n">_admin_person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
     <span class="n">_usr_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">_usr_enrollment</span><span class="o">.</span><span class="n">reject</span><span class="p">(</span><span class="n">decider</span><span class="o">=</span><span class="n">_admin_person</span><span class="p">)</span>
@@ -384,7 +354,11 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/accept&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/accept&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="post_enrollment_accept">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_enrollment_accept">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">post_enrollment_accept</span><span class="p">(</span>
@@ -398,10 +372,6 @@
 <span class="sd">    Accept callsign_hash (callsign/enrollment)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
-
     <span class="n">admin_user</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
     <span class="n">pending_enrollment</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request_in</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">request_in</span><span class="o">.</span><span class="n">approvecode</span> <span class="o">!=</span> <span class="n">pending_enrollment</span><span class="o">.</span><span class="n">approvecode</span><span class="p">:</span>
@@ -412,20 +382,17 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/invitecode/create&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/invitecode/create&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">,</span>
+    <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">require_roles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;admin&quot;</span><span class="p">]))],</span>
+<span class="p">)</span>
 <div class="viewcode-block" id="post_invite_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.post_invite_code">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">post_invite_code</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">post_invite_code</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Veriy that the user has permissions to create invite codes</span>
-    <span class="k">await</span> <span class="n">check_management_permissions</span><span class="p">(</span>
-        <span class="n">raise_exeption</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">,</span> <span class="n">required_role</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
-    <span class="p">)</span>
 
     <span class="n">_pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">old_invitecode_for_callsign_tobedeleted</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
 

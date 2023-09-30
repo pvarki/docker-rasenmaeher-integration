@@ -19,9 +19,11 @@ Functions
 .. autoapisummary::
 
    rasenmaeher_api.cfssl.private.sign_csr
+   rasenmaeher_api.cfssl.private.sign_ocsp
    rasenmaeher_api.cfssl.private.validate_reason
    rasenmaeher_api.cfssl.private.revoke_pem
    rasenmaeher_api.cfssl.private.revoke_serial
+   rasenmaeher_api.cfssl.private.certadd_pem
 
 
 
@@ -50,6 +52,12 @@ Attributes
    returns: certificate
 
 
+.. py:function:: sign_ocsp(cert, status = 'good')
+   :async:
+
+   Call ocspsign endpoint
+
+
 .. py:function:: validate_reason(reason)
 
    Resolve the given reason into the actual flag
@@ -71,5 +79,14 @@ Attributes
 
    authority_key_id must be formatted in the way CFSSL expects it
    Reason must be one of the enumerations of cryptography.x509.ReasonFlags or it's string values (see REASONS_BY_VALUE)
+
+
+.. py:function:: certadd_pem(pem, status = 'good')
+   :async:
+
+   Read the serial number from the PEM cert and call certadd
+   endpoint
+
+   If path is given it's read_text()d
 
 

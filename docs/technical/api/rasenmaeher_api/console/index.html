@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.console &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.console &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -121,6 +121,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.add_code" title="rasenmaeher_api.console.add_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_code</span></code></a>(ctx, claims_json)</p></td>
 <td><p>Add new single-use login code</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_pfx" title="rasenmaeher_api.console.get_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pfx</span></code></a>(ctx, callsign, admin)</p></td>
+<td><p>Get PFX for cert+key for the given user, will create the user if needed</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.revoke_user" title="rasenmaeher_api.console.revoke_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_user</span></code></a>(ctx, callsign, reason)</p></td>
+<td><p>Revoke user by callsign</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_jwt" title="rasenmaeher_api.console.get_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_jwt</span></code></a>(ctx, claims_json, nonce)</p></td>
 <td><p>Get RASENMAEHER signed JWT</p></td>
 </tr>
@@ -191,6 +197,42 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ctx</strong> (<em>click.Context</em>) – </p></li>
 <li><p><strong>claims_json</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.console.get_pfx">
+<span class="sig-name descname"><span class="pre">get_pfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/console.html#get_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.console.get_pfx" title="Link to this definition"></a></dt>
+<dd><p>Get PFX for cert+key for the given user, will create the user if needed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>click.Context</em>) – </p></li>
+<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>admin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.console.revoke_user">
+<span class="sig-name descname"><span class="pre">revoke_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/console.html#revoke_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.console.revoke_user" title="Link to this definition"></a></dt>
+<dd><p>Revoke user by callsign</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>click.Context</em>) – </p></li>
+<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>reason</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -110,55 +110,52 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.check_management_permissions" title="rasenmaeher_api.web.api.enrollment.views.check_management_permissions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_management_permissions</span></code></a>([raise_exeption, ...])</p></td>
-<td><p>Simple function to check if requester has requested role.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code" title="rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_generate_verification_code</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code" title="rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_generate_verification_code</span></code></a>(request)</p></td>
 <td><p>Update/Generate verification_code to database for given jwt/mtls</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_show_verification_code" title="rasenmaeher_api.web.api.enrollment.views.request_show_verification_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_show_verification_code</span></code></a>(request[, params])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_show_verification_code" title="rasenmaeher_api.web.api.enrollment.views.request_show_verification_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_show_verification_code</span></code></a>(request[, params])</p></td>
 <td><p>/show-verification-code-info?verification_code=jaddajaa</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted" title="rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_have_i_been_accepted</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted" title="rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_have_i_been_accepted</span></code></a>(request)</p></td>
 <td><p>/have-i-been-accepted</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrolment_status" title="rasenmaeher_api.web.api.enrollment.views.request_enrolment_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrolment_status</span></code></a>([params])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrolment_status" title="rasenmaeher_api.web.api.enrollment.views.request_enrolment_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrolment_status</span></code></a>([params])</p></td>
 <td><p>/status?callsign=xxxx</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_list" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_list</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_list" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_list</span></code></a>()</p></td>
 <td><p>/list</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_init" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_init</span></code></a>(request[, request_in])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_init" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_init</span></code></a>([request_in])</p></td>
 <td><p>Add new callsign (enrollment) to environment.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_promote</span></code></a>(request[, request_in])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_promote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_promote</span></code></a>(request[, request_in])</p></td>
 <td><p>&quot;Promote&quot; callsign/user/enrollment to have 'admin' rights</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_demote" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_demote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_demote</span></code></a>(request[, request_in])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_demote" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_demote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_demote</span></code></a>(request[, request_in])</p></td>
 <td><p>&quot;Demote&quot; callsign/user/enrollment from having 'admin' rights. callsign_hash can be used too.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_lock" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_lock</span></code></a>(request[, request_in])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_lock" title="rasenmaeher_api.web.api.enrollment.views.request_enrollment_lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_enrollment_lock</span></code></a>(request[, request_in])</p></td>
 <td><p>Lock callsign/user/enrollment so it cannot be used anymore.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept" title="rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_enrollment_accept</span></code></a>(request[, request_in])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept" title="rasenmaeher_api.web.api.enrollment.views.post_enrollment_accept"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_enrollment_accept</span></code></a>(request[, request_in])</p></td>
 <td><p>Accept callsign_hash (callsign/enrollment)</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_invite_code" title="rasenmaeher_api.web.api.enrollment.views.post_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_invite_code</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_invite_code" title="rasenmaeher_api.web.api.enrollment.views.post_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_invite_code</span></code></a>(request)</p></td>
 <td><p>Create a new invite code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code" title="rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put_activate_invite_code</span></code></a>(request[, request_in])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code" title="rasenmaeher_api.web.api.enrollment.views.put_activate_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put_activate_invite_code</span></code></a>(request[, request_in])</p></td>
 <td><p>Activate an invite code</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.put_deactivate_invite_code" title="rasenmaeher_api.web.api.enrollment.views.put_deactivate_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put_deactivate_invite_code</span></code></a>(request[, request_in])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.put_deactivate_invite_code" title="rasenmaeher_api.web.api.enrollment.views.put_deactivate_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put_deactivate_invite_code</span></code></a>(request[, request_in])</p></td>
 <td><p>Deactivate an invite code</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.delete_invite_code" title="rasenmaeher_api.web.api.enrollment.views.delete_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_invite_code</span></code></a>(invite_code)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.delete_invite_code" title="rasenmaeher_api.web.api.enrollment.views.delete_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_invite_code</span></code></a>(invite_code)</p></td>
 <td><p>Delete an invite code</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.get_invite_codes" title="rasenmaeher_api.web.api.enrollment.views.get_invite_codes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_invite_codes</span></code></a>([params])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.get_invite_codes" title="rasenmaeher_api.web.api.enrollment.views.get_invite_codes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_invite_codes</span></code></a>([params])</p></td>
 <td><p>/invitecode?invitecode=xxx</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_enroll_invite_code" title="rasenmaeher_api.web.api.enrollment.views.post_enroll_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_enroll_invite_code</span></code></a>(request[, request_in])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.views.post_enroll_invite_code" title="rasenmaeher_api.web.api.enrollment.views.post_enroll_invite_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_enroll_invite_code</span></code></a>(request[, request_in])</p></td>
 <td><p>Enroll with an invite code</p></td>
 </tr>
 </tbody>
@@ -193,24 +190,6 @@
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.views.NO_JWT_ENROLLMENT_ROUTER">
 <span class="sig-name descname"><span class="pre">NO_JWT_ENROLLMENT_ROUTER</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#NO_JWT_ENROLLMENT_ROUTER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.NO_JWT_ENROLLMENT_ROUTER" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.views.check_management_permissions">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_management_permissions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raise_exeption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_role</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'admin'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#check_management_permissions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.check_management_permissions" title="Link to this definition"></a></dt>
-<dd><p>Simple function to check if requester has requested role.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>raise_exeption</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – </p></li>
-<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>required_role</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Union[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a>, None]</p>
-</dd>
-</dl>
-</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code">
@@ -276,30 +255,24 @@ Check the status for given callsign (enrollment). status=-1 means that there is 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.views.request_enrollment_list">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">request_enrollment_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#request_enrollment_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_list" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">request_enrollment_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#request_enrollment_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_list" title="Link to this definition"></a></dt>
 <dd><p>/list
 Return users/callsign/enrollments. If ‘accepted’ has something else than ‘’, it has been accepted.
 Returns a list of dicts, callsign_list = [ {  “callsign”:’x’, ‘state’:’init’, ‘approvecode’:’’ } ]</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> (<em>fastapi.Request</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut">rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut</a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut">rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.views.request_enrollment_init">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">request_enrollment_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Body(None,</span> <span class="pre">examples=[EnrollmentInitIn.Config.schema_extra['examples']])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#request_enrollment_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_init" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">request_enrollment_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Body(None,</span> <span class="pre">examples=[EnrollmentInitIn.Config.schema_extra['examples']])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/views.html#request_enrollment_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.views.request_enrollment_init" title="Link to this definition"></a></dt>
 <dd><p>Add new callsign (enrollment) to environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> (<em>fastapi.Request</em>) – </p></li>
-<li><p><strong>request_in</strong> (<a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn"><em>rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn</em></a>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>request_in</strong> (<a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn"><em>rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitIn</em></a>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut">rasenmaeher_api.web.api.enrollment.schema.EnrollmentInitOut</a></p>

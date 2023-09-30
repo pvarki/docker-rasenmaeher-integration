@@ -20,6 +20,7 @@ Functions
 
    rasenmaeher_api.cfssl.public.get_ca
    rasenmaeher_api.cfssl.public.get_crl
+   rasenmaeher_api.cfssl.public.get_bundle
 
 
 
@@ -53,5 +54,11 @@ Attributes
 
    Quick and dirty method to get CRL from CFSSL
    returns: DER binary encoded Certificate Revocation List
+
+
+.. py:function:: get_bundle(cert)
+   :async:
+
+   Get the optimal cert bundle for given cert
 
 

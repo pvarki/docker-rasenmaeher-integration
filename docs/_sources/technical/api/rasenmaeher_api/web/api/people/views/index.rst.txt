@@ -1,0 +1,49 @@
+:py:mod:`rasenmaeher_api.web.api.people.views`
+==============================================
+
+.. py:module:: rasenmaeher_api.web.api.people.views
+
+.. autoapi-nested-parse::
+
+   People API views.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.people.views.request_people_list
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.people.views.LOGGER
+   rasenmaeher_api.web.api.people.views.router
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: router
+
+   
+
+.. py:function:: request_people_list()
+   :async:
+
+   /list
+   Return people/list.
+   Returns a list of dicts, callsign_list = [ {  "callsign":'x', "roles": ["str"] 'extra':'x' } ]
+
+

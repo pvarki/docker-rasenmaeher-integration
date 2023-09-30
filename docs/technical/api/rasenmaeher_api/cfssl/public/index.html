@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.cfssl.public &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.cfssl.public &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -114,6 +114,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.public.get_crl" title="rasenmaeher_api.cfssl.public.get_crl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_crl</span></code></a>()</p></td>
 <td><p>Quick and dirty method to get CRL from CFSSL</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.cfssl.public.get_bundle" title="rasenmaeher_api.cfssl.public.get_bundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_bundle</span></code></a>(cert)</p></td>
+<td><p>Get the optimal cert bundle for given cert</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -159,6 +162,20 @@ returns: DER binary encoded Certificate Revocation List</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.cfssl.public.get_bundle">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_bundle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/cfssl/public.html#get_bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.cfssl.public.get_bundle" title="Link to this definition"></a></dt>
+<dd><p>Get the optimal cert bundle for given cert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cert</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>

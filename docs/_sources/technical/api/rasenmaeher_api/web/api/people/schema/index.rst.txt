@@ -1,0 +1,61 @@
+:py:mod:`rasenmaeher_api.web.api.people.schema`
+===============================================
+
+.. py:module:: rasenmaeher_api.web.api.people.schema
+
+.. autoapi-nested-parse::
+
+   Schema for people.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.people.schema.CallSignPerson
+   rasenmaeher_api.web.api.people.schema.PeopleListOut
+
+
+
+
+.. py:class:: CallSignPerson
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   CallSignPerson schema for people list out response
+
+   .. py:attribute:: callsign
+      :type: str
+
+      
+
+   .. py:attribute:: roles
+      :type: List[str]
+
+      
+
+   .. py:attribute:: extra
+      :type: Optional[Dict[str, Any]]
+
+      
+
+
+.. py:class:: PeopleListOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   People list out response schema
+
+   .. py:attribute:: callsign_list
+      :type: List[CallSignPerson]
+
+      
+
+

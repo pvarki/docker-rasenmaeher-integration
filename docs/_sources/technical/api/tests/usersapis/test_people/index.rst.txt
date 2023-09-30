@@ -1,0 +1,42 @@
+:py:mod:`tests.usersapis.test_people`
+=====================================
+
+.. py:module:: tests.usersapis.test_people
+
+.. autoapi-nested-parse::
+
+   Test people endpoint
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_people.test_people_list
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_people.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_people_list(admin_mtls_client)
+   :async:
+
+   Test people list fragment
+
+

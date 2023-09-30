@@ -21,6 +21,8 @@ Functions
    rasenmaeher_api.console.cli_group
    rasenmaeher_api.console.dump_openapi
    rasenmaeher_api.console.add_code
+   rasenmaeher_api.console.get_pfx
+   rasenmaeher_api.console.revoke_user
    rasenmaeher_api.console.get_jwt
    rasenmaeher_api.console.get_adminjwt
    rasenmaeher_api.console.add_test_users
@@ -53,6 +55,16 @@ Attributes
 .. py:function:: add_code(ctx, claims_json)
 
    Add new single-use login code
+
+
+.. py:function:: get_pfx(ctx, callsign, admin)
+
+   Get PFX for cert+key for the given user, will create the user if needed
+
+
+.. py:function:: revoke_user(ctx, callsign, reason)
+
+   Revoke user by callsign
 
 
 .. py:function:: get_jwt(ctx, claims_json, nonce)

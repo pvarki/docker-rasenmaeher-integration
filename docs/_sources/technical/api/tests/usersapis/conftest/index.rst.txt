@@ -1,0 +1,55 @@
+:py:mod:`tests.usersapis.conftest`
+==================================
+
+.. py:module:: tests.usersapis.conftest
+
+.. autoapi-nested-parse::
+
+   fixtures
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.conftest.datadir
+   tests.usersapis.conftest.admin_mtls_client
+   tests.usersapis.conftest.user_mtls_client
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.conftest.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: datadir(nice_tmpdir_mod)
+
+   Make sure we have a well known directory structure
+
+
+.. py:function:: admin_mtls_client(issuer_cl)
+   :async:
+
+   (fake) mTLS client for admin
+
+
+.. py:function:: user_mtls_client(admin_mtls_client)
+   :async:
+
+   mTLS client for user
+
+

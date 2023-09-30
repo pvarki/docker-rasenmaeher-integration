@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.6.3 documentation</title>
+  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.6.4 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=b8503983"></script>
+        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.3
+                0.6.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -95,7 +95,7 @@
 <span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="n">CertificatesResponse</span><span class="p">,</span> <span class="n">CertificatesRequest</span>
 <span class="kn">from</span> <span class="nn">....db.nonces</span> <span class="kn">import</span> <span class="n">SeenToken</span>
 <span class="kn">from</span> <span class="nn">....db.errors</span> <span class="kn">import</span> <span class="n">NotFound</span>
-<span class="kn">from</span> <span class="nn">....cfssl.public</span> <span class="kn">import</span> <span class="n">get_ca</span>
+<span class="kn">from</span> <span class="nn">....cfssl.public</span> <span class="kn">import</span> <span class="n">get_ca</span><span class="p">,</span> <span class="n">get_bundle</span>
 <span class="kn">from</span> <span class="nn">....cfssl.private</span> <span class="kn">import</span> <span class="n">sign_csr</span>
 
 
@@ -133,13 +133,14 @@
     <span class="c1"># PONDER: Should we check jwtpayload[&quot;sub&quot;] is among the products in KRAFTWERK manifest ??</span>
 
     <span class="n">cachain</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_ca</span><span class="p">()</span>
-    <span class="n">certificate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">)</span>
+    <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">bundlepem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_bundle</span><span class="p">(</span><span class="n">certpem</span><span class="p">)</span>
 
     <span class="k">await</span> <span class="n">SeenToken</span><span class="o">.</span><span class="n">use_token</span><span class="p">(</span><span class="n">jwtpayload</span><span class="p">[</span><span class="s2">&quot;nonce&quot;</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">CertificatesResponse</span><span class="p">(</span>
         <span class="n">ca</span><span class="o">=</span><span class="n">cachain</span><span class="p">,</span>
-        <span class="n">certificate</span><span class="o">=</span><span class="n">certificate</span><span class="p">,</span>
+        <span class="n">certificate</span><span class="o">=</span><span class="n">bundlepem</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
@@ -160,11 +161,12 @@
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="mi">403</span><span class="p">,</span> <span class="s2">&quot;Renewal must be for same name&quot;</span><span class="p">)</span>
 
     <span class="n">cachain</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_ca</span><span class="p">()</span>
-    <span class="n">certificate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">)</span>
+    <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">bundlepem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_bundle</span><span class="p">(</span><span class="n">certpem</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">CertificatesResponse</span><span class="p">(</span>
         <span class="n">ca</span><span class="o">=</span><span class="n">cachain</span><span class="p">,</span>
-        <span class="n">certificate</span><span class="o">=</span><span class="n">certificate</span><span class="p">,</span>
+        <span class="n">certificate</span><span class="o">=</span><span class="n">bundlepem</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 

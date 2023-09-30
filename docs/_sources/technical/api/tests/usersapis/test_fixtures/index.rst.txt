@@ -1,0 +1,37 @@
+:py:mod:`tests.usersapis.test_fixtures`
+=======================================
+
+.. py:module:: tests.usersapis.test_fixtures
+
+.. autoapi-nested-parse::
+
+   Testthe fixtures
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_fixtures.test_check_auth_admin
+   tests.usersapis.test_fixtures.test_check_auth_user
+
+
+
+.. py:function:: test_check_auth_admin(admin_mtls_client)
+   :async:
+
+   Test admin fixture
+
+
+.. py:function:: test_check_auth_user(user_mtls_client)
+   :async:
+
+   Test user fixture
+
+

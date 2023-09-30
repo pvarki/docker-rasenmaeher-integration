@@ -15,7 +15,9 @@ Subpackages
    enrollment/index.rst
    firstuser/index.rst
    healthcheck/index.rst
+   instructions/index.rst
    middleware/index.rst
+   people/index.rst
    product/index.rst
    tokens/index.rst
    utils/index.rst

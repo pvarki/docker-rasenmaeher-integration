@@ -1,0 +1,28 @@
+:py:mod:`rasenmaeher_api.web.api.people`
+========================================
+
+.. py:module:: rasenmaeher_api.web.api.people
+
+.. autoapi-nested-parse::
+
+   People API.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   schema/index.rst
+   views/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: router
+
+   
+
