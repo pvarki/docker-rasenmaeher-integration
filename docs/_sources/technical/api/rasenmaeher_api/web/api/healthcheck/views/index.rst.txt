@@ -45,7 +45,8 @@ Attributes
    :async:
 
    Basic health check. Success = 200. Checks the following things.
-   - Local db connection
+   - Person list from database
+   - Domain name from manifest
 
 
 .. py:function:: request_healthcheck_delivery()

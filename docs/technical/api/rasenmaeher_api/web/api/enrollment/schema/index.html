@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -166,6 +166,12 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentListOut</span></code></a></p></td>
 <td><p>Enrollment list out response schema</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentPoolListItem</span></code></a></p></td>
+<td><p>Items for EnrollmentPoolListOut</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentPoolListOut</span></code></a></p></td>
+<td><p>Enrollment pools list out response schema</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnrollmentInviteCodeCreateOut</span></code></a></p></td>
 <td><p>Enrollment Invite code response schema</p></td>
@@ -717,6 +723,45 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.callsign_list">
 <span class="sig-name descname"><span class="pre">callsign_list</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentListOut.callsign_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.callsign_list" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnrollmentPoolListItem</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Items for EnrollmentPoolListOut</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.invitecode">
+<span class="sig-name descname"><span class="pre">invitecode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListItem.invitecode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.invitecode" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.active">
+<span class="sig-name descname"><span class="pre">active</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListItem.active"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.active" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.owner_cs">
+<span class="sig-name descname"><span class="pre">owner_cs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListItem.owner_cs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.owner_cs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListItem.created"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnrollmentPoolListOut</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListOut"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>Enrollment pools list out response schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut.pools">
+<span class="sig-name descname"><span class="pre">pools</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem" title="rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem"><span class="pre">EnrollmentPoolListItem</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enrollment/schema.html#EnrollmentPoolListOut.pools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut.pools" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

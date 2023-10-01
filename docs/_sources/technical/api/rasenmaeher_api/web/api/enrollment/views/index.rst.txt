@@ -18,6 +18,7 @@ Functions
 
 .. autoapisummary::
 
+   rasenmaeher_api.web.api.enrollment.views.list_pools
    rasenmaeher_api.web.api.enrollment.views.post_generate_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_show_verification_code
    rasenmaeher_api.web.api.enrollment.views.request_have_i_been_accepted
@@ -58,6 +59,12 @@ Attributes
 .. py:data:: NO_JWT_ENROLLMENT_ROUTER
 
    
+
+.. py:function:: list_pools(owner_cs = None)
+   :async:
+
+   List EnrollmentPools (aka invitecodes)
+
 
 .. py:function:: post_generate_verification_code(request)
    :async:

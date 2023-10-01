@@ -31,7 +31,6 @@ Submodules
    test_console/index.rst
    test_db/index.rst
    test_enrollment/index.rst
-   test_firstuser/index.rst
    test_healthcheck/index.rst
    test_rasenmaeher_api/index.rst
    test_tokens/index.rst

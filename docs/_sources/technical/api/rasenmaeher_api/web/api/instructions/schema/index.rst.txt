@@ -18,6 +18,9 @@ Classes
 .. autoapisummary::
 
    rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments
+   rasenmaeher_api.web.api.instructions.schema.ProductFile
+   rasenmaeher_api.web.api.instructions.schema.ProductFileList
+   rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles
 
 
 
@@ -45,6 +48,80 @@ Classes
 
    .. py:attribute:: fragments
       :type: Dict[str, Optional[libpvarki.schemas.product.UserInstructionFragment]]
+
+      
+
+
+.. py:class:: ProductFile
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   File description
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: title
+      :type: str
+
+      
+
+   .. py:attribute:: filename
+      :type: str
+
+      
+
+   .. py:attribute:: data
+      :type: str
+
+      
+
+
+.. py:class:: ProductFileList
+
+
+   Bases: :py:obj:`pydantic_collections.BaseCollectionModel`\ [\ :py:obj:`ProductFile`\ ]
+
+   List of files
+
+   .. py:class:: Config
+
+
+      Pydantic configs
+
+      .. py:attribute:: extra
+
+         
+
+
+
+.. py:class:: AllProdcutsInstructionFiles
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   user files for all products
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+
+   .. py:attribute:: files
+      :type: Dict[str, Optional[ProductFileList]]
 
       
 

@@ -15,6 +15,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   schema/index.rst
    views/index.rst
 
 

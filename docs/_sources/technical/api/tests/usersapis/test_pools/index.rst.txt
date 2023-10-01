@@ -1,0 +1,56 @@
+:py:mod:`tests.usersapis.test_pools`
+====================================
+
+.. py:module:: tests.usersapis.test_pools
+
+.. autoapi-nested-parse::
+
+   Test EnrollmentPool ops
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_pools.test_list_pools
+   tests.usersapis.test_pools.test_list_pools_by_owner
+   tests.usersapis.test_pools.test_list_pools_wrong_owner
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_pools.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_list_pools(admin_mtls_client)
+   :async:
+
+   Check lists
+
+
+.. py:function:: test_list_pools_by_owner(admin_mtls_client)
+   :async:
+
+   Check list by owner
+
+
+.. py:function:: test_list_pools_wrong_owner(admin_mtls_client)
+   :async:
+
+   Check nonexistent owner
+
+

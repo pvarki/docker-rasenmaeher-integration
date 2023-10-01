@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -110,13 +110,7 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_jwt" title="rasenmaeher_api.web.api.enduserpfx.views.check_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_jwt</span></code></a>(jwt, callsign)</p></td>
-<td><p>Sanity checks for JWT payload here</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs" title="rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_enduser_certs</span></code></a>(request, callsign[, jwt])</p></td>
-<td><p>Method to create key, sign CSR and return PFX</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available" title="rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_enduser_bundle_available</span></code></a>(request, callsign[, jwt])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.enduserpfx.views.get_user_pfx" title="rasenmaeher_api.web.api.enduserpfx.views.get_user_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_user_pfx</span></code></a>(callsign[, person])</p></td>
 <td><p>Method to check if bundle is available</p></td>
 </tr>
 </tbody>
@@ -145,58 +139,20 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.check_jwt">
-<span class="sig-name descname"><span class="pre">check_jwt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jwt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#check_jwt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.check_jwt" title="Link to this definition"></a></dt>
-<dd><p>Sanity checks for JWT payload here</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>jwt</strong> (<em>multikeyjwt.middleware.JWTPayload</em>) – </p></li>
-<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)">bool</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">return_enduser_certs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jwt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(JWTBearer(auto_error=True))</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#return_enduser_certs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.return_enduser_certs" title="Link to this definition"></a></dt>
-<dd><p>Method to create key, sign CSR and return PFX
-:param callsign: OTTER1
-:returns pfx</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> (<em>fastapi.Request</em>) – </p></li>
-<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>jwt</strong> (<em>multikeyjwt.middleware.JWTPayload</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>fastapi.Response</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_enduser_bundle_available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jwt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(JWTBearer(auto_error=True))</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#check_enduser_bundle_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.check_enduser_bundle_available" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.enduserpfx.views.get_user_pfx">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_user_pfx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">person</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(ValidUser(auto_error=True))</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/enduserpfx/views.html#get_user_pfx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.enduserpfx.views.get_user_pfx" title="Link to this definition"></a></dt>
 <dd><p>Method to check if bundle is available
-:param callsign: OTTER1
-:returns pfx or 404 error</p>
+:param callsign: OTTER1.pfx
+:returns pfx or 403 error</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> (<em>fastapi.Request</em>) – </p></li>
 <li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>jwt</strong> (<em>multikeyjwt.middleware.JWTPayload</em>) – </p></li>
+<li><p><strong>person</strong> (<a class="reference internal" href="../../../../db/index.html#rasenmaeher_api.db.Person" title="rasenmaeher_api.db.Person"><em>rasenmaeher_api.db.Person</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>fastapi.Response</p>
+<dd class="field-even"><p>fastapi.responses.FileResponse</p>
 </dd>
 </dl>
 </dd></dl>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.enduserpfx.views &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -83,10 +83,11 @@
 <span></span><span class="sd">&quot;&quot;&quot;Enduser API views.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Request</span><span class="p">,</span> <span class="n">Response</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Depends</span>
-<span class="kn">from</span> <span class="nn">multikeyjwt.middleware</span> <span class="kn">import</span> <span class="n">JWTBearer</span><span class="p">,</span> <span class="n">JWTPayload</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Depends</span>
+<span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">FileResponse</span>
 
 <span class="kn">from</span> <span class="nn">....db</span> <span class="kn">import</span> <span class="n">Person</span>
+<span class="kn">from</span> <span class="nn">..middleware.user</span> <span class="kn">import</span> <span class="n">ValidUser</span>
 
 <div class="viewcode-block" id="router">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.router">[docs]</a>
@@ -98,73 +99,26 @@
 
 
 
-<div class="viewcode-block" id="check_jwt">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.check_jwt">[docs]</a>
-<span class="k">def</span> <span class="nf">check_jwt</span><span class="p">(</span><span class="n">jwt</span><span class="p">:</span> <span class="n">JWTPayload</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanity checks for JWT payload here&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">jwt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sub&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Requesting JWT must have sub claim&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Forbidden&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">jwt</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sub&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">callsign</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Requesting JWT sub claim doesn&#39;t match requested callsign&quot;</span><span class="p">)</span>
-    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Forbidden&quot;</span><span class="p">)</span></div>
-
-
-
-<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{callsign}</span><span class="s2">&quot;</span><span class="p">)</span>
-<div class="viewcode-block" id="return_enduser_certs">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.return_enduser_certs">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">return_enduser_certs</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-    <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">jwt</span><span class="p">:</span> <span class="n">JWTPayload</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">JWTBearer</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Method to create key, sign CSR and return PFX</span>
-<span class="sd">    :param callsign: OTTER1</span>
-<span class="sd">    :returns pfx</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">callsign</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">callsign</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Callsign missing as last parameter&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Called with callsign=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">callsign</span><span class="p">))</span>
-
-    <span class="c1"># Check that the JWT has sub claim and it mathes requested callsign</span>
-    <span class="n">check_jwt</span><span class="p">(</span><span class="n">jwt</span><span class="p">,</span> <span class="n">callsign</span><span class="p">)</span>
-    <span class="c1"># Get the person (it will raise NotFound which is 404 HTTPException as well if callsign is not valid)</span>
-    <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pfxfile</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">(),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;application/x-pkcs12&quot;</span><span class="p">)</span></div>
-
-
-
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{callsign}</span><span class="s2">.pfx&quot;</span><span class="p">)</span>
 <span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/</span><span class="si">{callsign}</span><span class="s2">&quot;</span><span class="p">)</span>
-<div class="viewcode-block" id="check_enduser_bundle_available">
-<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.check_enduser_bundle_available">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">check_enduser_bundle_available</span><span class="p">(</span>
-    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+<div class="viewcode-block" id="get_user_pfx">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enduserpfx/views/index.html#rasenmaeher_api.web.api.enduserpfx.get_user_pfx">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_pfx</span><span class="p">(</span>
     <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">jwt</span><span class="p">:</span> <span class="n">JWTPayload</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">JWTBearer</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
+    <span class="n">person</span><span class="p">:</span> <span class="n">Person</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">ValidUser</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FileResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Method to check if bundle is available</span>
-<span class="sd">    :param callsign: OTTER1</span>
-<span class="sd">    :returns pfx or 404 error</span>
+<span class="sd">    :param callsign: OTTER1.pfx</span>
+<span class="sd">    :returns pfx or 403 error</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">callsign</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">callsign</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">_reason</span> <span class="o">=</span> <span class="s2">&quot;Error. Callsign missing as last parameter&quot;</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">_reason</span><span class="p">))</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">_reason</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">callsign</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.pfx&quot;</span><span class="p">):</span>
+        <span class="n">callsign</span> <span class="o">=</span> <span class="n">callsign</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Called with callsign=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">callsign</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">person</span><span class="o">.</span><span class="n">callsign</span> <span class="o">!=</span> <span class="n">callsign</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Callsign must match authenticated user&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Check that the JWT has sub claim and it mathes requested callsign</span>
-    <span class="n">check_jwt</span><span class="p">(</span><span class="n">jwt</span><span class="p">,</span> <span class="n">callsign</span><span class="p">)</span>
-    <span class="c1"># Get the person (it will raise NotFound which is 404 HTTPException as well if callsign is not valid)</span>
-    <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pfxfile</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">(),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;application/x-pkcs12&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">FileResponse</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">person</span><span class="o">.</span><span class="n">pfxfile</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;application/x-pkcs12&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">callsign</span><span class="si">}</span><span class="s2">.pfx&quot;</span><span class="p">)</span></div>
 
 </pre></div>
 

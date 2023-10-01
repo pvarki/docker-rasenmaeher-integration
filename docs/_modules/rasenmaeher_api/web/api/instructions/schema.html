@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.instructions.schema &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.instructions.schema &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -85,6 +85,7 @@
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Extra</span><span class="p">,</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">libpvarki.schemas.product</span> <span class="kn">import</span> <span class="n">UserInstructionFragment</span>
+<span class="kn">from</span> <span class="nn">pydantic_collections</span> <span class="kn">import</span> <span class="n">BaseCollectionModel</span>
 
 
 <div class="viewcode-block" id="AllProdcutsInstructionFragments">
@@ -123,6 +124,80 @@
                 <span class="p">},</span>
             <span class="p">],</span>
         <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="ProductFile">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile">[docs]</a>
+<span class="k">class</span> <span class="nc">ProductFile</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;File description&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProductFile.title">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile.title">[docs]</a>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Title for the file&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProductFile.filename">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile.filename">[docs]</a>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;file name&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ProductFile.data">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile.data">[docs]</a>
+    <span class="n">data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;data-url for the file&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ProductFile.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProductFile.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFile.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="ProductFileList">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFileList">[docs]</a>
+<span class="k">class</span> <span class="nc">ProductFileList</span><span class="p">(</span><span class="n">BaseCollectionModel</span><span class="p">[</span><span class="n">ProductFile</span><span class="p">]):</span>  <span class="c1"># type: ignore[misc]  # pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List of files&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProductFileList.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pydantic configs&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProductFileList.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="AllProdcutsInstructionFiles">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles">[docs]</a>
+<span class="k">class</span> <span class="nc">AllProdcutsInstructionFiles</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;user files for all products&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AllProdcutsInstructionFiles.files">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.files">[docs]</a>
+    <span class="n">files</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ProductFileList</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;files keyed by product short name, if fetching failed value for that product is null&quot;</span>  <span class="c1"># pylint: disable=C0301</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AllProdcutsInstructionFiles.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AllProdcutsInstructionFiles.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/instructions/schema/index.html#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
 </div>
 </div>
 

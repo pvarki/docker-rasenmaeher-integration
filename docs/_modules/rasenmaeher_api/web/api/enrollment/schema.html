@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.schema &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -713,6 +713,42 @@
 <div class="viewcode-block" id="EnrollmentListOut.callsign_list">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut.callsign_list">[docs]</a>
     <span class="n">callsign_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentPoolListItem">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentPoolListItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Items for EnrollmentPoolListOut&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentPoolListItem.invitecode">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.invitecode">[docs]</a>
+    <span class="n">invitecode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The invitation code&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentPoolListItem.active">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.active">[docs]</a>
+    <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Is this pool currently active, ie can it be used&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentPoolListItem.owner_cs">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.owner_cs">[docs]</a>
+    <span class="n">owner_cs</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Pool wwners callsign&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EnrollmentPoolListItem.created">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem.created">[docs]</a>
+    <span class="n">created</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;ISO datetime of when this pool was created&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="EnrollmentPoolListOut">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut">[docs]</a>
+<span class="k">class</span> <span class="nc">EnrollmentPoolListOut</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrollment pools list out response schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EnrollmentPoolListOut.pools">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/schema/index.html#rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut.pools">[docs]</a>
+    <span class="n">pools</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">EnrollmentPoolListItem</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The pools&quot;</span><span class="p">)</span></div>
 </div>
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fprun &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>fprun &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -103,22 +103,25 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.check_peer_cert" title="fprun.check_peer_cert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_peer_cert</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.zip_pem" title="fprun.zip_pem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zip_pem</span></code></a>(pem, filename)</p></td>
+<td><p>in-memory zip of the pem</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fprun.check_peer_cert" title="fprun.check_peer_cert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_peer_cert</span></code></a>(request)</p></td>
 <td><p>Check the transport for peer cert, raise error if missing</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_get_hello" title="fprun.handle_get_hello"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_get_hello</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_get_hello" title="fprun.handle_get_hello"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_get_hello</span></code></a>(request)</p></td>
 <td><p>Hello world but check mTLS</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_user_crud" title="fprun.handle_user_crud"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_user_crud</span></code></a>(request)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_user_crud" title="fprun.handle_user_crud"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_user_crud</span></code></a>(request)</p></td>
 <td><p>Respond with success to all CRUD operations</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_fragment" title="fprun.handle_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_fragment</span></code></a>(request)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_fragment" title="fprun.handle_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_fragment</span></code></a>(request)</p></td>
 <td><p>Respond with hello_world for user</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_admin_fragment" title="fprun.handle_admin_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_admin_fragment</span></code></a>(request)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_admin_fragment" title="fprun.handle_admin_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_admin_fragment</span></code></a>(request)</p></td>
 <td><p>Respond with success to all CRUD operations</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fprun.main" title="fprun.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.main" title="fprun.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p>Main entrypoint, return exit code</p></td>
 </tr>
 </tbody>
@@ -140,6 +143,23 @@
 <dt class="sig sig-object py" id="fprun.LOGGER">
 <span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../_modules/fprun.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fprun.LOGGER" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fprun.zip_pem">
+<span class="sig-name descname"><span class="pre">zip_pem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fprun.html#zip_pem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fprun.zip_pem" title="Link to this definition"></a></dt>
+<dd><p>in-memory zip of the pem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pem</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fprun.check_peer_cert">

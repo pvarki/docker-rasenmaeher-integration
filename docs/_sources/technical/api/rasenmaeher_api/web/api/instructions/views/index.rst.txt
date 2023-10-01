@@ -49,6 +49,6 @@ Attributes
 .. py:function:: user_instruction_fragment(request)
    :async:
 
-   Return end-user instructions
+   Return end-user files
 
 

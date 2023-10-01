@@ -1,0 +1,42 @@
+:py:mod:`rasenmaeher_api.web.api.healthcheck.schema`
+====================================================
+
+.. py:module:: rasenmaeher_api.web.api.healthcheck.schema
+
+.. autoapi-nested-parse::
+
+   Healthcheck response schemas
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.web.api.healthcheck.schema.HealthCheckResponse
+
+
+
+
+.. py:class:: HealthCheckResponse
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Healthcheck response schema
+
+   .. py:attribute:: healthcheck
+      :type: str
+
+      
+
+   .. py:attribute:: dns
+      :type: str
+
+      
+
+

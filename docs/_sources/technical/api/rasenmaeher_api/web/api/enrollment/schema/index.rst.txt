@@ -36,6 +36,8 @@ Classes
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentIsInvitecodeActiveOut
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentListOut
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListItem
+   rasenmaeher_api.web.api.enrollment.schema.EnrollmentPoolListOut
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeCreateOut
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeactivateOut
@@ -561,6 +563,47 @@ Classes
 
    .. py:attribute:: callsign_list
       :type: List[Dict[Any, Any]]
+
+      
+
+
+.. py:class:: EnrollmentPoolListItem
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Items for EnrollmentPoolListOut
+
+   .. py:attribute:: invitecode
+      :type: str
+
+      
+
+   .. py:attribute:: active
+      :type: bool
+
+      
+
+   .. py:attribute:: owner_cs
+      :type: str
+
+      
+
+   .. py:attribute:: created
+      :type: str
+
+      
+
+
+.. py:class:: EnrollmentPoolListOut
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Enrollment pools list out response schema
+
+   .. py:attribute:: pools
+      :type: List[EnrollmentPoolListItem]
 
       
 

@@ -1,0 +1,42 @@
+:py:mod:`tests.usersapis.test_userinfos`
+========================================
+
+.. py:module:: tests.usersapis.test_userinfos
+
+.. autoapi-nested-parse::
+
+   Test users own info things
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_userinfos.test_user_pfx
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.usersapis.test_userinfos.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_user_pfx(user_mtls_client, fname)
+   :async:
+
+   Test that we can get the pfx
+
+

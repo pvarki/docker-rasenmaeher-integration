@@ -18,6 +18,7 @@ Functions
 
 .. autoapisummary::
 
+   fprun.zip_pem
    fprun.check_peer_cert
    fprun.handle_get_hello
    fprun.handle_user_crud
@@ -39,6 +40,11 @@ Attributes
 .. py:data:: LOGGER
 
    
+
+.. py:function:: zip_pem(pem, filename)
+
+   in-memory zip of the pem
+
 
 .. py:function:: check_peer_cert(request)
 

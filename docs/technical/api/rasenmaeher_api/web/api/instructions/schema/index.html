@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.instructions.schema &mdash; Rasenmaeher docs 0.6.4 documentation</title>
+  <title>rasenmaeher_api.web.api.instructions.schema &mdash; Rasenmaeher docs 0.8.0 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=73d9a94e"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=486e5634"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.6.4
+                0.8.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -113,6 +113,15 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments" title="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AllProdcutsInstructionFragments</span></code></a></p></td>
 <td><p>Fragments for all products</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile" title="rasenmaeher_api.web.api.instructions.schema.ProductFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProductFile</span></code></a></p></td>
+<td><p>File description</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.ProductFileList" title="rasenmaeher_api.web.api.instructions.schema.ProductFileList"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProductFileList</span></code></a></p></td>
+<td><p>List of files</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles" title="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AllProdcutsInstructionFiles</span></code></a></p></td>
+<td><p>user files for all products</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -139,6 +148,80 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments.fragments">
 <span class="sig-name descname"><span class="pre">fragments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">libpvarki.schemas.product.UserInstructionFragment</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#AllProdcutsInstructionFragments.fragments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFragments.fragments" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProductFile</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>File description</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile.title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile.title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile.filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile.filename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFile.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFile.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFileList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProductFileList</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFileList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFileList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic_collections.BaseCollectionModel</span></code>[<a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.ProductFile" title="rasenmaeher_api.web.api.instructions.schema.ProductFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProductFile</span></code></a>]</p>
+<p>List of files</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFileList.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config" title="Link to this definition"></a></dt>
+<dd><p>Pydantic configs</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#ProductFileList.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.ProductFileList.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AllProdcutsInstructionFiles</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#AllProdcutsInstructionFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
+<p>user files for all products</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#AllProdcutsInstructionFiles.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config" title="Link to this definition"></a></dt>
+<dd><p>Example values for schema</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#AllProdcutsInstructionFiles.Config.extra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.Config.extra" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.files">
+<span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#rasenmaeher_api.web.api.instructions.schema.ProductFileList" title="rasenmaeher_api.web.api.instructions.schema.ProductFileList"><span class="pre">ProductFileList</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/instructions/schema.html#AllProdcutsInstructionFiles.files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.instructions.schema.AllProdcutsInstructionFiles.files" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
