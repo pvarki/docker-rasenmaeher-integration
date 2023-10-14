@@ -1,15 +1,6 @@
 server {
     server_name ${NGINX_HOST};
 
-    # HTTP configuration
-    listen ${NGINX_HTTP_PORT};
-    listen [::]:${NGINX_HTTP_PORT};
-
-    # HTTP to HTTPS
-    if ($scheme != "https") {
-        return 301 https://$host$request_uri;
-    }
-
     # HTTPS configuration
     listen ${NGINX_HTTPS_PORT} ssl;
 
