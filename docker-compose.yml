@@ -13,10 +13,10 @@ x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
-  TAK_DATABASE_NAME: &takdbname ${TAK_DATABASE_NAME:-tak}
-  TAK_DATABASE_HOST: postgres
-  TAK_DATABASE_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
-  TAK_DATABASE_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+  POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
+  POSTGRES_ADDRESS: postgres
+  POSTGRES_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
+  POSTGRES_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
@@ -51,7 +51,8 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:?domain must be defined}"
-
+  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -72,8 +73,9 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_RM_HTTPS_PORT: *apiport
-      MW_PRODUCT_HTTPS_PORT: *productport
+      MW_RASENMAEHER__API_PORT: *apiport
+      MW_FAKE__API_PORT: *productport
+      MW_TAK__API_PORT: *takapiport
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
     volumes:
@@ -363,6 +365,9 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+######################
+# Begin: Fakeproduct #
+######################
   rmfpapi:
     image: pvarki/rmfpapi:latest
     build:
@@ -415,6 +420,19 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+####################
+# End: Fakeproduct #
+####################
+
+##############
+# Begin: TAK #
+##############
+
+
+############
+# End: TAK #
+############
+
 
 networks:
   productnet:
@@ -424,6 +442,7 @@ networks:
   ocspnet:
   dbnet:
   intranet:
+  taknet:
 
 volumes:
   kraftwerk_data:
@@ -438,3 +457,5 @@ volumes:
   rmfpapi_data:
   ca_public:
   le_certs:
+  tak_data:
+  takrmapi_data:

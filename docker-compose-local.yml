@@ -13,10 +13,10 @@ x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
-  TAK_DATABASE_NAME: &takdbname ${TAK_DATABASE_NAME:-tak}
-  TAK_DATABASE_HOST: postgres
-  TAK_DATABASE_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
-  TAK_DATABASE_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:-takdbpwd} # pragma: allowlist secret
+  POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
+  POSTGRES_ADDRESS: postgres
+  POSTGRES_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
+  POSTGRES_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:-takdbpwd} # pragma: allowlist secret
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
@@ -51,6 +51,23 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
+  TAK_IMAGE: &takimage "pvarki/takserver:${TAK_RELEASE:-4.7-RELEASE-32}${DOCKER_TAG_EXTRA:-}"
+
+x-takserver_env: &takserver_env
+  TAK_SERVER_ADDRESS: *takdomain
+  TAK_SERVER_NAME: "localtak"
+  # All of the CA/cert stuff goes away when integration becomes more complete
+  ADMIN_CERT_NAME: "admin"
+  ADMIN_CERT_PASS: ${TAK_ADMIN_PASS:-takcapass} # pragma: allowlist secret
+  COUNTRY: "."
+  CA_NAME: "TAK-CA"
+  CA_PASS: ${TAK_CA_PASS:-takcapass} # pragma: allowlist secret
+  STATE: "."
+  CITY: "."
+  ORGANIZATION: "."
+  ORGANIZATIONAL_UNIT: "."
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -71,9 +88,10 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "fake"
+      MW_PRODUCTS: "fake,tak"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_FAKE__API_PORT: *productport
+      MW_TAK__API_PORT: *takapiport
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
       MW_MKCERT: "true"
@@ -383,6 +401,9 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+######################
+# Begin: Fakeproduct #
+######################
   rmfpapi:
     image: pvarki/rmfpapi:latest
     build:
@@ -441,6 +462,114 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+####################
+# End: Fakeproduct #
+####################
+
+##############
+# Begin: TAK #
+##############
+  takserver_initialization:  # FIXME: This needs to be changed to talk to RASENMAEHER
+    image: *takimage
+    build:
+      context: ./takserver
+      dockerfile: Dockerfile
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rmnginx:
+        condition: service_healthy
+    networks:
+      - taknet
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    command: /opt/scripts/firstrun.sh
+
+  takserver_messaging:
+    image: *takimage
+    build:
+      context: ./takserver
+      dockerfile: Dockerfile
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      takserver_initialization:
+          condition: service_completed_successfully
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    networks:
+      - taknet
+    ports:
+      - '8443:8443'
+      - '8444:8444'
+      - '8446:8446'
+      - '8089:8089'
+      - '8080:8080'
+    command: ./opt/scripts/start-tak.sh messaging
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  takserver_api:
+    image: *takimage
+    build:
+      context: ./takserver
+      dockerfile: Dockerfile
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takserver_messaging:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takserver_messaging"
+    command: ./opt/scripts/start-tak.sh api
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  takserver_pluginmanager:
+    image: *takimage
+    build:
+      context: ./takserver
+      dockerfile: Dockerfile
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takserver_api:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takserver_messaging"
+    command: ./opt/scripts/start-tak.sh pm
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+
+############
+# End: TAK #
+############
+
 
 networks:
   productnet:
@@ -450,6 +579,7 @@ networks:
   ocspnet:
   dbnet:
   intranet:
+  taknet:
 
 volumes:
   kraftwerk_data:
@@ -464,3 +594,5 @@ volumes:
   rmfpapi_data:
   ca_public:
   le_certs:
+  tak_data:
+  takrmapi_data:
