@@ -4,35 +4,37 @@ x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname keycloak
   KEYCLOAK_DATABASE_HOST: postgres
   KEYCLOAK_DATABASE_USER: &kcdbuser keycloak
-  # FIXME: take from env (which should be set to random)
-  KEYCLOAK_DATABASE_PASSWORD: &kcdbpass keycloakpwd # pragma: allowlist secret
+  KEYCLOAK_DATABASE_PASSWORD: &kcdbpass ${KEYCLOAK_DATABASE_PASSWORD:-keycloakpwd}  # pragma: allowlist secret
 
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_NAME: &rmdbname raesenmaeher
   RM_DATABASE_HOST: postgres
   RM_DATABASE_USER: &rmdbuser raesenmaeher
-  # FIXME: take from env (which should be set to random)
-  RM_DATABASE_PASSWORD: &rmdbpass raesenmaeherpwd # pragma: allowlist secret
+  RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
+x-tak_dbconfig_env: &takdbconfig_env
+  TAK_DATABASE_NAME: &takdbname ${TAK_DATABASE_NAME:-tak}
+  TAK_DATABASE_HOST: postgres
+  TAK_DATABASE_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
+  TAK_DATABASE_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:-takdbpwd} # pragma: allowlist secret
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: "FIXME: change to long random" # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
+  TAK_PASSWORD: *takdbpass # pragma: allowlist secret
 
 
 x-ldap_admin_env: &ldap_admin_env
-  # FIXME: take from env (which should be set to random)
-  LDAP_ADMIN_PASSWORD: &ldapadminpass ldapadminpwd # pragma: allowlist secret
+  LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:-ldapadminpwd} # pragma: allowlist secret
   LDAP_ADMIN_USERNAME: &ldapadminuser admin
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
   KEYCLOAK_ADMIN_USER: &lcadminuser admin
   KEYCLOAK_MANAGEMENT_USER: damager
-  # FIXME: take from env (which should be set to random)
-  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
-  KEYCLOAK_MANAGEMENT_PASSWORD: kcmgrpw # pragma: allowlist secret
+  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:-kcadminpw} # pragma: allowlist secret
+  KEYCLOAK_MANAGEMENT_PASSWORD: ${KEYCLOAK_MANAGEMENT_PASSWORD:-kcmgrpw}  # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json

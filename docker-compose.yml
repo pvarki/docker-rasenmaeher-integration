@@ -4,25 +4,28 @@ x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
   KEYCLOAK_DATABASE_HOST: postgres
   KEYCLOAK_DATABASE_USER: &kcdbuser ${KEYCLOAK_DATABASE_USER:-keycloak}
-  # FIXME: take from env (which should be set to random)
   KEYCLOAK_DATABASE_PASSWORD: &kcdbpass ${KEYCLOAK_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_NAME: &rmdbname ${RM_DATABASE_NAME:-raesenmaeher}
   RM_DATABASE_HOST: postgres
   RM_DATABASE_USER: &rmdbuser ${RM_DATABASE_USER:-raesenmaeher}
-  # FIXME: take from env (which should be set to random)
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
+x-tak_dbconfig_env: &takdbconfig_env
+  TAK_DATABASE_NAME: &takdbname ${TAK_DATABASE_NAME:-tak}
+  TAK_DATABASE_HOST: postgres
+  TAK_DATABASE_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
+  TAK_DATABASE_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?must be defined} # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
+  TAK_PASSWORD: *takdbpass # pragma: allowlist secret
 
 
 x-ldap_admin_env: &ldap_admin_env
-  # FIXME: take from env (which should be set to random)
   LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
   LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
 
@@ -30,7 +33,6 @@ x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
   KEYCLOAK_ADMIN_USER: &lcadminuser admin
   KEYCLOAK_MANAGEMENT_USER: damager
-  # FIXME: take from env (which should be set to random)
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
   KEYCLOAK_MANAGEMENT_PASSWORD: ${KEYCLOAK_MANAGEMENT_PASSWORD:?must be defined} # pragma: allowlist secret
 
