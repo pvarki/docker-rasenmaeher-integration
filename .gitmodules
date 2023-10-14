@@ -22,3 +22,9 @@
 [submodule "ui"]
 	path = ui
 	url = git@github.com:pvarki/rasenmaeher-ui.git
+[submodule "takserver"]
+	path = takserver
+	url = git@github.com:pvarki/docker-atak-server.git
+[submodule "takintegration"]
+	path = takintegration
+	url = git@github.com:pvarki/python-tak-rmapi.git

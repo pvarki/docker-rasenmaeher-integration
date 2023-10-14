@@ -35,8 +35,10 @@ Directories that are submodules
   - keycloak https://github.com/pvarki/docker-keycloak
   - kw_product_init https://github.com/pvarki/golang-kraftwerk-init-helper-cli
   - openldap https://github.com/pvarki/docker-openldap
-  - miniwerk https://github.com/pvarki/ https://github.com/pvarki/python-rasenmaeher-miniwerk
+  - miniwerk https://github.com/pvarki/python-rasenmaeher-miniwerk
   - ui https://github.com/pvarki/rasenmaeher-ui
+  - takserver https://github.com/pvarki/docker-atak-server
+  - takintegration https://github.com/pvarki/python-tak-rmapi
 
 
 Running in local development mode
