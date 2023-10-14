@@ -53,7 +53,12 @@ x-domains_env:
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
-  TAK_IMAGE: &takimage "pvarki/takserver:${TAK_RELEASE:-4.7-RELEASE-32}${DOCKER_TAG_EXTRA:-}"
+
+x-takbuilds: &takbuildinfo
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-4.10-RELEASE-12}${DOCKER_TAG_EXTRA:-}"
+  build:
+    context: ./takserver
+    dockerfile: Dockerfile
 
 x-takserver_env: &takserver_env
   TAK_SERVER_ADDRESS: *takdomain
@@ -473,10 +478,7 @@ services:
 # Begin: TAK #
 ##############
   takserver_initialization:  # FIXME: This needs to be changed to talk to RASENMAEHER
-    image: *takimage
-    build:
-      context: ./takserver
-      dockerfile: Dockerfile
+    <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
       POSTGRES_SUPERUSER: postgres
@@ -495,10 +497,7 @@ services:
     command: /opt/scripts/firstrun.sh
 
   takserver_messaging:
-    image: *takimage
-    build:
-      context: ./takserver
-      dockerfile: Dockerfile
+    <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -525,10 +524,7 @@ services:
       start_period: 5s
 
   takserver_api:
-    image: *takimage
-    build:
-      context: ./takserver
-      dockerfile: Dockerfile
+    <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -548,11 +544,29 @@ services:
       retries: 3
       start_period: 5s
 
+  takserver_retention:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takserver_messaging:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takserver_messaging"
+    command: ./opt/scripts/start-tak.sh retention
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
   takserver_pluginmanager:
-    image: *takimage
-    build:
-      context: ./takserver
-      dockerfile: Dockerfile
+    <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
