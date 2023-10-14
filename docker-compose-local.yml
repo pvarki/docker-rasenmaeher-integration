@@ -477,7 +477,7 @@ services:
 ##############
 # Begin: TAK #
 ##############
-  takserver_initialization:  # FIXME: This needs to be changed to talk to RASENMAEHER
+  takserver_initialization:
     <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
@@ -492,9 +492,11 @@ services:
       - taknet
       - dbnet
     volumes:
+      - kraftwerk_shared_tak:/pvarki
       - tak_data:/opt/tak/data
+      - le_certs:/le_certs
       - ca_public:/ca_public
-    command: /opt/scripts/firstrun.sh
+    command: /opt/scripts/firstrun_rm.sh
 
   takserver_messaging:
     <<: *takbuildinfo
