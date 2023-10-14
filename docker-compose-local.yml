@@ -20,7 +20,7 @@ x-tak_dbconfig_env: &takdbconfig_env
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
-  POSTGRES_PASSWORD: "FIXME: change to long random" # pragma: allowlist secret
+  POSTGRES_PASSWORD: &pgrootpwd ${POSTGRES_PASSWORD:-pg_R00t_user_password} # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
 
@@ -60,14 +60,15 @@ x-takserver_env: &takserver_env
   TAK_SERVER_NAME: "localtak"
   # All of the CA/cert stuff goes away when integration becomes more complete
   ADMIN_CERT_NAME: "admin"
-  ADMIN_CERT_PASS: ${TAK_ADMIN_PASS:-takcapass} # pragma: allowlist secret
-  COUNTRY: "."
+  ADMIN_CERT_PASS: ${TAK_ADMIN_PASS:-takadmincertpw} # pragma: allowlist secret
+  TAKSERVER_CERT_PASS: ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
+  COUNTRY: "FI"
   CA_NAME: "TAK-CA"
-  CA_PASS: ${TAK_CA_PASS:-takcapass} # pragma: allowlist secret
-  STATE: "."
-  CITY: "."
-  ORGANIZATION: "."
-  ORGANIZATIONAL_UNIT: "."
+  CA_PASS: ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
+  STATE: "NA"
+  CITY: "NA"
+  ORGANIZATION: "NA"
+  ORGANIZATIONAL_UNIT: "NA"
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -165,9 +166,11 @@ services:
         condition: service_healthy
 
   postgres:
-    image: postgres:12
+    image: postgis/postgis:12-3.4  # keycloak seems to depend on postgres 12,TAK needs postgis extensions
     networks:
       - dbnet
+    ports:
+      - "5432:5432"  # ONLY for testing, do not expose in production
     volumes:
       - ./pg_init:/docker-entrypoint-initdb.d
       - pg_data:/var/lib/postgresql/data
@@ -476,6 +479,8 @@ services:
       dockerfile: Dockerfile
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      POSTGRES_SUPERUSER: postgres
+      POSTGRES_SUPER_PASSWORD: *pgrootpwd
     depends_on:
       postgres:
         condition: service_healthy
@@ -483,6 +488,7 @@ services:
         condition: service_healthy
     networks:
       - taknet
+      - dbnet
     volumes:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
@@ -503,6 +509,7 @@ services:
       - ca_public:/ca_public
     networks:
       - taknet
+      - dbnet
     ports:
       - '8443:8443'
       - '8444:8444'
