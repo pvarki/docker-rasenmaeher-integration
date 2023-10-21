@@ -483,8 +483,6 @@ services:
     <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
-      POSTGRES_SUPERUSER: postgres
-      POSTGRES_SUPER_PASSWORD: *pgrootpwd
     depends_on:
       postgres:
         condition: service_healthy

@@ -13,12 +13,16 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     GRANT ALL PRIVILEGES ON DATABASE tak TO tak;
 EOSQL
 # Adjust default privileges and make a trigger to reassign table ownerships so the normal tak user can use tables
-# We need superuser privileges to run the SchemaManager and without this the tables will be owned by the superuser
-# and tak normal user has no access :(
+# Also make sure the gis etc extensions are actually present and usable
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "tak" <<-EOSQL
+    CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+    COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
+    CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
+    COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types and functions';
+    GRANT ALL PRIVILEGES ON TABLE public.spatial_ref_sys TO tak;
     CREATE OR REPLACE FUNCTION rm_func_create_set_owner()
-     RETURNS event_trigger
-     LANGUAGE plpgsql
+        RETURNS event_trigger
+        LANGUAGE plpgsql
     AS \$function\$
     DECLARE
         obj record;
@@ -40,5 +44,5 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "tak" <<-EOSQL
         WHEN tag IN ('CREATE TABLE')
         EXECUTE PROCEDURE rm_func_create_set_owner();
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO  tak;
+    GRANT ALL PRIVILEGES ON DATABASE tak TO tak;
 EOSQL
-# Sadly schemamanager nukes all procedures and triggers as the first thing it does when it sees a db without migration state
