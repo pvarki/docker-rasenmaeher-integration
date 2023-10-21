@@ -338,6 +338,9 @@ services:
       #target: production # Does not work due to https://github.com/pvarki/rasenmaeher-ui/issues/3
       target: devel_shell
     command: ["-c", "npm install && npm run dev -- --port 8002 --host 0.0.0.0"] # Remove when production works
+    environment:
+      SERVER_DOMAIN: *serverdomain
+      API_PORT: *apiport
     networks:
       - intranet
     ports:  # REMINDER Do not expose these in production
