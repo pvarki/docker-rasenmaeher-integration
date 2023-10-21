@@ -1,4 +1,4 @@
 Fakewerk Reference
 ==================
 
-.. include:: ../fakewerk/README.rst
+.. include:: ../miniwerk/README.rst

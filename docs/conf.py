@@ -121,7 +121,7 @@ exhale_args = {
         OPTIMIZE_OUTPUT_FOR_C  = YES
         HIDE_SCOPE_NAMES = YES
         QUIET = YES
-        INPUT = api cfssl fakewerk keycloak kw_product_init mkcert nginx openldap pg_init
+        INPUT = api cfssl miniwerk keycloak kw_product_init nginx openldap pg_init
         FILE_PATTERNS = *.py
         EXAMPLE_RECURSIVE = YES
         GENERATE_TREEVIEW = YES
@@ -143,23 +143,21 @@ breathe_default_project = "api"  #
 breathe_projects = {
     "api": f"{BASEDIR}/docs/html/api/xml",
     "cfssl": f"{BASEDIR}/docs/html/cfssl/xml",
-    "fakewerk": f"{BASEDIR}/docs/html/fakewerk/xml",
+    "miniwerk": f"{BASEDIR}/docs/html/miniwerk/xml",
     "keycloak": f"{BASEDIR}/docs/html/keycloak/xml",
     "kw_product_init": f"{BASEDIR}/docs/html/kw_product_init/xml",
-    "mkcert": f"{BASEDIR}/docs/html/mkcert/xml",
     "nginx": f"{BASEDIR}/docs/html/nginx/xml",
     "openldap": f"{BASEDIR}/docs/html/openldap/xml",
     "pg_init": f"{BASEDIR}/docs/html/pg_init/xml",
 }
 
-# autoapi_dirs = ['api', 'cfssl', 'fakewerk', 'keycloak', 'kw_product_init', 'mkcert', 'nginx', 'openldap', 'pg_init']
+# autoapi_dirs = ['api', 'cfssl', 'miniwerk', 'keycloak', 'kw_product_init', 'nginx', 'openldap', 'pg_init']
 autoapi_dirs = [
     "../api",
     "../cfssl",
-    "../fakewerk",
+    "../miniwerk",
     "../keycloak",
     "../kw_product_init",
-    "../mkcert",
     "../nginx",
     "../openldap",
     "../pg_init",

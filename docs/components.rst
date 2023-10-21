@@ -6,10 +6,9 @@ Components
 
    API <api.rst>
    CFSSL <cfssl.rst>
-   Fakewerk <fakewerk.rst>
+   Miniwerk <miniwerk.rst>
    Keycloak <keycloak.rst>
    KW Product Init <kw_product_init.rst>
-   Mkcert <mkcert.rst>
    Nginx <nginx.rst>
    OpenLDAP <openldap.rst>
    PG Init <pg_init.rst>
