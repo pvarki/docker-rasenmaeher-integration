@@ -171,7 +171,7 @@ services:
         condition: service_healthy
 
   postgres:
-    image: postgis/postgis:12-3.4  # keycloak seems to depend on postgres 12,TAK needs postgis extensions
+    image: postgis/postgis:15-3.4
     networks:
       - dbnet
     ports:
@@ -243,7 +243,7 @@ services:
       start_period: 15s
 
   keycloak:
-    image: bitnami/keycloak:21.0.2
+    image: bitnami/keycloak:21.1.2
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env]
       KC_HEALTH_ENABLED: "true"
@@ -266,7 +266,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:latest-21.0.1
+    image: adorsys/keycloak-config-cli:latest-21.1.1
     networks:
       - kcnet
     volumes:

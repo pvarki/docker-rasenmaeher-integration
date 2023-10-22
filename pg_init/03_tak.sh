@@ -14,6 +14,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
 EOSQL
 # Adjust default privileges and make a trigger to reassign table ownerships so the normal tak user can use tables
 # Also make sure the gis etc extensions are actually present and usable
+# And allow normal user to mess around in public schema, see https://www.cybertec-postgresql.com/en/error-permission-denied-schema-public/
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "tak" <<-EOSQL
     CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
     COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
@@ -45,4 +46,5 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "tak" <<-EOSQL
         EXECUTE PROCEDURE rm_func_create_set_owner();
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO  tak;
     GRANT ALL PRIVILEGES ON DATABASE tak TO tak;
+    GRANT ALL ON SCHEMA public TO tak;
 EOSQL

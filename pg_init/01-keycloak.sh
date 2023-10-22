@@ -12,3 +12,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     CREATE DATABASE keycloak;
     GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
 EOSQL
+# Allow normal user to mess around in public schema, see https://www.cybertec-postgresql.com/en/error-permission-denied-schema-public/
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname keycloak <<-EOSQL
+    GRANT ALL ON SCHEMA public TO keycloak;
+EOSQL
