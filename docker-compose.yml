@@ -288,25 +288,14 @@ services:
       retries: 3
       start_period: 5s
 
-  rmui: # When actual production build works we don't even really have to run this proxy
+  rmui:
     image: pvarki/rmui:latest
     build:
       context: ./ui
       dockerfile: Dockerfile
-      #target: production # Does not work due to https://github.com/pvarki/rasenmaeher-ui/issues/3
-      target: devel_shell
-    command: ["-c", "npm install && npm run dev -- --port 8002 --host 0.0.0.0"] # Remove when production works
-    environment:
-      SERVER_DOMAIN: *serverdomain
-      API_PORT: *apiport
-    networks:
-      - intranet
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
+      target: production
+    volumes:
+      - rmui_files:/deliver
 
   rmnginx:
     image: nginx
@@ -315,6 +304,7 @@ services:
       - ./nginx/includes:/etc/nginx/includes
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - rmui_files:/rmui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -341,7 +331,7 @@ services:
       rmapi:
         condition: service_healthy
       rmui:
-        condition: service_healthy
+        condition: service_completed_successfully
       ocsp:
         condition: service_healthy
       cfssl:
@@ -462,3 +452,4 @@ volumes:
   le_certs:
   tak_data:
   takrmapi_data:
+  rmui_files:
