@@ -25,6 +25,8 @@
 [submodule "takserver"]
 	path = takserver
 	url = git@github.com:pvarki/docker-atak-server.git
+	branch = rasenmaeher_integration
 [submodule "takintegration"]
 	path = takintegration
 	url = git@github.com:pvarki/python-tak-rmapi.git
+	branch = rasenmaeher_integration_with_tak_java

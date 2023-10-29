@@ -171,7 +171,7 @@ services:
         condition: service_healthy
 
   postgres:
-    image: postgis/postgis:15-3.4
+    image: postgis/postgis:12-3.4  # keycloak seems to depend on postgres 12,TAK needs postgis extensions
     networks:
       - dbnet
     ports:
@@ -243,7 +243,7 @@ services:
       start_period: 15s
 
   keycloak:
-    image: bitnami/keycloak:21.1.2
+    image: bitnami/keycloak:21.0.2
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env]
       KC_HEALTH_ENABLED: "true"
@@ -266,7 +266,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:latest-21.1.1
+    image: adorsys/keycloak-config-cli:latest-21.0.1
     networks:
       - kcnet
     volumes:
@@ -375,7 +375,7 @@ services:
       rmapi:
         condition: service_healthy
       rmui:
-        condition: service_completed_successfully
+        condition: service_healthy
       ocsp:
         condition: service_healthy
       cfssl:
@@ -467,15 +467,42 @@ services:
 ##############
 # Begin: TAK #
 ##############
+  # We run kw_product_init here to get required cert for tak initialization.
+  # The actual takrmapi depends on tak services and cannot be used at this point.
+  takkwinit:
+    image: pvarki/takrmapi:latest
+    build:
+      context: ./takintegration
+      dockerfile: Dockerfile
+      target: integ_production
+    networks:
+      - intranet
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_tak:/pvarki
+      - takrmapi_data:/data/persistent
+      - tak_data:/opt/tak/data
+      - le_certs:/le_certs
+    #entrypoint: /bin/bash /container-init.sh
+    command: /container-init.sh
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+
   takinit:
     <<: *takbuildinfo
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      POSTGRES_SUPERUSER: postgres
+      POSTGRES_SUPER_PASSWORD: *pgrootpwd
     depends_on:
       postgres:
         condition: service_healthy
       rmnginx:
         condition: service_healthy
+      takkwinit:
+        condition: service_completed_successfully
+
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -486,6 +513,7 @@ services:
       - tak_data:/opt/tak/data
       - le_certs:/le_certs
       - ca_public:/ca_public
+      - takrmapi_data:/data/persistent
     command: /opt/scripts/firstrun_rm.sh
 
   takmsg:
@@ -584,21 +612,23 @@ services:
 
   takrmapi:
     image: pvarki/takrmapi:latest
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
     build:
       context: ./takintegration
       dockerfile: Dockerfile
-      target: production
+      target: integ_production
     network_mode: "service:takmsg"
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
+      - tak_data:/opt/tak/data
+      - le_certs:/le_certs
     depends_on:
       rmnginx:
         condition: service_healthy
       takmsg:
-        condition: service_healthy
-      takapi:
         condition: service_healthy
     healthcheck:
       test: 'true'  # FIXME
