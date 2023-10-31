@@ -10,9 +10,11 @@
 [submodule "api"]
 	path = api
 	url = git@github.com:pvarki/python-rasenmaeher-api.git
+	branch = tak_localmaher
 [submodule "fpintegration"]
 	path = fpintegration
 	url = git@github.com:pvarki/python-rasenmaeher-rmfpapi.git
+	branch = why_sleep_in_compose
 [submodule "kw_product_init"]
 	path = kw_product_init
 	url = git@github.com:pvarki/golang-kraftwerk-init-helper-cli.git
@@ -22,6 +24,7 @@
 [submodule "ui"]
 	path = ui
 	url = git@github.com:pvarki/rasenmaeher-ui.git
+	branch = takguides_rebase
 [submodule "takserver"]
 	path = takserver
 	url = git@github.com:pvarki/docker-atak-server.git

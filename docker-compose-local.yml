@@ -423,6 +423,8 @@ services:
     depends_on:
       rmnginx:
         condition: service_healthy
+      rmapi:
+        condition: service_healthy
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
