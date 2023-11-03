@@ -66,14 +66,18 @@ x-takserver_env: &takserver_env
   # All of the CA/cert stuff goes away when integration becomes more complete
   ADMIN_CERT_NAME: "admin"
   ADMIN_CERT_PASS: ${TAK_ADMIN_PASS:-takadmincertpw} # pragma: allowlist secret
-  TAKSERVER_CERT_PASS: ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
+  TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
   COUNTRY: "FI"
   CA_NAME: "TAK-CA"
-  CA_PASS: ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
+  CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
   STATE: "NA"
   CITY: "NA"
   ORGANIZATION: "NA"
   ORGANIZATIONAL_UNIT: "NA"
+
+x-rm_takserver_env: &rm_takserver_env 
+  TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
+  KEYSTORE_PASS: *tak_ca_pass
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -494,7 +498,7 @@ services:
   takinit:
     <<: *takbuildinfo
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [*takdbconfig_env, *takserver_env, *rm_takserver_env]
       POSTGRES_SUPERUSER: postgres
       POSTGRES_SUPER_PASSWORD: *pgrootpwd
     depends_on:
