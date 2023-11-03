@@ -62,6 +62,7 @@ x-takbuilds: &takbuildinfo
 
 x-takserver_env: &takserver_env
   TAK_SERVER_ADDRESS: *takdomain
+  # The passwords here are just for takservers internal PKCS12 containers because it can't deal with PEM
   TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
