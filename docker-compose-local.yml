@@ -62,6 +62,10 @@ x-takbuilds: &takbuildinfo
 
 x-takserver_env: &takserver_env
   TAK_SERVER_ADDRESS: *takdomain
+  TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
+  TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
+  CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
+  KEYSTORE_PASS: *tak_ca_pass
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public

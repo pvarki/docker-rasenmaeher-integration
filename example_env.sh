@@ -9,3 +9,5 @@ export SERVER_DOMAIN="localmaeher.pvarki.fi"
 export CFSSL_CA_NAME="localmaeher"
 export MW_LE_EMAIL="example@example.com"
 export MW_LE_TEST="true"  # switch to false when you are ready for production
+export TAKSERVER_CERT_PASS="KissaKoira123!AlpakkaMursu"
+export TAK_CA_PASS="AlpakkaMursu!KissaKoira123"
