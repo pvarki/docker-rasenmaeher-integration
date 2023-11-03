@@ -51,8 +51,18 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:?domain must be defined}"
-  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
+
+x-takbuilds: &takbuildinfo
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-4.10-RELEASE-12}${DOCKER_TAG_EXTRA:-}"
+  build:
+    context: ./takserver
+    dockerfile: Dockerfile
+
+x-takserver_env: &takserver_env
+  TAK_SERVER_ADDRESS: *takdomain
+
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -420,8 +430,174 @@ services:
 ##############
 # Begin: TAK #
 ##############
+  takinit:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rmnginx:
+        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - taknet
+      - dbnet
+    volumes:
+      - kraftwerk_shared_tak:/pvarki
+      - tak_data:/opt/tak/data
+      - le_certs:/le_certs
+      - ca_public:/ca_public
+    command: /opt/scripts/firstrun_rm.sh
 
+  takmsg:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      takinit:
+          condition: service_completed_successfully
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - taknet
+      - dbnet
+      - intranet
+    ports:
+      - '8443:8443'
+      - '8444:8444'
+      - '8446:8446'
+      - '8089:8089'
+      - '8080:8080'
+    command: ./opt/scripts/start-tak.sh messaging
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
+  takapi:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takmsg:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takmsg"
+    command: ./opt/scripts/start-tak.sh api
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  takreten:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takmsg:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takmsg"
+    command: ./opt/scripts/start-tak.sh retention
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  takplug:
+    <<: *takbuildinfo
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      takapi:
+        condition: service_healthy
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+    network_mode: "service:takmsg"
+    command: ./opt/scripts/start-tak.sh pm
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  takrmapi:
+    image: pvarki/takrmapi:latest
+    build:
+      context: ./takintegration
+      dockerfile: Dockerfile
+      target: production
+    network_mode: "service:takmsg"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_tak:/pvarki
+      - takrmapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      takmsg:
+        condition: service_healthy
+      takapi:
+        condition: service_healthy
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  taknginx:
+    image: nginx
+    volumes:
+      - ./nginx/templates_productapi:/etc/nginx/templates
+      - ./nginx/includes:/etc/nginx/includes
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      NGINX_HOST: *takdomain
+      NGINX_HTTPS_PORT: *takapiport
+      NGINX_UPSTREAM: "takmsg"  # Due to the sidecar thing we must use the messaging container as host
+      NGINX_UPSTREAM_PORT: "8003"
+      NGINX_CERT_NAME: "rasenmaeher"
+    networks:
+      - taknet
+      - intranet
+    ports:
+      - "${TAK_RMAPI_PORT:-4626}:${TAK_RMAPI_PORT:-4626}"
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+      takrmapi:
+        condition: service_healthy
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 ############
 # End: TAK #
 ############
