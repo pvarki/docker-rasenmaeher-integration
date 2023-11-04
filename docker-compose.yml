@@ -122,6 +122,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
+    restart: unless-stopped
 
   ocsp:
     image: pvarki/cfssl:ocsp-latest
@@ -145,6 +146,7 @@ services:
     depends_on:
       cfssl:
         condition: service_healthy
+    restart: unless-stopped
 
   postgres:
     image: postgis/postgis:15-3.4
@@ -167,6 +169,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
@@ -219,6 +222,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+    restart: unless-stopped
 
   keycloak:
     image: bitnami/keycloak:21.0.2
@@ -241,6 +245,7 @@ services:
       timeout: 10s
       retries: 5
       start_period: 15s
+    restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
@@ -302,6 +307,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   rmui:
     image: pvarki/rmui:latest
@@ -358,6 +364,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
     image: pvarki/kw_product_init:latest
@@ -397,6 +404,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   fpnginx:
     image: nginx
@@ -427,6 +435,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 ####################
 # End: Fakeproduct #
 ####################
@@ -483,6 +492,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   takapi:
     <<: *takbuildinfo
@@ -504,6 +514,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   takreten:
     <<: *takbuildinfo
@@ -525,6 +536,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   takplug:
     <<: *takbuildinfo
@@ -546,6 +558,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   takrmapi:
     image: pvarki/takrmapi:latest
@@ -572,6 +585,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 
   taknginx:
     image: nginx
@@ -602,6 +616,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    restart: unless-stopped
 ############
 # End: TAK #
 ############
