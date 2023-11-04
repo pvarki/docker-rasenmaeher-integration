@@ -94,6 +94,7 @@ services:
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
       MW_MKCERT: "true"
+      MW_KEYTYPE: "rsa"
     volumes:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
