@@ -586,6 +586,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
+      - tak_data:/opt/tak/data
     depends_on:
       rmnginx:
         condition: service_healthy

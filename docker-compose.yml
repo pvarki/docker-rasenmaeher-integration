@@ -557,6 +557,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_tak:/pvarki
+      - tak_data:/opt/tak/data
       - takrmapi_data:/data/persistent
     depends_on:
       rmnginx:
