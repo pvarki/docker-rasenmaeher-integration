@@ -501,6 +501,7 @@ services:
     volumes:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
+      - le_certs:/le_certs
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -535,6 +536,7 @@ services:
     volumes:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
+      - le_certs:/le_certs
     network_mode: "service:takmsg"
     command: ./opt/scripts/start-tak.sh api
     healthcheck:
