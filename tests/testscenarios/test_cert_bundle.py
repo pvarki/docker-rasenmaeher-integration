@@ -171,6 +171,29 @@ async def test_2_invite_code_create(
 
 
 @pytest.mark.asyncio
+async def test_2_5_invite_code_create_many_and_list(
+    first_admin_mtls_session: Tuple[aiohttp.ClientSession, str],
+) -> None:
+    """Tests that we can create a new invite code"""
+    client, api = first_admin_mtls_session
+    url = f"{api}/{VER}/enrollment/invitecode/create"
+    for _ in range(5):
+        LOGGER.debug("Fetching {}".format(url))
+        response = await client.post(url, json=None, timeout=DEFAULT_TIMEOUT)
+        response.raise_for_status()
+        payload = await response.json()
+        LOGGER.debug("payload={}".format(payload))
+        assert payload["invite_code"] != ""
+    url = f"{api}/{VER}/enrollment/pools"
+    response = await client.get(url, json=None, timeout=DEFAULT_TIMEOUT)
+    response.raise_for_status()
+    payload = await response.json()
+    assert "pools" in payload
+    assert payload["pools"]
+    assert len(payload["pools"]) >= 5
+
+
+@pytest.mark.asyncio
 async def test_3_invite_code_is_ok(
     session_with_testcas: aiohttp.ClientSession,
 ) -> None:
