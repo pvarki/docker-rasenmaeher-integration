@@ -75,13 +75,14 @@ services:
     build:
       context: ./takintegration
       dockerfile: Dockerfile
-      target: devel_shell
+      target: integ_devel_shell
     command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
     depends_on:
       rmnginx:
         condition: service_healthy
+      
 
   taknginx:  # apparently we have to specify these here or it tries to start too early
     image: nginx

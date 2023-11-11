@@ -338,6 +338,12 @@ services:
       target: production
     volumes:
       - rmui_files:/deliver
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   rmnginx:
     image: nginx
@@ -375,7 +381,7 @@ services:
       rmapi:
         condition: service_healthy
       rmui:
-        condition: service_completed_successfully
+        condition: service_healthy
       ocsp:
         condition: service_healthy
       cfssl:
