@@ -63,12 +63,13 @@ services:
       dockerfile: Dockerfile
       target: integ_devel_shell
     command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    environment:
+      LOG_LEVEL: 10
     volumes:
       - "./takintegration:/app"
     depends_on:
       rmnginx:
         condition: service_healthy
-
 
   taknginx:  # apparently we have to specify these here or it tries to start too early
     image: nginx
@@ -76,17 +77,19 @@ services:
       takrmapi:
         condition: service_healthy
 
+
   kwinit:  # docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml exec kwinit zsh
     image: pvarki/kw_product_init:devel_shell
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
       target: devel_shell
-    #stdin_open: true
-    #tty: true
-    command: ["-c", "exit 0"]
+    stdin_open: true
+    tty: true
+    command: []
     volumes:
       - "./kw_product_init:/app"
     depends_on:
       rmapi:
         condition: service_healthy
+    profiles: ["kwinit_dev"]

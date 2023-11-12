@@ -299,6 +299,7 @@ services:
       RM_CFSSL_HOST: "http://cfssl"
       RM_CFSSL_PORT: *cfsslport
       JWT_LIFETIME: "3456000"  # Long JWT lifetimes for testing
+      LOG_CONSOLE_FORMATTER: "local"
     networks:
       - apinet
       - kcnet
@@ -410,6 +411,8 @@ services:
       context: ./fpintegration
       dockerfile: Dockerfile
       target: production
+    environment:
+      LOG_CONSOLE_FORMATTER: "local"
     ports:
       - "8001:8001"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
@@ -598,6 +601,8 @@ services:
       dockerfile: Dockerfile
       target: production
     network_mode: "service:takmsg"
+    environment:
+      LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_tak:/pvarki
