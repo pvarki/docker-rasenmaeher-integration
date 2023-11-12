@@ -1,5 +1,5 @@
 """Tests in sequence to simulate an end-to-end scenario"""
-from typing import AsyncGenerator, cast, Tuple
+from typing import AsyncGenerator, cast, Tuple, Dict
 import logging
 from pathlib import Path
 import base64
@@ -323,11 +323,23 @@ async def test_9_check_if_enduser_pfx_available(
     assert response.content
 
 
+def parse_file_payload(fpl: Dict[str, str]) -> None:
+    """parse file payload"""
+    assert fpl["title"]
+    assert fpl["filename"]
+    assert fpl["data"]
+    data = str(fpl["data"])
+    assert data.startswith("data:")
+    _, b64data = data.split(",")
+    dec = base64.b64decode(b64data)
+    assert dec
+
+
 @pytest.mark.asyncio
-async def test_9_check_if_enduser_instructions(
+async def test_10_check_enduser_files(
     session_with_testcas: aiohttp.ClientSession,
 ) -> None:
-    """Check that we can get files from fpaoi"""
+    """Check that we can get files from product integration apis"""
     client = session_with_testcas
     client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
     url = f"{API}/{VER}/instructions/user"
@@ -341,14 +353,34 @@ async def test_9_check_if_enduser_instructions(
     assert "fake" in payload["files"]
     if not payload["files"]["fake"]:
         LOGGER.error("Did not get payload from fakeproduct but living with it")
-        return
-    fake = payload["files"]["fake"]
-    for fpl in fake:
-        assert fpl["title"]
-        assert fpl["filename"]
-        assert fpl["data"]
-        data = str(fpl["data"])
-        assert data.startswith("data:")
-        _, b64data = data.split(",")
-        dec = base64.b64decode(b64data)
-        assert dec
+    else:
+        for fpl in payload["files"]["fake"]:
+            parse_file_payload(fpl)
+
+    assert "tak" in payload["files"]
+    for fpl in payload["files"]["tak"]:
+        parse_file_payload(fpl)
+
+
+@pytest.mark.asyncio
+async def test_11_check_user_revoke(
+    session_with_testcas: aiohttp.ClientSession,
+    first_admin_mtls_session: Tuple[aiohttp.ClientSession, str],
+) -> None:
+    """Test revoking the user"""
+    admin, api = first_admin_mtls_session
+    url = f"{api}/{VER}/people/{ValueStorage.call_sign}"
+    resp1 = await admin.delete(url)
+    LOGGER.debug("got response {} from {}".format(resp1, url))
+    resp1.raise_for_status()
+    payload = await resp1.json()
+    assert payload["success"]
+
+    resp2 = await admin.delete(url)
+    LOGGER.debug("got response {} from {}".format(resp2, url))
+    assert resp2.status == 404
+
+    client = session_with_testcas
+    resp2 = await client.get(f"{API}/{VER}/check-auth/validuser")
+    assert resp2.status == 403
+    # TODO: Test the cert revocation too once we get OCSP working
