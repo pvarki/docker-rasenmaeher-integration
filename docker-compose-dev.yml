@@ -55,20 +55,6 @@ services:
       rmfpapi:
         condition: service_healthy
 
-  kwinit:  # docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml exec kwinit zsh
-    image: pvarki/kw_product_init:devel_shell
-    build:
-      context: ./kw_product_init
-      dockerfile: Dockerfile
-      target: devel_shell
-    stdin_open: true
-    tty: true
-    command: []
-    volumes:
-      - "./kw_product_init:/app"
-    depends_on:
-      rmapi:
-        condition: service_healthy
 
   takrmapi:
     image: pvarki/takrmapi:devel_shell
@@ -82,10 +68,25 @@ services:
     depends_on:
       rmnginx:
         condition: service_healthy
-      
+
 
   taknginx:  # apparently we have to specify these here or it tries to start too early
     image: nginx
     depends_on:
       takrmapi:
+        condition: service_healthy
+
+  kwinit:  # docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml exec kwinit zsh
+    image: pvarki/kw_product_init:devel_shell
+    build:
+      context: ./kw_product_init
+      dockerfile: Dockerfile
+      target: devel_shell
+    #stdin_open: true
+    #tty: true
+    command: ["-c", "exit 0"]
+    volumes:
+      - "./kw_product_init:/app"
+    depends_on:
+      rmapi:
         condition: service_healthy
