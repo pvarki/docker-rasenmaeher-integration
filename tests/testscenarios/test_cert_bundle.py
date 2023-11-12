@@ -4,6 +4,7 @@ from typing import AsyncGenerator, cast, Tuple, Dict
 import logging
 from pathlib import Path
 import base64
+import os
 
 import aiohttp
 import pytest
@@ -352,15 +353,18 @@ async def test_10_check_enduser_files(
     assert payload
     assert "files" in payload
     assert "fake" in payload["files"]
-    if not payload["files"]["fake"]:
+    if not payload["files"]["fake"] and os.environ.get("CI"):  # pylint: disable=E1101  # false positive
         LOGGER.error("Did not get payload from fakeproduct but living with it")
     else:
         for fpl in payload["files"]["fake"]:
             parse_file_payload(fpl)
 
     assert "tak" in payload["files"]
-    for fpl in payload["files"]["tak"]:
-        parse_file_payload(fpl)
+    if not payload["files"]["tak"] and os.environ.get("CI"):  # pylint: disable=E1101  # false positive
+        LOGGER.error("Did not get payload from tak but living with it")
+    else:
+        for fpl in payload["files"]["tak"]:
+            parse_file_payload(fpl)
 
 
 @pytest.mark.asyncio
