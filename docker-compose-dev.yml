@@ -12,7 +12,7 @@ services:
     volumes:
       - "./api:/app"
 
-  rmui:
+  rmuidev:
     image: pvarki/rmui:devel_shell
     build:
       context: ./ui
@@ -21,11 +21,32 @@ services:
     command: ["-c", "npm install && npm run dev -- --port 8002 --host 0.0.0.0"]
     volumes:
       - "./ui:/app"
+    environment:
+      SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.pvarki.fi}
+      API_PORT: ${NGINX_HTTPS_PORT:-4439}
+    networks:
+      - intranet
+    ports:  # REMINDER Do not expose these in production
+      - "${NGINX_UI_UPSTREAM_PORT:-8002}:${NGINX_UI_UPSTREAM_PORT:-8002}"
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
-  rmnginx:  # apparently we have to specify these here or it tries to start too early
+  rmnginx:  # need to load different templates for uidev
     image: nginx
+    environment:
+      NGINX_UI_UPSTREAM: "rmuidev"
+      NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
+      NGINX_ENVSUBST_TEMPLATE_DIR: /templates_uidev
+    volumes:
+      - ./nginx/templates_rasenmaeher_uidev:/templates_uidev
     depends_on:
       rmapi:
+        condition: service_healthy
+      rmuidev:
         condition: service_healthy
 
   kwinit_prod:  # For building the go executable needed by rmfpapi
@@ -93,3 +114,7 @@ services:
       rmapi:
         condition: service_healthy
     profiles: ["kwinit_dev"]
+
+
+networks:
+  intranet:

@@ -1,0 +1,119 @@
+
+ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
+ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
+
+include /etc/nginx/includes/le_common_settings.conf;
+
+server {
+    server_name ${NGINX_HOST};
+
+    # HTTP configuration
+    listen ${NGINX_HTTP_PORT};
+    listen [::]:${NGINX_HTTP_PORT};
+
+    # HTTP to HTTPS
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    }
+
+    # HTTPS configuration
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    location /ca/crl {
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api/v1/utils/crl;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+    }
+    location /ca/ocsp {
+        proxy_pass  http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+    }
+    location /api {
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+    }
+
+    location / {
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+    }
+}
+
+server {
+    server_name mtls.${NGINX_HOST};
+
+    # HTTP configuration
+    listen ${NGINX_HTTP_PORT};
+    listen [::]:${NGINX_HTTP_PORT};
+
+    # HTTP to HTTPS
+    if ($scheme != "https") {
+        return 301 https://$host$request_uri;
+    }
+
+    # HTTPS configuration
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    ssl_client_certificate /ca_public/ca_chain.pem;
+    ssl_verify_client       optional;
+    # solve issues with https://github.com/pvarki/docker-rasenmaeher-cfssl/issues/9 first
+    #ssl_ocsp leaf;
+    #ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+
+    location /ca  {
+        return 301 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}$request_uri;
+    }
+
+    location /api {
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+        }
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+    }
+
+    location / {
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+        }
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+    }
+}
