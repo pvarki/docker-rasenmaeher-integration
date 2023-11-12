@@ -1,4 +1,5 @@
 """Tests in sequence to simulate an end-to-end scenario"""
+import asyncio
 from typing import AsyncGenerator, cast, Tuple, Dict
 import logging
 from pathlib import Path
@@ -380,7 +381,11 @@ async def test_11_check_user_revoke(
     LOGGER.debug("got response {} from {}".format(resp2, url))
     assert resp2.status == 404
 
+    await asyncio.sleep(1)
+
+    # FIXME: Use mTLS for the end-user too.
     client = session_with_testcas
-    resp2 = await client.get(f"{API}/{VER}/check-auth/validuser")
+    client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
+    resp2 = await client.get(f"{API}/{VER}/instructions/user")
     assert resp2.status == 403
     # TODO: Test the cert revocation too once we get OCSP working
