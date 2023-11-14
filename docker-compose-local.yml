@@ -605,6 +605,7 @@ services:
       LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - ca_public:/ca_public
+      - le_certs:/le_certs
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data

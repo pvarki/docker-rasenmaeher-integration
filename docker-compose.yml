@@ -572,6 +572,7 @@ services:
     network_mode: "service:takmsg"
     volumes:
       - ca_public:/ca_public
+      - le_certs:/le_certs
       - kraftwerk_shared_tak:/pvarki
       - tak_data:/opt/tak/data
       - takrmapi_data:/data/persistent
