@@ -333,6 +333,7 @@ services:
       - canet
       - intranet
       - dbnet
+      - ocspnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -407,6 +408,8 @@ services:
       rmui:
         condition: service_completed_successfully
       ocsp:
+        condition: service_healthy
+      ocsprest:
         condition: service_healthy
       cfssl:
         condition: service_healthy

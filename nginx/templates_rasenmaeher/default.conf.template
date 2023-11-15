@@ -76,6 +76,7 @@ server {
     # solve issues with https://github.com/pvarki/docker-rasenmaeher-cfssl/issues/9 first
     #ssl_ocsp leaf;
     #ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    #ssl_crl /ca_public/crl.pem;
 
     location /ca  {
         return 301 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}$request_uri;
