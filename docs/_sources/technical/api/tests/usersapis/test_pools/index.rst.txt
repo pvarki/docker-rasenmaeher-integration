@@ -18,6 +18,7 @@ Functions
 
 .. autoapisummary::
 
+   tests.usersapis.test_pools.five_pools
    tests.usersapis.test_pools.test_list_pools
    tests.usersapis.test_pools.test_list_pools_by_owner
    tests.usersapis.test_pools.test_list_pools_wrong_owner
@@ -36,7 +37,13 @@ Attributes
 
    
 
-.. py:function:: test_list_pools(admin_mtls_client)
+.. py:function:: five_pools(admin_mtls_client)
+   :async:
+
+   Check lists
+
+
+.. py:function:: test_list_pools(admin_mtls_client, five_pools)
    :async:
 
    Check lists

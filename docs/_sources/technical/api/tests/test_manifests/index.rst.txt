@@ -1,0 +1,55 @@
+:py:mod:`tests.test_manifests`
+==============================
+
+.. py:module:: tests.test_manifests
+
+.. autoapi-nested-parse::
+
+   Test manifest creation
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_manifests.check_jwt_pubkey
+   tests.test_manifests.test_rm_manifest
+   tests.test_manifests.test_fakeproduct_manifest
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_manifests.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: check_jwt_pubkey(pth)
+
+   Check JWT pubkey has been copied
+
+
+.. py:function:: test_rm_manifest()
+   :async:
+
+   Check RASENMAEHER manifest creation
+
+
+.. py:function:: test_fakeproduct_manifest()
+   :async:
+
+   Check fakeproduct manifest
+
+

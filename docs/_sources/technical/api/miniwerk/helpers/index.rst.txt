@@ -1,0 +1,54 @@
+:py:mod:`miniwerk.helpers`
+==========================
+
+.. py:module:: miniwerk.helpers
+
+.. autoapi-nested-parse::
+
+   Helpers
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.helpers.certs_copy
+   miniwerk.helpers.call_cmd
+   miniwerk.helpers.mkcert_ca_cert
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.helpers.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: certs_copy(copydir, sourcedir)
+
+   Copy certs
+
+
+.. py:function:: call_cmd(cmd)
+   :async:
+
+   Do the boilerplate for calling cmd and reporting output/return code
+
+
+.. py:function:: mkcert_ca_cert()
+
+   get mkcert root CA cert
+
+

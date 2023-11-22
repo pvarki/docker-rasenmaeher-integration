@@ -1,0 +1,55 @@
+:py:mod:`tests.test_mkcwrap`
+============================
+
+.. py:module:: tests.test_mkcwrap
+
+.. autoapi-nested-parse::
+
+   Test mkcert wrapper
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_mkcwrap.check_common_args
+   tests.test_mkcwrap.test_default_config
+   tests.test_mkcwrap.test_rsa_config
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_mkcwrap.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: check_common_args(args, config)
+
+   Common checks
+
+
+.. py:function:: test_default_config()
+   :async:
+
+   Test with default config
+
+
+.. py:function:: test_rsa_config(monkeypatch)
+   :async:
+
+   Test with modified config
+
+

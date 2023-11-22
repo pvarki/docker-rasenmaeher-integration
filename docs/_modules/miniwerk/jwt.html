@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miniwerk.jwt &mdash; Rasenmaeher docs 0.11.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/miniwerk/jwt.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.11.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../miniwerk.html">miniwerk</a></li>
+      <li class="breadcrumb-item active">miniwerk.jwt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for miniwerk.jwt</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;JWT wrappers&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">stat</span>
+
+
+<span class="kn">from</span> <span class="nn">multikeyjwt.keygen</span> <span class="kn">import</span> <span class="n">generate_keypair</span>
+<span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span><span class="p">,</span> <span class="n">Verifier</span>
+
+<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">MWConfig</span>
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PUBDIR_MODE">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.PUBDIR_MODE">[docs]</a>
+<span class="n">PUBDIR_MODE</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IRWXU</span> <span class="o">|</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IRGRP</span> <span class="o">|</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IROTH</span> <span class="o">|</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IXGRP</span> <span class="o">|</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IXOTH</span></div>
+
+<div class="viewcode-block" id="PRIVDIR_MODE">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.PRIVDIR_MODE">[docs]</a>
+<span class="n">PRIVDIR_MODE</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IRWXU</span></div>
+
+
+
+<div class="viewcode-block" id="check_create_keypair">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.check_create_keypair">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">check_create_keypair</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we have keypair, if not create it, returns the file paths&quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">MWConfig</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
+    <span class="n">privkeypath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">data_path</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;jwt.key&quot;</span>
+    <span class="n">privdir</span> <span class="o">=</span> <span class="n">privkeypath</span><span class="o">.</span><span class="n">parent</span>
+    <span class="n">privdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">privdir</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">PRIVDIR_MODE</span><span class="p">)</span>
+    <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">data_path</span> <span class="o">/</span> <span class="s2">&quot;publickeys&quot;</span> <span class="o">/</span> <span class="s2">&quot;kraftwerk.pub&quot;</span>
+    <span class="n">pubdir</span> <span class="o">=</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">parent</span>
+    <span class="n">pubdir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pubdir</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">PUBDIR_MODE</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">privkeypath</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">privkeypath</span><span class="p">,</span> <span class="n">pubkeypath</span>
+
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Generating keypair, this will take a moment&quot;</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">cpk</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">generate_keypair</span><span class="p">,</span> <span class="n">privkeypath</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">pubkeypath</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">cpk</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wrote </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeypath</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">privkeypath</span><span class="p">,</span> <span class="n">pubkeypath</span></div>
+
+
+
+<div class="viewcode-block" id="get_issuer">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.get_issuer">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_issuer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Issuer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get JWT issuer, init keys if needed&quot;&quot;&quot;</span>
+    <span class="n">privkeypath</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_create_keypair</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">Issuer</span><span class="p">(</span><span class="n">privkeypath</span><span class="o">=</span><span class="n">privkeypath</span><span class="p">,</span> <span class="n">keypasswd</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_verifier">
+<a class="viewcode-back" href="../../technical/api/miniwerk/jwt/index.html#miniwerk.jwt.get_verifier">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_verifier</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Verifier</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get JWT verifier, init keys if needed&quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">pubkeypath</span> <span class="o">=</span> <span class="k">await</span> <span class="n">check_create_keypair</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">Verifier</span><span class="p">(</span><span class="n">pubkeypath</span><span class="o">=</span><span class="n">pubkeypath</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

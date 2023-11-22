@@ -18,7 +18,9 @@ Functions
 
 .. autoapisummary::
 
-   tests.usersapis.test_people.test_people_list
+   tests.usersapis.test_people.test_admin_people_list
+   tests.usersapis.test_people.test_product_people_list
+   tests.usersapis.test_people.test_person_delete
 
 
 
@@ -34,9 +36,21 @@ Attributes
 
    
 
-.. py:function:: test_people_list(admin_mtls_client)
+.. py:function:: test_admin_people_list(admin_mtls_client)
    :async:
 
    Test people list fragment
+
+
+.. py:function:: test_product_people_list(product_mtls_client)
+   :async:
+
+   Test people list fragment
+
+
+.. py:function:: test_person_delete(admin_mtls_client, enroll_poolcode)
+   :async:
+
+   Test enrolling and then deleting a person
 
 

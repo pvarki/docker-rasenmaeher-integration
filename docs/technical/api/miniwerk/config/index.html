@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miniwerk.config &mdash; Rasenmaeher docs 0.11.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/miniwerk/config/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=57cbeb03"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="miniwerk.console" href="../console/index.html" />
+    <link rel="prev" title="miniwerk" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.11.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.console</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../helpers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.helpers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../jwt/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.jwt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../lewrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.lewrap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../manifests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.manifests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../mkcwrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.mkcwrap</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.config</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-miniwerk.config">
+<span id="miniwerk-config"></span><h1><a class="reference internal" href="#module-miniwerk.config" title="miniwerk.config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.config</span></code></a><a class="headerlink" href="#module-miniwerk.config" title="Link to this heading"></a></h1>
+<p>Configuration</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.config.KeyType" title="miniwerk.config.KeyType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyType</span></code></a></p></td>
+<td><p>Valid key types for certbot/mkcert</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#miniwerk.config.ProductSettings" title="miniwerk.config.ProductSettings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProductSettings</span></code></a></p></td>
+<td><p>Configs for each product</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.config.MWConfig" title="miniwerk.config.MWConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MWConfig</span></code></a></p></td>
+<td><p>Config for MiniWerk</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="miniwerk.config.KeyType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KeyType</span></span><a class="reference internal" href="../../../../_modules/miniwerk/config.html#KeyType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.KeyType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.StrEnum" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.StrEnum</span></code></a></p>
+<p>Valid key types for certbot/mkcert</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.KeyType.RSA">
+<span class="sig-name descname"><span class="pre">RSA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rsa'</span></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#KeyType.RSA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.KeyType.RSA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.KeyType.ECDSA">
+<span class="sig-name descname"><span class="pre">ECDSA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ecdsa'</span></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#KeyType.ECDSA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.KeyType.ECDSA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="miniwerk.config.ProductSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProductSettings</span></span><a class="reference internal" href="../../../../_modules/miniwerk/config.html#ProductSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.ProductSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic_settings.BaseSettings</span></code></p>
+<p>Configs for each product</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.ProductSettings.api_port">
+<span class="sig-name descname"><span class="pre">api_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#ProductSettings.api_port"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.ProductSettings.api_port" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MWConfig</span></span><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic_settings.BaseSettings</span></code></p>
+<p>Config for MiniWerk</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_config_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">le_config_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_config_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_config_path" title="Link to this definition"></a></dt>
+<dd><p>LE configuration dir</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.mkcert_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mkcert_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.mkcert_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.mkcert_path" title="Link to this definition"></a></dt>
+<dd><p>mkcert certs dir</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_work_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">le_work_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_work_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_work_path" title="Link to this definition"></a></dt>
+<dd><p>LE work dir (doesn’t seem to actually hold anything persistent)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_cert_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">le_cert_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_cert_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_cert_dir" title="Link to this definition"></a></dt>
+<dd><p>The “live” dir for the cert we have, remember the “file” here are symlinks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.mk_cert_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mk_cert_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.mk_cert_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.mk_cert_dir" title="Link to this definition"></a></dt>
+<dd><p>The “live” dir for the cert we have</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.fqdns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fqdns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.fqdns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.fqdns" title="Link to this definition"></a></dt>
+<dd><p>Main domain and all subdomains and FQDNs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.product_manifest_paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">product_manifest_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.product_manifest_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.product_manifest_paths" title="Link to this definition"></a></dt>
+<dd><p>Paths for product manifests keyed by product</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.domain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.domain" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_email">
+<span class="sig-name descname"><span class="pre">le_email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_email" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_test">
+<span class="sig-name descname"><span class="pre">le_test</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_test" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.subdomains">
+<span class="sig-name descname"><span class="pre">subdomains</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.subdomains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.subdomains" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.products">
+<span class="sig-name descname"><span class="pre">products</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.products"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.products" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.fake">
+<span class="sig-name descname"><span class="pre">fake</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#miniwerk.config.ProductSettings" title="miniwerk.config.ProductSettings"><span class="pre">ProductSettings</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.fake"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.fake" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.tak">
+<span class="sig-name descname"><span class="pre">tak</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#miniwerk.config.ProductSettings" title="miniwerk.config.ProductSettings"><span class="pre">ProductSettings</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.tak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.tak" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.rasenmaeher">
+<span class="sig-name descname"><span class="pre">rasenmaeher</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#miniwerk.config.ProductSettings" title="miniwerk.config.ProductSettings"><span class="pre">ProductSettings</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.rasenmaeher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.rasenmaeher" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_cert_name">
+<span class="sig-name descname"><span class="pre">le_cert_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_cert_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_cert_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.le_copy_path">
+<span class="sig-name descname"><span class="pre">le_copy_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.le_copy_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.le_copy_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.data_path">
+<span class="sig-name descname"><span class="pre">data_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.data_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.data_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.manifests_base">
+<span class="sig-name descname"><span class="pre">manifests_base</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">pathlib.Path</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.manifests_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.manifests_base" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.mkcert">
+<span class="sig-name descname"><span class="pre">mkcert</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.mkcert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.mkcert" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.ci">
+<span class="sig-name descname"><span class="pre">ci</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.ci"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.ci" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.keytype">
+<span class="sig-name descname"><span class="pre">keytype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#miniwerk.config.KeyType" title="miniwerk.config.KeyType"><span class="pre">KeyType</span></a></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.keytype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.keytype" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.model_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.model_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig._singleton">
+<span class="sig-name descname"><span class="pre">_singleton</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#miniwerk.config.MWConfig" title="miniwerk.config.MWConfig"><span class="pre">MWConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span></em><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig._singleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig._singleton" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="miniwerk.config.MWConfig.singleton">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/config.html#MWConfig.singleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.config.MWConfig.singleton" title="Link to this definition"></a></dt>
+<dd><p>Return singleton</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#miniwerk.config.MWConfig" title="miniwerk.config.MWConfig">MWConfig</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="miniwerk" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../console/index.html" class="btn btn-neutral float-right" title="miniwerk.console" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

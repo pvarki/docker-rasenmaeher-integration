@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.usersapis.conftest &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.usersapis.conftest &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -80,7 +80,7 @@
              
   <h1>Source code for tests.usersapis.conftest</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;fixtures&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">AsyncGenerator</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">uuid</span>
@@ -90,7 +90,8 @@
 <span class="kn">from</span> <span class="nn">async_asgi_testclient</span> <span class="kn">import</span> <span class="n">TestClient</span>  <span class="c1"># pylint: disable=import-error</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
 
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.web.application</span> <span class="kn">import</span> <span class="n">get_app</span>
+
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.web.application</span> <span class="kn">import</span> <span class="n">get_app_no_init</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.LOGGER">[docs]</a>
@@ -121,7 +122,7 @@
 <a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.admin_mtls_client">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">admin_mtls_client</span><span class="p">(</span><span class="n">issuer_cl</span><span class="p">:</span> <span class="n">Issuer</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;(fake) mTLS client for admin&quot;&quot;&quot;</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app_no_init</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
         <span class="n">token</span> <span class="o">=</span> <span class="n">issuer_cl</span><span class="o">.</span><span class="n">issue</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;sub&quot;</span><span class="p">:</span> <span class="s2">&quot;tpadminsession&quot;</span><span class="p">,</span>
@@ -146,37 +147,28 @@
 
 
 
-<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
-<div class="viewcode-block" id="user_mtls_client">
-<a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.user_mtls_client">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">user_mtls_client</span><span class="p">(</span><span class="n">admin_mtls_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;mTLS client for user&quot;&quot;&quot;</span>
-    <span class="c1"># create pool</span>
-    <span class="n">admin</span> <span class="o">=</span> <span class="n">admin_mtls_client</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">admin</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-    <span class="n">poolcode</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">]</span>
-
-    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
+<div class="viewcode-block" id="enroll_user">
+<a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.enroll_user">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">enroll_user</span><span class="p">(</span><span class="n">poolcode</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">admin</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enrolls a user, returns the p12 cert pkg&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app_no_init</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
         <span class="c1"># start enroll</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/enrollment/invitecode/enroll&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;invite_code&quot;</span><span class="p">:</span> <span class="n">poolcode</span><span class="p">,</span>
-            <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;ENROLLUSERa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="n">callsign</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Data: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
         <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">instance</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="n">enroll_payload</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">enroll_payload</span><span class="p">[</span><span class="s1">&#39;jwt&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
 
         <span class="c1"># approve enrollment</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/enrollment/accept&quot;</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="s2">&quot;ENROLLUSERa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="n">callsign</span><span class="p">,</span>
             <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="n">enroll_payload</span><span class="p">[</span><span class="s2">&quot;approvecode&quot;</span><span class="p">],</span>
         <span class="p">}</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
@@ -184,7 +176,52 @@
         <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">admin</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
         <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 
+        <span class="c1"># Fetch the p12 file</span>
+        <span class="n">p12url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/api/v1/enduserpfx/</span><span class="si">{</span><span class="n">callsign</span><span class="si">}</span><span class="s2">.pfx&quot;</span>
+        <span class="n">p12resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">p12url</span><span class="p">)</span>
+        <span class="n">p12resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">p12resp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="enroll_poolcode">
+<a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.enroll_poolcode">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">enroll_poolcode</span><span class="p">(</span><span class="n">admin_mtls_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create enrollment pool&quot;&quot;&quot;</span>
+    <span class="n">admin</span> <span class="o">=</span> <span class="n">admin_mtls_client</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/enrollment/invitecode/create&quot;</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">admin</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">poolcode</span> <span class="o">=</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;invite_code&quot;</span><span class="p">]</span>
+    <span class="k">yield</span> <span class="n">poolcode</span></div>
+
+    <span class="c1"># PONDER: Clean up ??</span>
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="user_mtls_client">
+<a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.user_mtls_client">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">user_mtls_client</span><span class="p">(</span><span class="n">admin_mtls_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">enroll_poolcode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;mTLS client for user&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">enroll_user</span><span class="p">(</span><span class="n">enroll_poolcode</span><span class="p">,</span> <span class="s2">&quot;ENROLLUSERa&quot;</span><span class="p">,</span> <span class="n">admin_mtls_client</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app_no_init</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
         <span class="n">instance</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X-ClientCert-DN&quot;</span><span class="p">:</span> <span class="s2">&quot;CN=ENROLLUSERa,O=N/A&quot;</span><span class="p">})</span>
+        <span class="k">yield</span> <span class="n">instance</span></div>
+
+
+
+<span class="nd">@pytest_asyncio</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;session&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="product_mtls_client">
+<a class="viewcode-back" href="../../../technical/api/tests/usersapis/conftest/index.html#tests.usersapis.conftest.product_mtls_client">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">product_mtls_client</span><span class="p">(</span><span class="n">admin_mtls_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncGenerator</span><span class="p">[</span><span class="n">TestClient</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Client with mocked NGinx mTLS headers&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">admin_mtls_client</span>  <span class="c1"># Just make sure the db inits are done</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">TestClient</span><span class="p">(</span><span class="n">get_app_no_init</span><span class="p">())</span> <span class="k">as</span> <span class="n">instance</span><span class="p">:</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X-ClientCert-DN&quot;</span><span class="p">:</span> <span class="s2">&quot;CN=fake.localmaeher.pvarki.fi,O=N/A&quot;</span><span class="p">})</span>
         <span class="k">yield</span> <span class="n">instance</span></div>
 
 </pre></div>

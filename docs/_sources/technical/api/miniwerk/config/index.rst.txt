@@ -1,0 +1,197 @@
+:py:mod:`miniwerk.config`
+=========================
+
+.. py:module:: miniwerk.config
+
+.. autoapi-nested-parse::
+
+   Configuration
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.config.KeyType
+   miniwerk.config.ProductSettings
+   miniwerk.config.MWConfig
+
+
+
+
+.. py:class:: KeyType
+
+
+   Bases: :py:obj:`enum.StrEnum`
+
+   Valid key types for certbot/mkcert
+
+   .. py:attribute:: RSA
+      :value: 'rsa'
+
+      
+
+   .. py:attribute:: ECDSA
+      :value: 'ecdsa'
+
+      
+
+
+.. py:class:: ProductSettings
+
+
+   Bases: :py:obj:`pydantic_settings.BaseSettings`
+
+   Configs for each product
+
+   .. py:attribute:: api_port
+      :type: int
+
+      
+
+
+.. py:class:: MWConfig
+
+
+   Bases: :py:obj:`pydantic_settings.BaseSettings`
+
+   Config for MiniWerk
+
+   .. py:property:: le_config_path
+      :type: pathlib.Path
+
+      LE configuration dir
+
+
+   .. py:property:: mkcert_path
+      :type: pathlib.Path
+
+      mkcert certs dir
+
+
+   .. py:property:: le_work_path
+      :type: pathlib.Path
+
+      LE work dir (doesn't seem to actually hold anything persistent)
+
+
+   .. py:property:: le_cert_dir
+      :type: pathlib.Path
+
+      The "live" dir for the cert we have, remember the "file" here are symlinks
+
+
+   .. py:property:: mk_cert_dir
+      :type: pathlib.Path
+
+      The "live" dir for the cert we have
+
+
+   .. py:property:: fqdns
+      :type: List[str]
+
+      Main domain and all subdomains and FQDNs
+
+
+   .. py:property:: product_manifest_paths
+      :type: Dict[str, pathlib.Path]
+
+      Paths for product manifests keyed by product
+
+
+   .. py:attribute:: domain
+      :type: str
+
+      
+
+   .. py:attribute:: le_email
+      :type: str
+
+      
+
+   .. py:attribute:: le_test
+      :type: bool
+
+      
+
+   .. py:attribute:: subdomains
+      :type: str
+
+      
+
+   .. py:attribute:: products
+      :type: str
+
+      
+
+   .. py:attribute:: fake
+      :type: ProductSettings
+
+      
+
+   .. py:attribute:: tak
+      :type: ProductSettings
+
+      
+
+   .. py:attribute:: rasenmaeher
+      :type: ProductSettings
+
+      
+
+   .. py:attribute:: le_cert_name
+      :type: str
+
+      
+
+   .. py:attribute:: le_copy_path
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: data_path
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: manifests_base
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: mkcert
+      :type: bool
+
+      
+
+   .. py:attribute:: ci
+      :type: bool
+
+      
+
+   .. py:attribute:: keytype
+      :type: KeyType
+
+      
+
+   .. py:attribute:: model_config
+
+      
+
+   .. py:attribute:: _singleton
+      :type: ClassVar[Optional[MWConfig]]
+
+      
+
+   .. py:method:: singleton()
+      :classmethod:
+
+      Return singleton
+
+
+

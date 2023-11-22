@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.prodcutapihelpers &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.prodcutapihelpers &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -81,17 +81,16 @@
              
   <h1>Source code for rasenmaeher_api.prodcutapihelpers</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Product integration API helpers&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">import</span> <span class="nn">aiohttp</span>
 <span class="kn">import</span> <span class="nn">pydantic</span>
 <span class="kn">from</span> <span class="nn">libpvarki.schemas.generic</span> <span class="kn">import</span> <span class="n">OperationResultResponse</span>
 
 
-<span class="kn">from</span> <span class="nn">.settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">.rmsettings</span> <span class="kn">import</span> <span class="n">RMSettings</span>
 <span class="kn">from</span> <span class="nn">.mtlsinit</span> <span class="kn">import</span> <span class="n">get_session_winit</span>
 
 <div class="viewcode-block" id="LOGGER">
@@ -104,15 +103,8 @@
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/prodcutapihelpers/index.html#rasenmaeher_api.prodcutapihelpers.check_kraftwerk_manifest">[docs]</a>
 <span class="k">def</span> <span class="nf">check_kraftwerk_manifest</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that settings has manifest&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span><span class="p">:</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;KRAFTWERK manifest file not read, it should have been done on init&quot;</span><span class="p">)</span>
-        <span class="n">pth</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">pth</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;KRAFTWERK manifest file not found&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">False</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pth</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span></div>
+    <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">load_manifest</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span></div>
 
 
 
@@ -154,39 +146,48 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Call given POST endpoint on call products in the manifest&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">check_kraftwerk_manifest</span><span class="p">():</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="n">manifest</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span>
+    <span class="n">manifest</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span>
     <span class="k">if</span> <span class="s2">&quot;products&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Manifest does not have products key&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
-    <span class="n">ret</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_session_winit</span><span class="p">()</span>
+    <span class="n">rmconf</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;data=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">conf</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_one</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">conf</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do one call&quot;&quot;&quot;</span>
+        <span class="k">nonlocal</span> <span class="n">url_suffix</span><span class="p">,</span> <span class="n">rmconf</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_session_winit</span><span class="p">()</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">conf</span><span class="p">[</span><span class="s1">&#39;api&#39;</span><span class="p">]</span><span class="si">}{</span><span class="n">url_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;calling </span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">methodname</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
                 <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">methodname</span><span class="p">)(</span><span class="n">url</span><span class="p">)</span>
+                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">methodname</span><span class="p">)(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">rmconf</span><span class="o">.</span><span class="n">integration_api_timeout</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">methodname</span><span class="p">)(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">methodname</span><span class="p">)(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">rmconf</span><span class="o">.</span><span class="n">integration_api_timeout</span><span class="p">)</span>
                 <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
                 <span class="n">payload</span> <span class="o">=</span> <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
                 <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;payload=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
-                <span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">respose_schema</span><span class="o">.</span><span class="n">parse_obj</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
-                <span class="c1"># Log a commong error case here for DRY</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">OperationResultResponse</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>  <span class="c1"># type: ignore[union-attr]</span>
-                        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failure at </span><span class="si">{}</span><span class="s2">, response: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">]))</span>
-            <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientError</span><span class="p">:</span>
-                <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failure to call </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
-                <span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">continue</span>
-            <span class="k">except</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">:</span>
-                <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Invalid response from </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
-                <span class="n">ret</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                <span class="k">continue</span>
-    <span class="k">return</span> <span class="n">ret</span></div>
+                <span class="n">retval</span> <span class="o">=</span> <span class="n">respose_schema</span><span class="o">.</span><span class="n">parse_obj</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+                <span class="c1"># Log a common error case here for DRY</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">retval</span><span class="p">,</span> <span class="n">OperationResultResponse</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">retval</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+                        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failure at </span><span class="si">{}</span><span class="s2">, response: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">retval</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="n">retval</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientError</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">,</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failure to call </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Invalid response from </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">exc</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pylint: disable=W0718</span>
+                <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Something went seriously wrong calling </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">coros</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">conf</span> <span class="ow">in</span> <span class="n">manifest</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">coros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle_one</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">conf</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">coros</span><span class="p">))</span></div>
 
 </pre></div>
 

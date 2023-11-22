@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RASENMAEHER integrations &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>RASENMAEHER integrations &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=486e5634"></script>
+        <script src="_static/documentation_options.js?v=57cbeb03"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -104,7 +104,10 @@ to the directory and create new branch, commit and push changes as usual under t
 <li><p>keycloak <a class="reference external" href="https://github.com/pvarki/docker-keycloak">https://github.com/pvarki/docker-keycloak</a></p></li>
 <li><p>kw_product_init <a class="reference external" href="https://github.com/pvarki/golang-kraftwerk-init-helper-cli">https://github.com/pvarki/golang-kraftwerk-init-helper-cli</a></p></li>
 <li><p>openldap <a class="reference external" href="https://github.com/pvarki/docker-openldap">https://github.com/pvarki/docker-openldap</a></p></li>
-<li><p>mkcert <a class="reference external" href="https://github.com/pvarki/docker-mkcert">https://github.com/pvarki/docker-mkcert</a></p></li>
+<li><p>miniwerk <a class="reference external" href="https://github.com/pvarki/python-rasenmaeher-miniwerk">https://github.com/pvarki/python-rasenmaeher-miniwerk</a></p></li>
+<li><p>ui <a class="reference external" href="https://github.com/pvarki/rasenmaeher-ui">https://github.com/pvarki/rasenmaeher-ui</a></p></li>
+<li><p>takserver <a class="reference external" href="https://github.com/pvarki/docker-atak-server">https://github.com/pvarki/docker-atak-server</a></p></li>
+<li><p>takintegration <a class="reference external" href="https://github.com/pvarki/python-tak-rmapi">https://github.com/pvarki/python-tak-rmapi</a></p></li>
 </ul>
 </div></blockquote>
 <section id="running-in-local-development-mode">
@@ -128,8 +131,15 @@ run “down” for one env before starting the other.</p>
 switching between environments.</p>
 <p>The dev version launches all the services and runs rasenmaeher-api in uvicorn reload mode so any edits
 you make under /api will soon be reflected in the running instance.</p>
+<p>If rasenmaeher-ui devel server complains make sure to delete ui/node_modules -directory from host first
+the dockder node distribution probably is not compatible with whatever you have installed on the host.</p>
 </section>
 </section>
+</section>
+<section id="pre-commit-notes">
+<h2>pre-commit notes<a class="headerlink" href="#pre-commit-notes" title="Link to this heading"></a></h2>
+<p>Use “pre-commit run –all-files” liberally (and make sure you have run “pre-commit install”). If you get complaints
+about missing environment variables run “source example_env.sh”</p>
 </section>
 <section id="integration-tests">
 <h2>Integration tests<a class="headerlink" href="#integration-tests" title="Link to this heading"></a></h2>
@@ -142,13 +152,10 @@ to run “down -v” for the composition first, then bring it back up before run
 <li class="toctree-l2"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cfssl.html">CFSSL Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cfssl.html#cfssl-submodule">cfssl Submodule</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fakewerk.html">Fakewerk Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fakewerk.html#fakewerk-component">fakewerk component</a></li>
+<li class="toctree-l2"><a class="reference internal" href="miniwerk.html">Miniwerk</a></li>
 <li class="toctree-l2"><a class="reference internal" href="keycloak.html">Keycloak</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kw_product_init.html">kw_product_init Reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="kw_product_init.html#golang-kraftwerk-init-helper-cli">golang-kraftwerk-init-helper-cli</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mkcert.html">mkcert Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mkcert.html#mkcert-submodule">mkcert Submodule</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx.html">Nginx</a></li>
 <li class="toctree-l2"><a class="reference internal" href="openldap.html">OpenLDAP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pg_init.html">PG Init</a></li>
@@ -159,11 +166,11 @@ to run “down -v” for the composition first, then bring it back up before run
 <li class="toctree-l1"><a class="reference internal" href="search.html">Search Page</a></li>
 <li class="toctree-l1"><a class="reference internal" href="technical/api/index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="technical/api/tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/api/fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/api/fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="technical/api/fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="technical/api/rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="technical/api/fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="technical/api/miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>

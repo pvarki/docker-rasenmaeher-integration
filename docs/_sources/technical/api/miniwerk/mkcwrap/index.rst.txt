@@ -1,0 +1,49 @@
+:py:mod:`miniwerk.mkcwrap`
+==========================
+
+.. py:module:: miniwerk.mkcwrap
+
+.. autoapi-nested-parse::
+
+   Wrap mkcert calls
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.mkcwrap.call_mkcert
+   miniwerk.mkcwrap.get_mk_certs
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.mkcwrap.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: call_mkcert(config)
+   :async:
+
+   Construct Cermkcerttbot command and call the entrypoint, returns the args for easier unit testing
+
+
+.. py:function:: get_mk_certs()
+   :async:
+
+   Get certs from mkcert, copy them to the configured path, return configured path
+
+

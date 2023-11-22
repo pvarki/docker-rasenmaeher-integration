@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.conftest &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.conftest &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -59,21 +59,26 @@
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.conftest</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_auth/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_auth</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_cfssl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_console</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_db/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_enrollment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_enrollment</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_healthcheck/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_healthcheck</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_lewrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_lewrap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_manifests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_manifests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_miniwerk</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_mkcwrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_mkcwrap</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_rasenmaeher_api</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_tokens/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_tokens</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -112,50 +117,8 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.event_loop" title="tests.conftest.event_loop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">event_loop</span></code></a>()</p></td>
-<td><p>Session scoped event loop so the db connection can stay up</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.test_user_secrets" title="tests.conftest.test_user_secrets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_user_secrets</span></code></a>(session_env_config)</p></td>
-<td><p>Create a few test users and work ids returns</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.issuer_cl" title="tests.conftest.issuer_cl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">issuer_cl</span></code></a>()</p></td>
-<td><p>issuer using cl-key</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.verifier" title="tests.conftest.verifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verifier</span></code></a>()</p></td>
-<td><p>issuer using all keys in data</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.session_env_config" title="tests.conftest.session_env_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session_env_config</span></code></a>(monkeysession, docker_ip, ...)</p></td>
-<td><p>set the JWT auth config</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_client" title="tests.conftest.tilauspalvelu_jwt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_client</span></code></a>(issuer_cl)</p></td>
-<td><p>Client with tilauspalvely style JWT</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.kraftwerk_jwt_client" title="tests.conftest.kraftwerk_jwt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kraftwerk_jwt_client</span></code></a>(issuer_cl)</p></td>
-<td><p>Client with KRAFTWERK style JWT</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_admin_client" title="tests.conftest.tilauspalvelu_jwt_admin_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_admin_client</span></code></a>(issuer_cl, ...)</p></td>
-<td><p>Client with admin JWT</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_user_client" title="tests.conftest.tilauspalvelu_jwt_user_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_user_client</span></code></a>(issuer_cl, test_user_secrets)</p></td>
-<td><p>Client with normal user JWT</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_user_koira_client" title="tests.conftest.tilauspalvelu_jwt_user_koira_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_user_koira_client</span></code></a>(issuer_cl, ...)</p></td>
-<td><p>Client with normal user JWT</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.tilauspalvelu_jwt_without_proper_user_client" title="tests.conftest.tilauspalvelu_jwt_without_proper_user_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tilauspalvelu_jwt_without_proper_user_client</span></code></a>(issuer_cl)</p></td>
-<td><p>Client with normal user JWT</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.mtls_client" title="tests.conftest.mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mtls_client</span></code></a>()</p></td>
-<td><p>Client with mocked NGinx mTLS headers</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.unauth_client" title="tests.conftest.unauth_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unauth_client</span></code></a>()</p></td>
-<td><p>Client with no auth headers</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.rm_jwt_client" title="tests.conftest.rm_jwt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rm_jwt_client</span></code></a>()</p></td>
-<td><p>Client with no auth headers</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.app_client" title="tests.conftest.app_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">app_client</span></code></a>(request)</p></td>
-<td><p>Create default client</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.default_env" title="tests.conftest.default_env"><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_env</span></code></a>(monkeysession, nice_tmpdir_ses)</p></td>
+<td><p>Setup some default environment variables</p></td>
 </tr>
 </tbody>
 </table>
@@ -167,12 +130,6 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.LOGGER" title="tests.conftest.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.conftest.DATA_PATH" title="tests.conftest.DATA_PATH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DATA_PATH</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.conftest.JWT_PATH" title="tests.conftest.JWT_PATH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JWT_PATH</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py data">
@@ -180,220 +137,19 @@
 <span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../_modules/tests/conftest.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.LOGGER" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py data">
-<dt class="sig sig-object py" id="tests.conftest.DATA_PATH">
-<span class="sig-name descname"><span class="pre">DATA_PATH</span></span><a class="reference internal" href="../../../../_modules/tests/conftest.html#DATA_PATH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.DATA_PATH" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="tests.conftest.JWT_PATH">
-<span class="sig-name descname"><span class="pre">JWT_PATH</span></span><a class="reference internal" href="../../../../_modules/tests/conftest.html#JWT_PATH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.JWT_PATH" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.event_loop">
-<span class="sig-name descname"><span class="pre">event_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#event_loop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.event_loop" title="Link to this definition"></a></dt>
-<dd><p>Session scoped event loop so the db connection can stay up</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Generator[<a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.AbstractEventLoop" title="(in Python v3.11)">asyncio.AbstractEventLoop</a>, None, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.test_user_secrets">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_user_secrets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_env_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#test_user_secrets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.test_user_secrets" title="Link to this definition"></a></dt>
-<dd><p>Create a few test users and work ids returns
-list of work-ids and their corresponding “hashes”</p>
-<p>First one has “enrollment” special role</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>session_env_config</strong> (<em>None</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple[List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>], List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.issuer_cl">
-<span class="sig-name descname"><span class="pre">issuer_cl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#issuer_cl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.issuer_cl" title="Link to this definition"></a></dt>
-<dd><p>issuer using cl-key</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>multikeyjwt.Issuer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.verifier">
-<span class="sig-name descname"><span class="pre">verifier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#verifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.verifier" title="Link to this definition"></a></dt>
-<dd><p>issuer using all keys in data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>multikeyjwt.Verifier</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.session_env_config">
-<span class="sig-name descname"><span class="pre">session_env_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeysession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docker_ip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">docker_services</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nice_tmpdir_ses</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#session_env_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.session_env_config" title="Link to this definition"></a></dt>
-<dd><p>set the JWT auth config</p>
+<dt class="sig sig-object py" id="tests.conftest.default_env">
+<span class="sig-name descname"><span class="pre">default_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monkeysession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nice_tmpdir_ses</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#default_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.default_env" title="Link to this definition"></a></dt>
+<dd><p>Setup some default environment variables</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>monkeysession</strong> (<em>pytest.MonkeyPatch</em>) – </p></li>
-<li><p><strong>docker_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>docker_services</strong> (<em>pytest_docker.plugin.Services</em>) – </p></li>
-<li><p><strong>nice_tmpdir_ses</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>nice_tmpdir_ses</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Generator[None, None, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_client" title="Link to this definition"></a></dt>
-<dd><p>Client with tilauspalvely style JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.kraftwerk_jwt_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kraftwerk_jwt_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#kraftwerk_jwt_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.kraftwerk_jwt_client" title="Link to this definition"></a></dt>
-<dd><p>Client with KRAFTWERK style JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_admin_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_admin_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_admin_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_admin_client" title="Link to this definition"></a></dt>
-<dd><p>Client with admin JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_user_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_user_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_user_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_user_client" title="Link to this definition"></a></dt>
-<dd><p>Client with normal user JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_user_koira_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_user_koira_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_user_secrets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_user_koira_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_user_koira_client" title="Link to this definition"></a></dt>
-<dd><p>Client with normal user JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p></li>
-<li><p><strong>test_user_secrets</strong> (<em>Tuple</em><em>[</em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>]</em><em>]</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.tilauspalvelu_jwt_without_proper_user_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tilauspalvelu_jwt_without_proper_user_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">issuer_cl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#tilauspalvelu_jwt_without_proper_user_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.tilauspalvelu_jwt_without_proper_user_client" title="Link to this definition"></a></dt>
-<dd><p>Client with normal user JWT</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>issuer_cl</strong> (<em>multikeyjwt.Issuer</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.mtls_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mtls_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#mtls_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.mtls_client" title="Link to this definition"></a></dt>
-<dd><p>Client with mocked NGinx mTLS headers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.unauth_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">unauth_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#unauth_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.unauth_client" title="Link to this definition"></a></dt>
-<dd><p>Client with no auth headers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.rm_jwt_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rm_jwt_client</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#rm_jwt_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.rm_jwt_client" title="Link to this definition"></a></dt>
-<dd><p>Client with no auth headers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="tests.conftest.app_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">app_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/conftest.html#app_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.conftest.app_client" title="Link to this definition"></a></dt>
-<dd><p>Create default client</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> (<em>_pytest.fixtures.SubRequest</em>) – </p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
 </dd>
 </dl>
 </dd></dl>

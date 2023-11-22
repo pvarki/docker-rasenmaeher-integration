@@ -1,0 +1,63 @@
+:py:mod:`miniwerk.manifests`
+============================
+
+.. py:module:: miniwerk.manifests
+
+.. autoapi-nested-parse::
+
+   Handle manifests
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.manifests.copy_jwt_pub
+   miniwerk.manifests.create_rasenmaeher_manifest
+   miniwerk.manifests.create_product_manifest
+   miniwerk.manifests.create_all_product_manifests
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.manifests.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: copy_jwt_pub(manifest_dir)
+   :async:
+
+   Copy miniwerks JWT public key to the manifest dir
+
+
+.. py:function:: create_rasenmaeher_manifest()
+   :async:
+
+   create manifest for RASENMAEHER
+
+
+.. py:function:: create_product_manifest(productname)
+   :async:
+
+   create manisfest for given product
+
+
+.. py:function:: create_all_product_manifests()
+   :async:
+
+   Handle all products
+
+

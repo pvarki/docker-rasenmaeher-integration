@@ -20,6 +20,7 @@ Functions
 
    tests.test_rasenmaeher_api.test_version
    tests.test_rasenmaeher_api.test_get_openapi_json
+   tests.test_rasenmaeher_api.test_settings
 
 
 
@@ -32,5 +33,10 @@ Functions
    :async:
 
    Check that we can get the openapi spec
+
+
+.. py:function:: test_settings()
+
+   Test settings defaults
 
 

@@ -23,6 +23,7 @@ Functions
    fprun.handle_get_hello
    fprun.handle_user_crud
    fprun.handle_fragment
+   fprun.handle_health
    fprun.handle_admin_fragment
    fprun.main
 
@@ -67,6 +68,12 @@ Attributes
    :async:
 
    Respond with hello_world for user
+
+
+.. py:function:: handle_health(request)
+   :async:
+
+   healthcheck response
 
 
 .. py:function:: handle_admin_fragment(request)

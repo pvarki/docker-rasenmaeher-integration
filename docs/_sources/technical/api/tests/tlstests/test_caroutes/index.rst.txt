@@ -22,6 +22,7 @@ Functions
    tests.tlstests.test_caroutes.test_have_mtlscert
    tests.tlstests.test_caroutes.test_sign
    tests.tlstests.test_caroutes.test_sign_twice
+   tests.tlstests.test_caroutes.test_sign_revoke_mtls
 
 
 
@@ -58,5 +59,11 @@ Attributes
    :async:
 
    Test using same nonce twice, should fail
+
+
+.. py:function:: test_sign_revoke_mtls(datadir)
+   :async:
+
+   Test signing as product
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../../../search.html" method="get">
@@ -54,9 +54,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../../../../search.html">Search Page</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../../../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../../../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="../../../../index.html#subpackages">Subpackages</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../../../../cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api.cfssl</span></code></a></li>
@@ -68,7 +68,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../index.html#package-contents">Package Contents</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -110,13 +110,22 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr" title="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_ca_and_sign_csr</span></code></a>(request, certs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.csr_common" title="rasenmaeher_api.web.api.product.views.csr_common"><code class="xref py py-obj docutils literal notranslate"><span class="pre">csr_common</span></code></a>(certs)</p></td>
+<td><p>Common parts of CSR handling</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr" title="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_ca_and_sign_csr</span></code></a>(request, certs)</p></td>
 <td><p>Used by product integration API to request signing of their mTLS client cert</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.renew_csr" title="rasenmaeher_api.web.api.product.views.renew_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renew_csr</span></code></a>(request, certs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr_mtls" title="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr_mtls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_ca_and_sign_csr_mtls</span></code></a>(request, certs)</p></td>
+<td><p>Allow product with mTLS cert to request signatures for other certs</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.revoke_cert" title="rasenmaeher_api.web.api.product.views.revoke_cert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_cert</span></code></a>(request, cert)</p></td>
+<td><p>Allow product with mTLS cert to revoke a cert</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.renew_csr" title="rasenmaeher_api.web.api.product.views.renew_csr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renew_csr</span></code></a>(request, certs)</p></td>
 <td><p>Used by product integration API to request renew of their mTLS client cert</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.signal_ready" title="rasenmaeher_api.web.api.product.views.signal_ready"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_ready</span></code></a>(meta)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.api.product.views.signal_ready" title="rasenmaeher_api.web.api.product.views.signal_ready"><code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_ready</span></code></a>(meta)</p></td>
 <td><p>Used by product integration API to signify everything is ready in their end</p></td>
 </tr>
 </tbody>
@@ -145,6 +154,20 @@
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.csr_common">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">csr_common</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">certs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#csr_common"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.csr_common" title="Link to this definition"></a></dt>
+<dd><p>Common parts of CSR handling</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>certs</strong> (<a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesRequest" title="rasenmaeher_api.web.api.product.schema.CertificatesRequest"><em>rasenmaeher_api.web.api.product.schema.CertificatesRequest</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesResponse" title="rasenmaeher_api.web.api.product.schema.CertificatesResponse">rasenmaeher_api.web.api.product.schema.CertificatesResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">return_ca_and_sign_csr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#return_ca_and_sign_csr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr" title="Link to this definition"></a></dt>
 <dd><p>Used by product integration API to request signing of their mTLS client cert</p>
@@ -157,6 +180,40 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesResponse" title="rasenmaeher_api.web.api.product.schema.CertificatesResponse">rasenmaeher_api.web.api.product.schema.CertificatesResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr_mtls">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">return_ca_and_sign_csr_mtls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">certs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#return_ca_and_sign_csr_mtls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr_mtls" title="Link to this definition"></a></dt>
+<dd><p>Allow product with mTLS cert to request signatures for other certs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>fastapi.Request</em>) – </p></li>
+<li><p><strong>certs</strong> (<a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesRequest" title="rasenmaeher_api.web.api.product.schema.CertificatesRequest"><em>rasenmaeher_api.web.api.product.schema.CertificatesRequest</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.CertificatesResponse" title="rasenmaeher_api.web.api.product.schema.CertificatesResponse">rasenmaeher_api.web.api.product.schema.CertificatesResponse</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.api.product.views.revoke_cert">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">revoke_cert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cert</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../../../_modules/rasenmaeher_api/web/api/product/views.html#revoke_cert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.api.product.views.revoke_cert" title="Link to this definition"></a></dt>
+<dd><p>Allow product with mTLS cert to revoke a cert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>fastapi.Request</em>) – </p></li>
+<li><p><strong>cert</strong> (<a class="reference internal" href="../schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest" title="rasenmaeher_api.web.api.product.schema.RevokeRequest"><em>rasenmaeher_api.web.api.product.schema.RevokeRequest</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>libpvarki.schemas.generic.OperationResultResponse</p>
 </dd>
 </dl>
 </dd></dl>

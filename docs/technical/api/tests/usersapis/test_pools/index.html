@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.usersapis.test_pools &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.usersapis.test_pools &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -62,11 +62,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -106,13 +106,16 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools" title="tests.usersapis.test_pools.test_list_pools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools</span></code></a>(admin_mtls_client)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.five_pools" title="tests.usersapis.test_pools.five_pools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">five_pools</span></code></a>(admin_mtls_client)</p></td>
 <td><p>Check lists</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools_by_owner" title="tests.usersapis.test_pools.test_list_pools_by_owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools_by_owner</span></code></a>(admin_mtls_client)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools" title="tests.usersapis.test_pools.test_list_pools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools</span></code></a>(admin_mtls_client, five_pools)</p></td>
+<td><p>Check lists</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools_by_owner" title="tests.usersapis.test_pools.test_list_pools_by_owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools_by_owner</span></code></a>(admin_mtls_client)</p></td>
 <td><p>Check list by owner</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools_wrong_owner" title="tests.usersapis.test_pools.test_list_pools_wrong_owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools_wrong_owner</span></code></a>(admin_mtls_client)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.test_pools.test_list_pools_wrong_owner" title="tests.usersapis.test_pools.test_list_pools_wrong_owner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_list_pools_wrong_owner</span></code></a>(admin_mtls_client)</p></td>
 <td><p>Check nonexistent owner</p></td>
 </tr>
 </tbody>
@@ -133,12 +136,29 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="tests.usersapis.test_pools.test_list_pools">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_list_pools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/test_pools.html#test_list_pools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.test_pools.test_list_pools" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="tests.usersapis.test_pools.five_pools">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">five_pools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/test_pools.html#five_pools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.test_pools.five_pools" title="Link to this definition"></a></dt>
 <dd><p>Check lists</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>admin_mtls_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[List[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>], None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.usersapis.test_pools.test_list_pools">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_list_pools</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">five_pools</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/test_pools.html#test_list_pools"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.test_pools.test_list_pools" title="Link to this definition"></a></dt>
+<dd><p>Check lists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>admin_mtls_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+<li><p><strong>five_pools</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>

@@ -1,0 +1,49 @@
+:py:mod:`miniwerk.lewrap`
+=========================
+
+.. py:module:: miniwerk.lewrap
+
+.. autoapi-nested-parse::
+
+   Wrap letsencrypt
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.lewrap.call_certbot
+   miniwerk.lewrap.get_le_certs
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.lewrap.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: call_certbot(config)
+   :async:
+
+   Construct Certbot command and call the entrypoint, returns the args for easier unit testing
+
+
+.. py:function:: get_le_certs()
+   :async:
+
+   Get certs from LE, copy them to the configured path, return configured path
+
+

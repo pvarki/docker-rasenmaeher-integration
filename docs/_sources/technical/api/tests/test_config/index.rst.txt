@@ -1,0 +1,53 @@
+:py:mod:`tests.test_config`
+===========================
+
+.. py:module:: tests.test_config
+
+.. autoapi-nested-parse::
+
+   Test the config class
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_config.test_defaults
+   tests.test_config.test_singleton
+   tests.test_config.test_sub_config_env
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_config.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_defaults()
+
+   Test the config defaults
+
+
+.. py:function:: test_singleton()
+
+   Test the singleton fetcher
+
+
+.. py:function:: test_sub_config_env(monkeypatch)
+
+   Test with modified config of product settings via env
+
+

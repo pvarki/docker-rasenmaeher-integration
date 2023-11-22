@@ -1,0 +1,29 @@
+:py:mod:`tests.test_miniwerk`
+=============================
+
+.. py:module:: tests.test_miniwerk
+
+.. autoapi-nested-parse::
+
+   Package level tests
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_miniwerk.test_version
+
+
+
+.. py:function:: test_version()
+
+   Make sure version matches expected
+
+

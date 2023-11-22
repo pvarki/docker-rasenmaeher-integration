@@ -32,6 +32,7 @@ Functions
    tests.test_db.test_person_with_cert_cfsslfail
    tests.test_db.test_person_with_cert_duplicatename
    tests.test_db.test_pfx_parse
+   tests.test_db.test_productcn_forbid
 
 
 
@@ -127,5 +128,11 @@ Attributes
    :async:
 
    Test that the PFX file gets done
+
+
+.. py:function:: test_productcn_forbid(ginosession)
+   :async:
+
+   Test that trying to create enrollment or person with callsign that matches a product CN fails
 
 

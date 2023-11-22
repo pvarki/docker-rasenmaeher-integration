@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_db &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.test_db &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -103,7 +103,7 @@
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.jwtinit</span> <span class="kn">import</span> <span class="n">jwt_init</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.mtlsinit</span> <span class="kn">import</span> <span class="n">mtls_init</span>
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.rmsettings</span> <span class="kn">import</span> <span class="n">switchme_to_singleton_call</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.cfssl.public</span> <span class="kn">import</span> <span class="n">get_crl</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.db.base</span> <span class="kn">import</span> <span class="n">init_db</span><span class="p">,</span> <span class="n">bind_config</span>
 
@@ -168,6 +168,11 @@
     <span class="k">assert</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">obj2</span><span class="o">.</span><span class="n">has_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="k">await</span> <span class="n">obj2</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="ow">not</span> <span class="k">await</span> <span class="n">obj2</span><span class="o">.</span><span class="n">assign_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>  <span class="c1"># already assignee, no need to create</span>
+    <span class="c1"># Test the get pk or callsign helper</span>
+    <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="s2">&quot;DOGGO01a&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="n">uuid_to_b64</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
 
     <span class="n">callsigns</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">async</span> <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">):</span>
@@ -235,6 +240,11 @@
     <span class="n">obj3</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">obj3</span><span class="o">.</span><span class="n">callsign</span> <span class="o">==</span> <span class="n">obj</span><span class="o">.</span><span class="n">callsign</span>
 
+    <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="s2">&quot;PORA22b&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="n">uuid_to_b64</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">by_pk_or_callsign</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+
     <span class="n">old_code</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">approvecode</span><span class="p">)</span>
     <span class="n">new_code</span> <span class="o">=</span> <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">reset_approvecode</span><span class="p">()</span>
     <span class="k">assert</span> <span class="n">old_code</span> <span class="o">!=</span> <span class="n">new_code</span>
@@ -273,6 +283,11 @@
     <span class="c1"># refresh</span>
     <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">pool</span><span class="o">.</span><span class="n">active</span>
+
+    <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk_or_invitecode</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk_or_invitecode</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk_or_invitecode</span><span class="p">(</span><span class="n">uuid_to_b64</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_pk_or_invitecode</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
 
     <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">pool</span><span class="o">.</span><span class="n">set_active</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">PoolInactive</span><span class="p">):</span>
@@ -449,11 +464,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Test the cert creation with the classmethod with CFSSL failure&quot;&quot;&quot;</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
     <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
-    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
+    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
     <span class="n">old_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
     <span class="k">with</span> <span class="n">monkeypatch</span><span class="o">.</span><span class="n">context</span><span class="p">()</span> <span class="k">as</span> <span class="n">mpatch</span><span class="p">:</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s2">&quot;cfssl_host&quot;</span><span class="p">,</span> <span class="s2">&quot;http://nosuchost&quot;</span><span class="p">)</span>
-        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_CFSSL_HOST&quot;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">cfssl_host</span><span class="p">)</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setattr</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="p">,</span> <span class="s2">&quot;cfssl_host&quot;</span><span class="p">,</span> <span class="s2">&quot;http://nosuchost&quot;</span><span class="p">)</span>
+        <span class="n">mpatch</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s2">&quot;RM_CFSSL_HOST&quot;</span><span class="p">,</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">cfssl_host</span><span class="p">)</span>
         <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">BackendError</span><span class="p">):</span>
             <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;BONGO01a&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;kissa&quot;</span><span class="p">:</span> <span class="s2">&quot;puuma&quot;</span><span class="p">})</span>
         <span class="n">new_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">peoplepath</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span>
@@ -471,7 +486,7 @@
     <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
     <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
     <span class="n">callsign</span> <span class="o">=</span> <span class="s2">&quot;RUOSKA23a&quot;</span>
-    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
+    <span class="n">peoplepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span>
     <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">privkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
     <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">pubkeyfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
@@ -495,9 +510,22 @@
     <span class="n">person</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;PFXMAN01a&quot;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">person</span><span class="o">.</span><span class="n">pfxfile</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
     <span class="n">pfxbytes</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">pfxfile</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
-    <span class="n">pfxdata</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">hazmat</span><span class="o">.</span><span class="n">primitives</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">pkcs12</span><span class="o">.</span><span class="n">load_pkcs12</span><span class="p">(</span><span class="n">pfxbytes</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">pfxdata</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">hazmat</span><span class="o">.</span><span class="n">primitives</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">pkcs12</span><span class="o">.</span><span class="n">load_pkcs12</span><span class="p">(</span><span class="n">pfxbytes</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;PFXMAN01a&quot;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">pfxdata</span><span class="o">.</span><span class="n">key</span>
     <span class="k">assert</span> <span class="n">pfxdata</span><span class="o">.</span><span class="n">cert</span></div>
+
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_productcn_forbid">
+<a class="viewcode-back" href="../../technical/api/tests/test_db/index.html#tests.test_db.test_productcn_forbid">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_productcn_forbid</span><span class="p">(</span><span class="n">ginosession</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test that trying to create enrollment or person with callsign that matches a product CN fails&quot;&quot;&quot;</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">ginosession</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">CallsignReserved</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">create_with_cert</span><span class="p">(</span><span class="s2">&quot;fake.localmaeher.pvarki.fi&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">CallsignReserved</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">create_for_callsign</span><span class="p">(</span><span class="s2">&quot;fake.localmaeher.pvarki.fi&quot;</span><span class="p">)</span></div>
 
 </pre></div>
 

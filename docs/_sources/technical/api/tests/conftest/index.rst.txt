@@ -18,21 +18,7 @@ Functions
 
 .. autoapisummary::
 
-   tests.conftest.event_loop
-   tests.conftest.test_user_secrets
-   tests.conftest.issuer_cl
-   tests.conftest.verifier
-   tests.conftest.session_env_config
-   tests.conftest.tilauspalvelu_jwt_client
-   tests.conftest.kraftwerk_jwt_client
-   tests.conftest.tilauspalvelu_jwt_admin_client
-   tests.conftest.tilauspalvelu_jwt_user_client
-   tests.conftest.tilauspalvelu_jwt_user_koira_client
-   tests.conftest.tilauspalvelu_jwt_without_proper_user_client
-   tests.conftest.mtls_client
-   tests.conftest.unauth_client
-   tests.conftest.rm_jwt_client
-   tests.conftest.app_client
+   tests.conftest.default_env
 
 
 
@@ -42,108 +28,14 @@ Attributes
 .. autoapisummary::
 
    tests.conftest.LOGGER
-   tests.conftest.DATA_PATH
-   tests.conftest.JWT_PATH
 
 
 .. py:data:: LOGGER
 
    
 
-.. py:data:: DATA_PATH
+.. py:function:: default_env(monkeysession, nice_tmpdir_ses)
 
-   
-
-.. py:data:: JWT_PATH
-
-   
-
-.. py:function:: event_loop()
-
-   Session scoped event loop so the db connection can stay up
-
-
-.. py:function:: test_user_secrets(session_env_config)
-   :async:
-
-   Create a few test users and work ids returns
-   list of work-ids and their corresponding "hashes"
-
-   First one has "enrollment" special role
-
-
-.. py:function:: issuer_cl()
-
-   issuer using cl-key
-
-
-.. py:function:: verifier()
-
-   issuer using all keys in data
-
-
-.. py:function:: session_env_config(monkeysession, docker_ip, docker_services, nice_tmpdir_ses)
-
-   set the JWT auth config
-
-
-.. py:function:: tilauspalvelu_jwt_client(issuer_cl)
-   :async:
-
-   Client with tilauspalvely style JWT
-
-
-.. py:function:: kraftwerk_jwt_client(issuer_cl)
-   :async:
-
-   Client with KRAFTWERK style JWT
-
-
-.. py:function:: tilauspalvelu_jwt_admin_client(issuer_cl, test_user_secrets)
-   :async:
-
-   Client with admin JWT
-
-
-.. py:function:: tilauspalvelu_jwt_user_client(issuer_cl, test_user_secrets)
-   :async:
-
-   Client with normal user JWT
-
-
-.. py:function:: tilauspalvelu_jwt_user_koira_client(issuer_cl, test_user_secrets)
-   :async:
-
-   Client with normal user JWT
-
-
-.. py:function:: tilauspalvelu_jwt_without_proper_user_client(issuer_cl)
-   :async:
-
-   Client with normal user JWT
-
-
-.. py:function:: mtls_client()
-   :async:
-
-   Client with mocked NGinx mTLS headers
-
-
-.. py:function:: unauth_client()
-   :async:
-
-   Client with no auth headers
-
-
-.. py:function:: rm_jwt_client()
-   :async:
-
-   Client with no auth headers
-
-
-.. py:function:: app_client(request)
-   :async:
-
-   Create default client
+   Setup some default environment variables
 
 

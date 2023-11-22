@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rasenmaeher_api.rmsettings &mdash; Rasenmaeher docs 0.11.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/rasenmaeher_api/rmsettings.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.11.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../rasenmaeher_api.html">rasenmaeher_api</a></li>
+      <li class="breadcrumb-item active">rasenmaeher_api.rmsettings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rasenmaeher_api.rmsettings</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot; Application settings. &quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LogLevel">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel">[docs]</a>
+<span class="k">class</span> <span class="nc">LogLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>  <span class="c1"># noqa: WPS600</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Possible log levels.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LogLevel.NOTSET">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.NOTSET">[docs]</a>
+    <span class="n">NOTSET</span> <span class="o">=</span> <span class="s2">&quot;NOTSET&quot;</span></div>
+
+<div class="viewcode-block" id="LogLevel.DEBUG">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.DEBUG">[docs]</a>
+    <span class="n">DEBUG</span> <span class="o">=</span> <span class="s2">&quot;DEBUG&quot;</span></div>
+
+<div class="viewcode-block" id="LogLevel.INFO">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.INFO">[docs]</a>
+    <span class="n">INFO</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span></div>
+
+<div class="viewcode-block" id="LogLevel.WARNING">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.WARNING">[docs]</a>
+    <span class="n">WARNING</span> <span class="o">=</span> <span class="s2">&quot;WARNING&quot;</span></div>
+
+<div class="viewcode-block" id="LogLevel.ERROR">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.ERROR">[docs]</a>
+    <span class="n">ERROR</span> <span class="o">=</span> <span class="s2">&quot;ERROR&quot;</span></div>
+
+<div class="viewcode-block" id="LogLevel.FATAL">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.LogLevel.FATAL">[docs]</a>
+    <span class="n">FATAL</span> <span class="o">=</span> <span class="s2">&quot;FATAL&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RMSettings">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings">[docs]</a>
+<span class="k">class</span> <span class="nc">RMSettings</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Application settings.</span>
+
+<span class="sd">    These parameters can be configured</span>
+<span class="sd">    with environment variables.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RMSettings.Config">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Configuration of settings.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RMSettings.Config.env_file">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.Config.env_file">[docs]</a>
+        <span class="n">env_file</span> <span class="o">=</span> <span class="s2">&quot;.env&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.Config.env_prefix">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.Config.env_prefix">[docs]</a>
+        <span class="n">env_prefix</span> <span class="o">=</span> <span class="s2">&quot;RM_&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.Config.env_file_encoding">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.Config.env_file_encoding">[docs]</a>
+        <span class="n">env_file_encoding</span> <span class="o">=</span> <span class="s2">&quot;utf-8&quot;</span></div>
+</div>
+
+
+<div class="viewcode-block" id="RMSettings.host">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.host">[docs]</a>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.port">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.port">[docs]</a>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8000</span></div>
+
+    <span class="c1"># quantity of workers for uvicorn</span>
+<div class="viewcode-block" id="RMSettings.workers_count">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.workers_count">[docs]</a>
+    <span class="n">workers_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+    <span class="c1"># Enable uvicorn reloading</span>
+<div class="viewcode-block" id="RMSettings.reload">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.reload">[docs]</a>
+    <span class="n">reload</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="c1"># Current environment</span>
+<div class="viewcode-block" id="RMSettings.environment">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.environment">[docs]</a>
+    <span class="n">environment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span></div>
+
+
+    <span class="c1"># Set log_level (str) and log_level_int (int) for later use</span>
+    <span class="c1"># if log_level is not set, then log level will be DEBUG</span>
+<div class="viewcode-block" id="RMSettings.log_level">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.log_level">[docs]</a>
+    <span class="n">log_level</span><span class="p">:</span> <span class="n">LogLevel</span> <span class="o">=</span> <span class="n">LogLevel</span><span class="o">.</span><span class="n">DEBUG</span></div>
+
+<div class="viewcode-block" id="RMSettings.log_level_int">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.log_level_int">[docs]</a>
+    <span class="n">log_level_int</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span></div>
+
+    <span class="k">if</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;INFO&quot;</span><span class="p">:</span>
+        <span class="n">log_level_int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
+    <span class="k">elif</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">:</span>
+        <span class="n">log_level_int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
+    <span class="k">elif</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span>
+        <span class="n">log_level_int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span>
+    <span class="k">elif</span> <span class="n">log_level</span> <span class="o">==</span> <span class="s2">&quot;FATAL&quot;</span><span class="p">:</span>
+        <span class="n">log_level_int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FATAL</span>
+
+    <span class="c1"># Manifest file from kraftwerk</span>
+<div class="viewcode-block" id="RMSettings.integration_api_port">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.integration_api_port">[docs]</a>
+    <span class="n">integration_api_port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4625</span></div>
+
+<div class="viewcode-block" id="RMSettings.kraftwerk_manifest_path">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.kraftwerk_manifest_path">[docs]</a>
+    <span class="n">kraftwerk_manifest_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/pvarki/kraftwerk-rasenmaeher-init.json&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.kraftwerk_manifest_bool">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.kraftwerk_manifest_bool">[docs]</a>
+    <span class="n">kraftwerk_manifest_bool</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="RMSettings.kraftwerk_manifest_dict">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.kraftwerk_manifest_dict">[docs]</a>
+    <span class="n">kraftwerk_manifest_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="RMSettings.integration_api_timeout">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.integration_api_timeout">[docs]</a>
+    <span class="n">integration_api_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+
+    <span class="c1"># Api access management</span>
+<div class="viewcode-block" id="RMSettings.api_client_cert_header">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.api_client_cert_header">[docs]</a>
+    <span class="n">api_client_cert_header</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;X-ClientCert-DN&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.test_api_client_cert_header_value">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.test_api_client_cert_header_value">[docs]</a>
+    <span class="n">test_api_client_cert_header_value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;CN=fake.localmaeher.pvarki.fi,O=N/A&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.api_healthcheck_proto">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.api_healthcheck_proto">[docs]</a>
+    <span class="n">api_healthcheck_proto</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.api_healthcheck_url">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.api_healthcheck_url">[docs]</a>
+    <span class="n">api_healthcheck_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/api/v1/healthcheck&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.api_healthcheck_headers">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.api_healthcheck_headers">[docs]</a>
+    <span class="n">api_healthcheck_headers</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;{&quot;propably&quot;:&quot;not_needed&quot;}&#39;</span></div>
+
+
+    <span class="c1"># Sentry&#39;s configuration.</span>
+<div class="viewcode-block" id="RMSettings.sentry_dsn">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.sentry_dsn">[docs]</a>
+    <span class="n">sentry_dsn</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.sentry_sample_rate">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.sentry_sample_rate">[docs]</a>
+    <span class="n">sentry_sample_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+
+
+    <span class="c1"># Cfssl configuration</span>
+<div class="viewcode-block" id="RMSettings.cfssl_host">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.cfssl_host">[docs]</a>
+    <span class="n">cfssl_host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.cfssl_port">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.cfssl_port">[docs]</a>
+    <span class="n">cfssl_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8888&quot;</span></div>
+
+
+<div class="viewcode-block" id="RMSettings.persistent_data_dir">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.persistent_data_dir">[docs]</a>
+    <span class="n">persistent_data_dir</span> <span class="o">=</span> <span class="s2">&quot;/data/persistent&quot;</span></div>
+
+
+    <span class="c1"># mtls</span>
+<div class="viewcode-block" id="RMSettings.mtls_client_cert_path">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.mtls_client_cert_path">[docs]</a>
+    <span class="n">mtls_client_cert_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.mtls_client_key_path">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.mtls_client_key_path">[docs]</a>
+    <span class="n">mtls_client_key_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.mtls_client_cert_cn">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.mtls_client_cert_cn">[docs]</a>
+    <span class="n">mtls_client_cert_cn</span> <span class="o">=</span> <span class="s2">&quot;rasenmaeher&quot;</span></div>
+
+
+    <span class="c1"># Keycloak configuration.</span>
+<div class="viewcode-block" id="RMSettings.keycloak_server_url">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.keycloak_server_url">[docs]</a>
+    <span class="n">keycloak_server_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.keycloak_client_id">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.keycloak_client_id">[docs]</a>
+    <span class="n">keycloak_client_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.keycloak_realm_name">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.keycloak_realm_name">[docs]</a>
+    <span class="n">keycloak_realm_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.keycloak_client_secret">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.keycloak_client_secret">[docs]</a>
+    <span class="n">keycloak_client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="c1"># LDAP configuration</span>
+<div class="viewcode-block" id="RMSettings.ldap_conn_string">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ldap_conn_string">[docs]</a>
+    <span class="n">ldap_conn_string</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.ldap_username">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ldap_username">[docs]</a>
+    <span class="n">ldap_username</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="RMSettings.ldap_client_secret">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ldap_client_secret">[docs]</a>
+    <span class="n">ldap_client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="RMSettings._singleton">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings._singleton">[docs]</a>
+    <span class="n">_singleton</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;RMSettings&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="RMSettings.singleton">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.singleton">[docs]</a>
+    <span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RMSettings&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return singleton&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">_singleton</span><span class="p">:</span>
+            <span class="n">RMSettings</span><span class="o">.</span><span class="n">_singleton</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">_singleton</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="c1"># FIXME: When the switchme_to_singleton_call has been removed call load_manifest here</span>
+
+<div class="viewcode-block" id="RMSettings.load_manifest">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.load_manifest">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load the kraftwerk manifest file&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">pth</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pth</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_path</span><span class="si">}</span><span class="s2"> does not exist&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">pth</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_bool</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="RMSettings.valid_product_cns">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.valid_product_cns">[docs]</a>
+    <span class="k">def</span> <span class="nf">valid_product_cns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get valid CNs for productapi certs&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_manifest</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">product</span><span class="p">[</span><span class="s2">&quot;certcn&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="switchme_to_singleton_call">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.switchme_to_singleton_call">[docs]</a>
+<span class="n">switchme_to_singleton_call</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>  <span class="c1"># pylint: disable=C0103</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

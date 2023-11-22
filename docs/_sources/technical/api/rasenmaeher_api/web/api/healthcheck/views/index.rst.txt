@@ -19,7 +19,6 @@ Functions
 .. autoapisummary::
 
    rasenmaeher_api.web.api.healthcheck.views.request_healthcheck
-   rasenmaeher_api.web.api.healthcheck.views.request_healthcheck_delivery
    rasenmaeher_api.web.api.healthcheck.views.request_healthcheck_services
 
 
@@ -49,19 +48,11 @@ Attributes
    - Domain name from manifest
 
 
-.. py:function:: request_healthcheck_delivery()
-   :async:
-
-   Delivery endpoint healthcheck.
-   200 {"state":"ready-for-delivery"}
-   201 {"detail":{"state":"init"}}
-   204 {"detail":{"state":"waiting-for-services"}}
-
-
 .. py:function:: request_healthcheck_services()
    :async:
 
-   Serices endpoint healthcheck.
-   return list of services
+   Return the states of products' apis and if everything is ok
+
+   Note that HTTP status-code is 200 even if all_ok is False
 
 

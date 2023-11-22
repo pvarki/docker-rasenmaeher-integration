@@ -17,17 +17,32 @@ Classes
 
 .. autoapisummary::
 
-   rasenmaeher_api.web.api.healthcheck.schema.HealthCheckResponse
+   rasenmaeher_api.web.api.healthcheck.schema.BasicHealthCheckResponse
+   rasenmaeher_api.web.api.healthcheck.schema.AllProductsHealthCheckResponse
 
 
 
 
-.. py:class:: HealthCheckResponse
+.. py:class:: BasicHealthCheckResponse
 
 
    Bases: :py:obj:`pydantic.BaseModel`
 
-   Healthcheck response schema
+   Basic healthcheck, basically are we running at all...
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
 
    .. py:attribute:: healthcheck
       :type: str
@@ -36,6 +51,48 @@ Classes
 
    .. py:attribute:: dns
       :type: str
+
+      
+
+   .. py:attribute:: deployment
+      :type: str
+
+      
+
+   .. py:attribute:: version
+      :type: str
+
+      
+
+
+.. py:class:: AllProductsHealthCheckResponse
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Check status of all products in manifest
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: all_ok
+      :type: bool
+
+      
+
+   .. py:attribute:: products
+      :type: Dict[str, bool]
 
       
 

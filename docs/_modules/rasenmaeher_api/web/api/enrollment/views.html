@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.web.api.enrollment.views &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -110,7 +110,6 @@
     <span class="n">EnrollmentInviteCodeEnrollIn</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeActivateIn</span><span class="p">,</span>
     <span class="n">EnrollmentInviteCodeDeactivateIn</span><span class="p">,</span>
-    <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">,</span>
     <span class="n">EnrollmentPoolListOut</span><span class="p">,</span>
     <span class="n">EnrollmentPoolListItem</span><span class="p">,</span>
 <span class="p">)</span>
@@ -264,13 +263,13 @@
 <span class="sd">    Returns a list of dicts, callsign_list = [ {  &quot;callsign&quot;:&#39;x&#39;, &#39;state&#39;:&#39;init&#39;, &#39;approvecode&#39;:&#39;&#39; } ]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_enroll_list</span> <span class="o">=</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+    <span class="n">result_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">enrollment</span> <span class="ow">in</span> <span class="n">Enrollment</span><span class="o">.</span><span class="n">list</span><span class="p">():</span>
+        <span class="n">result_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="n">enrollment</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="n">enrollment</span><span class="o">.</span><span class="n">approvecode</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">enrollment</span><span class="o">.</span><span class="n">state</span><span class="p">}</span>
+        <span class="p">)</span>
 
-    <span class="n">_result_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">async</span> <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="n">_enroll_list</span><span class="p">:</span>
-        <span class="n">_result_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;callsign&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">callsign</span><span class="p">,</span> <span class="s2">&quot;approvecode&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">approvecode</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">_x</span><span class="o">.</span><span class="n">state</span><span class="p">})</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentListOut</span><span class="p">(</span><span class="n">callsign_list</span><span class="o">=</span><span class="n">_result_list</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">EnrollmentListOut</span><span class="p">(</span><span class="n">callsign_list</span><span class="o">=</span><span class="n">result_list</span><span class="p">)</span></div>
 
 
 
@@ -425,10 +424,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">_pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">old_invitecode_for_callsign_tobedeleted</span><span class="p">(</span><span class="n">callsign</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtls_or_jwt</span><span class="o">.</span><span class="n">userid</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">_pool</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span></div>
+    <span class="n">pool</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">create_for_owner</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">person</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">EnrollmentInviteCodeCreateOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="n">pool</span><span class="o">.</span><span class="n">invitecode</span><span class="p">)</span></div>
 
 
 
@@ -482,18 +479,22 @@
 
 
 
-<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/invitecode/</span><span class="si">{invite_code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">)</span>
+<span class="nd">@ENROLLMENT_ROUTER</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/invitecode/</span><span class="si">{invite_code}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">OperationResultResponse</span><span class="p">)</span>
 <div class="viewcode-block" id="delete_invite_code">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/enrollment/views/index.html#rasenmaeher_api.web.api.enrollment.delete_invite_code">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_invite_code</span><span class="p">(</span>
     <span class="c1"># request: Request,</span>
     <span class="n">invite_code</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete an invite code</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO</span>
-    <span class="k">return</span> <span class="n">EnrollmentInviteCodeDeleteOut</span><span class="p">(</span><span class="n">invite_code</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;TODO</span><span class="si">{</span><span class="n">invite_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">EnrollmentPool</span><span class="o">.</span><span class="n">by_invitecode</span><span class="p">(</span><span class="n">invitecode</span><span class="o">=</span><span class="n">invite_code</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;Invitecode was deleted&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">NotFound</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;No such invitecode found&quot;</span><span class="p">)</span></div>
 
 
 

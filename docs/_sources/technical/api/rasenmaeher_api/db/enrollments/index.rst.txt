@@ -81,6 +81,13 @@ Attributes
 
       
 
+   .. py:method:: by_pk_or_invitecode(inval, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get pool by pk or by invitecode
+
+
    .. py:method:: create_enrollment(callsign)
       :async:
 
@@ -126,20 +133,6 @@ Attributes
       :async:
 
       Get by invitecode
-
-
-   .. py:method:: by_owner_old_tbremoved(owner_uuid)
-      :classmethod:
-      :async:
-
-      Get by owner UUID
-
-
-   .. py:method:: old_invitecode_for_callsign_tobedeleted(callsign, extra = None)
-      :classmethod:
-      :async:
-
-      Create enrollment pool owned by callsign, or update invitecode for existing one
 
 
 
@@ -209,6 +202,13 @@ Attributes
    .. py:attribute:: extra
 
       
+
+   .. py:method:: by_pk_or_callsign(inval)
+      :classmethod:
+      :async:
+
+      Get enrollment by pk or by callsign
+
 
    .. py:method:: approve(approver)
       :async:

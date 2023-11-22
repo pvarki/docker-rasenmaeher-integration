@@ -19,7 +19,6 @@ Functions
 .. autoapisummary::
 
    tests.test_healthcheck.test_get_healthcheck
-   tests.test_healthcheck.test_get_healthcheck_delivery
    tests.test_healthcheck.test_get_healthcheck_services
 
 
@@ -43,18 +42,11 @@ Attributes
    healthcheck should be success
 
 
-.. py:function:: test_get_healthcheck_delivery(app_client)
-   :async:
-
-   /healthcheck/delivery
-   response status should be 200,201,204
-
-
 .. py:function:: test_get_healthcheck_services(app_client)
    :async:
 
    /healthcheck/services
    Result should be 200
-   There should be at least more than one result on dict...
+   There fakeproduct should be ok, nonexistentproduct should not...
 
 

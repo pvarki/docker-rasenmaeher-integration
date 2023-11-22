@@ -19,6 +19,7 @@ Functions
 .. autoapisummary::
 
    rasenmaeher_api.web.api.people.views.request_people_list
+   rasenmaeher_api.web.api.people.views.delete_person
 
 
 
@@ -45,5 +46,11 @@ Attributes
    /list
    Return people/list.
    Returns a list of dicts, callsign_list = [ {  "callsign":'x', "roles": ["str"] 'extra':'x' } ]
+
+
+.. py:function:: delete_person(callsign)
+   :async:
+
+   delete==revoke a callsign
 
 

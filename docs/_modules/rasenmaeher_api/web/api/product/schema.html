@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.product.schema &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.web.api.product.schema &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -152,6 +152,44 @@
 <span class="s2">0TdCAC4q4VuW+1FYcLrBkZhJZDnPRn214POSwN5lRmkYfUK40VGBRJMhgaI6Iud/</span>
 <span class="s2">yiIpfvrcT9M4hJwtVFZy</span>
 <span class="s2">-----END CERTIFICATE REQUEST-----&quot;&quot;&quot;</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span></div>
+</div>
+</div>
+
+
+
+<div class="viewcode-block" id="RevokeRequest">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest">[docs]</a>
+<span class="k">class</span> <span class="nc">RevokeRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Request a cert to be revoked&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RevokeRequest.cert">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest.cert">[docs]</a>
+    <span class="n">cert</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Cert PEM&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RevokeRequest.Config">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest.Config">[docs]</a>
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Example values for schema&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="RevokeRequest.Config.extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest.Config.extra">[docs]</a>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span></div>
+
+<div class="viewcode-block" id="RevokeRequest.Config.schema_extra">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/schema/index.html#rasenmaeher_api.web.api.product.schema.RevokeRequest.Config.schema_extra">[docs]</a>
+        <span class="n">schema_extra</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;examples&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;cert&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;-----BEGIN CERTIFICATE-----</span>
+<span class="s2">MIID9DCCAtygAwIBAgIUSF7KldQcZ9tc8IHB9zBQnf/1V58wDQYJKoZIhvcNAQEL</span>
+<span class="s2">...</span>
+<span class="s2">RTM/xsm9FVNDBFy/w5Xu6Xewa5UrHkRtrEsbmhbbc6VLytoQrhgqV6kbFJP8vgFn</span>
+<span class="s2">zPs4ufNJed0=</span>
+<span class="s2">-----END CERTIFICATE-----&quot;&quot;&quot;</span>
                 <span class="p">},</span>
             <span class="p">]</span>
         <span class="p">}</span></div>

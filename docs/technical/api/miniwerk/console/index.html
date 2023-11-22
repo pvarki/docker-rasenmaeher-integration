@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miniwerk.console &mdash; Rasenmaeher docs 0.11.1 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/miniwerk/console/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=57cbeb03"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="miniwerk.helpers" href="../helpers/index.html" />
+    <link rel="prev" title="miniwerk.config" href="../config/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.11.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.config</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.console</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../helpers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.helpers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../jwt/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.jwt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../lewrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.lewrap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../manifests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.manifests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../mkcwrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.mkcwrap</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.console</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-miniwerk.console">
+<span id="miniwerk-console"></span><h1><a class="reference internal" href="#module-miniwerk.console" title="miniwerk.console"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk.console</span></code></a><a class="headerlink" href="#module-miniwerk.console" title="Link to this heading"></a></h1>
+<p>CLI entrypoints for miniwerk</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.console.cligrp" title="miniwerk.console.cligrp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cligrp</span></code></a>(loglevel, verbose)</p></td>
+<td><p>Minimal KRAFTWERK amulation to be able to run a RASENMAEHER+products deployment on any VM</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#miniwerk.console.dump_config" title="miniwerk.console.dump_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_config</span></code></a>()</p></td>
+<td><p>Show the resolved config as JSON</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.console.do_certs" title="miniwerk.console.do_certs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">do_certs</span></code></a>(ctx)</p></td>
+<td><p>Get and/or renew certs based on configuration</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#miniwerk.console.create_manifests" title="miniwerk.console.create_manifests"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_manifests</span></code></a>(ctx)</p></td>
+<td><p>Create manifests</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.console.do_full_init" title="miniwerk.console.do_full_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">do_full_init</span></code></a>(ctx)</p></td>
+<td><p>Create manifests, get certs, everything that is needed</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#miniwerk.console.miniwerk_cli" title="miniwerk.console.miniwerk_cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">miniwerk_cli</span></code></a>()</p></td>
+<td><p>cli entrypoint</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#miniwerk.console.LOGGER" title="miniwerk.console.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="miniwerk.console.LOGGER">
+<span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.LOGGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.cligrp">
+<span class="sig-name descname"><span class="pre">cligrp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loglevel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#cligrp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.cligrp" title="Link to this definition"></a></dt>
+<dd><p>Minimal KRAFTWERK amulation to be able to run a RASENMAEHER+products deployment on any VM</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loglevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.dump_config">
+<span class="sig-name descname"><span class="pre">dump_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#dump_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.dump_config" title="Link to this definition"></a></dt>
+<dd><p>Show the resolved config as JSON</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.do_certs">
+<span class="sig-name descname"><span class="pre">do_certs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#do_certs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.do_certs" title="Link to this definition"></a></dt>
+<dd><p>Get and/or renew certs based on configuration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>Any</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.create_manifests">
+<span class="sig-name descname"><span class="pre">create_manifests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#create_manifests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.create_manifests" title="Link to this definition"></a></dt>
+<dd><p>Create manifests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>Any</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.do_full_init">
+<span class="sig-name descname"><span class="pre">do_full_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#do_full_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.do_full_init" title="Link to this definition"></a></dt>
+<dd><p>Create manifests, get certs, everything that is needed</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ctx</strong> (<em>Any</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="miniwerk.console.miniwerk_cli">
+<span class="sig-name descname"><span class="pre">miniwerk_cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/miniwerk/console.html#miniwerk_cli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#miniwerk.console.miniwerk_cli" title="Link to this definition"></a></dt>
+<dd><p>cli entrypoint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../config/index.html" class="btn btn-neutral float-left" title="miniwerk.config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../helpers/index.html" class="btn btn-neutral float-right" title="miniwerk.helpers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

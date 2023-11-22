@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.web.api.product.views &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -92,11 +92,13 @@
 <span class="kn">from</span> <span class="nn">OpenSSL.crypto</span> <span class="kn">import</span> <span class="n">load_certificate_request</span><span class="p">,</span> <span class="n">FILETYPE_PEM</span>  <span class="c1"># FIXME: use cryptography instead of pyOpenSSL</span>
 
 
-<span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="n">CertificatesResponse</span><span class="p">,</span> <span class="n">CertificatesRequest</span>
+<span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="n">CertificatesResponse</span><span class="p">,</span> <span class="n">CertificatesRequest</span><span class="p">,</span> <span class="n">RevokeRequest</span>
 <span class="kn">from</span> <span class="nn">....db.nonces</span> <span class="kn">import</span> <span class="n">SeenToken</span>
 <span class="kn">from</span> <span class="nn">....db.errors</span> <span class="kn">import</span> <span class="n">NotFound</span>
 <span class="kn">from</span> <span class="nn">....cfssl.public</span> <span class="kn">import</span> <span class="n">get_ca</span><span class="p">,</span> <span class="n">get_bundle</span>
-<span class="kn">from</span> <span class="nn">....cfssl.private</span> <span class="kn">import</span> <span class="n">sign_csr</span>
+<span class="kn">from</span> <span class="nn">....cfssl.private</span> <span class="kn">import</span> <span class="n">sign_csr</span><span class="p">,</span> <span class="n">revoke_pem</span>
+<span class="kn">from</span> <span class="nn">....cfssl.base</span> <span class="kn">import</span> <span class="n">CFSSLError</span>
+<span class="kn">from</span> <span class="nn">....rmsettings</span> <span class="kn">import</span> <span class="n">RMSettings</span>
 
 
 <div class="viewcode-block" id="router">
@@ -106,6 +108,21 @@
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.LOGGER">[docs]</a>
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="csr_common">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.csr_common">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">csr_common</span><span class="p">(</span><span class="n">certs</span><span class="p">:</span> <span class="n">CertificatesRequest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CertificatesResponse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Common parts of CSR handling&quot;&quot;&quot;</span>
+    <span class="n">cachain</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_ca</span><span class="p">()</span>
+    <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">bundlepem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_bundle</span><span class="p">(</span><span class="n">certpem</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">CertificatesResponse</span><span class="p">(</span>
+        <span class="n">ca</span><span class="o">=</span><span class="n">cachain</span><span class="p">,</span>
+        <span class="n">certificate</span><span class="o">=</span><span class="n">bundlepem</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 
@@ -132,16 +149,44 @@
 
     <span class="c1"># PONDER: Should we check jwtpayload[&quot;sub&quot;] is among the products in KRAFTWERK manifest ??</span>
 
-    <span class="n">cachain</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_ca</span><span class="p">()</span>
-    <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">certs</span><span class="o">.</span><span class="n">csr</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">bundlepem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_bundle</span><span class="p">(</span><span class="n">certpem</span><span class="p">)</span>
-
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">csr_common</span><span class="p">(</span><span class="n">certs</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">SeenToken</span><span class="o">.</span><span class="n">use_token</span><span class="p">(</span><span class="n">jwtpayload</span><span class="p">[</span><span class="s2">&quot;nonce&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">resp</span></div>
 
-    <span class="k">return</span> <span class="n">CertificatesResponse</span><span class="p">(</span>
-        <span class="n">ca</span><span class="o">=</span><span class="n">cachain</span><span class="p">,</span>
-        <span class="n">certificate</span><span class="o">=</span><span class="n">bundlepem</span><span class="p">,</span>
-    <span class="p">)</span></div>
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/sign_csr/mtls&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">MTLSHeader</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">))])</span>
+<div class="viewcode-block" id="return_ca_and_sign_csr_mtls">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.return_ca_and_sign_csr_mtls">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">return_ca_and_sign_csr_mtls</span><span class="p">(</span>
+    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+    <span class="n">certs</span><span class="p">:</span> <span class="n">CertificatesRequest</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CertificatesResponse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Allow product with mTLS cert to request signatures for other certs&quot;&quot;&quot;</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtlsdn</span>
+    <span class="k">if</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CN&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">valid_product_cns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">csr_common</span><span class="p">(</span><span class="n">certs</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/revoke/mtls&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="p">[</span><span class="n">Depends</span><span class="p">(</span><span class="n">MTLSHeader</span><span class="p">(</span><span class="n">auto_error</span><span class="o">=</span><span class="kc">True</span><span class="p">))])</span>
+<div class="viewcode-block" id="revoke_cert">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/product/views/index.html#rasenmaeher_api.web.api.product.revoke_cert">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">revoke_cert</span><span class="p">(</span>
+    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+    <span class="n">cert</span><span class="p">:</span> <span class="n">RevokeRequest</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OperationResultResponse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Allow product with mTLS cert to revoke a cert&quot;&quot;&quot;</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">mtlsdn</span>
+    <span class="k">if</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CN&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">valid_product_cns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">revoke_pem</span><span class="p">(</span><span class="n">cert</span><span class="o">.</span><span class="n">cert</span><span class="p">,</span> <span class="s2">&quot;unspecified&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">CFSSLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Revoke failed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">OperationResultResponse</span><span class="p">(</span><span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span></div>
 
 
 

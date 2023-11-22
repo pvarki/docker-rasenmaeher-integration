@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>miniwerk.config &mdash; Rasenmaeher docs 0.11.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/miniwerk/config.html" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                0.11.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../miniwerk.html">miniwerk</a></li>
+      <li class="breadcrumb-item active">miniwerk.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for miniwerk.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Configuration&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">StrEnum</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">pydantic_settings</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">SettingsConfigDict</span>
+
+
+<div class="viewcode-block" id="KeyType">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.KeyType">[docs]</a>
+<span class="k">class</span> <span class="nc">KeyType</span><span class="p">(</span><span class="n">StrEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Valid key types for certbot/mkcert&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KeyType.RSA">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.KeyType.RSA">[docs]</a>
+    <span class="n">RSA</span> <span class="o">=</span> <span class="s2">&quot;rsa&quot;</span></div>
+
+<div class="viewcode-block" id="KeyType.ECDSA">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.KeyType.ECDSA">[docs]</a>
+    <span class="n">ECDSA</span> <span class="o">=</span> <span class="s2">&quot;ecdsa&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ProductSettings">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.ProductSettings">[docs]</a>
+<span class="k">class</span> <span class="nc">ProductSettings</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configs for each product&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ProductSettings.api_port">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.ProductSettings.api_port">[docs]</a>
+    <span class="n">api_port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;port for the API&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MWConfig">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig">[docs]</a>
+<span class="k">class</span> <span class="nc">MWConfig</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Config for MiniWerk&quot;&quot;&quot;</span>
+
+    <span class="c1"># Things you must or should define</span>
+<div class="viewcode-block" id="MWConfig.domain">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.domain">[docs]</a>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Domain under which we operate&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.le_email">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_email">[docs]</a>
+    <span class="n">le_email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;email given to letsencrypt&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.le_test">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_test">[docs]</a>
+    <span class="n">le_test</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Use LE staging/test env&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.subdomains">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.subdomains">[docs]</a>
+    <span class="n">subdomains</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;mtls&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Comma separated list of extra subdomains to get certs for&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.products">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.products">[docs]</a>
+    <span class="n">products</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;fake,tak&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Comma separated list of products to create manifests and get subdomains for&quot;</span>
+    <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.fake">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.fake">[docs]</a>
+    <span class="n">fake</span><span class="p">:</span> <span class="n">ProductSettings</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Setting for fakeproduct intration API&quot;</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ProductSettings</span><span class="p">(</span><span class="n">api_port</span><span class="o">=</span><span class="mi">4625</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.tak">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.tak">[docs]</a>
+    <span class="n">tak</span><span class="p">:</span> <span class="n">ProductSettings</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Setting for TAK intration API&quot;</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ProductSettings</span><span class="p">(</span><span class="n">api_port</span><span class="o">=</span><span class="mi">4626</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.rasenmaeher">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.rasenmaeher">[docs]</a>
+    <span class="n">rasenmaeher</span><span class="p">:</span> <span class="n">ProductSettings</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Setting for RASENMAEHER API&quot;</span><span class="p">,</span> <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">ProductSettings</span><span class="p">(</span><span class="n">api_port</span><span class="o">=</span><span class="mi">443</span><span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MWConfig.le_cert_name">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_cert_name">[docs]</a>
+    <span class="n">le_cert_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;rasenmaeher&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;--cert-name for LE, used to determine directory name&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.le_copy_path">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_copy_path">[docs]</a>
+    <span class="n">le_copy_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;/le_certs&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Where to copy letsencrypt certs and keys&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.data_path">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.data_path">[docs]</a>
+    <span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;/data/persistent&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Where do we keep our data&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.manifests_base">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.manifests_base">[docs]</a>
+    <span class="n">manifests_base</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;/pvarkishares&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path for manifests etc, each product gets a subdir&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MWConfig.mkcert">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.mkcert">[docs]</a>
+    <span class="n">mkcert</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Use mkcert instead of certbot&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.ci">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.ci">[docs]</a>
+    <span class="n">ci</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;CI&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Are we running in CI&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.keytype">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.keytype">[docs]</a>
+    <span class="n">keytype</span><span class="p">:</span> <span class="n">KeyType</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;ecdsa&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Which key types to use, rsa or ecdsa (default)&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig.model_config">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.model_config">[docs]</a>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">SettingsConfigDict</span><span class="p">(</span><span class="n">env_prefix</span><span class="o">=</span><span class="s2">&quot;mw_&quot;</span><span class="p">,</span> <span class="n">env_file</span><span class="o">=</span><span class="s2">&quot;.env&quot;</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">env_nested_delimiter</span><span class="o">=</span><span class="s2">&quot;__&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MWConfig._singleton">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig._singleton">[docs]</a>
+    <span class="n">_singleton</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">MWConfig</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="MWConfig.singleton">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.singleton">[docs]</a>
+    <span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MWConfig</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return singleton&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">MWConfig</span><span class="o">.</span><span class="n">_singleton</span><span class="p">:</span>
+            <span class="n">MWConfig</span><span class="o">.</span><span class="n">_singleton</span> <span class="o">=</span> <span class="n">MWConfig</span><span class="p">()</span>  <span class="c1"># type: ignore[call-arg]</span>
+        <span class="k">return</span> <span class="n">MWConfig</span><span class="o">.</span><span class="n">_singleton</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.le_config_path">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_config_path">[docs]</a>
+    <span class="k">def</span> <span class="nf">le_config_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;LE configuration dir&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">/</span> <span class="s2">&quot;le&quot;</span> <span class="o">/</span> <span class="s2">&quot;conf&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.mkcert_path">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.mkcert_path">[docs]</a>
+    <span class="k">def</span> <span class="nf">mkcert_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;mkcert certs dir&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">/</span> <span class="s2">&quot;mkcert&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.le_work_path">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_work_path">[docs]</a>
+    <span class="k">def</span> <span class="nf">le_work_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;LE work dir (doesn&#39;t seem to actually hold anything persistent)&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span> <span class="o">/</span> <span class="s2">&quot;le&quot;</span> <span class="o">/</span> <span class="s2">&quot;work&quot;</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.le_cert_dir">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.le_cert_dir">[docs]</a>
+    <span class="k">def</span> <span class="nf">le_cert_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The &quot;live&quot; dir for the cert we have, remember the &quot;file&quot; here are symlinks&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">le_config_path</span> <span class="o">/</span> <span class="s2">&quot;live&quot;</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">le_cert_name</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.mk_cert_dir">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.mk_cert_dir">[docs]</a>
+    <span class="k">def</span> <span class="nf">mk_cert_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The &quot;live&quot; dir for the cert we have&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mkcert_path</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">le_cert_name</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.fqdns">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.fqdns">[docs]</a>
+    <span class="k">def</span> <span class="nf">fqdns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Main domain and all subdomains and FQDNs&quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">subd</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">subd</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">proddomain</span> <span class="ow">in</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prod</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">prod</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">products</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]:</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proddomain</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">subd</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">proddomain</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">subd</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subdomains</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+        <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span></div>
+
+
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="MWConfig.product_manifest_paths">
+<a class="viewcode-back" href="../../technical/api/miniwerk/config/index.html#miniwerk.config.MWConfig.product_manifest_paths">[docs]</a>
+    <span class="k">def</span> <span class="nf">product_manifest_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Paths for product manifests keyed by product&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">prod</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span> <span class="bp">self</span><span class="o">.</span><span class="n">manifests_base</span> <span class="o">/</span> <span class="n">prod</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">prod</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">products</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

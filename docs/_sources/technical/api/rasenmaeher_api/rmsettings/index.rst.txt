@@ -1,0 +1,311 @@
+:py:mod:`rasenmaeher_api.rmsettings`
+====================================
+
+.. py:module:: rasenmaeher_api.rmsettings
+
+.. autoapi-nested-parse::
+
+   Application settings. 
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.rmsettings.LogLevel
+   rasenmaeher_api.rmsettings.RMSettings
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   rasenmaeher_api.rmsettings.LOGGER
+   rasenmaeher_api.rmsettings.switchme_to_singleton_call
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:class:: LogLevel
+
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+   Possible log levels.
+
+   .. py:attribute:: NOTSET
+      :value: 'NOTSET'
+
+      
+
+   .. py:attribute:: DEBUG
+      :value: 'DEBUG'
+
+      
+
+   .. py:attribute:: INFO
+      :value: 'INFO'
+
+      
+
+   .. py:attribute:: WARNING
+      :value: 'WARNING'
+
+      
+
+   .. py:attribute:: ERROR
+      :value: 'ERROR'
+
+      
+
+   .. py:attribute:: FATAL
+      :value: 'FATAL'
+
+      
+
+
+.. py:class:: RMSettings(*args, **kwargs)
+
+
+   Bases: :py:obj:`pydantic.BaseSettings`
+
+   Application settings.
+
+   These parameters can be configured
+   with environment variables.
+
+   .. py:class:: Config
+
+
+      Configuration of settings.
+
+      .. py:attribute:: env_file
+         :value: '.env'
+
+         
+
+      .. py:attribute:: env_prefix
+         :value: 'RM_'
+
+         
+
+      .. py:attribute:: env_file_encoding
+         :value: 'utf-8'
+
+         
+
+
+   .. py:property:: valid_product_cns
+      :type: List[str]
+
+      Get valid CNs for productapi certs
+
+
+   .. py:attribute:: host
+      :type: str
+      :value: '127.0.0.1'
+
+      
+
+   .. py:attribute:: port
+      :type: int
+      :value: 8000
+
+      
+
+   .. py:attribute:: workers_count
+      :type: int
+      :value: 1
+
+      
+
+   .. py:attribute:: reload
+      :type: bool
+      :value: True
+
+      
+
+   .. py:attribute:: environment
+      :type: str
+      :value: 'dev'
+
+      
+
+   .. py:attribute:: log_level
+      :type: LogLevel
+
+      
+
+   .. py:attribute:: log_level_int
+      :type: int
+
+      
+
+   .. py:attribute:: integration_api_port
+      :type: int
+      :value: 4625
+
+      
+
+   .. py:attribute:: kraftwerk_manifest_path
+      :type: str
+      :value: '/pvarki/kraftwerk-rasenmaeher-init.json'
+
+      
+
+   .. py:attribute:: kraftwerk_manifest_bool
+      :type: bool
+      :value: False
+
+      
+
+   .. py:attribute:: kraftwerk_manifest_dict
+      :type: Dict[Any, Any]
+
+      
+
+   .. py:attribute:: integration_api_timeout
+      :type: float
+      :value: 1.0
+
+      
+
+   .. py:attribute:: api_client_cert_header
+      :type: str
+      :value: 'X-ClientCert-DN'
+
+      
+
+   .. py:attribute:: test_api_client_cert_header_value
+      :type: str
+      :value: 'CN=fake.localmaeher.pvarki.fi,O=N/A'
+
+      
+
+   .. py:attribute:: api_healthcheck_proto
+      :type: str
+      :value: 'http://'
+
+      
+
+   .. py:attribute:: api_healthcheck_url
+      :type: str
+      :value: '/api/v1/healthcheck'
+
+      
+
+   .. py:attribute:: api_healthcheck_headers
+      :type: str
+      :value: '{"propably":"not_needed"}'
+
+      
+
+   .. py:attribute:: sentry_dsn
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: sentry_sample_rate
+      :type: float
+      :value: 1.0
+
+      
+
+   .. py:attribute:: cfssl_host
+      :type: str
+      :value: 'http://127.0.0.1'
+
+      
+
+   .. py:attribute:: cfssl_port
+      :type: str
+      :value: '8888'
+
+      
+
+   .. py:attribute:: persistent_data_dir
+      :value: '/data/persistent'
+
+      
+
+   .. py:attribute:: mtls_client_cert_path
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: mtls_client_key_path
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: mtls_client_cert_cn
+      :value: 'rasenmaeher'
+
+      
+
+   .. py:attribute:: keycloak_server_url
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: keycloak_client_id
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: keycloak_realm_name
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: keycloak_client_secret
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: ldap_conn_string
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: ldap_username
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: ldap_client_secret
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: _singleton
+      :type: ClassVar[Optional[RMSettings]]
+
+      
+
+   .. py:method:: singleton()
+      :classmethod:
+
+      Return singleton
+
+
+   .. py:method:: load_manifest()
+
+      Load the kraftwerk manifest file
+
+
+
+.. py:data:: switchme_to_singleton_call
+
+   
+

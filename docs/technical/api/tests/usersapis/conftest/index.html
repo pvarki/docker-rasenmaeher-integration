@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.usersapis.conftest &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.usersapis.conftest &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -62,11 +62,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -112,8 +112,17 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.conftest.admin_mtls_client" title="tests.usersapis.conftest.admin_mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">admin_mtls_client</span></code></a>(issuer_cl)</p></td>
 <td><p>(fake) mTLS client for admin</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.conftest.user_mtls_client" title="tests.usersapis.conftest.user_mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_mtls_client</span></code></a>(admin_mtls_client)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.conftest.enroll_user" title="tests.usersapis.conftest.enroll_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enroll_user</span></code></a>(poolcode, callsign, admin)</p></td>
+<td><p>Enrolls a user, returns the p12 cert pkg</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.conftest.enroll_poolcode" title="tests.usersapis.conftest.enroll_poolcode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enroll_poolcode</span></code></a>(admin_mtls_client)</p></td>
+<td><p>Create enrollment pool</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.usersapis.conftest.user_mtls_client" title="tests.usersapis.conftest.user_mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_mtls_client</span></code></a>(admin_mtls_client, enroll_poolcode)</p></td>
 <td><p>mTLS client for user</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.usersapis.conftest.product_mtls_client" title="tests.usersapis.conftest.product_mtls_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">product_mtls_client</span></code></a>(admin_mtls_client)</p></td>
+<td><p>Client with mocked NGinx mTLS headers</p></td>
 </tr>
 </tbody>
 </table>
@@ -138,10 +147,10 @@
 <dd><p>Make sure we have a well known directory structure</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nice_tmpdir_mod</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>nice_tmpdir_mod</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)">pathlib.Path</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -161,9 +170,58 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tests.usersapis.conftest.enroll_user">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enroll_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poolcode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callsign</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/conftest.html#enroll_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.conftest.enroll_user" title="Link to this definition"></a></dt>
+<dd><p>Enrolls a user, returns the p12 cert pkg</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poolcode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>callsign</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>admin</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.12)">bytes</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.usersapis.conftest.enroll_poolcode">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enroll_poolcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/conftest.html#enroll_poolcode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.conftest.enroll_poolcode" title="Link to this definition"></a></dt>
+<dd><p>Create enrollment pool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>admin_mtls_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tests.usersapis.conftest.user_mtls_client">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_mtls_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/conftest.html#user_mtls_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.conftest.user_mtls_client" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">user_mtls_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enroll_poolcode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/conftest.html#user_mtls_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.conftest.user_mtls_client" title="Link to this definition"></a></dt>
 <dd><p>mTLS client for user</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>admin_mtls_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+<li><p><strong>enroll_poolcode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>AsyncGenerator[async_asgi_testclient.TestClient, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.usersapis.conftest.product_mtls_client">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">product_mtls_client</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">admin_mtls_client</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/usersapis/conftest.html#product_mtls_client"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.usersapis.conftest.product_mtls_client" title="Link to this definition"></a></dt>
+<dd><p>Client with mocked NGinx mTLS headers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>admin_mtls_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p>

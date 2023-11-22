@@ -1,0 +1,66 @@
+:py:mod:`miniwerk.jwt`
+======================
+
+.. py:module:: miniwerk.jwt
+
+.. autoapi-nested-parse::
+
+   JWT wrappers
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.jwt.check_create_keypair
+   miniwerk.jwt.get_issuer
+   miniwerk.jwt.get_verifier
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.jwt.LOGGER
+   miniwerk.jwt.PUBDIR_MODE
+   miniwerk.jwt.PRIVDIR_MODE
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: PUBDIR_MODE
+
+   
+
+.. py:data:: PRIVDIR_MODE
+
+   
+
+.. py:function:: check_create_keypair()
+   :async:
+
+   Check if we have keypair, if not create it, returns the file paths
+
+
+.. py:function:: get_issuer()
+   :async:
+
+   Get JWT issuer, init keys if needed
+
+
+.. py:function:: get_verifier()
+   :async:
+
+   Get JWT verifier, init keys if needed
+
+

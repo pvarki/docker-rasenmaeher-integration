@@ -19,6 +19,7 @@ Classes
 
    rasenmaeher_api.web.api.product.schema.CertificatesResponse
    rasenmaeher_api.web.api.product.schema.CertificatesRequest
+   rasenmaeher_api.web.api.product.schema.RevokeRequest
 
 
 
@@ -77,6 +78,33 @@ Classes
 
 
    .. py:attribute:: csr
+      :type: str
+
+      
+
+
+.. py:class:: RevokeRequest
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Request a cert to be revoked
+
+   .. py:class:: Config
+
+
+      Example values for schema
+
+      .. py:attribute:: extra
+
+         
+
+      .. py:attribute:: schema_extra
+
+         
+
+
+   .. py:attribute:: cert
       :type: str
 
       

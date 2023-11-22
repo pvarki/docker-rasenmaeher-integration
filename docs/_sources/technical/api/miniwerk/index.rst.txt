@@ -1,0 +1,34 @@
+:py:mod:`miniwerk`
+==================
+
+.. py:module:: miniwerk
+
+.. autoapi-nested-parse::
+
+   Minimal KRAFTWERK amulation to be able to run a RASENMAEHER+products deployment on any VM 
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   config/index.rst
+   console/index.rst
+   helpers/index.rst
+   jwt/index.rst
+   lewrap/index.rst
+   manifests/index.rst
+   mkcwrap/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+   :value: '0.2.0'
+
+   
+

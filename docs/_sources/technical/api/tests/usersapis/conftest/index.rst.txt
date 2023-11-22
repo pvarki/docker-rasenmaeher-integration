@@ -20,7 +20,10 @@ Functions
 
    tests.usersapis.conftest.datadir
    tests.usersapis.conftest.admin_mtls_client
+   tests.usersapis.conftest.enroll_user
+   tests.usersapis.conftest.enroll_poolcode
    tests.usersapis.conftest.user_mtls_client
+   tests.usersapis.conftest.product_mtls_client
 
 
 
@@ -47,9 +50,27 @@ Attributes
    (fake) mTLS client for admin
 
 
-.. py:function:: user_mtls_client(admin_mtls_client)
+.. py:function:: enroll_user(poolcode, callsign, admin)
+   :async:
+
+   Enrolls a user, returns the p12 cert pkg
+
+
+.. py:function:: enroll_poolcode(admin_mtls_client)
+   :async:
+
+   Create enrollment pool
+
+
+.. py:function:: user_mtls_client(admin_mtls_client, enroll_poolcode)
    :async:
 
    mTLS client for user
+
+
+.. py:function:: product_mtls_client(admin_mtls_client)
+   :async:
+
+   Client with mocked NGinx mTLS headers
 
 

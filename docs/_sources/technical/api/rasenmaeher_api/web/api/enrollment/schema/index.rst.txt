@@ -45,7 +45,6 @@ Classes
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeActivateOut
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeEnrollIn
    rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteIn
-   rasenmaeher_api.web.api.enrollment.schema.EnrollmentInviteCodeDeleteOut
 
 
 
@@ -753,19 +752,6 @@ Classes
 
          
 
-
-   .. py:attribute:: invite_code
-      :type: str
-
-      
-
-
-.. py:class:: EnrollmentInviteCodeDeleteOut
-
-
-   Bases: :py:obj:`pydantic.BaseModel`
-
-   Enrollment Invite code deactivate response schema
 
    .. py:attribute:: invite_code
       :type: str

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fprun &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>fprun &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -15,14 +15,14 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="rasenmaeher_api" href="../rasenmaeher_api/index.html" />
-    <link rel="prev" title="fpinit" href="../fpinit/index.html" /> 
+    <link rel="next" title="fpclient" href="../fpclient/index.html" />
+    <link rel="prev" title="tests.test_tokens" href="../tests/test_tokens/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -54,8 +54,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../search.html">Search Page</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
@@ -64,8 +62,10 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -118,10 +118,13 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_fragment" title="fprun.handle_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_fragment</span></code></a>(request)</p></td>
 <td><p>Respond with hello_world for user</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_admin_fragment" title="fprun.handle_admin_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_admin_fragment</span></code></a>(request)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fprun.handle_health" title="fprun.handle_health"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_health</span></code></a>(request)</p></td>
+<td><p>healthcheck response</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.handle_admin_fragment" title="fprun.handle_admin_fragment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_admin_fragment</span></code></a>(request)</p></td>
 <td><p>Respond with success to all CRUD operations</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#fprun.main" title="fprun.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#fprun.main" title="fprun.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
 <td><p>Main entrypoint, return exit code</p></td>
 </tr>
 </tbody>
@@ -151,12 +154,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pem</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>pem</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.11)">bytes</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.12)">bytes</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -218,6 +221,20 @@
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="fprun.handle_health">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_health</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fprun.html#handle_health"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fprun.handle_health" title="Link to this definition"></a></dt>
+<dd><p>healthcheck response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>aiohttp.web.Request</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>aiohttp.web.Response</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="fprun.handle_admin_fragment">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_admin_fragment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/fprun.html#handle_admin_fragment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fprun.handle_admin_fragment" title="Link to this definition"></a></dt>
 <dd><p>Respond with success to all CRUD operations</p>
@@ -237,7 +254,7 @@
 <dd><p>Main entrypoint, return exit code</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -255,8 +272,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../fpinit/index.html" class="btn btn-neutral float-left" title="fpinit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../rasenmaeher_api/index.html" class="btn btn-neutral float-right" title="rasenmaeher_api" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../tests/test_tokens/index.html" class="btn btn-neutral float-left" title="tests.test_tokens" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../fpclient/index.html" class="btn btn-neutral float-right" title="fpclient" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

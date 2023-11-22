@@ -1,0 +1,62 @@
+:py:mod:`tests.test_lewrap`
+===========================
+
+.. py:module:: tests.test_lewrap
+
+.. autoapi-nested-parse::
+
+   Test the LW wrapper (what little we can)
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_lewrap.check_common_args
+   tests.test_lewrap.test_default_config
+   tests.test_lewrap.test_rsa_config
+   tests.test_lewrap.test_live_config
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_lewrap.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: check_common_args(args, config)
+
+   Common checks
+
+
+.. py:function:: test_default_config()
+   :async:
+
+   Test with default config
+
+
+.. py:function:: test_rsa_config(monkeypatch)
+   :async:
+
+   Test with modified config
+
+
+.. py:function:: test_live_config(monkeypatch)
+   :async:
+
+   Test with modified config
+
+

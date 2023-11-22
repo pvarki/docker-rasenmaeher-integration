@@ -18,7 +18,10 @@ Functions
 
 .. autoapisummary::
 
+   rasenmaeher_api.web.api.product.views.csr_common
    rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr
+   rasenmaeher_api.web.api.product.views.return_ca_and_sign_csr_mtls
+   rasenmaeher_api.web.api.product.views.revoke_cert
    rasenmaeher_api.web.api.product.views.renew_csr
    rasenmaeher_api.web.api.product.views.signal_ready
 
@@ -41,10 +44,28 @@ Attributes
 
    
 
+.. py:function:: csr_common(certs)
+   :async:
+
+   Common parts of CSR handling
+
+
 .. py:function:: return_ca_and_sign_csr(request, certs)
    :async:
 
    Used by product integration API to request signing of their mTLS client cert
+
+
+.. py:function:: return_ca_and_sign_csr_mtls(request, certs)
+   :async:
+
+   Allow product with mTLS cert to request signatures for other certs
+
+
+.. py:function:: revoke_cert(request, cert)
+   :async:
+
+   Allow product with mTLS cert to revoke a cert
 
 
 .. py:function:: renew_csr(request, certs)

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.tlstests.test_productapi &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.tlstests.test_productapi &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -89,7 +89,7 @@
 <span class="kn">from</span> <span class="nn">libpvarki.schemas.product</span> <span class="kn">import</span> <span class="n">UserCRUDRequest</span>
 
 
-<span class="kn">from</span> <span class="nn">rasenmaeher_api.settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">rasenmaeher_api.rmsettings</span> <span class="kn">import</span> <span class="n">switchme_to_singleton_call</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.prodcutapihelpers</span> <span class="kn">import</span> <span class="n">post_to_all_products</span><span class="p">,</span> <span class="n">put_to_all_products</span>
 <span class="kn">from</span> <span class="nn">rasenmaeher_api.web.api.instructions.schema</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ProductFileList</span><span class="p">,</span>
@@ -107,7 +107,7 @@
 <a class="viewcode-back" href="../../../technical/api/tests/tlstests/test_productapi/index.html#tests.tlstests.test_productapi.test_hello">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">test_hello</span><span class="p">(</span><span class="n">mtlsclient</span><span class="p">:</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Quick and dirty test of the mTLS client and server&quot;&quot;&quot;</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="s2">&quot;fake&quot;</span><span class="p">][</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">][</span><span class="s2">&quot;fake&quot;</span><span class="p">][</span><span class="s2">&quot;api&quot;</span><span class="p">]</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">mtlsclient</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;GETting </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
         <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>

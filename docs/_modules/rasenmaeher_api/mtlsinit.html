@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.mtlsinit &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>rasenmaeher_api.mtlsinit &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -93,7 +93,7 @@
 
 
 <span class="kn">from</span> <span class="nn">.cfssl.anoncsr</span> <span class="kn">import</span> <span class="n">anon_sign_csr</span>
-<span class="kn">from</span> <span class="nn">.settings</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">.rmsettings</span> <span class="kn">import</span> <span class="n">switchme_to_singleton_call</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/mtlsinit/index.html#rasenmaeher_api.mtlsinit.LOGGER">[docs]</a>
@@ -110,11 +110,15 @@
 <span class="k">def</span> <span class="nf">check_settings_clientpaths</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make sure the paths are defined, to defaults if needed, return True if setting was changed&quot;&quot;&quot;</span>
     <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">:</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;public&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.pem&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">:</span>
+        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;public&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.pem&quot;</span>
+        <span class="p">)</span>
         <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">:</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.key&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">:</span>
+        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.key&quot;</span>
+        <span class="p">)</span>
         <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="n">changed</span></div>
 
@@ -125,10 +129,10 @@
 <span class="k">def</span> <span class="nf">check_mtls_init</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if we have the cert and key&quot;&quot;&quot;</span>
     <span class="n">check_settings_clientpaths</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="n">cert_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">)</span>
-    <span class="n">key_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">cert_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">)</span>
+    <span class="n">key_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">)</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;cert_path=</span><span class="si">{}</span><span class="s2">  exits=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cert_path</span><span class="p">,</span> <span class="n">cert_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()))</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;key_path=</span><span class="si">{}</span><span class="s2">  exits=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key_path</span><span class="p">,</span> <span class="n">key_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()))</span>
     <span class="k">if</span> <span class="n">cert_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">key_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -143,14 +147,16 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;If needed: Create keypair, CSR, and get it signed&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">check_mtls_init</span><span class="p">():</span>
         <span class="k">return</span>
-    <span class="n">privkeypath</span><span class="p">,</span> <span class="n">pubkeypath</span><span class="p">,</span> <span class="n">csrpath</span> <span class="o">=</span> <span class="n">resolve_filepaths</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">),</span> <span class="n">CERT_NAME_PREFIX</span><span class="p">)</span>
+    <span class="n">privkeypath</span><span class="p">,</span> <span class="n">pubkeypath</span><span class="p">,</span> <span class="n">csrpath</span> <span class="o">=</span> <span class="n">resolve_filepaths</span><span class="p">(</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">),</span> <span class="n">CERT_NAME_PREFIX</span>
+    <span class="p">)</span>
     <span class="n">check_settings_clientpaths</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pth</span> <span class="o">:=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">))</span> <span class="o">!=</span> <span class="n">privkeypath</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pth</span> <span class="o">:=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">))</span> <span class="o">!=</span> <span class="n">privkeypath</span><span class="p">:</span>
         <span class="n">privkeypath</span> <span class="o">=</span> <span class="n">pth</span>
     <span class="n">certpath</span> <span class="o">=</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CERT_NAME_PREFIX</span><span class="si">}</span><span class="s2">.pem&quot;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">pth</span> <span class="o">:=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">))</span> <span class="o">!=</span> <span class="n">certpath</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pth</span> <span class="o">:=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">))</span> <span class="o">!=</span> <span class="n">certpath</span><span class="p">:</span>
         <span class="n">certpath</span> <span class="o">=</span> <span class="n">pth</span>
     <span class="n">lockpath</span> <span class="o">=</span> <span class="n">privkeypath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.lock&quot;</span><span class="p">)</span>
     <span class="c1"># Random sleep to avoid race conditions on these file accesses</span>
@@ -163,7 +169,7 @@
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No mTLS client cert yet, creating it, this will take a moment&quot;</span><span class="p">)</span>
         <span class="n">keypair</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_create_keypair</span><span class="p">(</span><span class="n">privkeypath</span><span class="p">,</span> <span class="n">pubkeypath</span><span class="p">)</span>
-        <span class="n">csrpem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_create_client_csr</span><span class="p">(</span><span class="n">keypair</span><span class="p">,</span> <span class="n">csrpath</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;CN&quot;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_cn</span><span class="p">})</span>
+        <span class="n">csrpem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_create_client_csr</span><span class="p">(</span><span class="n">keypair</span><span class="p">,</span> <span class="n">csrpath</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;CN&quot;</span><span class="p">:</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_cn</span><span class="p">})</span>
         <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">anon_sign_csr</span><span class="p">(</span><span class="n">csrpem</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">filelock</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Someone has already locked </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lockpath</span><span class="p">))</span>
@@ -182,10 +188,10 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;wrap libpvarki get_session to init checks&quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="n">mtls_init</span><span class="p">()</span>
     <span class="n">check_settings_clientpaths</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="k">assert</span> <span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="n">cert_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">)</span>
-    <span class="n">key_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">cert_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_cert_path</span><span class="p">)</span>
+    <span class="n">key_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">mtls_client_key_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">libsession</span><span class="p">((</span><span class="n">cert_path</span><span class="p">,</span> <span class="n">key_path</span><span class="p">))</span></div>
 
 </pre></div>

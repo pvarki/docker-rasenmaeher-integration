@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_db &mdash; Rasenmaeher docs 0.8.0 documentation</title>
+  <title>tests.test_db &mdash; Rasenmaeher docs 0.11.1 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=486e5634"></script>
+        <script src="../../../../_static/documentation_options.js?v=57cbeb03"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                0.8.0
+                0.11.1
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -59,21 +59,26 @@
 <li class="toctree-l4"><a class="reference internal" href="../conftest/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.conftest</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_auth/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_auth</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_cfssl/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_cfssl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_console/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_console</span></code></a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_db</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_enrollment/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_enrollment</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_healthcheck/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_healthcheck</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_lewrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_lewrap</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_manifests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_manifests</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_miniwerk</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../test_mkcwrap/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_mkcwrap</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_rasenmaeher_api</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../test_tokens/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests.test_tokens</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fakewerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fakewerk</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -154,6 +159,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#tests.test_db.test_pfx_parse" title="tests.test_db.test_pfx_parse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_pfx_parse</span></code></a>(ginosession)</p></td>
 <td><p>Test that the PFX file gets done</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_db.test_productcn_forbid" title="tests.test_db.test_productcn_forbid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_productcn_forbid</span></code></a>(ginosession)</p></td>
+<td><p>Test that trying to create enrollment or person with callsign that matches a product CN fails</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -202,7 +210,7 @@
 <dd><p>Check that the fixture set port and host correctly</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>docker_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p>
+<dd class="field-odd"><p><strong>docker_ip</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -357,6 +365,20 @@
 <dt class="sig sig-object py" id="tests.test_db.test_pfx_parse">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_pfx_parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ginosession</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_db.html#test_pfx_parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_db.test_pfx_parse" title="Link to this definition"></a></dt>
 <dd><p>Test that the PFX file gets done</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ginosession</strong> (<em>None</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_db.test_productcn_forbid">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_productcn_forbid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ginosession</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_db.html#test_productcn_forbid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_db.test_productcn_forbid" title="Link to this definition"></a></dt>
+<dd><p>Test that trying to create enrollment or person with callsign that matches a product CN fails</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ginosession</strong> (<em>None</em>) – </p>

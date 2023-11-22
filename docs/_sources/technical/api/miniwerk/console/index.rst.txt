@@ -1,0 +1,71 @@
+:py:mod:`miniwerk.console`
+==========================
+
+.. py:module:: miniwerk.console
+
+.. autoapi-nested-parse::
+
+   CLI entrypoints for miniwerk
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.console.cligrp
+   miniwerk.console.dump_config
+   miniwerk.console.do_certs
+   miniwerk.console.create_manifests
+   miniwerk.console.do_full_init
+   miniwerk.console.miniwerk_cli
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   miniwerk.console.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: cligrp(loglevel, verbose)
+
+   Minimal KRAFTWERK amulation to be able to run a RASENMAEHER+products deployment on any VM
+
+
+.. py:function:: dump_config()
+
+   Show the resolved config as JSON
+
+
+.. py:function:: do_certs(ctx)
+
+   Get and/or renew certs based on configuration
+
+
+.. py:function:: create_manifests(ctx)
+
+   Create manifests
+
+
+.. py:function:: do_full_init(ctx)
+
+   Create manifests, get certs, everything that is needed
+
+
+.. py:function:: miniwerk_cli()
+
+   cli entrypoint
+
+

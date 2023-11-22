@@ -121,6 +121,13 @@ Attributes
 
       
 
+   .. py:method:: by_pk_or_callsign(inval, allow_deleted = False)
+      :classmethod:
+      :async:
+
+      Get person by pk or by callsign
+
+
    .. py:method:: create_with_cert(callsign, extra = None)
       :classmethod:
       :async:
