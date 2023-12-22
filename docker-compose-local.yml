@@ -55,7 +55,7 @@ x-domains_env:
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-4.10-RELEASE-12}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.0-RELEASE-29}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
