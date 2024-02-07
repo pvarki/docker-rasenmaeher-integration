@@ -18,6 +18,7 @@ Functions
 
 .. autoapisummary::
 
+   tests.tlstests.test_rminit_session.test_ssl_context
    tests.tlstests.test_rminit_session.test_get_session
 
 
@@ -33,6 +34,11 @@ Attributes
 .. py:data:: LOGGER
 
    
+
+.. py:function:: test_ssl_context()
+
+   Make sure we can get the context (ref sterlette issue)
+
 
 .. py:function:: test_get_session(app_client)
    :async:
