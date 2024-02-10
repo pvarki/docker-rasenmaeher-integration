@@ -21,6 +21,8 @@ Functions
    tests.test_rasenmaeher_api.test_version
    tests.test_rasenmaeher_api.test_get_openapi_json
    tests.test_rasenmaeher_api.test_settings
+   tests.test_rasenmaeher_api.test_announce
+   tests.test_rasenmaeher_api.test_jwt_pub_url
 
 
 
@@ -38,5 +40,17 @@ Functions
 .. py:function:: test_settings()
 
    Test settings defaults
+
+
+.. py:function:: test_announce(unauth_client, announce_server)
+   :async:
+
+   Make sure we have seen at least one announce call
+
+
+.. py:function:: test_jwt_pub_url(unauth_client, tmp_path)
+   :async:
+
+   Test the JWT public key
 
 

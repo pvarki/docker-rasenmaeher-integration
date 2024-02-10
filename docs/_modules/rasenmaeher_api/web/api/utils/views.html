@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.api.utils.views &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>rasenmaeher_api.web.api.utils.views &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../../../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -84,12 +84,14 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Response</span>
+<span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">FileResponse</span>
 <span class="kn">from</span> <span class="nn">libpvarki.middleware.mtlsheader</span> <span class="kn">import</span> <span class="n">MTLSHeader</span>
 
 
 <span class="kn">from</span> <span class="nn">.schema</span> <span class="kn">import</span> <span class="n">LdapConnString</span><span class="p">,</span> <span class="n">KeyCloakConnString</span>
-<span class="kn">from</span> <span class="nn">....rmsettings</span> <span class="kn">import</span> <span class="n">switchme_to_singleton_call</span>
+<span class="kn">from</span> <span class="nn">....rmsettings</span> <span class="kn">import</span> <span class="n">RMSettings</span>
 <span class="kn">from</span> <span class="nn">....cfssl.public</span> <span class="kn">import</span> <span class="n">get_crl</span>
+<span class="kn">from</span> <span class="nn">....jwtinit</span> <span class="kn">import</span> <span class="n">resolve_rm_jwt_pubkey_path</span>
 
 
 <div class="viewcode-block" id="LOGGER">
@@ -110,24 +112,25 @@
 <span class="sd">    TODO ldap-conn-string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
     <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="p">(</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">return</span> <span class="n">LdapConnString</span><span class="p">(</span>
             <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;One or more ldap connection variables are undefined.&quot;</span><span class="p">,</span>
-            <span class="n">ldap_conn_string</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
-            <span class="n">ldap_user</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
-            <span class="n">ldap_client_secret</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
+            <span class="n">ldap_conn_string</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
+            <span class="n">ldap_user</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
+            <span class="n">ldap_client_secret</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">LdapConnString</span><span class="p">(</span>
         <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">ldap_conn_string</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
-        <span class="n">ldap_user</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
-        <span class="n">ldap_client_secret</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
+        <span class="n">ldap_conn_string</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_conn_string</span><span class="p">,</span>
+        <span class="n">ldap_user</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_username</span><span class="p">,</span>
+        <span class="n">ldap_client_secret</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">ldap_client_secret</span><span class="p">,</span>
         <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -141,11 +144,12 @@
 <span class="sd">    TODO keycloak-conn-string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">conf</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
     <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="p">(</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_server_url</span><span class="p">,</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_client_id</span><span class="p">,</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_realm_name</span><span class="p">,</span>
-        <span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_client_secret</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">keycloak_server_url</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">keycloak_client_id</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">keycloak_realm_name</span><span class="p">,</span>
+        <span class="n">conf</span><span class="o">.</span><span class="n">keycloak_client_secret</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">return</span> <span class="n">KeyCloakConnString</span><span class="p">(</span>
             <span class="n">success</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -158,10 +162,10 @@
 
     <span class="k">return</span> <span class="n">KeyCloakConnString</span><span class="p">(</span>
         <span class="n">success</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">keycloak_server_url</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_server_url</span><span class="p">,</span>
-        <span class="n">keycloak_client_id</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_client_id</span><span class="p">,</span>
-        <span class="n">keycloak_realm_name</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_realm_name</span><span class="p">,</span>
-        <span class="n">keycloak_client_s_sting</span><span class="o">=</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">keycloak_client_secret</span><span class="p">,</span>
+        <span class="n">keycloak_server_url</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">keycloak_server_url</span><span class="p">,</span>
+        <span class="n">keycloak_client_id</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">keycloak_client_id</span><span class="p">,</span>
+        <span class="n">keycloak_realm_name</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">keycloak_realm_name</span><span class="p">,</span>
+        <span class="n">keycloak_client_s_sting</span><span class="o">=</span><span class="n">conf</span><span class="o">.</span><span class="n">keycloak_client_secret</span><span class="p">,</span>
         <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -171,9 +175,22 @@
 <div class="viewcode-block" id="return_crl">
 <a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.return_crl">[docs]</a>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">return_crl</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Response</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the CRL from CFSSL&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the CRL from CFSSL. NOTE: This should not be used anymore, use the cosprest helper for CRLs&quot;&quot;&quot;</span>
     <span class="n">crl_der</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_crl</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">crl_der</span><span class="p">,</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;application/pkix-crl&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/jwt.pub&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="return_jwt_pubkey">
+<a class="viewcode-back" href="../../../../../technical/api/rasenmaeher_api/web/api/utils/views/index.html#rasenmaeher_api.web.api.utils.return_jwt_pubkey">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">return_jwt_pubkey</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">FileResponse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return PEM encoded public key for tokens that RASENMAEHER issues&quot;&quot;&quot;</span>
+    <span class="n">my_dn</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">kraftwerk_manifest_dict</span><span class="p">[</span><span class="s2">&quot;dns&quot;</span><span class="p">]</span>
+    <span class="n">deployment_name</span> <span class="o">=</span> <span class="n">my_dn</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">FileResponse</span><span class="p">(</span>
+        <span class="n">resolve_rm_jwt_pubkey_path</span><span class="p">(),</span> <span class="n">media_type</span><span class="o">=</span><span class="s2">&quot;application/x-pem-file&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">deployment_name</span><span class="si">}</span><span class="s2">_rm_jwt.pub&quot;</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

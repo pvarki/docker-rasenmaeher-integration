@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.tlstests.test_jwt_init &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>tests.tlstests.test_jwt_init &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../../../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -109,16 +109,19 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.empty_datadirs" title="tests.tlstests.test_jwt_init.empty_datadirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty_datadirs</span></code></a>(nice_tmpdir, monkeypatch)</p></td>
 <td><p>Create fresh datadirs and set the environments</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_empty_response" title="tests.tlstests.test_jwt_init.test_empty_response"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_empty_response</span></code></a>(empty_datadirs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_tilaupalvelu_key" title="tests.tlstests.test_jwt_init.test_tilaupalvelu_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_tilaupalvelu_key</span></code></a>()</p></td>
+<td><p>Test that default env has copied tilauspalvelu key</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_empty_response" title="tests.tlstests.test_jwt_init.test_empty_response"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_empty_response</span></code></a>(empty_datadirs)</p></td>
 <td><p>Check tnat the checking functions return False</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_create" title="tests.tlstests.test_jwt_init.test_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_create</span></code></a>(empty_datadirs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_create" title="tests.tlstests.test_jwt_init.test_create"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_create</span></code></a>(empty_datadirs)</p></td>
 <td><p>Test keypair create</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_create_password" title="tests.tlstests.test_jwt_init.test_create_password"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_create_password</span></code></a>(empty_datadirs, monkeypatch)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_create_password" title="tests.tlstests.test_jwt_init.test_create_password"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_create_password</span></code></a>(empty_datadirs, monkeypatch)</p></td>
 <td><p>Test keypair create</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_rm_jwt_session" title="tests.tlstests.test_jwt_init.test_rm_jwt_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_rm_jwt_session</span></code></a>(rm_jwt_client)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.tlstests.test_jwt_init.test_rm_jwt_session" title="tests.tlstests.test_jwt_init.test_rm_jwt_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_rm_jwt_session</span></code></a>(rm_jwt_client)</p></td>
 <td><p>Test that we can use JWTs issued by RASENMAEHER itself</p></td>
 </tr>
 </tbody>
@@ -151,6 +154,17 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Generator[Tuple[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a>], None, None]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.tlstests.test_jwt_init.test_tilaupalvelu_key">
+<span class="sig-name descname"><span class="pre">test_tilaupalvelu_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/tests/tlstests/test_jwt_init.html#test_tilaupalvelu_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.tlstests.test_jwt_init.test_tilaupalvelu_key" title="Link to this definition"></a></dt>
+<dd><p>Test that default env has copied tilauspalvelu key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

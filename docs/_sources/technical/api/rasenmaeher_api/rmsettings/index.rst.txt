@@ -288,6 +288,23 @@ Attributes
 
       
 
+   .. py:attribute:: tilauspalvelu_jwt
+      :type: str
+      :value: 'https://tilaa.pvarki.fi/api/v1/config/jwtPublicKey.pem'
+
+      
+
+   .. py:attribute:: kraftwerk_announce
+      :type: Optional[str]
+
+      
+
+   .. py:attribute:: kraftwerk_timeout
+      :type: float
+      :value: 2.0
+
+      
+
    .. py:attribute:: _singleton
       :type: ClassVar[Optional[RMSettings]]
 

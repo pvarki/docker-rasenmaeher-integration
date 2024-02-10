@@ -19,6 +19,7 @@ Functions
 .. autoapisummary::
 
    tests.tlstests.test_jwt_init.empty_datadirs
+   tests.tlstests.test_jwt_init.test_tilaupalvelu_key
    tests.tlstests.test_jwt_init.test_empty_response
    tests.tlstests.test_jwt_init.test_create
    tests.tlstests.test_jwt_init.test_create_password
@@ -41,6 +42,11 @@ Attributes
 .. py:function:: empty_datadirs(nice_tmpdir, monkeypatch)
 
    Create fresh datadirs and set the environments
+
+
+.. py:function:: test_tilaupalvelu_key()
+
+   Test that default env has copied tilauspalvelu key
 
 
 .. py:function:: test_empty_response(empty_datadirs)

@@ -21,6 +21,7 @@ Functions
    rasenmaeher_api.web.api.utils.views.request_utils_ldap_conn_string
    rasenmaeher_api.web.api.utils.views.request_utils_keycloak_conn_string
    rasenmaeher_api.web.api.utils.views.return_crl
+   rasenmaeher_api.web.api.utils.views.return_jwt_pubkey
 
 
 
@@ -56,6 +57,12 @@ Attributes
 .. py:function:: return_crl()
    :async:
 
-   Get the CRL from CFSSL
+   Get the CRL from CFSSL. NOTE: This should not be used anymore, use the cosprest helper for CRLs
+
+
+.. py:function:: return_jwt_pubkey()
+   :async:
+
+   Return PEM encoded public key for tokens that RASENMAEHER issues
 
 

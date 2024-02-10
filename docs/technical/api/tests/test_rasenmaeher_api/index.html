@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_rasenmaeher_api &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>tests.test_rasenmaeher_api &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -126,6 +126,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_rasenmaeher_api.test_settings" title="tests.test_rasenmaeher_api.test_settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_settings</span></code></a>()</p></td>
 <td><p>Test settings defaults</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#tests.test_rasenmaeher_api.test_announce" title="tests.test_rasenmaeher_api.test_announce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_announce</span></code></a>(unauth_client, announce_server)</p></td>
+<td><p>Make sure we have seen at least one announce call</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#tests.test_rasenmaeher_api.test_jwt_pub_url" title="tests.test_rasenmaeher_api.test_jwt_pub_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_jwt_pub_url</span></code></a>(unauth_client, tmp_path)</p></td>
+<td><p>Test the JWT public key</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py function">
@@ -160,6 +166,40 @@
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_rasenmaeher_api.test_announce">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_announce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">announce_server</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_rasenmaeher_api.html#test_announce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_rasenmaeher_api.test_announce" title="Link to this definition"></a></dt>
+<dd><p>Make sure we have seen at least one announce call</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+<li><p><strong>announce_server</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.test_rasenmaeher_api.test_jwt_pub_url">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">test_jwt_pub_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unauth_client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/tests/test_rasenmaeher_api.html#test_jwt_pub_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tests.test_rasenmaeher_api.test_jwt_pub_url" title="Link to this definition"></a></dt>
+<dd><p>Test the JWT public key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unauth_client</strong> (<em>async_asgi_testclient.TestClient</em>) – </p></li>
+<li><p><strong>tmp_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>

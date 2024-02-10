@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.rmsettings &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>rasenmaeher_api.rmsettings &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -313,6 +313,20 @@
 <div class="viewcode-block" id="RMSettings.ldap_client_secret">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ldap_client_secret">[docs]</a>
     <span class="n">ldap_client_secret</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="c1"># Tilauspalvelu integration</span>
+<div class="viewcode-block" id="RMSettings.tilauspalvelu_jwt">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.tilauspalvelu_jwt">[docs]</a>
+    <span class="n">tilauspalvelu_jwt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;https://tilaa.pvarki.fi/api/v1/config/jwtPublicKey.pem&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.kraftwerk_announce">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.kraftwerk_announce">[docs]</a>
+    <span class="n">kraftwerk_announce</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># When KRAFTWERK actually exists</span></div>
+
+<div class="viewcode-block" id="RMSettings.kraftwerk_timeout">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.kraftwerk_timeout">[docs]</a>
+    <span class="n">kraftwerk_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span></div>
 
 
 <div class="viewcode-block" id="RMSettings._singleton">

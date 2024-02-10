@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.jwtinit &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>rasenmaeher_api.jwtinit &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -112,22 +112,31 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_public_keys" title="rasenmaeher_api.jwtinit.check_public_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_public_keys</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu" title="rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_public_keys_tilauspalvelu</span></code></a>(pubkeydir)</p></td>
+<td><p>handle TILAUSPALVELU public key</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit._check_public_keys_kraftwerk" title="rasenmaeher_api.jwtinit._check_public_keys_kraftwerk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_check_public_keys_kraftwerk</span></code></a>(pubkeydir)</p></td>
+<td><p>Handle KRAFTWERK Public Keys copy</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.resolve_pubkeydir" title="rasenmaeher_api.jwtinit.resolve_pubkeydir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_pubkeydir</span></code></a>()</p></td>
+<td><p>Resolve the directory for public keys and make sure it exists</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_public_keys" title="rasenmaeher_api.jwtinit.check_public_keys"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_public_keys</span></code></a>()</p></td>
 <td><p>Check public keys</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_private_key" title="rasenmaeher_api.jwtinit.check_private_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_private_key</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_private_key" title="rasenmaeher_api.jwtinit.check_private_key"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_private_key</span></code></a>()</p></td>
 <td><p>Check that we instantiate the issuer</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_jwt_init" title="rasenmaeher_api.jwtinit.check_jwt_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_jwt_init</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.check_jwt_init" title="rasenmaeher_api.jwtinit.check_jwt_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_jwt_init</span></code></a>()</p></td>
 <td><p>Check that we have key we can use for issuing and decoding JWTs</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit._jwt_init_keypath" title="rasenmaeher_api.jwtinit._jwt_init_keypath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_jwt_init_keypath</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path" title="rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_rm_jwt_privkey_path</span></code></a>()</p></td>
 <td><p>resolve the path for the private key</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit._jwt_init_pubkeypath" title="rasenmaeher_api.jwtinit._jwt_init_pubkeypath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_jwt_init_pubkeypath</span></code></a>(genpubpath)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path" title="rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_rm_jwt_pubkey_path</span></code></a>([expect_name])</p></td>
 <td><p>resolve the path for the public key</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.jwt_init" title="rasenmaeher_api.jwtinit.jwt_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jwt_init</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.jwt_init" title="rasenmaeher_api.jwtinit.jwt_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jwt_init</span></code></a>()</p></td>
 <td><p>If needed: Create keypair</p></td>
 </tr>
 </tbody>
@@ -147,6 +156,9 @@
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH" title="rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KRAFTWERK_KEYS_PATH</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.jwtinit.HTTP_TIMEOUT" title="rasenmaeher_api.jwtinit.HTTP_TIMEOUT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTTP_TIMEOUT</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -170,6 +182,50 @@
 <dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH">
 <span class="sig-name descname"><span class="pre">KRAFTWERK_KEYS_PATH</span></span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#KRAFTWERK_KEYS_PATH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.HTTP_TIMEOUT">
+<span class="sig-name descname"><span class="pre">HTTP_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#HTTP_TIMEOUT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit.HTTP_TIMEOUT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu">
+<span class="sig-name descname"><span class="pre">_check_public_keys_tilauspalvelu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkeydir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#_check_public_keys_tilauspalvelu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu" title="Link to this definition"></a></dt>
+<dd><p>handle TILAUSPALVELU public key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pubkeydir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit._check_public_keys_kraftwerk">
+<span class="sig-name descname"><span class="pre">_check_public_keys_kraftwerk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pubkeydir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#_check_public_keys_kraftwerk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit._check_public_keys_kraftwerk" title="Link to this definition"></a></dt>
+<dd><p>Handle KRAFTWERK Public Keys copy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pubkeydir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.resolve_pubkeydir">
+<span class="sig-name descname"><span class="pre">resolve_pubkeydir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#resolve_pubkeydir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit.resolve_pubkeydir" title="Link to this definition"></a></dt>
+<dd><p>Resolve the directory for public keys and make sure it exists</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.check_public_keys">
@@ -205,8 +261,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit._jwt_init_keypath">
-<span class="sig-name descname"><span class="pre">_jwt_init_keypath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#_jwt_init_keypath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit._jwt_init_keypath" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path">
+<span class="sig-name descname"><span class="pre">resolve_rm_jwt_privkey_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#resolve_rm_jwt_privkey_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path" title="Link to this definition"></a></dt>
 <dd><p>resolve the path for the private key</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -216,12 +272,12 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit._jwt_init_pubkeypath">
-<span class="sig-name descname"><span class="pre">_jwt_init_pubkeypath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genpubpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#_jwt_init_pubkeypath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit._jwt_init_pubkeypath" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path">
+<span class="sig-name descname"><span class="pre">resolve_rm_jwt_pubkey_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expect_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/jwtinit.html#resolve_rm_jwt_pubkey_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path" title="Link to this definition"></a></dt>
 <dd><p>resolve the path for the public key</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>genpubpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><em>pathlib.Path</em></a>) – </p>
+<dd class="field-odd"><p><strong>expect_name</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a></p>

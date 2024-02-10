@@ -21,6 +21,7 @@ Functions
    rasenmaeher_api.web.application.app_lifespan
    rasenmaeher_api.web.application.get_app_no_init
    rasenmaeher_api.web.application.get_app
+   rasenmaeher_api.web.application.report_to_kraftwerk
 
 
 
@@ -44,11 +45,17 @@ Attributes
 
 .. py:function:: get_app_no_init()
 
-   Retunr the app without logging etc inits
+   Return the app without logging etc inits
 
 
 .. py:function:: get_app()
 
    Returns the FastAPI application.
+
+
+.. py:function:: report_to_kraftwerk()
+   :async:
+
+   Call the KRAFTWERK announce URL if configured
 
 

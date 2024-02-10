@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.jwtinit &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>rasenmaeher_api.jwtinit &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -87,10 +87,15 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">ssl</span>
 
 <span class="kn">import</span> <span class="nn">filelock</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt</span> <span class="kn">import</span> <span class="n">Issuer</span>
 <span class="kn">from</span> <span class="nn">multikeyjwt.keygen</span> <span class="kn">import</span> <span class="n">generate_keypair</span>
+<span class="kn">from</span> <span class="nn">libpvarki.mtlshelp.context</span> <span class="kn">import</span> <span class="n">get_ca_context</span>
+
+<span class="kn">from</span> <span class="nn">.rmsettings</span> <span class="kn">import</span> <span class="n">RMSettings</span>
 
 <div class="viewcode-block" id="LOGGER">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.LOGGER">[docs]</a>
@@ -108,12 +113,76 @@
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH">[docs]</a>
 <span class="n">KRAFTWERK_KEYS_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PVARKI_PUBLICKEYS_PATH&quot;</span><span class="p">,</span> <span class="s2">&quot;/pvarki/publickeys&quot;</span><span class="p">))</span></div>
 
+<div class="viewcode-block" id="HTTP_TIMEOUT">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.HTTP_TIMEOUT">[docs]</a>
+<span class="n">HTTP_TIMEOUT</span> <span class="o">=</span> <span class="mf">2.0</span></div>
 
 
-<div class="viewcode-block" id="check_public_keys">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.check_public_keys">[docs]</a>
-<span class="k">def</span> <span class="nf">check_public_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check public keys&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="_check_public_keys_tilauspalvelu">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu">[docs]</a>
+<span class="k">def</span> <span class="nf">_check_public_keys_tilauspalvelu</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;handle TILAUSPALVELU public key&quot;&quot;&quot;</span>
+    <span class="n">tppubkey</span> <span class="o">=</span> <span class="n">pubkeydir</span> <span class="o">/</span> <span class="s2">&quot;tilauspalvelu.pub&quot;</span>
+    <span class="k">if</span> <span class="n">tppubkey</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> exists&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tppubkey</span><span class="p">))</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">tilauspalvelu_jwt</span><span class="p">:</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;No URL for TILAUSPALVELU public key given&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Making sure TILAUSPALVELU key is in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">))</span>
+    <span class="n">lockpath</span> <span class="o">=</span> <span class="n">pubkeydir</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;tpkeycopy.lock&quot;</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">filelock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">lockpath</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">ssl_ctx</span> <span class="o">=</span> <span class="n">get_ca_context</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">Purpose</span><span class="o">.</span><span class="n">SERVER_AUTH</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span>
+                <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">tilauspalvelu_jwt</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">ssl_ctx</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">HTTP_TIMEOUT</span>  <span class="c1"># nosec</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">tppubkey</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not load TILAUSPALVELU key: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># pylint: disable=W0718</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Unhanled exception while loading TILAUSPALVELU key: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">filelock</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Someone already locked </span><span class="si">{}</span><span class="s2">, leaving them to it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lockpath</span><span class="p">))</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="_check_public_keys_kraftwerk">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit._check_public_keys_kraftwerk">[docs]</a>
+<span class="k">def</span> <span class="nf">_check_public_keys_kraftwerk</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle KRAFTWERK Public Keys copy&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">KRAFTWERK_KEYS_PATH</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> does not exist, not copying KRAFTWERK public keys&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KRAFTWERK_KEYS_PATH</span><span class="p">))</span>
+        <span class="k">return</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Making sure KRAFTWERK provided keys are in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">))</span>
+    <span class="n">lockpath</span> <span class="o">=</span> <span class="n">pubkeydir</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;pubkeycopy.lock&quot;</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">filelock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">lockpath</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fpath</span> <span class="ow">in</span> <span class="n">KRAFTWERK_KEYS_PATH</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="n">tgtpath</span> <span class="o">=</span> <span class="n">pubkeydir</span> <span class="o">/</span> <span class="n">fpath</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Checking </span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2"> (exists=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="o">.</span><span class="n">exists</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">tgtpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="c1"># Copy the pubkey</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Copying </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="p">))</span>
+            <span class="n">tgtpath</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">fpath</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>
+    <span class="k">except</span> <span class="n">filelock</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Someone already locked </span><span class="si">{}</span><span class="s2">, leaving them to it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lockpath</span><span class="p">))</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_pubkeydir">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.resolve_pubkeydir">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve_pubkeydir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve the directory for public keys and make sure it exists&quot;&quot;&quot;</span>
     <span class="n">pubkeydir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JWT_PUBKEY_PATH&quot;</span><span class="p">)</span>
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;initial pubkeydir=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">pubkeydir</span><span class="p">:</span>
@@ -125,27 +194,20 @@
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;final pubkeydir=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">))</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">pubkeydir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="n">pubkeydir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pubkeydir</span></div>
 
-    <span class="k">if</span> <span class="n">KRAFTWERK_KEYS_PATH</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Making sure KRAFTWERK provided keys are in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">))</span>
-        <span class="n">lockpath</span> <span class="o">=</span> <span class="n">pubkeydir</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;pubkeycopy.lock&quot;</span>
-        <span class="n">lock</span> <span class="o">=</span> <span class="n">filelock</span><span class="o">.</span><span class="n">FileLock</span><span class="p">(</span><span class="n">lockpath</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">fpath</span> <span class="ow">in</span> <span class="n">KRAFTWERK_KEYS_PATH</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
-                <span class="n">tgtpath</span> <span class="o">=</span> <span class="n">pubkeydir</span> <span class="o">/</span> <span class="n">fpath</span><span class="o">.</span><span class="n">name</span>
-                <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Checking </span><span class="si">{}</span><span class="s2"> vs </span><span class="si">{}</span><span class="s2"> (exists=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="o">.</span><span class="n">exists</span><span class="p">()))</span>
-                <span class="k">if</span> <span class="n">tgtpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                    <span class="k">continue</span>
-                <span class="c1"># Copy the pubkey</span>
-                <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Copying </span><span class="si">{}</span><span class="s2"> to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">tgtpath</span><span class="p">))</span>
-                <span class="n">tgtpath</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">fpath</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>
-        <span class="k">except</span> <span class="n">filelock</span><span class="o">.</span><span class="n">Timeout</span><span class="p">:</span>
-            <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Someone already locked </span><span class="si">{}</span><span class="s2">, leaving them to it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lockpath</span><span class="p">))</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> does not exist, not copying KRAFTWERK public keys&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">KRAFTWERK_KEYS_PATH</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="check_public_keys">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.check_public_keys">[docs]</a>
+<span class="k">def</span> <span class="nf">check_public_keys</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check public keys&quot;&quot;&quot;</span>
+    <span class="n">pubkeydir</span> <span class="o">=</span> <span class="n">resolve_pubkeydir</span><span class="p">()</span>
+
+    <span class="c1"># FIXME: These should be run in executors (which means this function should be async etc)</span>
+    <span class="n">_check_public_keys_tilauspalvelu</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">)</span>
+    <span class="n">_check_public_keys_kraftwerk</span><span class="p">(</span><span class="n">pubkeydir</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -182,9 +244,9 @@
 
 
 
-<div class="viewcode-block" id="_jwt_init_keypath">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit._jwt_init_keypath">[docs]</a>
-<span class="k">def</span> <span class="nf">_jwt_init_keypath</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<div class="viewcode-block" id="resolve_rm_jwt_privkey_path">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve_rm_jwt_privkey_path</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;resolve the path for the private key&quot;&quot;&quot;</span>
     <span class="n">keypath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JWT_PRIVKEY_PATH&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">keypath</span><span class="p">:</span>
@@ -201,23 +263,13 @@
 
 
 
-<div class="viewcode-block" id="_jwt_init_pubkeypath">
-<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit._jwt_init_pubkeypath">[docs]</a>
-<span class="k">def</span> <span class="nf">_jwt_init_pubkeypath</span><span class="p">(</span><span class="n">genpubpath</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<div class="viewcode-block" id="resolve_rm_jwt_pubkey_path">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/jwtinit/index.html#rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path">[docs]</a>
+<span class="k">def</span> <span class="nf">resolve_rm_jwt_pubkey_path</span><span class="p">(</span><span class="n">expect_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;resolve the path for the public key&quot;&quot;&quot;</span>
-    <span class="n">pubkeypath</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;JWT_PUBKEY_PATH&quot;</span><span class="p">)</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;initial pubkeypath=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeypath</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">pubkeypath</span><span class="p">:</span>
-        <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">pubkeypath</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
-            <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">pubkeypath</span> <span class="o">/</span> <span class="n">genpubpath</span><span class="o">.</span><span class="n">name</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;JWT_PUBKEY_PATH defined, copying our key there&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">DEFAULT_PUB_PATH</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;final pubkeypath=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeypath</span><span class="p">))</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">pubkeypath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">pubkeypath</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">pubkeypath</span></div>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expect_name</span><span class="p">:</span>
+        <span class="n">expect_name</span> <span class="o">=</span> <span class="n">resolve_rm_jwt_privkey_path</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.key&quot;</span><span class="p">,</span> <span class="s2">&quot;.pub&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resolve_pubkeydir</span><span class="p">()</span> <span class="o">/</span> <span class="n">expect_name</span></div>
 
 
 
@@ -227,7 +279,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;If needed: Create keypair&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">check_jwt_init</span><span class="p">():</span>
         <span class="k">return</span>
-    <span class="n">keypath</span> <span class="o">=</span> <span class="n">_jwt_init_keypath</span><span class="p">()</span>
+    <span class="n">keypath</span> <span class="o">=</span> <span class="n">resolve_rm_jwt_privkey_path</span><span class="p">()</span>
 
     <span class="n">genpubpath</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">genprivpath</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -257,7 +309,7 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Returned private key does not exist!&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">genpubpath</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">genpubpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Returned private key does not exist!&quot;</span><span class="p">)</span>
-    <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">_jwt_init_pubkeypath</span><span class="p">(</span><span class="n">genpubpath</span><span class="p">)</span>
+    <span class="n">pubkeypath</span> <span class="o">=</span> <span class="n">resolve_rm_jwt_pubkey_path</span><span class="p">(</span><span class="n">genpubpath</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Copy generated pubkey to </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pubkeypath</span><span class="p">))</span>
     <span class="n">pubkeypath</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">genpubpath</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span>

@@ -18,11 +18,14 @@ Functions
 
 .. autoapisummary::
 
+   rasenmaeher_api.jwtinit._check_public_keys_tilauspalvelu
+   rasenmaeher_api.jwtinit._check_public_keys_kraftwerk
+   rasenmaeher_api.jwtinit.resolve_pubkeydir
    rasenmaeher_api.jwtinit.check_public_keys
    rasenmaeher_api.jwtinit.check_private_key
    rasenmaeher_api.jwtinit.check_jwt_init
-   rasenmaeher_api.jwtinit._jwt_init_keypath
-   rasenmaeher_api.jwtinit._jwt_init_pubkeypath
+   rasenmaeher_api.jwtinit.resolve_rm_jwt_privkey_path
+   rasenmaeher_api.jwtinit.resolve_rm_jwt_pubkey_path
    rasenmaeher_api.jwtinit.jwt_init
 
 
@@ -36,6 +39,7 @@ Attributes
    rasenmaeher_api.jwtinit.DEFAULT_KEY_PATH
    rasenmaeher_api.jwtinit.DEFAULT_PUB_PATH
    rasenmaeher_api.jwtinit.KRAFTWERK_KEYS_PATH
+   rasenmaeher_api.jwtinit.HTTP_TIMEOUT
 
 
 .. py:data:: LOGGER
@@ -54,6 +58,26 @@ Attributes
 
    
 
+.. py:data:: HTTP_TIMEOUT
+   :value: 2.0
+
+   
+
+.. py:function:: _check_public_keys_tilauspalvelu(pubkeydir)
+
+   handle TILAUSPALVELU public key
+
+
+.. py:function:: _check_public_keys_kraftwerk(pubkeydir)
+
+   Handle KRAFTWERK Public Keys copy
+
+
+.. py:function:: resolve_pubkeydir()
+
+   Resolve the directory for public keys and make sure it exists
+
+
 .. py:function:: check_public_keys()
 
    Check public keys
@@ -69,12 +93,12 @@ Attributes
    Check that we have key we can use for issuing and decoding JWTs
 
 
-.. py:function:: _jwt_init_keypath()
+.. py:function:: resolve_rm_jwt_privkey_path()
 
    resolve the path for the private key
 
 
-.. py:function:: _jwt_init_pubkeypath(genpubpath)
+.. py:function:: resolve_rm_jwt_pubkey_path(expect_name = None)
 
    resolve the path for the public key
 

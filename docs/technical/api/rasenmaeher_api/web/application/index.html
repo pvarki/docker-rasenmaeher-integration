@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.web.application &mdash; Rasenmaeher docs 1.1.1 documentation</title>
+  <title>rasenmaeher_api.web.application &mdash; Rasenmaeher docs 1.2.0 documentation</title>
       <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../../_static/documentation_options.js?v=58fbf978"></script>
+        <script src="../../../../../_static/documentation_options.js?v=6efca38a"></script>
         <script src="../../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.1.1
+                1.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
@@ -112,10 +112,13 @@
 <td><p>Handle lifespan management things, like mTLS client init</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.application.get_app_no_init" title="rasenmaeher_api.web.application.get_app_no_init"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_app_no_init</span></code></a>()</p></td>
-<td><p>Retunr the app without logging etc inits</p></td>
+<td><p>Return the app without logging etc inits</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.web.application.get_app" title="rasenmaeher_api.web.application.get_app"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_app</span></code></a>()</p></td>
 <td><p>Returns the FastAPI application.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.web.application.report_to_kraftwerk" title="rasenmaeher_api.web.application.report_to_kraftwerk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report_to_kraftwerk</span></code></a>()</p></td>
+<td><p>Call the KRAFTWERK announce URL if configured</p></td>
 </tr>
 </tbody>
 </table>
@@ -151,7 +154,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="rasenmaeher_api.web.application.get_app_no_init">
 <span class="sig-name descname"><span class="pre">get_app_no_init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/web/application.html#get_app_no_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.application.get_app_no_init" title="Link to this definition"></a></dt>
-<dd><p>Retunr the app without logging etc inits</p>
+<dd><p>Return the app without logging etc inits</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>fastapi.FastAPI</p>
@@ -166,6 +169,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>fastapi.FastAPI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.web.application.report_to_kraftwerk">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">report_to_kraftwerk</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/rasenmaeher_api/web/application.html#report_to_kraftwerk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.web.application.report_to_kraftwerk" title="Link to this definition"></a></dt>
+<dd><p>Call the KRAFTWERK announce URL if configured</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
