@@ -282,6 +282,7 @@ services:
       RM_CFSSL_HOST: "http://cfssl"
       RM_CFSSL_PORT: *cfsslport
       JWT_LIFETIME: "3456000"  # Long JWT lifetimes for testing
+      RM_TILAUSPALVELU_JWT: "https://${TILAUSPALVELU_DOMAIN:-tilaa.pvarki.fi}/api/v1/config/jwtPublicKey.pem"
     networks:
       - apinet
       - kcnet
