@@ -1,0 +1,39 @@
+:py:mod:`ocsprest`
+==================
+
+.. py:module:: ocsprest
+
+.. autoapi-nested-parse::
+
+   Quick and dirty rest API to call the ocsp signing methods for CFSSL CLI
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   console/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   config/index.rst
+   helpers/index.rst
+   routes/index.rst
+
+
+Package Contents
+----------------
+
+.. py:data:: __version__
+   :value: '1.0.3'
+
+   
+

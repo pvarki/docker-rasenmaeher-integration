@@ -37,6 +37,7 @@ Submodules
    test_manifests/index.rst
    test_miniwerk/index.rst
    test_mkcwrap/index.rst
+   test_ocsprest/index.rst
    test_rasenmaeher_api/index.rst
    test_tokens/index.rst
 

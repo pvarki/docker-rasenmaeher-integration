@@ -18,6 +18,9 @@ Functions
 
 .. autoapisummary::
 
+   rasenmaeher_api.cfssl.private.post_ocsprest
+   rasenmaeher_api.cfssl.private.dump_crlfiles
+   rasenmaeher_api.cfssl.private.refresh_ocsp
    rasenmaeher_api.cfssl.private.sign_csr
    rasenmaeher_api.cfssl.private.sign_ocsp
    rasenmaeher_api.cfssl.private.validate_reason
@@ -44,12 +47,30 @@ Attributes
 
    
 
-.. py:function:: sign_csr(csr)
+.. py:function:: post_ocsprest(url, send_payload = None, timeout = None)
+   :async:
+
+   Do a POST with the mTLS client
+
+
+.. py:function:: dump_crlfiles()
+   :async:
+
+   Call ocsprest CRL dump
+
+
+.. py:function:: refresh_ocsp()
+   :async:
+
+   Call ocsprest refresh
+
+
+.. py:function:: sign_csr(csr, bundle = True)
    :async:
 
    Quick and dirty method to sign CSR from CFSSL
-   params: csr
-   returns: certificate
+   params: csr, whether to return cert of full bundle
+   returns: certificate as PEM
 
 
 .. py:function:: sign_ocsp(cert, status = 'good')

@@ -34,7 +34,7 @@ Attributes
 
    
 
-.. py:function:: anon_sign_csr(csr)
+.. py:function:: anon_sign_csr(csr, bundle = True)
    :async:
 
    Quick and dirty method to sign CSR from CFSSL.

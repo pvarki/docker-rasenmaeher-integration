@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.rmsettings &mdash; Rasenmaeher docs 1.2.0 documentation</title>
+  <title>rasenmaeher_api.rmsettings &mdash; Rasenmaeher docs 1.3.2 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=6efca38a"></script>
+        <script src="../../_static/documentation_options.js?v=8ca9e7a0"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.2.0
+                1.3.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -219,7 +219,7 @@
 
 <div class="viewcode-block" id="RMSettings.integration_api_timeout">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.integration_api_timeout">[docs]</a>
-    <span class="n">integration_api_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span></div>
+    <span class="n">integration_api_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.0</span></div>
 
 
     <span class="c1"># Api access management</span>
@@ -262,6 +262,18 @@
 <div class="viewcode-block" id="RMSettings.cfssl_port">
 <a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.cfssl_port">[docs]</a>
     <span class="n">cfssl_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8888&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.ocsprest_host">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ocsprest_host">[docs]</a>
+    <span class="n">ocsprest_host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;http://127.0.0.1&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.ocsprest_port">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.ocsprest_port">[docs]</a>
+    <span class="n">ocsprest_port</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;8887&quot;</span></div>
+
+<div class="viewcode-block" id="RMSettings.cfssl_timeout">
+<a class="viewcode-back" href="../../technical/api/rasenmaeher_api/rmsettings/index.html#rasenmaeher_api.rmsettings.RMSettings.cfssl_timeout">[docs]</a>
+    <span class="n">cfssl_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.5</span></div>
 
 
 <div class="viewcode-block" id="RMSettings.persistent_data_dir">

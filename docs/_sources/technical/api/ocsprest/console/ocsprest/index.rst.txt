@@ -1,0 +1,77 @@
+:py:mod:`ocsprest.console.ocsprest`
+===================================
+
+.. py:module:: ocsprest.console.ocsprest
+
+.. autoapi-nested-parse::
+
+   CLI commands for the OCSP rest wrapper
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.console.ocsprest.cligrp
+   ocsprest.console.ocsprest.dump_config
+   ocsprest.console.ocsprest.crl
+   ocsprest.console.ocsprest.ocsp
+   ocsprest.console.ocsprest.start_refresher
+   ocsprest.console.ocsprest.do_http_healthcheck
+   ocsprest.console.ocsprest.ocsprest_cli
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.console.ocsprest.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: cligrp(loglevel, verbose)
+
+   REST wrapper for CFSSL CLI functionality not present in it's own REST API
+
+
+.. py:function:: dump_config()
+
+   Show the resolved config as JSON
+
+
+.. py:function:: crl()
+
+   dump CRL files
+
+
+.. py:function:: ocsp()
+
+   Refresh OCSP signatures
+
+
+.. py:function:: start_refresher()
+
+   Start the refresher loop and run forever
+
+
+.. py:function:: do_http_healthcheck(ctx, host, port, timeout)
+
+   Do a GET request to the healthcheck api and dump results to stdout
+
+
+.. py:function:: ocsprest_cli()
+
+   cli entrypoint
+
+

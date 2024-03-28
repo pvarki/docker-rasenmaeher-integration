@@ -22,6 +22,7 @@ Functions
    rasenmaeher_api.cfssl.base.get_result_cert
    rasenmaeher_api.cfssl.base.get_result_bundle
    rasenmaeher_api.cfssl.base.base_url
+   rasenmaeher_api.cfssl.base.ocsprest_base
    rasenmaeher_api.cfssl.base.anon_session
 
 
@@ -40,7 +41,6 @@ Attributes
    
 
 .. py:data:: DEFAULT_TIMEOUT
-   :value: 2.0
 
    
 
@@ -66,6 +66,14 @@ Attributes
    Bases: :py:obj:`CFSSLError`, :py:obj:`ValueError`
 
    Did not get any result
+
+
+.. py:exception:: DBLocked
+
+
+   Bases: :py:obj:`CFSSLError`
+
+   Database is locked, we should probably retry
 
 
 .. py:exception:: NoValue
@@ -97,6 +105,11 @@ Attributes
 .. py:function:: base_url()
 
    Construct the base url
+
+
+.. py:function:: ocsprest_base()
+
+   Construct the base url for ocsprest
 
 
 .. py:function:: anon_session()

@@ -1,0 +1,47 @@
+:py:mod:`tests.test_ocsprest`
+=============================
+
+.. py:module:: tests.test_ocsprest
+
+.. autoapi-nested-parse::
+
+   package level stuff, like version etc
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_ocsprest.test_version
+   tests.test_ocsprest.test_healthcheck
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   tests.test_ocsprest.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: test_version()
+
+   Make sure version matches expected
+
+
+.. py:function:: test_healthcheck(client)
+
+   Check that healthcheck responds
+
+

@@ -1,0 +1,21 @@
+:py:mod:`ocsprest.console`
+==========================
+
+.. py:module:: ocsprest.console
+
+.. autoapi-nested-parse::
+
+   console entrypoints
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   fakessl/index.rst
+   ocsprest/index.rst
+
+

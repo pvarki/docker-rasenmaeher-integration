@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocsprest.console.fakessl &mdash; Rasenmaeher docs 1.3.2 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/_modules/ocsprest/console/fakessl.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=8ca9e7a0"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                1.3.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../search.html">Search Page</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../technical/api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../ocsprest.html">ocsprest</a></li>
+      <li class="breadcrumb-item active">ocsprest.console.fakessl</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ocsprest.console.fakessl</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;fake cfssl for unit testing&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">click</span>
+<span class="kn">from</span> <span class="nn">libadvian.logging</span> <span class="kn">import</span> <span class="n">init_logging</span>
+
+<span class="kn">from</span> <span class="nn">ocsprest</span> <span class="kn">import</span> <span class="n">__version__</span>
+
+<div class="viewcode-block" id="LOGGER">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.LOGGER">[docs]</a>
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="s2">&quot;--loglevel&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Python log level, 10=DEBUG, 20=INFO, 30=WARNING, 40=CRITICAL&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Shorthand for info/debug loglevel (-v/-vv)&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="cligrp">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.cligrp">[docs]</a>
+<span class="k">def</span> <span class="nf">cligrp</span><span class="p">(</span><span class="n">loglevel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fake CFSSL command for unit testing&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">loglevel</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">loglevel</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">init_logging</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span>
+    <span class="n">LOGGER</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">loglevel</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;crl&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="crl">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.crl">[docs]</a>
+<span class="k">def</span> <span class="nf">crl</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a new Certificate Revocation List from Database&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;serve&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="serve">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.serve">[docs]</a>
+<span class="k">def</span> <span class="nf">serve</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;set up a HTTP server handles CF SSL requests&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;gencert&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="gencert">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.gencert">[docs]</a>
+<span class="k">def</span> <span class="nf">gencert</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a new key and signed certificate&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;gencsr&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="gencsr">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.gencsr">[docs]</a>
+<span class="k">def</span> <span class="nf">gencsr</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a csr from a private key with existing CSR json specification or certificate&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ocspsign&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ocspsign">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.ocspsign">[docs]</a>
+<span class="k">def</span> <span class="nf">ocspsign</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;signs an OCSP response for a given CA, cert, and status.&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;certinfo&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="certinfo">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.certinfo">[docs]</a>
+<span class="k">def</span> <span class="nf">certinfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;output certinfo about the given cert&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;sign&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="sign">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.sign">[docs]</a>
+<span class="k">def</span> <span class="nf">sign</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;signs a client cert with a host name by a given CA and CA key&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="version">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.version">[docs]</a>
+<span class="k">def</span> <span class="nf">version</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;print out the version of CF SSL&quot;&quot;&quot;</span>
+    <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">__version__</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;gencrl&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="gencrl">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.gencrl">[docs]</a>
+<span class="k">def</span> <span class="nf">gencrl</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a new Certificate Revocation List&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ocsprefresh&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ocsprefresh">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.ocsprefresh">[docs]</a>
+<span class="k">def</span> <span class="nf">ocsprefresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;refreshes the ocsp_responses table&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;print-defaults&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="print_defaults">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.print_defaults">[docs]</a>
+<span class="k">def</span> <span class="nf">print_defaults</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;print default configurations that can be used as a template&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;revoke&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="revoke">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.revoke">[docs]</a>
+<span class="k">def</span> <span class="nf">revoke</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;revoke a certificate in the certificate store&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;bundle&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="bundle">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.bundle">[docs]</a>
+<span class="k">def</span> <span class="nf">bundle</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create a certificate bundle that contains the client cert&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ocspserve&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ocspserve">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.ocspserve">[docs]</a>
+<span class="k">def</span> <span class="nf">ocspserve</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;set up an HTTP server that handles OCSP requests from either a file or directly from a database (see RFC 5019)&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;scan&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="scan">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.scan">[docs]</a>
+<span class="k">def</span> <span class="nf">scan</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;scan a host for issues&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;genkey&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="genkey">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.genkey">[docs]</a>
+<span class="k">def</span> <span class="nf">genkey</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a new key and CSR&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;selfsign&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="selfsign">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.selfsign">[docs]</a>
+<span class="k">def</span> <span class="nf">selfsign</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generate a new self-signed key and signed certificate&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="info">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.info">[docs]</a>
+<span class="k">def</span> <span class="nf">info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;get info about a remote signer&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<span class="nd">@cligrp</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ocspdump&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ocspdump">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.ocspdump">[docs]</a>
+<span class="k">def</span> <span class="nf">ocspdump</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;generates a series of concatenated OCSP responses&quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="fakessl_cli">
+<a class="viewcode-back" href="../../../technical/api/ocsprest/console/fakessl/index.html#ocsprest.console.fakessl.fakessl_cli">[docs]</a>
+<span class="k">def</span> <span class="nf">fakessl_cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;cli entrypoint&quot;&quot;&quot;</span>
+    <span class="n">init_logging</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+    <span class="n">cligrp</span><span class="p">()</span>  <span class="c1"># pylint: disable=no-value-for-parameter</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

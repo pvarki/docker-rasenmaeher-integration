@@ -1,0 +1,132 @@
+:py:mod:`ocsprest.config`
+=========================
+
+.. py:module:: ocsprest.config
+
+.. autoapi-nested-parse::
+
+   Config
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.config.RESTConfig
+
+
+
+
+.. py:class:: RESTConfig
+
+
+   Bases: :py:obj:`pydantic_settings.BaseSettings`
+
+   Config for for the wrapper REST api
+
+   .. py:attribute:: port
+      :type: int
+
+      
+
+   .. py:attribute:: addr
+      :type: str
+
+      
+
+   .. py:attribute:: cfssl
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: data_path
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: cacrt
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: cakey
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: rootcacrt
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: rootcakey
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: conf
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: dbconf
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: respcrt
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: respkey
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: crl
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: crl_lifetime
+      :type: str
+
+      
+
+   .. py:attribute:: ocsp_lifetime
+      :type: str
+
+      
+
+   .. py:attribute:: crl_refresh
+      :type: int
+
+      
+
+   .. py:attribute:: ci
+      :type: bool
+
+      
+
+   .. py:attribute:: model_config
+
+      
+
+   .. py:attribute:: _singleton
+      :type: ClassVar[Optional[RESTConfig]]
+
+      
+
+   .. py:method:: singleton()
+      :classmethod:
+
+      Return singleton
+
+
+

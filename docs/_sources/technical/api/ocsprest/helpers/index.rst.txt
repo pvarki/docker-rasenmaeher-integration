@@ -1,0 +1,106 @@
+:py:mod:`ocsprest.helpers`
+==========================
+
+.. py:module:: ocsprest.helpers
+
+.. autoapi-nested-parse::
+
+   helpers
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.helpers.CRLType
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.helpers.call_cmd
+   ocsprest.helpers.cfssl_loglevel
+   ocsprest.helpers.crlpaths
+   ocsprest.helpers.merge_crl
+   ocsprest.helpers.dump_crl
+   ocsprest.helpers.refresh_oscp
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.helpers.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: call_cmd(cmd, timeout = 10)
+   :async:
+
+   Do the boilerplate for calling cmd and reporting output/return code
+
+
+.. py:function:: cfssl_loglevel()
+
+   Return CFSSL loglevel 0-5
+
+
+.. py:class:: CRLType
+
+
+   Bases: :py:obj:`enum.IntEnum`
+
+   Root or intermediate (or why not both)
+
+   .. py:attribute:: ROOT
+      :value: 1
+
+      
+
+   .. py:attribute:: INTERMEDIATE
+      :value: 2
+
+      
+
+   .. py:attribute:: MERGED
+      :value: 3
+
+      
+
+
+.. py:function:: crlpaths(crltype = CRLType.MERGED)
+
+   Path to CRL files by CRLType
+
+
+.. py:function:: merge_crl()
+   :async:
+
+   Merge CRL files
+
+
+.. py:function:: dump_crl(crltype = CRLType.MERGED)
+   :async:
+
+   Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though
+
+
+.. py:function:: refresh_oscp()
+   :async:
+
+   Call the OCSP refresh script
+
+

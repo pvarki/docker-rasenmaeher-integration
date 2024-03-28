@@ -1,0 +1,161 @@
+:py:mod:`ocsprest.console.fakessl`
+==================================
+
+.. py:module:: ocsprest.console.fakessl
+
+.. autoapi-nested-parse::
+
+   fake cfssl for unit testing
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.console.fakessl.cligrp
+   ocsprest.console.fakessl.crl
+   ocsprest.console.fakessl.serve
+   ocsprest.console.fakessl.gencert
+   ocsprest.console.fakessl.gencsr
+   ocsprest.console.fakessl.ocspsign
+   ocsprest.console.fakessl.certinfo
+   ocsprest.console.fakessl.sign
+   ocsprest.console.fakessl.version
+   ocsprest.console.fakessl.gencrl
+   ocsprest.console.fakessl.ocsprefresh
+   ocsprest.console.fakessl.print_defaults
+   ocsprest.console.fakessl.revoke
+   ocsprest.console.fakessl.bundle
+   ocsprest.console.fakessl.ocspserve
+   ocsprest.console.fakessl.scan
+   ocsprest.console.fakessl.genkey
+   ocsprest.console.fakessl.selfsign
+   ocsprest.console.fakessl.info
+   ocsprest.console.fakessl.ocspdump
+   ocsprest.console.fakessl.fakessl_cli
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.console.fakessl.LOGGER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:function:: cligrp(loglevel, verbose)
+
+   Fake CFSSL command for unit testing
+
+
+.. py:function:: crl()
+
+   generate a new Certificate Revocation List from Database
+
+
+.. py:function:: serve()
+
+   set up a HTTP server handles CF SSL requests
+
+
+.. py:function:: gencert()
+
+   generate a new key and signed certificate
+
+
+.. py:function:: gencsr()
+
+   generate a csr from a private key with existing CSR json specification or certificate
+
+
+.. py:function:: ocspsign()
+
+   signs an OCSP response for a given CA, cert, and status.
+
+
+.. py:function:: certinfo()
+
+   output certinfo about the given cert
+
+
+.. py:function:: sign()
+
+   signs a client cert with a host name by a given CA and CA key
+
+
+.. py:function:: version()
+
+   print out the version of CF SSL
+
+
+.. py:function:: gencrl()
+
+   generate a new Certificate Revocation List
+
+
+.. py:function:: ocsprefresh()
+
+   refreshes the ocsp_responses table
+
+
+.. py:function:: print_defaults()
+
+   print default configurations that can be used as a template
+
+
+.. py:function:: revoke()
+
+   revoke a certificate in the certificate store
+
+
+.. py:function:: bundle()
+
+   create a certificate bundle that contains the client cert
+
+
+.. py:function:: ocspserve()
+
+   set up an HTTP server that handles OCSP requests from either a file or directly from a database (see RFC 5019)
+
+
+.. py:function:: scan()
+
+   scan a host for issues
+
+
+.. py:function:: genkey()
+
+   generate a new key and CSR
+
+
+.. py:function:: selfsign()
+
+   generate a new self-signed key and signed certificate
+
+
+.. py:function:: info()
+
+   get info about a remote signer
+
+
+.. py:function:: ocspdump()
+
+   generates a series of concatenated OCSP responses
+
+
+.. py:function:: fakessl_cli()
+
+   cli entrypoint
+
+

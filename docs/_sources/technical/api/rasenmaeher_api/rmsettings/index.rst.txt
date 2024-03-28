@@ -176,7 +176,7 @@ Attributes
 
    .. py:attribute:: integration_api_timeout
       :type: float
-      :value: 1.0
+      :value: 3.0
 
       
 
@@ -230,6 +230,24 @@ Attributes
    .. py:attribute:: cfssl_port
       :type: str
       :value: '8888'
+
+      
+
+   .. py:attribute:: ocsprest_host
+      :type: str
+      :value: 'http://127.0.0.1'
+
+      
+
+   .. py:attribute:: ocsprest_port
+      :type: str
+      :value: '8887'
+
+      
+
+   .. py:attribute:: cfssl_timeout
+      :type: float
+      :value: 2.5
 
       
 

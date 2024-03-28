@@ -20,6 +20,7 @@ Functions
 
    rasenmaeher_api.console.cli_group
    rasenmaeher_api.console.dump_openapi
+   rasenmaeher_api.console.do_http_healthcheck
    rasenmaeher_api.console.add_code
    rasenmaeher_api.console.get_pfx
    rasenmaeher_api.console.revoke_user
@@ -50,6 +51,11 @@ Attributes
 .. py:function:: dump_openapi(ctx)
 
    Dump autogenerate openapi spec as JSON
+
+
+.. py:function:: do_http_healthcheck(ctx, host, port, timeout, services)
+
+   Do a GET request to the healthcheck api and dump results to stdout
 
 
 .. py:function:: add_code(ctx, claims_json)

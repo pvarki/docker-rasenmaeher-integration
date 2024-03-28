@@ -43,25 +43,25 @@ Attributes
    Check that settings has manifest
 
 
-.. py:function:: post_to_all_products(url_suffix, data, respose_schema)
+.. py:function:: post_to_all_products(url_suffix, data, respose_schema, collect_responses = True)
    :async:
 
    Call given POST endpoint on call products in the manifest
 
 
-.. py:function:: put_to_all_products(url_suffix, data, respose_schema)
+.. py:function:: put_to_all_products(url_suffix, data, respose_schema, collect_responses = True)
    :async:
 
    Call given PUT endpoint on call products in the manifest
 
 
-.. py:function:: get_from_all_products(url_suffix, respose_schema)
+.. py:function:: get_from_all_products(url_suffix, respose_schema, collect_responses = True)
    :async:
 
    Call given GET endpoint on call products in the manifest
 
 
-.. py:function:: _method_to_all_products(methodname, url_suffix, data, respose_schema)
+.. py:function:: _method_to_all_products(methodname, url_suffix, data, respose_schema, collect_responses = True)
    :async:
 
    Call given POST endpoint on call products in the manifest

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.console &mdash; Rasenmaeher docs 1.2.0 documentation</title>
+  <title>rasenmaeher_api.console &mdash; Rasenmaeher docs 1.3.2 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -15,7 +15,7 @@
   
         <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
+        <script src="../../../../_static/documentation_options.js?v=8ca9e7a0"></script>
         <script src="../../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.2.0
+                1.3.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -70,9 +70,10 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ocsprest/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
 </ul>
 </li>
@@ -118,25 +119,28 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.dump_openapi" title="rasenmaeher_api.console.dump_openapi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_openapi</span></code></a>(ctx)</p></td>
 <td><p>Dump autogenerate openapi spec as JSON</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.add_code" title="rasenmaeher_api.console.add_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_code</span></code></a>(ctx, claims_json)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.do_http_healthcheck" title="rasenmaeher_api.console.do_http_healthcheck"><code class="xref py py-obj docutils literal notranslate"><span class="pre">do_http_healthcheck</span></code></a>(ctx, host, port, timeout, services)</p></td>
+<td><p>Do a GET request to the healthcheck api and dump results to stdout</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.add_code" title="rasenmaeher_api.console.add_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_code</span></code></a>(ctx, claims_json)</p></td>
 <td><p>Add new single-use login code</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_pfx" title="rasenmaeher_api.console.get_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pfx</span></code></a>(ctx, callsign, admin)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_pfx" title="rasenmaeher_api.console.get_pfx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_pfx</span></code></a>(ctx, callsign, admin)</p></td>
 <td><p>Get PFX for cert+key for the given user, will create the user if needed</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.revoke_user" title="rasenmaeher_api.console.revoke_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_user</span></code></a>(ctx, callsign, reason)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.revoke_user" title="rasenmaeher_api.console.revoke_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke_user</span></code></a>(ctx, callsign, reason)</p></td>
 <td><p>Revoke user by callsign</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_jwt" title="rasenmaeher_api.console.get_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_jwt</span></code></a>(ctx, claims_json, nonce)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_jwt" title="rasenmaeher_api.console.get_jwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_jwt</span></code></a>(ctx, claims_json, nonce)</p></td>
 <td><p>Get RASENMAEHER signed JWT</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_adminjwt" title="rasenmaeher_api.console.get_adminjwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_adminjwt</span></code></a>(ctx, claims_json)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.get_adminjwt" title="rasenmaeher_api.console.get_adminjwt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_adminjwt</span></code></a>(ctx, claims_json)</p></td>
 <td><p>Get RASENMAEHER signed admin user JWT</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.add_test_users" title="rasenmaeher_api.console.add_test_users"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_test_users</span></code></a>(ctx)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.add_test_users" title="rasenmaeher_api.console.add_test_users"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_test_users</span></code></a>(ctx)</p></td>
 <td><p>Create the test users defined in testhelpers.create_test_users</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#rasenmaeher_api.console.rasenmaeher_api_cli" title="rasenmaeher_api.console.rasenmaeher_api_cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api_cli</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#rasenmaeher_api.console.rasenmaeher_api_cli" title="rasenmaeher_api.console.rasenmaeher_api_cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasenmaeher_api_cli</span></code></a>()</p></td>
 <td><p>python-rasenmaeher-api</p></td>
 </tr>
 </tbody>
@@ -181,6 +185,26 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ctx</strong> (<em>click.Context</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="rasenmaeher_api.console.do_http_healthcheck">
+<span class="sig-name descname"><span class="pre">do_http_healthcheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">services</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/rasenmaeher_api/console.html#do_http_healthcheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#rasenmaeher_api.console.do_http_healthcheck" title="Link to this definition"></a></dt>
+<dd><p>Do a GET request to the healthcheck api and dump results to stdout</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctx</strong> (<em>click.Context</em>) – </p></li>
+<li><p><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>services</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>

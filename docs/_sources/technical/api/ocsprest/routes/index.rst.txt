@@ -1,0 +1,108 @@
+:py:mod:`ocsprest.routes`
+=========================
+
+.. py:module:: ocsprest.routes
+
+.. autoapi-nested-parse::
+
+   aiohttp routes
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.routes.refresh_all
+   ocsprest.routes.csr_sign
+   ocsprest.routes.ocsp_sign_one
+   ocsprest.routes.call_dump_crl
+   ocsprest.routes.get_crl_pem
+   ocsprest.routes.get_crl_der
+   ocsprest.routes.healthcheck
+   ocsprest.routes.get_app
+   ocsprest.routes.app_w_logging
+   ocsprest.routes.refresher
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ocsprest.routes.LOGGER
+   ocsprest.routes.ROUTER
+
+
+.. py:data:: LOGGER
+
+   
+
+.. py:data:: ROUTER
+
+   
+
+.. py:function:: refresh_all(request)
+   :async:
+
+   calls cfssl ocsprefresh
+
+
+.. py:function:: csr_sign(request)
+   :async:
+
+   Sign a CSR, we have to do it via CLI if we want CFSSL to add the Authority Information Access properties
+
+
+.. py:function:: ocsp_sign_one(request)
+   :async:
+
+   calls cfssl ocspsign
+
+
+.. py:function:: call_dump_crl(request)
+   :async:
+
+   Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though
+
+
+.. py:function:: get_crl_pem(request)
+   :async:
+
+   Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though
+
+
+.. py:function:: get_crl_der(request)
+   :async:
+
+   Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though
+
+
+.. py:function:: healthcheck(request)
+   :async:
+
+   Health check
+
+
+.. py:function:: get_app()
+
+   Get the app
+
+
+.. py:function:: app_w_logging()
+
+   init logging and create app
+
+
+.. py:function:: refresher()
+   :async:
+
+   Dump the CRL and refresh OCSP periodically
+
+

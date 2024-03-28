@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rasenmaeher_api.db.people &mdash; Rasenmaeher docs 1.2.0 documentation</title>
+  <title>rasenmaeher_api.db.people &mdash; Rasenmaeher docs 1.3.2 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
@@ -14,7 +14,7 @@
   
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
+        <script src="../../../_static/documentation_options.js?v=8ca9e7a0"></script>
         <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.2.0
+                1.3.2
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -96,13 +96,12 @@
 <span class="kn">from</span> <span class="nn">libpvarki.schemas.product</span> <span class="kn">import</span> <span class="n">UserCRUDRequest</span>
 <span class="kn">from</span> <span class="nn">libpvarki.schemas.generic</span> <span class="kn">import</span> <span class="n">OperationResultResponse</span>
 <span class="kn">from</span> <span class="nn">libpvarki.mtlshelp.pkcs12</span> <span class="kn">import</span> <span class="n">convert_pem_to_pkcs12</span>
+<span class="kn">from</span> <span class="nn">libadvian.tasks</span> <span class="kn">import</span> <span class="n">TaskMaster</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">ORMBaseModel</span><span class="p">,</span> <span class="n">DBModel</span><span class="p">,</span> <span class="n">utcnow</span><span class="p">,</span> <span class="n">db</span>
 <span class="kn">from</span> <span class="nn">..web.api.middleware.datatypes</span> <span class="kn">import</span> <span class="n">MTLSorJWTPayload</span>
 <span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">NotFound</span><span class="p">,</span> <span class="n">Deleted</span><span class="p">,</span> <span class="n">BackendError</span><span class="p">,</span> <span class="n">CallsignReserved</span>
-<span class="kn">from</span> <span class="nn">..rmsettings</span> <span class="kn">import</span> <span class="n">switchme_to_singleton_call</span>
-<span class="kn">from</span> <span class="nn">..cfssl.private</span> <span class="kn">import</span> <span class="n">sign_csr</span><span class="p">,</span> <span class="n">revoke_pem</span><span class="p">,</span> <span class="n">validate_reason</span><span class="p">,</span> <span class="n">ReasonTypes</span>
-<span class="kn">from</span> <span class="nn">..cfssl.public</span> <span class="kn">import</span> <span class="n">get_bundle</span>
+<span class="kn">from</span> <span class="nn">..cfssl.private</span> <span class="kn">import</span> <span class="n">sign_csr</span><span class="p">,</span> <span class="n">revoke_pem</span><span class="p">,</span> <span class="n">validate_reason</span><span class="p">,</span> <span class="n">ReasonTypes</span><span class="p">,</span> <span class="n">refresh_ocsp</span>
 <span class="kn">from</span> <span class="nn">..prodcutapihelpers</span> <span class="kn">import</span> <span class="n">post_to_all_products</span>
 <span class="kn">from</span> <span class="nn">..rmsettings</span> <span class="kn">import</span> <span class="n">RMSettings</span>
 
@@ -161,7 +160,8 @@
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.Person.create_with_cert">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">create_with_cert</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">callsign</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Person&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the cert etc and save the person&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">callsign</span> <span class="ow">in</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">valid_product_cns</span><span class="p">:</span>
+        <span class="n">cnf</span> <span class="o">=</span> <span class="n">RMSettings</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">callsign</span> <span class="ow">in</span> <span class="n">cnf</span><span class="o">.</span><span class="n">valid_product_cns</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">CallsignReserved</span><span class="p">(</span><span class="s2">&quot;Using product CNs as callsigns is forbidden&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">await</span> <span class="n">Person</span><span class="o">.</span><span class="n">by_callsign</span><span class="p">(</span><span class="n">callsign</span><span class="p">)</span>
@@ -171,7 +171,7 @@
         <span class="k">async</span> <span class="k">with</span> <span class="n">db</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
             <span class="k">async</span> <span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>  <span class="c1"># do it in a transaction so if something fails we can roll back</span>
                 <span class="n">puuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
-                <span class="n">certspath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">switchme_to_singleton_call</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="n">puuid</span><span class="p">)</span>
+                <span class="n">certspath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">cnf</span><span class="o">.</span><span class="n">persistent_data_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;private&quot;</span> <span class="o">/</span> <span class="s2">&quot;people&quot;</span> <span class="o">/</span> <span class="nb">str</span><span class="p">(</span><span class="n">puuid</span><span class="p">)</span>
                 <span class="n">certspath</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="n">certspath</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">PRIVDIR_MODE</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -180,9 +180,7 @@
                     <span class="n">ckp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_create_keypair</span><span class="p">(</span><span class="n">newperson</span><span class="o">.</span><span class="n">privkeyfile</span><span class="p">,</span> <span class="n">newperson</span><span class="o">.</span><span class="n">pubkeyfile</span><span class="p">)</span>
                     <span class="n">csrpem</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_create_client_csr</span><span class="p">(</span><span class="n">ckp</span><span class="p">,</span> <span class="n">newperson</span><span class="o">.</span><span class="n">csrfile</span><span class="p">,</span> <span class="n">newperson</span><span class="o">.</span><span class="n">certsubject</span><span class="p">)</span>
                     <span class="n">certpem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">sign_csr</span><span class="p">(</span><span class="n">csrpem</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="n">bundlepem</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="n">get_bundle</span><span class="p">(</span><span class="n">certpem</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">n&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                    <span class="n">newperson</span><span class="o">.</span><span class="n">certfile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">bundlepem</span><span class="p">)</span>
-                    <span class="k">await</span> <span class="n">newperson</span><span class="o">.</span><span class="n">create_pfx</span><span class="p">()</span>
+                    <span class="n">newperson</span><span class="o">.</span><span class="n">certfile</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">certpem</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">LOGGER</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Something went wrong, doing cleanup&quot;</span><span class="p">)</span>
                     <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">certspath</span><span class="p">)</span>
@@ -191,7 +189,9 @@
                     <span class="k">raise</span> <span class="n">BackendError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
                 <span class="c1"># Return refreshed object if everything went ok</span>
                 <span class="n">refresh</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">by_pk</span><span class="p">(</span><span class="n">newperson</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
-                <span class="k">await</span> <span class="n">user_created</span><span class="p">(</span><span class="n">refresh</span><span class="p">)</span>
+                <span class="n">TaskMaster</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">refresh</span><span class="o">.</span><span class="n">create_pfx</span><span class="p">())</span>
+                <span class="n">TaskMaster</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">refresh_ocsp</span><span class="p">())</span>
+                <span class="n">TaskMaster</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">user_created</span><span class="p">(</span><span class="n">refresh</span><span class="p">))</span>
                 <span class="k">return</span> <span class="n">refresh</span></div>
 
 
@@ -402,13 +402,14 @@
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.Person.assign_role">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">assign_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign a role, return true if role was created, false if it already existed&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+            <span class="n">TaskMaster</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">user_promoted</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="k">if</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_role</span><span class="p">(</span><span class="n">role</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="n">role</span> <span class="o">=</span> <span class="n">Role</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">)</span>
+        <span class="c1"># These MUST be done sequentially or asyncpg: &quot;cannot perform operation: another operation is in progress&quot;</span>
         <span class="k">await</span> <span class="n">role</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="o">=</span><span class="n">utcnow</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">user_promoted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -416,13 +417,14 @@
 <a class="viewcode-back" href="../../../technical/api/rasenmaeher_api/db/people/index.html#rasenmaeher_api.db.Person.remove_role">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">remove_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a role, return true if role was removed, false if it wasn&#39;t assigned&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+            <span class="n">TaskMaster</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">user_demoted</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_role</span><span class="p">(</span><span class="n">role</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># These MUST be done sequentially or asyncpg: &quot;cannot perform operation: another operation is in progress&quot;</span>
         <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="o">=</span><span class="n">utcnow</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">user_demoted</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
@@ -491,15 +493,9 @@
 <span class="k">async</span> <span class="k">def</span> <span class="nf">post_user_crud</span><span class="p">(</span><span class="n">userinfo</span><span class="p">:</span> <span class="n">UserCRUDRequest</span><span class="p">,</span> <span class="n">endpoint_suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper to be more DRY in the basic CRUD things&quot;&quot;&quot;</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;api/v1/users/</span><span class="si">{</span><span class="n">endpoint_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="c1"># We can&#39;t do anything about any issues with the responses so don&#39;t collect them</span>
+    <span class="k">await</span> <span class="n">post_to_all_products</span><span class="p">(</span><span class="n">endpoint</span><span class="p">,</span> <span class="n">userinfo</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span> <span class="n">OperationResultResponse</span><span class="p">,</span> <span class="n">collect_responses</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 
-    <span class="n">responses</span> <span class="o">=</span> <span class="k">await</span> <span class="n">post_to_all_products</span><span class="p">(</span>
-        <span class="n">endpoint</span><span class="p">,</span>
-        <span class="n">userinfo</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
-        <span class="n">OperationResultResponse</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;got responses: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">responses</span><span class="p">))</span></div>
-
-    <span class="c1"># TODO: Check responses and log errors</span>
 
 
 <div class="viewcode-block" id="user_created">

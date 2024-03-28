@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocsprest.console.fakessl &mdash; Rasenmaeher docs 1.3.2 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/ocsprest/console/fakessl/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=8ca9e7a0"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="ocsprest.console.ocsprest" href="../ocsprest/index.html" />
+    <link rel="prev" title="ocsprest.console" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                1.3.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.console</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest</span></code></a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.console</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.console.fakessl</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ocsprest.console.fakessl">
+<span id="ocsprest-console-fakessl"></span><h1><a class="reference internal" href="#module-ocsprest.console.fakessl" title="ocsprest.console.fakessl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.console.fakessl</span></code></a><a class="headerlink" href="#module-ocsprest.console.fakessl" title="Link to this heading"></a></h1>
+<p>fake cfssl for unit testing</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.cligrp" title="ocsprest.console.fakessl.cligrp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cligrp</span></code></a>(loglevel, verbose)</p></td>
+<td><p>Fake CFSSL command for unit testing</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.crl" title="ocsprest.console.fakessl.crl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crl</span></code></a>()</p></td>
+<td><p>generate a new Certificate Revocation List from Database</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.serve" title="ocsprest.console.fakessl.serve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">serve</span></code></a>()</p></td>
+<td><p>set up a HTTP server handles CF SSL requests</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.gencert" title="ocsprest.console.fakessl.gencert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gencert</span></code></a>()</p></td>
+<td><p>generate a new key and signed certificate</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.gencsr" title="ocsprest.console.fakessl.gencsr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gencsr</span></code></a>()</p></td>
+<td><p>generate a csr from a private key with existing CSR json specification or certificate</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.ocspsign" title="ocsprest.console.fakessl.ocspsign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ocspsign</span></code></a>()</p></td>
+<td><p>signs an OCSP response for a given CA, cert, and status.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.certinfo" title="ocsprest.console.fakessl.certinfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">certinfo</span></code></a>()</p></td>
+<td><p>output certinfo about the given cert</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.sign" title="ocsprest.console.fakessl.sign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sign</span></code></a>()</p></td>
+<td><p>signs a client cert with a host name by a given CA and CA key</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.version" title="ocsprest.console.fakessl.version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">version</span></code></a>()</p></td>
+<td><p>print out the version of CF SSL</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.gencrl" title="ocsprest.console.fakessl.gencrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gencrl</span></code></a>()</p></td>
+<td><p>generate a new Certificate Revocation List</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.ocsprefresh" title="ocsprest.console.fakessl.ocsprefresh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ocsprefresh</span></code></a>()</p></td>
+<td><p>refreshes the ocsp_responses table</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.print_defaults" title="ocsprest.console.fakessl.print_defaults"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_defaults</span></code></a>()</p></td>
+<td><p>print default configurations that can be used as a template</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.revoke" title="ocsprest.console.fakessl.revoke"><code class="xref py py-obj docutils literal notranslate"><span class="pre">revoke</span></code></a>()</p></td>
+<td><p>revoke a certificate in the certificate store</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.bundle" title="ocsprest.console.fakessl.bundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bundle</span></code></a>()</p></td>
+<td><p>create a certificate bundle that contains the client cert</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.ocspserve" title="ocsprest.console.fakessl.ocspserve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ocspserve</span></code></a>()</p></td>
+<td><p>set up an HTTP server that handles OCSP requests from either a file or directly from a database (see RFC 5019)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.scan" title="ocsprest.console.fakessl.scan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scan</span></code></a>()</p></td>
+<td><p>scan a host for issues</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.genkey" title="ocsprest.console.fakessl.genkey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">genkey</span></code></a>()</p></td>
+<td><p>generate a new key and CSR</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.selfsign" title="ocsprest.console.fakessl.selfsign"><code class="xref py py-obj docutils literal notranslate"><span class="pre">selfsign</span></code></a>()</p></td>
+<td><p>generate a new self-signed key and signed certificate</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.info" title="ocsprest.console.fakessl.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>()</p></td>
+<td><p>get info about a remote signer</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.ocspdump" title="ocsprest.console.fakessl.ocspdump"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ocspdump</span></code></a>()</p></td>
+<td><p>generates a series of concatenated OCSP responses</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.fakessl_cli" title="ocsprest.console.fakessl.fakessl_cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fakessl_cli</span></code></a>()</p></td>
+<td><p>cli entrypoint</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.console.fakessl.LOGGER" title="ocsprest.console.fakessl.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.LOGGER">
+<span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.LOGGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.cligrp">
+<span class="sig-name descname"><span class="pre">cligrp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loglevel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#cligrp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.cligrp" title="Link to this definition"></a></dt>
+<dd><p>Fake CFSSL command for unit testing</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loglevel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.crl">
+<span class="sig-name descname"><span class="pre">crl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#crl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.crl" title="Link to this definition"></a></dt>
+<dd><p>generate a new Certificate Revocation List from Database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.serve">
+<span class="sig-name descname"><span class="pre">serve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#serve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.serve" title="Link to this definition"></a></dt>
+<dd><p>set up a HTTP server handles CF SSL requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.gencert">
+<span class="sig-name descname"><span class="pre">gencert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#gencert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.gencert" title="Link to this definition"></a></dt>
+<dd><p>generate a new key and signed certificate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.gencsr">
+<span class="sig-name descname"><span class="pre">gencsr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#gencsr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.gencsr" title="Link to this definition"></a></dt>
+<dd><p>generate a csr from a private key with existing CSR json specification or certificate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.ocspsign">
+<span class="sig-name descname"><span class="pre">ocspsign</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#ocspsign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.ocspsign" title="Link to this definition"></a></dt>
+<dd><p>signs an OCSP response for a given CA, cert, and status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.certinfo">
+<span class="sig-name descname"><span class="pre">certinfo</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#certinfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.certinfo" title="Link to this definition"></a></dt>
+<dd><p>output certinfo about the given cert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.sign">
+<span class="sig-name descname"><span class="pre">sign</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.sign" title="Link to this definition"></a></dt>
+<dd><p>signs a client cert with a host name by a given CA and CA key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.version">
+<span class="sig-name descname"><span class="pre">version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.version" title="Link to this definition"></a></dt>
+<dd><p>print out the version of CF SSL</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.gencrl">
+<span class="sig-name descname"><span class="pre">gencrl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#gencrl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.gencrl" title="Link to this definition"></a></dt>
+<dd><p>generate a new Certificate Revocation List</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.ocsprefresh">
+<span class="sig-name descname"><span class="pre">ocsprefresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#ocsprefresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.ocsprefresh" title="Link to this definition"></a></dt>
+<dd><p>refreshes the ocsp_responses table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.print_defaults">
+<span class="sig-name descname"><span class="pre">print_defaults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#print_defaults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.print_defaults" title="Link to this definition"></a></dt>
+<dd><p>print default configurations that can be used as a template</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.revoke">
+<span class="sig-name descname"><span class="pre">revoke</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#revoke"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.revoke" title="Link to this definition"></a></dt>
+<dd><p>revoke a certificate in the certificate store</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.bundle">
+<span class="sig-name descname"><span class="pre">bundle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#bundle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.bundle" title="Link to this definition"></a></dt>
+<dd><p>create a certificate bundle that contains the client cert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.ocspserve">
+<span class="sig-name descname"><span class="pre">ocspserve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#ocspserve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.ocspserve" title="Link to this definition"></a></dt>
+<dd><p>set up an HTTP server that handles OCSP requests from either a file or directly from a database (see RFC 5019)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.scan">
+<span class="sig-name descname"><span class="pre">scan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#scan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.scan" title="Link to this definition"></a></dt>
+<dd><p>scan a host for issues</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.genkey">
+<span class="sig-name descname"><span class="pre">genkey</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#genkey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.genkey" title="Link to this definition"></a></dt>
+<dd><p>generate a new key and CSR</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.selfsign">
+<span class="sig-name descname"><span class="pre">selfsign</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#selfsign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.selfsign" title="Link to this definition"></a></dt>
+<dd><p>generate a new self-signed key and signed certificate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.info">
+<span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.info" title="Link to this definition"></a></dt>
+<dd><p>get info about a remote signer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.ocspdump">
+<span class="sig-name descname"><span class="pre">ocspdump</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#ocspdump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.ocspdump" title="Link to this definition"></a></dt>
+<dd><p>generates a series of concatenated OCSP responses</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.console.fakessl.fakessl_cli">
+<span class="sig-name descname"><span class="pre">fakessl_cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../../_modules/ocsprest/console/fakessl.html#fakessl_cli"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.console.fakessl.fakessl_cli" title="Link to this definition"></a></dt>
+<dd><p>cli entrypoint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="ocsprest.console" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ocsprest/index.html" class="btn btn-neutral float-right" title="ocsprest.console.ocsprest" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

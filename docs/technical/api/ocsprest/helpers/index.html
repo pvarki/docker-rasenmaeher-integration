@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ocsprest.helpers &mdash; Rasenmaeher docs 1.3.2 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+    <link rel="canonical" href="https://pvarki.github.io/docker-rasenmaeher-integration/docs/technical/api/ocsprest/helpers/index.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=8ca9e7a0"></script>
+        <script src="../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="ocsprest.routes" href="../routes/index.html" />
+    <link rel="prev" title="ocsprest.config" href="../config/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #000000" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            Rasenmaeher docs
+          </a>
+              <div class="version">
+                1.3.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../py-modindex.html">Module Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../search.html">Search Page</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../rasenmaeher_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rasenmaeher_api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tests/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tests</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpinit/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpinit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fpclient/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fpclient</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fprun/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fprun</span></code></a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../config/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.config</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.helpers</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../routes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.routes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../miniwerk/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">miniwerk</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #000000" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Rasenmaeher docs</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.helpers</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ocsprest.helpers">
+<span id="ocsprest-helpers"></span><h1><a class="reference internal" href="#module-ocsprest.helpers" title="ocsprest.helpers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ocsprest.helpers</span></code></a><a class="headerlink" href="#module-ocsprest.helpers" title="Link to this heading"></a></h1>
+<p>helpers</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.helpers.CRLType" title="ocsprest.helpers.CRLType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CRLType</span></code></a></p></td>
+<td><p>Root or intermediate (or why not both)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.helpers.call_cmd" title="ocsprest.helpers.call_cmd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">call_cmd</span></code></a>(cmd[, timeout])</p></td>
+<td><p>Do the boilerplate for calling cmd and reporting output/return code</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.helpers.cfssl_loglevel" title="ocsprest.helpers.cfssl_loglevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cfssl_loglevel</span></code></a>()</p></td>
+<td><p>Return CFSSL loglevel 0-5</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.helpers.crlpaths" title="ocsprest.helpers.crlpaths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">crlpaths</span></code></a>([crltype])</p></td>
+<td><p>Path to CRL files by CRLType</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.helpers.merge_crl" title="ocsprest.helpers.merge_crl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">merge_crl</span></code></a>()</p></td>
+<td><p>Merge CRL files</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.helpers.dump_crl" title="ocsprest.helpers.dump_crl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_crl</span></code></a>([crltype])</p></td>
+<td><p>Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ocsprest.helpers.refresh_oscp" title="ocsprest.helpers.refresh_oscp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refresh_oscp</span></code></a>()</p></td>
+<td><p>Call the OCSP refresh script</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ocsprest.helpers.LOGGER" title="ocsprest.helpers.LOGGER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGER</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ocsprest.helpers.LOGGER">
+<span class="sig-name descname"><span class="pre">LOGGER</span></span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#LOGGER"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.LOGGER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.call_cmd">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_cmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#call_cmd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.call_cmd" title="Link to this definition"></a></dt>
+<dd><p>Do the boilerplate for calling cmd and reporting output/return code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cmd</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.cfssl_loglevel">
+<span class="sig-name descname"><span class="pre">cfssl_loglevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#cfssl_loglevel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.cfssl_loglevel" title="Link to this definition"></a></dt>
+<dd><p>Return CFSSL loglevel 0-5</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ocsprest.helpers.CRLType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CRLType</span></span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#CRLType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.CRLType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.IntEnum" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></a></p>
+<p>Root or intermediate (or why not both)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ocsprest.helpers.CRLType.ROOT">
+<span class="sig-name descname"><span class="pre">ROOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#CRLType.ROOT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.CRLType.ROOT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ocsprest.helpers.CRLType.INTERMEDIATE">
+<span class="sig-name descname"><span class="pre">INTERMEDIATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#CRLType.INTERMEDIATE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.CRLType.INTERMEDIATE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ocsprest.helpers.CRLType.MERGED">
+<span class="sig-name descname"><span class="pre">MERGED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#CRLType.MERGED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.CRLType.MERGED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.crlpaths">
+<span class="sig-name descname"><span class="pre">crlpaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CRLType.MERGED</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#crlpaths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.crlpaths" title="Link to this definition"></a></dt>
+<dd><p>Path to CRL files by CRLType</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crltype</strong> (<a class="reference internal" href="#ocsprest.helpers.CRLType" title="ocsprest.helpers.CRLType"><em>CRLType</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)">pathlib.Path</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.merge_crl">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_crl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#merge_crl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.merge_crl" title="Link to this definition"></a></dt>
+<dd><p>Merge CRL files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.dump_crl">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dump_crl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crltype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CRLType.MERGED</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#dump_crl"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.dump_crl" title="Link to this definition"></a></dt>
+<dd><p>Dump CRL to shared directory, triggering reloads for everyone interested in it is beyond us though</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crltype</strong> (<a class="reference internal" href="#ocsprest.helpers.CRLType" title="ocsprest.helpers.CRLType"><em>CRLType</em></a>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ocsprest.helpers.refresh_oscp">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">refresh_oscp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/ocsprest/helpers.html#refresh_oscp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ocsprest.helpers.refresh_oscp" title="Link to this definition"></a></dt>
+<dd><p>Call the OCSP refresh script</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../config/index.html" class="btn btn-neutral float-left" title="ocsprest.config" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../routes/index.html" class="btn btn-neutral float-right" title="ocsprest.routes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, PVARKI.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

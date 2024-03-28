@@ -93,12 +93,13 @@ Attributes
    Check the status for given callsign (enrollment). status=-1 means that there is no enrollment with given callsign
 
 
-.. py:function:: request_enrollment_list()
+.. py:function:: request_enrollment_list(code = None)
    :async:
 
    /list
    Return users/callsign/enrollments. If 'accepted' has something else than '', it has been accepted.
    Returns a list of dicts, callsign_list = [ {  "callsign":'x', 'state':'init', 'approvecode':'' } ]
+   if ?code= is given the results are filtered by that approvecode
 
 
 .. py:function:: request_enrollment_init(request_in = Body(None, examples=[EnrollmentInitIn.Config.schema_extra['examples']]))
