@@ -33,6 +33,6 @@ jobs:
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.RASENMAEHER_INTEGRATION_GH_PAGES }}
           publish_dir: swagger-ui
           keep_files: true
