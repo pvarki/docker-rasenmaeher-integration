@@ -20,7 +20,8 @@ Functions
 
    rasenmaeher_api.web.api.utils.views.request_utils_ldap_conn_string
    rasenmaeher_api.web.api.utils.views.request_utils_keycloak_conn_string
-   rasenmaeher_api.web.api.utils.views.return_crl
+   rasenmaeher_api.web.api.utils.views.return_crl_der
+   rasenmaeher_api.web.api.utils.views.return_crl_pem
    rasenmaeher_api.web.api.utils.views.return_jwt_pubkey
 
 
@@ -54,10 +55,16 @@ Attributes
    TODO keycloak-conn-string
 
 
-.. py:function:: return_crl()
+.. py:function:: return_crl_der()
    :async:
 
-   Get the CRL from CFSSL. NOTE: This should not be used anymore, use the cosprest helper for CRLs
+   Get the DER CRL from OCSPREST
+
+
+.. py:function:: return_crl_pem()
+   :async:
+
+   Get the PEM CRL from OCSPREST
 
 
 .. py:function:: return_jwt_pubkey()

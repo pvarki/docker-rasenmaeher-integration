@@ -19,6 +19,7 @@ Functions
 .. autoapisummary::
 
    rasenmaeher_api.cfssl.public.get_ca
+   rasenmaeher_api.cfssl.public.get_ocsprest_crl
    rasenmaeher_api.cfssl.public.get_crl
    rasenmaeher_api.cfssl.public.get_bundle
 
@@ -49,10 +50,16 @@ Attributes
    returns: CA certificate
 
 
+.. py:function:: get_ocsprest_crl(suffix)
+   :async:
+
+   Fetch CRL from OCSPREST
+
+
 .. py:function:: get_crl()
    :async:
 
-   Quick and dirty method to get CRL from CFSSL
+   Quick and dirty method to get CRL from CFSSL, should not be used.
    returns: DER binary encoded Certificate Revocation List
 
 

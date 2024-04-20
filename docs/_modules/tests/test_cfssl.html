@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tests.test_cfssl &mdash; Rasenmaeher docs 1.3.2 documentation</title>
+  <title>tests.test_cfssl &mdash; Rasenmaeher docs 1.4.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -14,8 +14,8 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=8ca9e7a0"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/documentation_options.js?v=9172181d"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
         <script>mermaid.initialize({startOnLoad:true});</script>
@@ -36,7 +36,7 @@
             Rasenmaeher docs
           </a>
               <div class="version">
-                1.3.2
+                1.4.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -151,17 +151,34 @@
 
 
 
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;suffix&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;/crl.der&quot;</span><span class="p">))</span>
 <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
-<div class="viewcode-block" id="test_crl_route">
-<a class="viewcode-back" href="../../technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_crl_route">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">test_crl_route</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">one_revoked_cert</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="test_crl_der_route">
+<a class="viewcode-back" href="../../technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_crl_der_route">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_crl_der_route</span><span class="p">(</span><span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">one_revoked_cert</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that we can get a parseable CRL from the route&quot;&quot;&quot;</span>
     <span class="c1"># Make sure there is at least one revoked cert</span>
     <span class="n">_</span> <span class="o">=</span> <span class="n">one_revoked_cert</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
-    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/utils/crl&quot;</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/api/v1/utils/crl</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span></div>
+
+    <span class="c1"># both intermediate and root CRLs are in one file, this parser cannot deal with it</span>
+    <span class="c1"># crl = cryptography.x509.load_der_x509_crl(resp.content)</span>
+    <span class="c1"># assert crl</span>
+
+
+<span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">asyncio</span>
+<div class="viewcode-block" id="test_crl_pem_route">
+<a class="viewcode-back" href="../../technical/api/tests/test_cfssl/index.html#tests.test_cfssl.test_crl_pem_route">[docs]</a>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">test_crl_pem_route</span><span class="p">(</span><span class="n">unauth_client</span><span class="p">:</span> <span class="n">TestClient</span><span class="p">,</span> <span class="n">one_revoked_cert</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that we can get a parseable CRL from the route&quot;&quot;&quot;</span>
+    <span class="c1"># Make sure there is at least one revoked cert</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">one_revoked_cert</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">unauth_client</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/api/v1/utils/crl/crl.pem&quot;</span><span class="p">)</span>
     <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-    <span class="n">crl</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">x509</span><span class="o">.</span><span class="n">load_der_x509_crl</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="n">crl</span> <span class="o">=</span> <span class="n">cryptography</span><span class="o">.</span><span class="n">x509</span><span class="o">.</span><span class="n">load_pem_x509_crl</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">crl</span></div>
 
 </pre></div>
