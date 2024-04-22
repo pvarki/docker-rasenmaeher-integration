@@ -297,6 +297,8 @@ services:
     networks:
       - kcnet
       - dbnet
+    ports:
+      - '8280:8080'  # do not expose this in production
     volumes:
       - ca_public:/ca
     depends_on:
