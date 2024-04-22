@@ -12,3 +12,4 @@ export MW_LE_TEST="true"  # switch to false when you are ready for production
 export TAKSERVER_CERT_PASS="KissaKoira123!AlpakkaMursu"  # used for the JKS
 export TAK_CA_PASS="AlpakkaMursu!KissaKoira123"  # used for the JKS
 export VITE_ASSET_SET="${VITE_ASSET_SET:-neutral}"  # used RMUI to define asset sets (logos, etc).
+export KEYCLOAK_PROFILEROOT_UUID="4f88fe8c-ffa5-4ae4-97c9-3831a500d502"  # use uuidgen -r in production

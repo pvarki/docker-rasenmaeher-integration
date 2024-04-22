@@ -38,7 +38,7 @@ x-keycloak_users_env: &keycloak_users_env
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
   KCP_REALM: "RASENMAEHER"
-  KCP_MAIN_ID: "4f88fe8c-ffa5-4ae4-97c9-3831a500d502"  # FIXME: get from env or something
+  KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:?must be defined}"
 
 x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_USER: *lcadminuser # pragma: allowlist secret
