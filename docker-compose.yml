@@ -291,7 +291,10 @@ services:
       - kcnet
       - dbnet
     volumes:
-      - ca_public:/ca
+      - keycloak_data:/bitnami/keycloak/
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - ./nginx/includes/dhparam.pem:/dhparam.pem
     depends_on:
       openldap:
         condition: service_healthy
@@ -712,6 +715,7 @@ volumes:
   pg_data:
   cfssl_data:
   openldap_data:
+  keycloak_data:
   rmapi_data:
   rmfpapi_data:
   ca_public:
