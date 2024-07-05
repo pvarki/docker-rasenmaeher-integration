@@ -1,6 +1,17 @@
 # For local testing
 #   `docker-compose -p rmloc -f docker-compose-local.yml up -d`
 
+x-domains_env:
+  SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.pvarki.fi}
+  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
+  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
+  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
+  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
+  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
+
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname keycloak
   KEYCLOAK_DATABASE_HOST: postgres
@@ -32,31 +43,25 @@ x-ldap_admin_env: &ldap_admin_env
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN_USER: &lcadminuser admin
-  KEYCLOAK_MANAGEMENT_USER: damager
+  KEYCLOAK_ADMIN: &kcadminuser admin
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:-kcadminpw} # pragma: allowlist secret
-  KEYCLOAK_MANAGEMENT_PASSWORD: ${KEYCLOAK_MANAGEMENT_PASSWORD:-kcmgrpw}  # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
   KCP_REALM: "RASENMAEHER"
   KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
 
+x-keycloak_tls_env: &keycloak_tls_env
+  KEYCLOAK_ENABLE_HTTPS: true
+  KCI_SERVER_HOSTNAME: ${SERVER_DOMAIN:-localmaeher.pvarki.fi}  # TODO: Should we use a subdomain so we can do smart proxying ??
+  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:-kckspwd}  # pragma: allowlist secret
+  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
+  KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
+  KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
 
 x-keycloakinit_users_env: &keycloakinit_users_env
-  KEYCLOAK_USER: *lcadminuser # pragma: allowlist secret
+  KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
-
-x-domains_env:
-  SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.pvarki.fi}
-  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
-  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
-  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
 x-takbuilds: &takbuildinfo
   image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.2-RELEASE-30}${DOCKER_TAG_EXTRA:-}"
@@ -275,6 +280,8 @@ services:
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
     depends_on:
+      openldap_cert_perms:
+        condition: service_completed_successfully
       miniwerk:
         condition: service_completed_successfully
       cfssl:
@@ -289,10 +296,19 @@ services:
       start_period: 15s
     restart: unless-stopped
 
+  keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    image: bash:latest
+    volumes:
+      - le_certs:/le_certs
+    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+
   keycloak:
-    image: bitnami/keycloak:${KEYCLOAK_VERSION:-22.0.4}
+    image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     environment:
-      <<: [*kcdbconfig_env, *keycloak_users_env]
+      <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
 #      KEYCLOAK_PRODUCTION: "true"
     networks:
@@ -300,12 +316,16 @@ services:
       - dbnet
     ports:
       - '8280:8080'  # do not expose this in production
+      - '9443:8443'
     volumes:
       - keycloak_data:/bitnami/keycloak/
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
+      - ./keycloak/init_scripts:/docker-entrypoint-initdb.d
     depends_on:
+      keycloak_cert_perms:
+        condition: service_completed_successfully
       openldap:
         condition: service_healthy
       postgres:
@@ -320,12 +340,12 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:latest-${KEYCLOAK_VERSION:-22.0.4}
+    image: adorsys/keycloak-config-cli:latest-${KEYCLOAK_VERSION:-24.0.5}
     networks:
       - kcnet
     volumes:
       - ./keycloak/keycloak-config:/config
-      - ca_public:/ca
+      - ca_public:/ca_public
     environment:
       <<: [*keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env]
       KEYCLOAK_URL: http://keycloak:8080
