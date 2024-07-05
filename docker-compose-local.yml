@@ -290,7 +290,7 @@ services:
     restart: unless-stopped
 
   keycloak:
-    image: bitnami/keycloak:21.1.2
+    image: bitnami/keycloak:${KEYCLOAK_VERSION:-22.0.4}
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env]
       KC_HEALTH_ENABLED: "true"
@@ -320,7 +320,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:latest-21.1.1
+    image: adorsys/keycloak-config-cli:latest-${KEYCLOAK_VERSION:-22.0.4}
     networks:
       - kcnet
     volumes:
