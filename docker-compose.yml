@@ -286,6 +286,7 @@ services:
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env]
       KC_HEALTH_ENABLED: "true"
+#      KEYCLOAK_PRODUCTION: "true"
     networks:
       - kcnet
       - dbnet
