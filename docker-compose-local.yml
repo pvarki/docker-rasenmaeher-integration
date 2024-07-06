@@ -42,9 +42,12 @@ x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_USERNAME: &ldapadminuser admin
 
 x-keycloak_users_env: &keycloak_users_env
-  KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN: &kcadminuser admin
-  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:-kcadminpw} # pragma: allowlist secret
+  KEYCLOAK_CREATE_ADMIN_USER: true
+  KEYCLOAK_ADMIN_USER: &kcadminuser admin
+  KEYCLOAK_MANAGEMENT_USER: damager
+  # FIXME: take from env (which should be set to random)
+  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
+  KEYCLOAK_MANAGEMENT_PASSWORD: kcmgrpw # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
@@ -53,11 +56,12 @@ x-keycloak_profile_env: &keycloak_profile_env
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
-  KCI_SERVER_HOSTNAME: ${SERVER_DOMAIN:-localmaeher.pvarki.fi}  # TODO: Should we use a subdomain so we can do smart proxying ??
+  KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
   KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:-kckspwd}  # pragma: allowlist secret
   KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
   KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
   KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
+  KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
 
 x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
@@ -307,10 +311,11 @@ services:
 
   keycloak:
     image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
-#      KEYCLOAK_PRODUCTION: "true"
+      #KEYCLOAK_PRODUCTION: "true"
     networks:
       - kcnet
       - dbnet
