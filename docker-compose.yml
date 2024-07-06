@@ -384,6 +384,8 @@ services:
       target: production
     volumes:
       - rmui_files:/deliver
+    environment: 
+      VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
 
   nginx_templates:
     image: pvarki/nginx:templates-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
