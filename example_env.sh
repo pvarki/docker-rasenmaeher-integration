@@ -12,3 +12,5 @@ export MW_LE_TEST="true"  # switch to false when you are ready for production
 export TAKSERVER_CERT_PASS="KissaKoira123!AlpakkaMursu"  # used for the JKS
 export TAK_CA_PASS="AlpakkaMursu!KissaKoira123"  # used for the JKS
 export KEYCLOAK_PROFILEROOT_UUID="4f88fe8c-ffa5-4ae4-97c9-3831a500d502"  # use uuidgen -r in production
+export KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="chinchilla"  # pragma: allowlist secret
+export KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="iguaani"  # pragma: allowlist secret

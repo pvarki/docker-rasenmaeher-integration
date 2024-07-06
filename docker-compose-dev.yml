@@ -1,7 +1,5 @@
 # This extends the _local file, run with:
 #   `docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up -d`
-version: '3.7'
-
 x-nginxbuilds: &nginxbuildinfo
   image: pvarki/nginx:1.25${DOCKER_TAG_EXTRA:-}
   build:
