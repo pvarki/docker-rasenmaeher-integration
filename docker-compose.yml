@@ -57,7 +57,7 @@ x-domains_env:
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.1-RELEASE-11}-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.1-RELEASE-11}-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -65,7 +65,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.1-RELEASE-11}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.25-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.25-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -104,7 +104,7 @@ x-takserver_env: &takserver_env
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:1.1.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:1.1.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -130,7 +130,7 @@ services:
       - "80:80"
 
   cfssl:
-    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -153,7 +153,7 @@ services:
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -179,7 +179,7 @@ services:
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -239,7 +239,7 @@ services:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./openldap
       dockerfile: Dockerfile
@@ -326,7 +326,7 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:1.4.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.4.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -377,7 +377,7 @@ services:
     restart: unless-stopped
 
   rmui:
-    image: pvarki/rmui:1.3.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:1.3.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -445,7 +445,7 @@ services:
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -603,7 +603,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:1.3.0-tak${TAK_RELEASE:-5.1-RELEASE-11}-d${RELEASE_TAG:-1.3.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/takrmapi:1.3.0-tak${TAK_RELEASE:-5.1-RELEASE-11}-d${RELEASE_TAG:-1.4.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
