@@ -3,7 +3,6 @@ export RM_DATABASE_PASSWORD="kissa"  # pragma: allowlist secret
 export POSTGRES_PASSWORD="kani"  # pragma: allowlist secret
 export LDAP_ADMIN_PASSWORD="pupu"  # pragma: allowlist secret
 export KEYCLOAK_ADMIN_PASSWORD="marsu"  # pragma: allowlist secret
-export KEYCLOAK_MANAGEMENT_PASSWORD="alpakka"  # pragma: allowlist secret
 export TAK_DATABASE_PASSWORD="laama"  # pragma: allowlist secret
 export SERVER_DOMAIN="localmaeher.pvarki.fi"
 export CFSSL_CA_NAME="localmaeher"
