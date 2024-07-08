@@ -40,10 +40,8 @@ x-ldap_admin_env: &ldap_admin_env
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN_USER: &lcadminuser admin
-  KEYCLOAK_MANAGEMENT_USER: damager
+  KEYCLOAK_ADMIN_USER: &kcadminuser admin
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
-  KEYCLOAK_MANAGEMENT_PASSWORD: ${KEYCLOAK_MANAGEMENT_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
@@ -57,11 +55,11 @@ x-keycloak_tls_env: &keycloak_tls_env
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
-  KCP_REALM: "RASENMAEHER"
+  KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
   KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:?must be defined}"
 
 x-keycloakinit_users_env: &keycloakinit_users_env
-  KEYCLOAK_USER: *lcadminuser # pragma: allowlist secret
+  KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
@@ -371,6 +369,9 @@ services:
       JWT_LIFETIME: "7200"
       RM_OCSCP_RESPONDER: *publicocsp
       RM_TILAUSPALVELU_JWT: "https://${TILAUSPALVELU_DOMAIN:-tilaa.pvarki.fi}/api/v1/config/jwtPublicKey.pem"
+      RM_KC_USERNAME: *kcadminuser
+      RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
+      RM_KC_REALM: *kc_realm
     networks:
       - apinet
       - kcnet

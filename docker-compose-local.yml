@@ -44,14 +44,12 @@ x-ldap_admin_env: &ldap_admin_env
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: true
   KEYCLOAK_ADMIN_USER: &kcadminuser admin
-  KEYCLOAK_MANAGEMENT_USER: damager
   # FIXME: take from env (which should be set to random)
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
-  KEYCLOAK_MANAGEMENT_PASSWORD: kcmgrpw # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
-  KCP_REALM: "RASENMAEHER"
+  KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
   KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
 
 x-keycloak_tls_env: &keycloak_tls_env
@@ -387,6 +385,7 @@ services:
       RM_TILAUSPALVELU_JWT: ""
       RM_KC_USERNAME: *kcadminuser
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
+      RM_KC_REALM: *kc_realm
     networks:
       - apinet
       - kcnet
