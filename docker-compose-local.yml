@@ -385,6 +385,8 @@ services:
       RM_OCSCP_RESPONDER: *publicocsp
       #RM_TILAUSPALVELU_JWT: "file:///pvarki/publickeys/kraftwerk.pub"
       RM_TILAUSPALVELU_JWT: ""
+      RM_KC_USERNAME: *kcadminuser
+      RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
     networks:
       - apinet
       - kcnet
