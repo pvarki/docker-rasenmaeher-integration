@@ -140,6 +140,18 @@ the dockder node distribution probably is not compatible with whatever you have 
 </section>
 </section>
 </section>
+<section id="gaining-first-admin-access-in-dev-and-production-mode">
+<h2>Gaining first admin access in dev and production mode<a class="headerlink" href="#gaining-first-admin-access-in-dev-and-production-mode" title="Link to this heading"></a></h2>
+<p>In dev mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="n">rmdev</span><span class="o">-</span><span class="n">rmapi</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;source /.venv/bin/activate &amp;&amp; rasenmaeher_api addcode&quot;</span>
+</pre></div>
+</div>
+<p>Under dev mode, the UI runs at <a class="reference external" href="https://localmaeher.pvarki.fi:4439">https://localmaeher.pvarki.fi:4439</a>.</p>
+<p>In VM production mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">exec</span> <span class="o">-</span><span class="n">it</span> <span class="n">rmvm</span><span class="o">-</span><span class="n">rmapi</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;rasenmaeher_api addcode&quot;</span>
+</pre></div>
+</div>
+</section>
 <section id="pre-commit-notes">
 <h2>pre-commit notes<a class="headerlink" href="#pre-commit-notes" title="Link to this heading"></a></h2>
 <p>Use “pre-commit run –all-files” liberally (and make sure you have run “pre-commit install”). If you get complaints
