@@ -332,7 +332,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:5.6.1-${KEYCLOAK_VERSION:-22.0.4}
+    image: adorsys/keycloak-config-cli:6.1.6-${KEYCLOAK_VERSION:-22.0.4}
     networks:
       - kcnet
     volumes:
