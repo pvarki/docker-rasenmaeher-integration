@@ -298,7 +298,7 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnami/keycloak:${KEYCLOAK_VERSION:-21.0.2}
+    image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -333,7 +333,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:5.6.1-${INIT_KEYCLOAK_VERSION:-21.0.1}
+    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
     networks:
       - kcnet
     volumes:
