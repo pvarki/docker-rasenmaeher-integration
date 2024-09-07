@@ -298,12 +298,13 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: bitnami/keycloak:${KEYCLOAK_VERSION:-21.0.2}
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
       KEYCLOAK_PRODUCTION: "true"
+      KC_RUN_IN_CONTAINER: "true"
     networks:
       - kcnet
       - dbnet
@@ -323,7 +324,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: "curl -s localhost:8080/health/ready | grep status | grep UP || exit 1"
+      test: "curl -s http://keycloak:8080/health/ready | grep status | grep UP || exit 1"
       interval: 10s
       timeout: 10s
       retries: 5
@@ -332,7 +333,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:6.1.6-${KEYCLOAK_VERSION:-22.0.4}
+    image: adorsys/keycloak-config-cli:5.6.1-${INIT_KEYCLOAK_VERSION:-21.0.1}
     networks:
       - kcnet
     volumes:
@@ -340,10 +341,10 @@ services:
       - ca_public:/ca
     environment:
       <<: [*keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env]
-      KEYCLOAK_URL: http://keycloak:8080
+      KEYCLOAK_URL: http://keycloak:8080/
       KEYCLOAK_SSL-VERIFY: "false"  # We are using the internal port
-      KEYCLOAK_AVAILABILITYCHECK_ENABLED: "true"
-      KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 30s
+      KEYCLOAK_AVAILABILITYCHECK_ENABLED: "false"
+      KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 15s
       IMPORT_VAR_SUBSTITUTION_ENABLED: "true"
       LDAP_CONNECTION_URL: ldap://openldap:1389
     depends_on:
