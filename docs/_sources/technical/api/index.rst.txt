@@ -6,11 +6,11 @@ This page contains auto-generated API reference documentation [#f1]_.
 .. toctree::
    :titlesonly:
 
-   /technical/api/rasenmaeher_api/index
    /technical/api/tests/index
-   /technical/api/fprun/index
-   /technical/api/fpinit/index
    /technical/api/fpclient/index
+   /technical/api/fpinit/index
+   /technical/api/fprun/index
+   /technical/api/rasenmaeher_api/index
    /technical/api/ocsprest/index
    /technical/api/miniwerk/index
 
