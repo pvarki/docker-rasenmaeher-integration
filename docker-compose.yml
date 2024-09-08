@@ -6,6 +6,7 @@ x-domains_env:
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:?domain must be defined}"
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
+  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
@@ -50,7 +51,10 @@ x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
   KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
   KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
+  #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
   KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
+  KEYCLOAK_HOSTNAME: *kcdomain
+  KEYCLOAK_HTTPS_PORT: 9443
 
 
 x-keycloak_profile_env: &keycloak_profile_env
@@ -304,12 +308,15 @@ services:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
       KEYCLOAK_PRODUCTION: "true"
-      KC_RUN_IN_CONTAINER: "true"
+      KC_RUN_IN_CONTAINER: "false"  # Setting this to true will just make Java hog RAM like there is no tomorrow
+      KC_LOG_LEVEL: info
+      #KC_LOG_LEVEL: debug
+      # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
     networks:
       - kcnet
       - dbnet
     ports:
-      - '9443:8443'
+      - '9443:9443'
     volumes:
       - keycloak_data:/bitnami/keycloak/
       - ca_public:/ca_public
