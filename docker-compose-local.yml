@@ -345,7 +345,7 @@ services:
       test: "curl -s http://keycloak:8080/health/ready | grep status | grep UP || exit 1"
       interval: 10s
       timeout: 10s
-      retries: 5
+      retries: 10
       start_period: 15s
     restart: unless-stopped
 
@@ -365,6 +365,8 @@ services:
       KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 15s
       IMPORT_VAR_SUBSTITUTION_ENABLED: "true"
       LDAP_CONNECTION_URL: ldap://openldap:1389
+      LOGGING_LEVEL_KEYCLOAKCONFIGCLI: debug
+      #LOGGING_LEVEL_KEYCLOAKCONFIGCLI: info
     depends_on:
       keycloak:
         condition: service_healthy
