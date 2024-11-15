@@ -159,7 +159,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 
   ocsp:
@@ -289,7 +289,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 20s
     restart: unless-stopped
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
@@ -335,7 +335,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
-      start_period: 15s
+      start_period: 20s
     restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
