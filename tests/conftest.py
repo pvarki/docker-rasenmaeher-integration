@@ -24,7 +24,7 @@ CA_PATH = Path(__file__).parent / "testcas"
 JWT_PATH = Path(__file__).parent / "testjwts"
 DEFAULT_TIMEOUT = 15.0
 OPENAPI_VER = "3.1.0"
-API = os.environ.get("RM_API_BASE", "https://localmaeher.pvarki.fi:4439/api")  # pylint: disable=E1101
+API = os.environ.get("RM_API_BASE", "https://localmaeher.dev.pvarki.fi:4439/api")  # pylint: disable=E1101
 VER = "v1"
 
 # pylint: disable=W0621
