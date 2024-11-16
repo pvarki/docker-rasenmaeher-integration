@@ -294,9 +294,7 @@ services:
       cfssl:
         condition: service_healthy
     healthcheck:
-      # This started returning: No such object (32)
-      #test: 'ldapsearch -Q -tt -LLL -Y EXTERNAL -H ldapi:/// "(uid=testuser)" -b dc=example,dc=org memberOf || exit 1'
-      test: "true" # FIXME
+      test: 'ldapsearch -Q -tt -LLL -Y EXTERNAL -H ldapi:/// "(uid=admin)" -b dc=example,dc=org memberOf  || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
