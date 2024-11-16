@@ -252,7 +252,7 @@ services:
   openldap:
     image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.6.0}${DOCKER_TAG_EXTRA:-}
     build:
-      context: ./openldap
+      context: ./keycloak/openldap
       dockerfile: Dockerfile
     networks:
       - kcnet
