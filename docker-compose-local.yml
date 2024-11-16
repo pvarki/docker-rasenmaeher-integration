@@ -282,6 +282,7 @@ services:
       LDAP_TLS_KEY_FILE: /le_certs/rasenmaeher/privkey.pem
       LDAP_TLS_CA_FILE: /ca_public/ca_chain.pem
       LDAP_TLS_DH_PARAM_FILENAME: /dhparam.pem
+      #LDAP_ENABLE_ACCESSLOG: "yes"
     volumes:
       - openldap_data:/bitnami/openldap
       - ca_public:/ca_public
