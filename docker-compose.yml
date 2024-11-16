@@ -23,21 +23,22 @@ x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_USER: &rmdbuser ${RM_DATABASE_USER:-raesenmaeher}
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
+x-ldap_admin_env: &ldap_admin_env
+  LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
+  LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
+
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
   POSTGRES_ADDRESS: postgres
   POSTGRES_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
   POSTGRES_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+  LDAP_BIND_PASSWORD: *ldapadminpass
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?must be defined} # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
-
-x-ldap_admin_env: &ldap_admin_env
-  LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
-  LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
