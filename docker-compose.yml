@@ -466,7 +466,6 @@ services:
   # BEGIN profile: kibana  #
   ##########################
 
-  # profile: kibana - deploy conditionally if profile: kibana is used
     elasticsearch:
       image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
       container_name: elasticsearch
@@ -491,7 +490,6 @@ services:
       profiles:
         - kibana
 
-    # profile: kibana - deploy conditionally if profile: kibana is used
     kibana:
       image: docker.elastic.co/kibana/kibana:8.10.1
       container_name: kibana
@@ -509,7 +507,6 @@ services:
       profiles:
         - kibana
 
-  # profile: kibana - deploy conditionally if profile: kibana is used
   kibananginx:
     <<: *nginxbuildinfo
     volumes:
@@ -811,6 +808,7 @@ networks:
   dbnet:
   intranet:
   taknet:
+  loggingnet:
 
 volumes:
   kraftwerk_data:
@@ -829,3 +827,4 @@ volumes:
   takrmapi_data:
   rmui_files:
   nginx_templates:
+  es_data:
