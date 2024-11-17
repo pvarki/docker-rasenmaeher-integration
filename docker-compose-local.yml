@@ -527,7 +527,7 @@ services:
       NGINX_HTTPS_PORT: "5601"
       NGINX_UPSTREAM: "kibana"
       NGINX_UPSTREAM_PORT: "5601"
-      NGINX_CERT_NAME: "kibana"
+      NGINX_CERT_NAME: "rasenmaeher"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
