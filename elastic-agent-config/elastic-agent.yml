@@ -12,15 +12,19 @@ fleet:
 outputs:
   default:
     type: elasticsearch
-    hosts: ${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}
+    hosts:
+      - ${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}
 
 inputs:
-  - id: docker-logs
-    type: logfile
+  - type: docker
+    id: docker-logs
     enabled: ${LOG_INPUT_ENABLED:-true}
     streams:
-      - paths:
-          - /var/lib/docker/containers/*/*.log
-        parsers:
-          - ndjson:
-              message_key: log
+      - containers.ids:
+          - '*'  # Collect logs from all containers
+    processors:
+      - add_docker_metadata: ~
+    # Enable the Docker module
+    modules:
+      - name: docker
+        enabled: true

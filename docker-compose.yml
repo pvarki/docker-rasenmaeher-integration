@@ -449,17 +449,17 @@ services:
   elastic-agent:
     image: docker.elastic.co/beats/elastic-agent:8.15.3
     container_name: elastic-agent
+    user: root
     environment:
-      ELASTIC_AGENT_ENABLED: "${ELASTIC_AGENT_ENABLED:-false}"
-      ELASTIC_AGENT_ENROLLMENT_TOKEN: "${ELASTIC_AGENT_ENROLLMENT_TOKEN}"
-      ELASTIC_AGENT_FLEET_URL: "${ELASTIC_AGENT_FLEET_URL}"
-      ELASTICSEARCH_HOSTS: "${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}"
-      LOG_INPUT_ENABLED: "${LOG_INPUT_ENABLED:-true}"
+      ELASTIC_AGENT_ENABLED: ${ELASTIC_AGENT_ENABLED-false} # Unless set to true, the agent will not start
+      ELASTIC_AGENT_ENROLLMENT_TOKEN: "${ELASTIC_AGENT_ENROLLMENT_TOKEN:-dummy-token}"
+      ELASTIC_AGENT_FLEET_URL: "${ELASTIC_AGENT_FLEET_URL:-http://dummy-fleet-url}"
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      LOG_INPUT_ENABLED: "true"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup
-      - /proc:/hostfs/proc
-      - /:/hostfs
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /:/hostfs:ro
       - ./elastic-agent-config/elastic-agent.yml:/usr/share/elastic-agent/elastic-agent.yml
     networks:
       - loggingnet
