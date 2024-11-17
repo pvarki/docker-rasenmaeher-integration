@@ -445,6 +445,23 @@ services:
       start_period: 5s
     restart: unless-stopped
 
+  elastic-agent:
+    image: docker.elastic.co/beats/elastic-agent:8.10.1
+    container_name: elastic-agent
+    user: root
+    environment:
+      ELASTIC_AGENT_ENROLLMENT_TOKEN: ${ELASTIC_AGENT_ENROLLMENT_TOKEN}
+      ELASTIC_AGENT_FLEET_URL: ${ELASTIC_AGENT_FLEET_URL}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup
+      - /proc:/hostfs/proc
+      - /:/hostfs
+      - ./elastic-agent-config/elastic-agent.yml:/usr/share/elastic-agent/elastic-agent.yml
+    networks:
+      - loggingnet
+    restart: unless-stopped
+
   kwinit:  # Mostly to make sure it's built
     image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.5.1}${DOCKER_TAG_EXTRA:-}
     build:

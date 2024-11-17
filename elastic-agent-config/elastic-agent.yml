@@ -1,0 +1,22 @@
+{% if ELASTIC_AGENT_ENROLLMENT_TOKEN and ELASTIC_AGENT_FLEET_URL %}
+fleet:
+  enrollment_token: ${ELASTIC_AGENT_ENROLLMENT_TOKEN}
+  hosts:
+    - ${ELASTIC_AGENT_FLEET_URL}
+{% else %}
+outputs:
+  default:
+    type: elasticsearch
+    hosts:
+      - http://elasticsearch:9200
+
+inputs:
+  - id: docker-logs
+    type: logfile
+    streams:
+      - paths:
+          - /var/lib/docker/containers/*/*.log
+        parsers:
+          - ndjson:
+              message_key: log
+{% endif %}
