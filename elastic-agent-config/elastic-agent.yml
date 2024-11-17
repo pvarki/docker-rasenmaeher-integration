@@ -1,0 +1,30 @@
+agent:
+  id: ${ELASTIC_AGENT_ID}
+
+# Fleet enrollment configuration
+fleet:
+  enabled: ${ELASTIC_AGENT_ENABLED}
+  enrollment_token: ${ELASTIC_AGENT_ENROLLMENT_TOKEN}
+  hosts:
+    - ${ELASTIC_AGENT_FLEET_URL}
+
+# Standalone configuration
+outputs:
+  default:
+    type: elasticsearch
+    hosts:
+      - ${ELASTICSEARCH_HOSTS:-http://elasticsearch:9200}
+
+inputs:
+  - type: docker
+    id: docker-logs
+    enabled: ${LOG_INPUT_ENABLED:-true}
+    streams:
+      - containers.ids:
+          - '*'  # Collect logs from all containers
+    processors:
+      - add_docker_metadata: ~
+    # Enable the Docker module
+    modules:
+      - name: docker
+        enabled: true
