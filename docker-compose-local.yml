@@ -774,6 +774,7 @@ services:
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
+      - tak_www_static:/www_static
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -795,6 +796,7 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - tak_www_static:/www_static
     environment:
       NGINX_HOST: *takdomain
       NGINX_HTTPS_PORT: *takapiport
@@ -804,7 +806,7 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_TEMPLATE_DIR: "templates_productapi"
+      NGINX_TEMPLATE_DIR: "templates_rasenmaeher_takapi"
     networks:
       - taknet
       - intranet
