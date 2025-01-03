@@ -120,7 +120,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "fake,tak"
+      MW_PRODUCTS: "tak,kc,fake"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_FAKE__API_PORT: *productport
       MW_TAK__API_PORT: *takapiport
