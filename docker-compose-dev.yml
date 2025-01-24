@@ -22,7 +22,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     volumes:
       - "./api:/app"
 
@@ -36,7 +36,7 @@ services:
     volumes:
       - "./ui:/app"
     environment:
-      SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.pvarki.fi}
+      SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
     networks:

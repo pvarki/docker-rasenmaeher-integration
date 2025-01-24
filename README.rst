@@ -93,7 +93,7 @@ In dev mode::
 
     docker exec -it rmdev-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
 
-Under dev mode, the UI runs at https://localmaeher.pvarki.fi:4439.
+Under dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
 
 In VM production mode::
 

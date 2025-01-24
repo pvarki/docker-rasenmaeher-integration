@@ -1,6 +1,18 @@
 # For local testing
 #   `docker-compose -p rmloc -f docker-compose-local.yml up -d`
 
+x-domains_env:
+  SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
+  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
+  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
+  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
+  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
+
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname keycloak
   KEYCLOAK_DATABASE_HOST: postgres
@@ -13,11 +25,17 @@ x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_USER: &rmdbuser raesenmaeher
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
+x-ldap_admin_env: &ldap_admin_env
+  LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:-ldapadminpwd} # pragma: allowlist secret
+  LDAP_ADMIN_USERNAME: &ldapadminuser admin
+
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
   POSTGRES_ADDRESS: postgres
   POSTGRES_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
   POSTGRES_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:-takdbpwd} # pragma: allowlist secret
+  LDAP_BIND_USER: *ldapadminuser
+  LDAP_BIND_PASSWORD: *ldapadminpass
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
@@ -25,37 +43,32 @@ x-postgres_env: &postgres_env
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
 
-
-x-ldap_admin_env: &ldap_admin_env
-  LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:-ldapadminpwd} # pragma: allowlist secret
-  LDAP_ADMIN_USERNAME: &ldapadminuser admin
-
 x-keycloak_users_env: &keycloak_users_env
-  KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN_USER: &lcadminuser admin
-  KEYCLOAK_MANAGEMENT_USER: damager
-  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:-kcadminpw} # pragma: allowlist secret
-  KEYCLOAK_MANAGEMENT_PASSWORD: ${KEYCLOAK_MANAGEMENT_PASSWORD:-kcmgrpw}  # pragma: allowlist secret
+  KEYCLOAK_CREATE_ADMIN_USER: true
+  KEYCLOAK_ADMIN_USER: &kcadminuser admin
+  # FIXME: take from env (which should be set to random)
+  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
-  KCP_REALM: "RASENMAEHER"
-  KCP_MAIN_ID: "4f88fe8c-ffa5-4ae4-97c9-3831a500d502"  # FIXME: get from env or something
+  KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
+  KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
+
+x-keycloak_tls_env: &keycloak_tls_env
+  KEYCLOAK_ENABLE_HTTPS: true
+  KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
+  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:-kckspwd}  # pragma: allowlist secret
+  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
+  KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
+  KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
+  KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
+  #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
+  KEYCLOAK_HOSTNAME: *kcdomain
+  KEYCLOAK_HTTPS_PORT: 9443
 
 x-keycloakinit_users_env: &keycloakinit_users_env
-  KEYCLOAK_USER: *lcadminuser # pragma: allowlist secret
+  KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
-
-x-domains_env:
-  SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.pvarki.fi}
-  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
-  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
-  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.pvarki.fi}"
-  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
 x-takbuilds: &takbuildinfo
   image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.2-RELEASE-30}${DOCKER_TAG_EXTRA:-}"
@@ -96,17 +109,18 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_UPSTREAM: &ocsphost "ocsp"
   TAK_OCSP_PORT: *oscpport
+  WEBTAK_ENABLE: "true"
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "fake,tak"
+      MW_PRODUCTS: "tak,kc,fake"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_FAKE__API_PORT: *productport
       MW_TAK__API_PORT: *takapiport
@@ -126,7 +140,7 @@ services:
       - ca_public:/ca_public
 
   jwtcopy:
-    image: pvarki/miniwerk:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -144,7 +158,7 @@ services:
         condition: service_healthy
 
   cfssl:
-    image: pvarki/cfssl:api-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -161,11 +175,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -189,7 +203,7 @@ services:
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -247,9 +261,9 @@ services:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:local${DOCKER_TAG_EXTRA:-}
     build:
-      context: ./openldap
+      context: ./keycloak/openldap
       dockerfile: Dockerfile
     networks:
       - kcnet
@@ -268,71 +282,100 @@ services:
       LDAP_TLS_KEY_FILE: /le_certs/rasenmaeher/privkey.pem
       LDAP_TLS_CA_FILE: /ca_public/ca_chain.pem
       LDAP_TLS_DH_PARAM_FILENAME: /dhparam.pem
+      #LDAP_ENABLE_ACCESSLOG: "yes"
     volumes:
       - openldap_data:/bitnami/openldap
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
     depends_on:
+      openldap_cert_perms:
+        condition: service_completed_successfully
       miniwerk:
         condition: service_completed_successfully
       cfssl:
         condition: service_healthy
     healthcheck:
-      # This started returning: No such object (32)
-      #test: 'ldapsearch -Q -tt -LLL -Y EXTERNAL -H ldapi:/// "(uid=testuser)" -b dc=example,dc=org memberOf || exit 1'
-      test: "true" # FIXME
+      # error 32 is back
+      #test: 'ldapsearch -Q -tt -LLL -Y EXTERNAL -H ldapi:/// "(uid=admin)" -b dc=example,dc=org memberOf  || exit 1'
+      test: "true"
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 20s
     restart: unless-stopped
 
+  keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    image: bash:latest
+    volumes:
+      - le_certs:/le_certs
+    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+
   keycloak:
-    image: bitnami/keycloak:21.1.2
+    image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    user: root
     environment:
-      <<: [*kcdbconfig_env, *keycloak_users_env]
+      <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
+      KEYCLOAK_PRODUCTION: "true"
+      KC_RUN_IN_CONTAINER: "false"  # Setting this to true will just make Java hog RAM like there is no tomorrow
+      KC_LOG_LEVEL: info
+      #KC_LOG_LEVEL: debug
+      # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
     networks:
       - kcnet
       - dbnet
+    ports:
+      - '8280:8080'  # do not expose this in production
+      - '9443:9443'
     volumes:
-      - ca_public:/ca
+      - keycloak_data:/bitnami/keycloak/
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - ./nginx/includes/dhparam.pem:/dhparam.pem
+      - ./keycloak/init_scripts:/docker-entrypoint-initdb.d
     depends_on:
+      keycloak_cert_perms:
+        condition: service_completed_successfully
       openldap:
         condition: service_healthy
       postgres:
         condition: service_healthy
     healthcheck:
-      test: "curl -s localhost:8080/health/ready | grep status | grep UP || exit 1"
+      test: "curl -s http://keycloak:8080/health/ready | grep status | grep UP || exit 1"
       interval: 10s
       timeout: 10s
-      retries: 5
-      start_period: 15s
+      retries: 10
+      start_period: 20s
     restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:latest-21.1.1
+    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
     networks:
       - kcnet
     volumes:
       - ./keycloak/keycloak-config:/config
-      - ca_public:/ca
+      - ca_public:/ca_public
     environment:
       <<: [*keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env]
       KEYCLOAK_URL: http://keycloak:8080
       KEYCLOAK_SSL-VERIFY: "false"  # We are using the internal port
-      KEYCLOAK_AVAILABILITYCHECK_ENABLED: "true"
-      KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 30s
+      KEYCLOAK_AVAILABILITYCHECK_ENABLED: "false"
+      KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 15s
       IMPORT_VAR_SUBSTITUTION_ENABLED: "true"
       LDAP_CONNECTION_URL: ldap://openldap:1389
+      LOGGING_LEVEL_KEYCLOAKCONFIGCLI: debug
+      #LOGGING_LEVEL_KEYCLOAKCONFIGCLI: info
     depends_on:
       keycloak:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -353,6 +396,9 @@ services:
       RM_OCSCP_RESPONDER: *publicocsp
       #RM_TILAUSPALVELU_JWT: "file:///pvarki/publickeys/kraftwerk.pub"
       RM_TILAUSPALVELU_JWT: ""
+      RM_KC_USERNAME: *kcadminuser
+      RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
+      RM_KC_REALM: *kc_realm
     networks:
       - apinet
       - kcnet
@@ -388,7 +434,7 @@ services:
     restart: unless-stopped
 
   rmui:
-    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -399,7 +445,7 @@ services:
       - rmui_files:/deliver
 
   nginx_templates:
-    image: pvarki/nginx:templates-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -461,7 +507,7 @@ services:
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/kw_product_init:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -477,7 +523,7 @@ services:
 # Begin: Fakeproduct #
 ######################
   rmfpapi:
-    image: pvarki/rmfpapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmfpapi:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -565,6 +611,7 @@ services:
       - taknet
       - dbnet
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - kraftwerk_shared_tak:/pvarki
       - tak_data:/opt/tak/data
       - le_certs:/le_certs
@@ -579,6 +626,7 @@ services:
       takinit:
           condition: service_completed_successfully
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -615,6 +663,7 @@ services:
       takconfig:
         condition: service_healthy
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -638,6 +687,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -661,6 +711,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
@@ -683,6 +734,7 @@ services:
       takapi:
         condition: service_healthy
     volumes:
+      - ./takserver/updates:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
@@ -696,7 +748,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.2-RELEASE-30}
+    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.2-RELEASE-30}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -790,6 +842,7 @@ volumes:
   pg_data:
   cfssl_data:
   openldap_data:
+  keycloak_data:
   rmapi_data:
   rmfpapi_data:
   ca_public:
