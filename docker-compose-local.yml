@@ -113,7 +113,7 @@ x-takserver_env: &takserver_env
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -140,7 +140,7 @@ services:
       - ca_public:/ca_public
 
   jwtcopy:
-    image: pvarki/miniwerk:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -158,7 +158,7 @@ services:
         condition: service_healthy
 
   cfssl:
-    image: pvarki/cfssl:api-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -179,7 +179,7 @@ services:
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -203,7 +203,7 @@ services:
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -261,7 +261,7 @@ services:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -375,7 +375,7 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -434,7 +434,7 @@ services:
     restart: unless-stopped
 
   rmui:
-    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -445,7 +445,7 @@ services:
       - rmui_files:/deliver
 
   nginx_templates:
-    image: pvarki/nginx:templates-${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -507,7 +507,7 @@ services:
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/kw_product_init:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -523,7 +523,7 @@ services:
 # Begin: Fakeproduct #
 ######################
   rmfpapi:
-    image: pvarki/rmfpapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmfpapi:local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -748,7 +748,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.2-RELEASE-30}
+    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.2-RELEASE-30}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
