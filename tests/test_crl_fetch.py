@@ -37,5 +37,5 @@ async def test_localmaeher_fetch_crl_sslfail() -> None:
 def test_localhost_fetch_crl() -> None:
     """Test that we can get CRL via the direct localhost access to rasenmaeher"""
     url = f"http://127.0.0.1:8000/api/{VER}/utils/crl"
-    response = requests.get(url, json=None, headers=None, verify=False, timeout=DEFAULT_TIMEOUT)
+    response = requests.get(url, json=None, headers=None, verify=False, timeout=DEFAULT_TIMEOUT.total)
     assert response.status_code == 200
