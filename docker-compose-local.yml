@@ -405,6 +405,7 @@ services:
       UVICORN_LOG_LEVEL: "debug"
       RM_LOG_LEVEL: "DEBUG"
       RM_LOG_LEVEL_INT: "10"
+      RELEASE_TAG: "local"
     networks:
       - apinet
       - kcnet
@@ -447,6 +448,7 @@ services:
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+        RELEASE_TAG: "local"
     volumes:
       - rmui_files:/deliver
 
