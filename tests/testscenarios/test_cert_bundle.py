@@ -344,11 +344,11 @@ async def test_10_check_enduser_files(
     client = session_with_testcas
     client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
     url = f"{API}/{VER}/instructions/user"
-    LOGGER.debug("Fetching {}".format(url))
+    LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
     response.raise_for_status()
     payload = await response.json()
-    LOGGER.debug("payload={}".format(payload))
+    LOGGER.debug("payload={} (for {})".format(payload, ValueStorage.call_sign))
     assert payload
     assert "files" in payload
     assert "fake" in payload["files"]
