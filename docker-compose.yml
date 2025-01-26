@@ -385,7 +385,7 @@ services:
       RM_KC_USERNAME: *kcadminuser
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
-      RM_LOG_LEVEL: "20"
+      RM_LOG_LEVEL: "INFO"
     networks:
       - apinet
       - kcnet
@@ -660,6 +660,9 @@ services:
       target: production
       args:
         TAKSERVER_IMAGE: *takimage
+    environment:
+      UVICORN_LOG_LEVEL: "info"
+      TI_LOG_LEVEL: "20"
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
