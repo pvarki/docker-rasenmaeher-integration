@@ -123,7 +123,7 @@ server {
     }
 
     # Even though users sees code 400 the code is 495 http://nginx.org/en/docs/http/ngx_http_ssl_module.html#errors
-    error_page 495 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
+    error_page 495 =302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
 
     location / {
         if ($redir_uri != "") {
