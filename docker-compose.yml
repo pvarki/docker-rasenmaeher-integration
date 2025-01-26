@@ -386,6 +386,7 @@ services:
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
+      RELEASE_TAG: ${RELEASE_TAG:-1.7.0}
     networks:
       - apinet
       - kcnet
@@ -426,6 +427,7 @@ services:
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+        RELEASE_TAG: ${RELEASE_TAG:-1.7.0}
     volumes:
       - rmui_files:/deliver
 
