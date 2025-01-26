@@ -765,7 +765,7 @@ services:
     environment:
       LOG_CONSOLE_FORMATTER: "local"
       UVICORN_LOG_LEVEL: "debug"
-      LOG_LEVEL: "DEBUG"
+      TI_LOG_LEVEL: "10"
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs

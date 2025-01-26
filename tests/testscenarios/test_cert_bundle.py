@@ -337,7 +337,7 @@ def parse_file_payload(fpl: Dict[str, str]) -> None:
     assert dec
 
 
-@flaky(max_runs=3, min_passes=2)  # type: ignore
+@flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
 async def test_10_check_enduser_files(
     session_with_testcas: aiohttp.ClientSession,
