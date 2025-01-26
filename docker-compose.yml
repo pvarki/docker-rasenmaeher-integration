@@ -123,13 +123,16 @@ services:
     environment:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
+      MW_RASENMAEHER__USER_PORT: *apiport
       MW_FAKE__API_PORT: *productport
+      MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *takapiport
+      MW_TAK__USER_PORT: 8443
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc"
+      MW_PRODUCTS: "tak,kc,bl"
     volumes:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
