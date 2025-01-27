@@ -863,3 +863,4 @@ volumes:
   takrmapi_data:
   rmui_files:
   nginx_templates:
+  tak_www_static:
