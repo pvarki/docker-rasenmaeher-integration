@@ -522,7 +522,7 @@ services:
       - taknet
       - dbnet
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - kraftwerk_shared_tak:/pvarki
       - tak_data:/opt/tak/data
       - le_certs:/le_certs
@@ -537,7 +537,7 @@ services:
       takinit:
           condition: service_completed_successfully
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -570,7 +570,7 @@ services:
       takconfig:
         condition: service_healthy
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -594,7 +594,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -618,7 +618,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
@@ -641,7 +641,7 @@ services:
       takapi:
         condition: service_healthy
     volumes:
-      - ./takserver/updates:/opt/tak/webcontent/update
+      - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
