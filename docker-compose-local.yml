@@ -71,12 +71,12 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.2-RELEASE-30}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.3-RELEASE-24}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.2-RELEASE-30}
+      TAK_RELEASE: ${TAK_RELEASE:-5.3-RELEASE-24}
 
 x-nginxbuilds: &nginxbuildinfo
   image: pvarki/nginx:1.25${DOCKER_TAG_EXTRA:-}
@@ -120,10 +120,13 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake"
+      MW_PRODUCTS: "tak,kc,fake,bl"
       MW_RASENMAEHER__API_PORT: *apiport
+      MW_RASENMAEHER__USER_PORT: *apiport
       MW_FAKE__API_PORT: *productport
+      MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *takapiport
+      MW_TAK__USER_PORT: 8443
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
       MW_LE_TEST: "true"
@@ -399,6 +402,10 @@ services:
       RM_KC_USERNAME: *kcadminuser
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
+      UVICORN_LOG_LEVEL: "debug"
+      RM_LOG_LEVEL: "DEBUG"
+      RM_LOG_LEVEL_INT: "10"
+      RELEASE_TAG: "local"
     networks:
       - apinet
       - kcnet
@@ -441,6 +448,7 @@ services:
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+        RELEASE_TAG: "local"
     volumes:
       - rmui_files:/deliver
 
@@ -748,7 +756,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.2-RELEASE-30}
+    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.3-RELEASE-24}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -758,12 +766,15 @@ services:
     network_mode: "service:takconfig"
     environment:
       LOG_CONSOLE_FORMATTER: "local"
+      UVICORN_LOG_LEVEL: "debug"
+      TI_LOG_LEVEL: "10"
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
+      - tak_www_static:/www_static
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -785,6 +796,7 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - tak_www_static:/www_static
     environment:
       NGINX_HOST: *takdomain
       NGINX_HTTPS_PORT: *takapiport
@@ -794,7 +806,7 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_TEMPLATE_DIR: "templates_productapi"
+      NGINX_TEMPLATE_DIR: "templates_rasenmaeher_takapi"
     networks:
       - taknet
       - intranet
@@ -851,3 +863,4 @@ volumes:
   takrmapi_data:
   rmui_files:
   nginx_templates:
+  tak_www_static:
