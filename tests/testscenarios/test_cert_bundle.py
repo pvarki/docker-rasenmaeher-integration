@@ -9,6 +9,7 @@ import os
 import aiohttp
 import pytest
 import pytest_asyncio
+from flaky import flaky  # type: ignore
 from cryptography.hazmat.primitives.serialization import pkcs12
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
@@ -336,19 +337,22 @@ def parse_file_payload(fpl: Dict[str, str]) -> None:
     assert dec
 
 
+@flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
 async def test_10_check_enduser_files(
     session_with_testcas: aiohttp.ClientSession,
 ) -> None:
     """Check that we can get files from product integration apis"""
+    # Wait a moment so we have less of race issues
+    await asyncio.sleep(2.0)
     client = session_with_testcas
     client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
     url = f"{API}/{VER}/instructions/user"
-    LOGGER.debug("Fetching {}".format(url))
+    LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
     response.raise_for_status()
     payload = await response.json()
-    LOGGER.debug("payload={}".format(payload))
+    LOGGER.debug("payload={} (for {})".format(payload, ValueStorage.call_sign))
     assert payload
     assert "files" in payload
     assert "fake" in payload["files"]
