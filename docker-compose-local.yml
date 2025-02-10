@@ -79,7 +79,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.3-RELEASE-24}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.25${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.27${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
