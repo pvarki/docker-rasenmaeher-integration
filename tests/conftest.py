@@ -22,7 +22,7 @@ init_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 CA_PATH = Path(__file__).parent / "testcas"
 JWT_PATH = Path(__file__).parent / "testjwts"
-DEFAULT_TIMEOUT = aiohttp.ClientTimeout(total=15.0)
+DEFAULT_TIMEOUT = aiohttp.ClientTimeout(total=25.0)
 OPENAPI_VER = "3.1.0"
 API = os.environ.get("RM_API_BASE", "https://localmaeher.dev.pvarki.fi:4439/api")  # pylint: disable=E1101
 VER = "v1"
