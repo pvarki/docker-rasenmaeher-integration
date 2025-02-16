@@ -79,12 +79,17 @@ Needed ports open to internet on firewall, with redirect to server running Rasen
 Downloading and composing Rasenmaeher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Be mindfull on where you download the repository, you will need to perform rest of the commands inside the downloaded repository.
+
 Getting the repository from github::
 
     git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git 
 
-Copying the env file to downloaded repository, filling in the wanted changes and saving as .env-file inside downloaded repository example: "/home/user/docker-rasenmaeher-integration/". Things to include in .env-file ca-name, domain, secure passwords and lets encrypt email address. https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
-Example .env-file::
+Create .env file that defines info for Rasenmaeher setup. File must be located inside downloaded repository and file type must be .env to work.
+
+The original example file is: https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
+
+Example .env-file with the minimal changes needed::
 
     KEYCLOAK_DATABASE_PASSWORD="input-secure-password"
     RM_DATABASE_PASSWORD="input-secure-password"
@@ -103,19 +108,19 @@ Example .env-file::
     KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"
     KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"
 
-Starting the services. You need to be inside the downloaded repository example: "/home/user/docker-rasenmaeher-integration/"::
+Starting the services::
 
     docker compose up –d 
 
-Updating the repository from github. You need to be inside the downloaded repository example: "/home/user/docker-rasenmaeher-integration/"::
+Updating the repository from github::
 
     git submodule update
 
-!DO NOT DO! Deleting the services. Deletes the certificates etc you will need to add all users etc again. You need to be inside the downloaded repository example: "/home/user/docker-rasenmaeher-integration/"::
+!DO NOT DO! Deleting the services. Deletes the certificates etc you will need to add all users etc again::
 
     docker compose down -v
 
-Getting the admin login invite code for first admin. You need to be inside the downloaded repository example: "/home/user/docker-rasenmaeher-integration/"::
+Getting the admin login invite code for first admin::
 
     docker compose exec -it rmapi /bin/bash -c "rasenmaeher_api addcode" 
 
