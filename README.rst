@@ -85,11 +85,11 @@ Getting the repository from github::
 
     git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git 
 
-Create .env file that defines info for Rasenmaeher setup. File must be located inside downloaded repository and file type must be .env to work.
+Create .env file that defines environmental variables for Rasenmaeher setup. File must be located inside downloaded repository and file type must be .env to work.
 
 The original example file is: https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
 
-Example .env-file with the minimal changes needed::
+Example .env-file with the minimal information needed::
 
     KEYCLOAK_DATABASE_PASSWORD="input-secure-password"
     RM_DATABASE_PASSWORD="input-secure-password"
@@ -124,7 +124,7 @@ Getting the admin login invite code for first admin::
 
     docker compose exec -it rmapi /bin/bash -c "rasenmaeher_api addcode" 
 
-Services:
+Services
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Rasenmaeher login page::
