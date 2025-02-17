@@ -2,7 +2,7 @@
 #   `docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml up -d`
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.25${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.27${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -39,6 +39,7 @@ services:
       SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+      RELEASE_TAG: "localdev"
     networks:
       - intranet
     ports:  # REMINDER Do not expose these in production

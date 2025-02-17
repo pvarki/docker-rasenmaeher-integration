@@ -109,7 +109,7 @@ server {
 
     location /api {
         if ($ssl_client_verify != SUCCESS) {
-            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
         }
         proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api;
         proxy_redirect                      off;
@@ -123,14 +123,14 @@ server {
     }
 
     # Even though users sees code 400 the code is 495 http://nginx.org/en/docs/http/ngx_http_ssl_module.html#errors
-    error_page 495 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+    error_page 495 =302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
 
     location / {
         if ($redir_uri != "") {
             return 301 $redir_uri$request_uri;
         }
         if ($ssl_client_verify != SUCCESS) {
-            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
         }
         index index.html;
         root /rmui_files;
