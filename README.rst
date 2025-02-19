@@ -18,6 +18,128 @@ This `Disobey24 talk`_ explains a lot.
 .. _`Disobey24 talk`: https://www.youtube.com/watch?v=m3xd7uygpaY&list=PLLvAhAn5sGfiB9AlEt2KD7H9Dnr6kbd64&index=23
 
 
+
+Running Rasenmaher in your own docker environment
+-------------------------------------------------
+
+
+Needed DNS Records
+^^^^^^^^^^^^^^^^^^
+
+These need to point to your WAN address.
+
+  - domain
+  - kc.domain
+  - tak.domain
+  - mtls.domain
+  - mtls.tak.domain
+  - mtls.kc.domain
+  - kc.tak.domain
+
+When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
+for all products listed in the composition for miniwerk service variable MW_PRODUCTS and "kc" for Keycloak.
+
+Needed ports open
+^^^^^^^^^^^^^^^^^
+
+And redirected to the server if behind NAT or similar.
+
+  - 80
+  - 443
+  - 8443
+  - 8446
+  - 9446
+  - 4626
+
+Downloading and composing Rasenmaeher
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Be mindfull on where you download the repository, you will need to perform rest of the commands inside the downloaded repository.
+
+Getting the repository from github::
+
+    git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git
+
+Create .env file that defines environmental variables for Rasenmaeher setup. File must be located inside downloaded repository and file type must be .env to work.
+
+The original example file is: https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
+
+Example .env-file with the minimal information needed::
+
+    KEYCLOAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    RM_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    LDAP_ADMIN_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KEYCLOAK_ADMIN_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    TAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    SERVER_DOMAIN="input-domain"
+    CFSSL_CA_NAME="input-ca-name"
+    MW_LE_EMAIL="input-email-for-lets-encrypt"
+    MW_LE_TEST="false"
+    TAKSERVER_CERT_PASS="input-secure-password"  # pragma: allowlist secret
+    TAK_CA_PASS="input-secure-password"  # pragma: allowlist secret
+    VITE_ASSET_SET="${VITE_ASSET_SET:-neutral}"
+    KEYCLOAK_PROFILEROOT_UUID="input-uuid"
+    KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+
+Starting the services::
+
+    docker compose up –d
+
+Updating the repository from github::
+
+    git submodule update
+
+!DO NOT DO! Deleting the services. Deletes the certificates etc you will need to add all users etc again::
+
+    docker compose down -v
+
+Getting the admin login invite code for first admin::
+
+    docker compose exec -it rmapi /bin/bash -c "rasenmaeher_api addcode"
+
+Services
+^^^^^^^^
+
+Rasenmaeher login page::
+
+    https://domain (example.com)
+
+Rasenmaeher home page::
+
+    https://mtls.domain (mtls.example.com)
+
+Takserver Admin UI::
+
+    https://tak.domain:8443/ (tak.example.com:8443/)
+
+Keycloack Admin UI. (Later group management will be withing Rasenmaeher)::
+
+    https://kc.domain:9443/admin/RASENMAEHER/console/ (kc.example.com:9443/admin/RASENMAEHER/console/)
+
+OTA update server inside takserver. Is located in the loaded repository, location depends on where you downloaded it::
+
+    /home/user/docker-rasenmaeher-integration/takserver/update
+
+Using the Rasenmaeher service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Login with first admin code. Create your admin account by typing your first admin invite code and inputting desired admin callsign.
+2. Create invite code for other users. Share the invite code. Go to Manage Users -> Add Users -> Create New Invite. Share link, qr code or invite code and domain.
+3. Approve users in Rasenmaeher. Open approvement link or scan qr code from users and approve the user. You can also go to Approve Users -> Select Waiting User and input the users approvement code.
+4. If desired promote some of the added users as admins. Go to Manage Users -> Manage Users -> Select user and select Promote. You can also Demote Admins or Delete users altogether.
+
+Using Rasenmaeher TAK in EUD
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+EUD=End User Device
+
+1. Login to Rasenmaeher. Go to https://mtls.domain and select TAK.
+2. Download Client Package. Select tak package for desired software "Android ATAK or Windows WinTAK" or "iOS iTAK". Select Download Client Package.
+3. Go to EUD's TAK Software. Import downloaded package. Device is connected to server.
+4. You should also read Quickstart and Usage Guides.
+
 Git submodules
 --------------
 
