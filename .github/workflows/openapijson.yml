@@ -30,6 +30,7 @@ jobs:
           output: swagger-ui
           spec-file: openapi.json
           version: ^5.0.0
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to gh-pages
         if: ${{ !env.ACT }}
         uses: peaceiris/actions-gh-pages@v3
