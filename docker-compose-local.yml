@@ -127,6 +127,7 @@ services:
       MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *takapiport
       MW_TAK__USER_PORT: 8443
+      MW_TAK__EXTRAVAL: "this should be ignored"
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
       MW_LE_TEST: "true"
