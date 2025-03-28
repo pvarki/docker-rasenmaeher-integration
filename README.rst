@@ -225,7 +225,7 @@ In VM production mode::
 pre-commit notes
 ----------------
 
-Use "pre-commit run --all-files" liberally (and make sure you have run "pre-commit install"). If you get complaints
+Use "pre-commit run --all-files" liberally (and make sure you have run "pre-commit install --install-hooks"). If you get complaints
 about missing environment variables run "source example_env.sh"
 
 
