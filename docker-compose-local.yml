@@ -332,6 +332,8 @@ services:
     networks:
       - kcnet
       - dbnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - '8280:8080'  # do not expose this in production
       - '9443:9443'
