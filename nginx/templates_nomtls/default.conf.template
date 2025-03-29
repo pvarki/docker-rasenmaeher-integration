@@ -1,0 +1,26 @@
+ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
+ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
+
+include /etc/nginx/includes/le_common_settings.conf;
+
+server {
+    server_name ${NGINX_HOST};
+
+    # HTTPS configuration
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    location / {
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT};
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
+        proxy_buffer_size          128k;
+        proxy_buffers              4 256k;
+        proxy_busy_buffers_size    256k;        
+    }
+}

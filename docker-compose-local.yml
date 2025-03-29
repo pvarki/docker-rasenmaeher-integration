@@ -37,11 +37,19 @@ x-tak_dbconfig_env: &takdbconfig_env
   LDAP_BIND_USER: *ldapadminuser
   LDAP_BIND_PASSWORD: *ldapadminpass
 
+x-battlelog_dbconfig_env: &bldbconfig_env
+  POSTGRES_HOST: &bldbname battlelog
+  POSTGRES_DB: battlelog
+  POSTGRES_USER: &bldbuser battlelog
+  POSTGRES_PASSWORD: &bldbpass ${BL_DATABASE_PASSWORD:-battlelogpwd} # pragma: allowlist secret
+  DATABASE_URL: "postgresql://battlelog:battlelogpwd@postgres:5432/battlelog"
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: &pgrootpwd ${POSTGRES_PASSWORD:-pg_R00t_user_password} # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
+  BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: true
@@ -111,6 +119,7 @@ x-takserver_env: &takserver_env
   TAK_OCSP_PORT: *oscpport
   WEBTAK_ENABLE: "true"
 
+
 services:
   miniwerk:
     image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
@@ -139,6 +148,7 @@ services:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
+      - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_data:/data/persistent
       - le_certs:/le_certs
       - ca_public:/ca_public
@@ -575,10 +585,10 @@ services:
       NGINX_UPSTREAM: "rmfpapi"
       NGINX_UPSTREAM_PORT: "8001"
       NGINX_CERT_NAME: "rasenmaeher"
+      NGINX_TEMPLATE_DIR: "templates_productapi"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_TEMPLATE_DIR: "templates_productapi"
     networks:
       - productnet
       - intranet
@@ -602,6 +612,79 @@ services:
     restart: unless-stopped
 ####################
 # End: Fakeproduct #
+####################
+
+
+######################
+# Begin: Battlelog #
+######################
+  blapi:
+    image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./battlelog
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: [*bldbconfig_env]
+      LOG_CONSOLE_FORMATTER: "local"
+    ports:
+      - "8666:3000"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
+    networks:
+      - productnet
+      - intranet
+      - dbnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_bl:/pvarki
+      - blapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  blnginx:
+    <<: *nginxbuildinfo
+    volumes:
+      - nginx_templates:/nginx_templates
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      NGINX_HOST: *productdomain
+      NGINX_HTTPS_PORT: 4666
+      NGINX_UPSTREAM: "blapi"
+      NGINX_UPSTREAM_PORT: "3000"
+      NGINX_CERT_NAME: "rasenmaeher"
+      NGINX_TEMPLATE_DIR: "templates_nomtls"
+    networks:
+      - productnet
+      - intranet
+      - ocspnet
+    ports:
+      - 4666:4666
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+      nginx_templates:
+        condition: service_completed_successfully
+      blapi:
+        condition: service_healthy
+    healthcheck:
+      test: 'curl -s localhost:5666/healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+####################
+# End: Battlelog #
 ####################
 
 ##############
@@ -864,3 +947,5 @@ volumes:
   takrmapi_data:
   rmui_files:
   nginx_templates:
+  kraftwerk_shared_bl:
+  blapi_data:
