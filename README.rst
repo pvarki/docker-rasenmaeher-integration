@@ -86,7 +86,7 @@ Example .env-file with the minimal information needed::
 
 Starting the services::
 
-    docker compose up –d
+    docker compose up -d
 
 Updating the repository from github::
 
@@ -99,6 +99,10 @@ Updating the repository from github::
 Getting the admin login invite code for first admin::
 
     docker compose exec -it rmapi /bin/bash -c "rasenmaeher_api addcode"
+
+If you get "no such service -d", make sure whatever you copy-pasted the command from did not render
+the dash (ASCII 0x2D) as some other codepoint with a glyph that looks deceptively similar. When in doubt
+write the commands yourself instead of copy-pasting.
 
 Services
 ^^^^^^^^
