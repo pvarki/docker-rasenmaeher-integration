@@ -60,7 +60,8 @@ Getting the repository from github (on Windows **first** see "Windows notes" bel
 
     git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git
 
-Create .env file that defines environmental variables for Rasenmaeher setup. File must be located inside downloaded repository and file type must be .env to work.
+Create ``.env`` file that defines environmental variables for Rasenmaeher setup. File must be located inside downloaded repository
+and file type must be named literally ``.env`` (not ``something.env``)  to work.
 
 The original example file is: https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
 
@@ -83,6 +84,14 @@ Example .env-file with the minimal information needed::
     KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     BL_POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
+
+If you wish to use one deployment for longer than the *design lifetime* of 1-2 months you can change the following
+env variables. But do understand that this is **not recommended** and has **security implications**. If you do this
+**you** take **responsibility** to go through all Dockerfiles and compositions to understand **exactly** how things are done
+and how apply security updates into the containers::
+
+    CFSSL_CA_EXPIRY="8800h" # Input time in hours = xxh, 8800h is 366.. days
+    CFSSL_SIGN_DEFAULT_EXPIRY="8800h" # Input time in hours = xxh, 8800h is 366.. days
 
 Starting the services::
 
