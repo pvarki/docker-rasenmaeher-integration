@@ -1,0 +1,43 @@
+ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
+ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
+
+include /etc/nginx/includes/le_common_settings.conf;
+
+server {
+    server_name ${NGINX_HOST};
+
+    # HTTPS configuration
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    ssl_client_certificate /ca_public/ca_chain.pem;
+    ssl_verify_client      on;
+    ssl_ocsp leaf;
+    ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    resolver ${DNS_RESOLVER_IP} ipv6=off;
+    #ssl_crl /ca_public/crl.pem;
+    ssl_verify_depth 3;
+
+
+    # This volume may only have content that EVERYONE with proper client certificate can view
+    location /content/static {
+        if ($ssl_client_verify != SUCCESS) {
+            return 401;
+        }
+        root /www_static;
+    }
+
+    location / {
+        if ($ssl_client_verify != SUCCESS) {
+            return 401;
+        }
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT};
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+    }
+}
