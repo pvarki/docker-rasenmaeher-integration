@@ -9,6 +9,7 @@ x-domains_env:
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  DOCS_DOMAIN:  &docsdomain "docs.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
@@ -130,7 +131,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl"
+      MW_PRODUCTS: "tak,kc,fake,bl,docs"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_FAKE__API_PORT: *productport
@@ -552,6 +553,9 @@ services:
       - productnet
     volumes:
       - docs_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3001/health || (echo 'Healthcheck failed' && exit 1)"]
       interval: 10s
@@ -580,6 +584,8 @@ services:
       - productnet
       - intranet
       - ocspnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - 4777:4777
     depends_on:
@@ -1010,3 +1016,4 @@ volumes:
   nginx_templates:
   kraftwerk_shared_bl:
   blapi_data:
+  docs_data:
