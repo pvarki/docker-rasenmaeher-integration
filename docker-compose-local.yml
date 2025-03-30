@@ -38,11 +38,12 @@ x-tak_dbconfig_env: &takdbconfig_env
   LDAP_BIND_PASSWORD: *ldapadminpass
 
 x-battlelog_dbconfig_env: &bldbconfig_env
-  POSTGRES_HOST: &bldbname battlelog
-  POSTGRES_DB: battlelog
-  POSTGRES_USER: &bldbuser battlelog
-  POSTGRES_PASSWORD: &bldbpass ${BL_DATABASE_PASSWORD:-battlelogpwd} # pragma: allowlist secret
-  DATABASE_URL: "postgresql://battlelog:battlelogpwd@postgres:5432/battlelog"
+  BL_POSTGRES_HOST: postgres
+  BL_POSTGRES_DB: &bldbname battlelog
+  BL_POSTGRES_USER: &bldbuser battlelog
+  BL_POSTGRES_PASSWORD: &bldbpass ${BL_DATABASE_PASSWORD:-battlelogpwd} # pragma: allowlist secret
+  # Currently need to be defined separately because of the way the image is built
+  DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:-battlelogpwd}@postgres:5432/battlelog"
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
@@ -662,7 +663,10 @@ services:
       NGINX_UPSTREAM: "blapi"
       NGINX_UPSTREAM_PORT: "3000"
       NGINX_CERT_NAME: "rasenmaeher"
-      NGINX_TEMPLATE_DIR: "templates_nomtls"
+      NGINX_TEMPLATE_DIR: "templates_productapi"
+      CFSSL_OCSP_BIND_PORT: *oscpport
+      NGINX_OCSP_UPSTREAM: *ocsphost
+      DNS_RESOLVER_IP: *dnsresolver
     networks:
       - productnet
       - intranet
