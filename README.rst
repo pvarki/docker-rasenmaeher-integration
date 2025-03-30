@@ -82,6 +82,7 @@ Example .env-file with the minimal information needed::
     KEYCLOAK_PROFILEROOT_UUID="input-uuid"
     KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    BL_POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
 
 Starting the services::
 
