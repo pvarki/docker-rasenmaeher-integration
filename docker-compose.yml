@@ -854,3 +854,5 @@ volumes:
   takrmapi_data:
   rmui_files:
   nginx_templates:
+  kraftwerk_shared_bl:
+  blapi_data:
