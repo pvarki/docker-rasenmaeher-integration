@@ -518,12 +518,11 @@ services:
       DOCS_DOMAIN: *docsdomain
     networks:
       - intranet
-      - apinet
-      - productnet
     volumes:
       - docs_data:/data/persistent
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      rmnginx:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3001/health || (echo 'Healthcheck failed' && exit 1)"]
       interval: 10s
@@ -549,22 +548,19 @@ services:
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
     networks:
-      - productnet
       - intranet
       - ocspnet
     ports:
       - 4777:4777
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       miniwerk:
         condition: service_completed_successfully
       nginx_templates:
         condition: service_completed_successfully
-      docs:
+      rmnginx:
         condition: service_healthy
     healthcheck:
-      test: 'curl -s localhost:3001/healthcheck || exit 1'
+      test: 'curl -s localhost:5666/healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
