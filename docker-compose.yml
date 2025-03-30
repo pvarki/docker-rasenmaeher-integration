@@ -7,6 +7,7 @@ x-domains_env:
   PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:?domain must be defined}"
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  DOCS_DOMAIN:  &docsdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
@@ -141,7 +142,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl"
+      MW_PRODUCTS: "tak,kc,bl,docs"
     volumes:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
@@ -511,6 +512,63 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+  docs:
+    image: pvarki/pvarkidocs:latest
+    environment:
+      DOCS_DOMAIN: *docsdomain
+    networks:
+      - intranet
+      - apinet
+      - productnet
+    volumes:
+      - docs_data:/data/persistent
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/health || (echo 'Healthcheck failed' && exit 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+  docsnginx:
+    <<: *nginxbuildinfo
+    volumes:
+      - nginx_templates:/nginx_templates
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      NGINX_HOST: *productdomain
+      NGINX_HTTPS_PORT: 4777
+      NGINX_UPSTREAM: "docs"
+      NGINX_UPSTREAM_PORT: "3001"
+      NGINX_CERT_NAME: "rasenmaeher"
+      NGINX_TEMPLATE_DIR: "templates_productapi"
+      CFSSL_OCSP_BIND_PORT: *oscpport
+      NGINX_OCSP_UPSTREAM: *ocsphost
+      DNS_RESOLVER_IP: *dnsresolver
+    networks:
+      - productnet
+      - intranet
+      - ocspnet
+    ports:
+      - 4777:4777
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+      nginx_templates:
+        condition: service_completed_successfully
+      docs:
+        condition: service_healthy
+    healthcheck:
+      test: 'curl -s localhost:3001/healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
 
 ######################
 # Begin: Battlelog #
@@ -856,3 +914,4 @@ volumes:
   nginx_templates:
   kraftwerk_shared_bl:
   blapi_data:
+  docs_data:
