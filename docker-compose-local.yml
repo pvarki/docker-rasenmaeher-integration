@@ -546,7 +546,6 @@ services:
     image: pvarki/pvarkidocs:latest
     environment:
       DOCS_DOMAIN: *docsdomain
-      DOCS_PORT: "4439" # Help docusaurus build correct static links under local mode
     networks:
       - intranet
       - apinet
@@ -571,7 +570,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     environment:
-      NGINX_HOST: *productdomain
+      NGINX_HOST: *docsdomain
       NGINX_HTTPS_PORT: 4777
       NGINX_UPSTREAM: "docs"
       NGINX_UPSTREAM_PORT: "3001"
