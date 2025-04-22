@@ -31,9 +31,11 @@ These need to point to your WAN address.
   - domain
   - kc.domain
   - tak.domain
+  - bl.domain
   - mtls.domain
   - mtls.tak.domain
   - mtls.kc.domain
+  - mtls.bl.domain
   - kc.tak.domain
 
 When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
@@ -46,10 +48,11 @@ And redirected to the server if behind NAT or similar.
 
   - 80
   - 443
-  - 8443
-  - 8446
-  - 9446
-  - 4626
+  - 8443 (TAK)
+  - 8446 (TAK)
+  - 9446 (Keycloak)
+  - 4626 (Rasenmaeher API port)
+  - 4666 (Battlelog API/UI port)
 
 Downloading and composing Rasenmaeher
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
