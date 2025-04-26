@@ -3,10 +3,9 @@ x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
   MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
-  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
+  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
-  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
 
