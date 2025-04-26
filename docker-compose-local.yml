@@ -486,6 +486,7 @@ services:
       NGINX_HOST: *serverdomain
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-8015}
       NGINX_HTTPS_PORT: *apiport
+      NGINX_PRODUCTAPI_PORT: *productport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_UI_UPSTREAM: "rmui"

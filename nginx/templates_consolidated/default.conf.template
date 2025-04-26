@@ -11,8 +11,8 @@ map $host $host_upstream_mapped {
     bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
     mtls.tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
     mtls.bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
-#    fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
-#    mtls.fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
+    fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
+    mtls.fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
 }
 
 server {

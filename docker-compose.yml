@@ -459,6 +459,7 @@ services:
       NGINX_HOST: *serverdomain
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-80}
       NGINX_HTTPS_PORT: *apiport
+      NGINX_PRODUCTAPI_PORT: *productport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_CERT_NAME: "rasenmaeher"
@@ -750,6 +751,9 @@ services:
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
+      # these must be defined for the template to work even if the product is not used
+      NGINX_FP_UPSTREAM: "rmfpapi"
+      NGINX_FP_UPSTREAM_PORT: "8001"
       NGINX_BL_UPSTREAM: "blapi"
       NGINX_BL_UPSTREAM_PORT: "3000"
       NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
