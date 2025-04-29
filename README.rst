@@ -1,17 +1,18 @@
 .. image:: https://github.com/pvarki/docker-rasenmaeher-integration/actions/workflows/build.yml/badge.svg
    :alt: Build Status
 
-========================
-RASENMAEHER integrations
-========================
+==========
+Deploy App
+==========
 
 "One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them."
 
 Docker compositions, helpers etc to bring it all together into something resembling grand old ones.
 
+Codename RASENMAEHER because infantry jokes.
 
-WTF is RASENMAEHER anyway ?
----------------------------
+WTF is this anyway ?
+--------------------
 
 This `Disobey24 talk`_ explains a lot.
 
@@ -19,7 +20,7 @@ This `Disobey24 talk`_ explains a lot.
 
 
 
-Running Rasenmaher in your own docker environment
+Running Deploy App in your own docker environment
 -------------------------------------------------
 
 
@@ -51,11 +52,11 @@ And redirected to the server if behind NAT or similar.
   - 8443 (TAK)
   - 8446 (TAK)
   - 9446 (Keycloak)
-  - 4626 (Rasenmaeher API port)
+  - 4626 (Product integration APIs port)
   - 4666 (Battlelog API/UI port)
 
-Downloading and composing Rasenmaeher
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Downloading and composing Deploy App
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Be mindfull on where you download the repository, you will need to perform rest of the commands inside the downloaded repository.
 
@@ -63,7 +64,7 @@ Getting the repository from github (on Windows **first** see "Windows notes" bel
 
     git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git
 
-Create ``.env`` file that defines environmental variables for Rasenmaeher setup. File must be located inside downloaded repository
+Create ``.env`` file that defines environmental variables for Deploy App setup. File must be located inside downloaded repository
 and file type must be named literally ``.env`` (not ``something.env``)  to work.
 
 The original example file is: https://github.com/pvarki/docker-rasenmaeher-integration/blob/main/example_env.sh
@@ -119,11 +120,11 @@ write the commands yourself instead of copy-pasting.
 Services
 ^^^^^^^^
 
-Rasenmaeher login page::
+Deploy App login page::
 
     https://domain (example.com)
 
-Rasenmaeher home page::
+Deploy App home page::
 
     https://mtls.domain (mtls.example.com)
 
@@ -131,7 +132,7 @@ Takserver Admin UI::
 
     https://tak.domain:8443/ (tak.example.com:8443/)
 
-Keycloack Admin UI. (Later group management will be withing Rasenmaeher)::
+Keycloack Admin UI. (Later group management will be withing Deploy App)::
 
     https://kc.domain:9443/admin/RASENMAEHER/console/ (kc.example.com:9443/admin/RASENMAEHER/console/)
 
@@ -139,20 +140,20 @@ OTA update server inside takserver. Is located in the loaded repository, locatio
 
     /home/user/docker-rasenmaeher-integration/takserver/update
 
-Using the Rasenmaeher service
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using the Deploy App service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. Login with first admin code. Create your admin account by typing your first admin invite code and inputting desired admin callsign.
 2. Create invite code for other users. Share the invite code. Go to Manage Users -> Add Users -> Create New Invite. Share link, qr code or invite code and domain.
-3. Approve users in Rasenmaeher. Open approvement link or scan qr code from users and approve the user. You can also go to Approve Users -> Select Waiting User and input the users approvement code.
+3. Approve users in Deploy App. Open approvement link or scan qr code from users and approve the user. You can also go to Approve Users -> Select Waiting User and input the users approvement code.
 4. If desired promote some of the added users as admins. Go to Manage Users -> Manage Users -> Select user and select Promote. You can also Demote Admins or Delete users altogether.
 
-Using Rasenmaeher TAK in EUD
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using Deploy App TAK in EUD
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 EUD=End User Device
 
-1. Login to Rasenmaeher. Go to https://mtls.domain and select TAK.
+1. Login to Deploy App. Go to https://mtls.domain and select TAK.
 2. Download Client Package. Select tak package for desired software "Android ATAK or Windows WinTAK" or "iOS iTAK". Select Download Client Package.
 3. Go to EUD's TAK Software. Import downloaded package. Device is connected to server.
 4. You should also read Quickstart and Usage Guides.
@@ -166,9 +167,9 @@ When cloning for the first time use::
 
 When updating or checking out branches use::
 
-    git submodule update
+    git submodule update --init --recursive
 
-And if you forgot to --recurse-submodules run git submodule init to fix things.
+And if you forgot to --recurse-submodules run the update command above.
 
 The submodules are repos in their own right, if you plan to make changes into them change
 to the directory and create new branch, commit and push changes as usual under that directory.
@@ -186,12 +187,13 @@ Directories that are submodules
   - ui https://github.com/pvarki/rasenmaeher-ui
   - takserver https://github.com/pvarki/docker-atak-server
   - takintegration https://github.com/pvarki/python-tak-rmapi
+  - battlelog https://github.com/pvarki/typescript-liveloki-app
 
 Autogenerated (mostly API) docs
 -------------------------------
 
   - Module API docs: https://pvarki.github.io/docker-rasenmaeher-integration/docs/
-  - Swagger definition for RASENMAEHER API: https://pvarki.github.io/docker-rasenmaeher-integration/
+  - Swagger definition for Deploy App API: https://pvarki.github.io/docker-rasenmaeher-integration/
 
 
 Running in local development mode

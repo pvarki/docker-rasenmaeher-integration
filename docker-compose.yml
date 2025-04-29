@@ -3,11 +3,9 @@ x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
   MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
-  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
-  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:?domain must be defined}"
+  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
-  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
 
@@ -77,7 +75,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.3-RELEASE-24}-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.3-RELEASE-24}-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -85,7 +83,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.3-RELEASE-24}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.27-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.27-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -124,7 +122,7 @@ x-takserver_env: &takserver_env
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:1.3.3-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:1.3.4-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -135,7 +133,7 @@ services:
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_FAKE__API_PORT: *productport
       MW_FAKE__USER_PORT: *productport
-      MW_TAK__API_PORT: *takapiport
+      MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
@@ -153,7 +151,7 @@ services:
       - "80:80"
 
   cfssl:
-    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -176,7 +174,7 @@ services:
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -202,7 +200,7 @@ services:
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -262,7 +260,7 @@ services:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -372,7 +370,7 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:1.6.2-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.6.4-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -394,7 +392,7 @@ services:
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
-      RELEASE_TAG: ${RELEASE_TAG:-1.8.1}
+      RELEASE_TAG: ${RELEASE_TAG:-1.9.0}
     networks:
       - apinet
       - kcnet
@@ -428,19 +426,19 @@ services:
     restart: unless-stopped
 
   rmui:
-    image: pvarki/rmui:1.3.0-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:1.3.0-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./ui
       dockerfile: Dockerfile
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
-        RELEASE_TAG: ${RELEASE_TAG:-1.8.1}
+        RELEASE_TAG: ${RELEASE_TAG:-1.9.0}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
-    image: pvarki/nginx:templates-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/nginx:templates-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -460,6 +458,7 @@ services:
       NGINX_HOST: *serverdomain
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-80}
       NGINX_HTTPS_PORT: *apiport
+      NGINX_PRODUCTAPI_PORT: *productport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_CERT_NAME: "rasenmaeher"
@@ -499,7 +498,7 @@ services:
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -516,7 +515,7 @@ services:
 # Begin: Battlelog #
 ######################
   blapi:
-    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -536,45 +535,12 @@ services:
     depends_on:
       rmnginx:
         condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
-
-  blnginx:
-    <<: *nginxbuildinfo
-    volumes:
-      - nginx_templates:/nginx_templates
-      - ca_public:/ca_public
-      - le_certs:/le_certs
-    environment:
-      NGINX_HOST: *productdomain
-      NGINX_HTTPS_PORT: 4666
-      NGINX_UPSTREAM: "blapi"
-      NGINX_UPSTREAM_PORT: "3000"
-      NGINX_CERT_NAME: "rasenmaeher"
-      NGINX_TEMPLATE_DIR: "templates_productapi"
-      CFSSL_OCSP_BIND_PORT: *oscpport
-      NGINX_OCSP_UPSTREAM: *ocsphost
-      DNS_RESOLVER_IP: *dnsresolver
-    networks:
-      - productnet
-      - intranet
-      - ocspnet
-    ports:
-      - 4666:4666
-    depends_on:
-      miniwerk:
-        condition: service_completed_successfully
-      nginx_templates:
-        condition: service_completed_successfully
-      blapi:
+      rmapi:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     healthcheck:
-      test: 'curl -s localhost:5666/healthcheck || exit 1'
+      test: 'curl http://localhost:3000/api/v1/healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
@@ -735,7 +701,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:1.5.0-tak${TAK_RELEASE:-5.3-RELEASE-24}-d${RELEASE_TAG:-1.8.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/takrmapi:1.5.0-tak${TAK_RELEASE:-5.3-RELEASE-24}-d${RELEASE_TAG:-1.9.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -768,32 +734,45 @@ services:
       retries: 3
       start_period: 45s
     restart: unless-stopped
+############
+# End: TAK #
+############
 
-  taknginx:
+#############################
+# BEGIN: consolidated NGinx #
+#############################
+  productsnginx:
     <<: *nginxbuildinfo
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
     environment:
-      NGINX_HOST: *takdomain
-      NGINX_HTTPS_PORT: *takapiport
-      NGINX_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
-      NGINX_UPSTREAM_PORT: "8003"
+      NGINX_HOST: *serverdomain
+      NGINX_HTTPS_PORT: *productport
+      # these must be defined for the template to work even if the product is not used
+      NGINX_FP_UPSTREAM: "rmfpapi"
+      NGINX_FP_UPSTREAM_PORT: "8001"
+      NGINX_BL_UPSTREAM: "blapi"
+      NGINX_BL_UPSTREAM_PORT: "3000"
+      NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
+      NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_CERT_NAME: "rasenmaeher"
+      NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_TEMPLATE_DIR: "templates_productapi"
     networks:
-      - taknet
+      - productnet
       - intranet
       - ocspnet
     ports:
-      - "${TAK_RMAPI_PORT:-4626}:${TAK_RMAPI_PORT:-4626}"
+      - "${NGINX_HTTPS_PRODUCT_PORT:-4625}:${NGINX_HTTPS_PRODUCT_PORT:-4625}"
     depends_on:
-      miniwerk:
+      nginx_templates:
         condition: service_completed_successfully
+      blapi:
+        condition: service_healthy
       takrmapi:
         condition: service_healthy
     healthcheck:
@@ -803,9 +782,9 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
-############
-# End: TAK #
-############
+###########################
+# END: consolidated NGinx #
+###########################
 
 
 ##############################################################################

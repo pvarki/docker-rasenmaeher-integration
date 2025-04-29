@@ -1,0 +1,46 @@
+ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
+ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
+
+include /etc/nginx/includes/le_common_settings.conf;
+
+map_hash_max_size 128;
+map_hash_bucket_size 128;
+map $host $host_upstream_mapped {
+    hostnames;
+    tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
+    bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
+    mtls.tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
+    mtls.bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
+    fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
+    mtls.fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
+}
+
+server {
+    # HTTPS configuration
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    ssl_client_certificate /ca_public/ca_chain.pem;
+    ssl_verify_client      on;
+    ssl_ocsp leaf;
+    ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    resolver ${DNS_RESOLVER_IP} ipv6=off;
+    #ssl_crl /ca_public/crl.pem;
+    ssl_verify_depth 3;
+
+    location / {
+        if ($ssl_client_verify != SUCCESS) {
+            return 401;
+        }
+        proxy_pass http://$host_upstream_mapped$request_uri;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
+        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
+    }
+}

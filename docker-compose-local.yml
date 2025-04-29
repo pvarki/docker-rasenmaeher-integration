@@ -5,11 +5,9 @@ x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
   MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
-  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4625}
-  PRODUCT_DOMAIN: &productdomain "fake.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
-  TAK_RMAPI_PORT: &takapiport ${TAK_RMAPI_PORT:-4626}
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
@@ -135,7 +133,7 @@ services:
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_FAKE__API_PORT: *productport
       MW_FAKE__USER_PORT: *productport
-      MW_TAK__API_PORT: *takapiport
+      MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_TAK__EXTRAVAL: "this should be ignored"
       CAROOT: "/data/persistent/mkcert"
@@ -487,6 +485,7 @@ services:
       NGINX_HOST: *serverdomain
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-8015}
       NGINX_HTTPS_PORT: *apiport
+      NGINX_PRODUCTAPI_PORT: *productport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_UI_UPSTREAM: "rmui"
@@ -573,48 +572,9 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
-
-  fpnginx:
-    <<: *nginxbuildinfo
-    volumes:
-      - nginx_templates:/nginx_templates
-      - ca_public:/ca_public
-      - le_certs:/le_certs
-    environment:
-      NGINX_HOST: *productdomain
-      NGINX_HTTPS_PORT: *productport
-      NGINX_UPSTREAM: "rmfpapi"
-      NGINX_UPSTREAM_PORT: "8001"
-      NGINX_CERT_NAME: "rasenmaeher"
-      NGINX_TEMPLATE_DIR: "templates_productapi"
-      CFSSL_OCSP_BIND_PORT: *oscpport
-      NGINX_OCSP_UPSTREAM: *ocsphost
-      DNS_RESOLVER_IP: *dnsresolver
-    networks:
-      - productnet
-      - intranet
-      - ocspnet
-    ports:
-      - "${NGINX_HTTP_PRODUCT_PORT:-8016}:${NGINX_HTTP_PRODUCT_PORT:-8016}"
-      - "${NGINX_HTTPS_PRODUCT_PORT:-4625}:${NGINX_HTTPS_PRODUCT_PORT:-4625}"
-    depends_on:
-      miniwerk:
-        condition: service_completed_successfully
-      nginx_templates:
-        condition: service_completed_successfully
-      rmfpapi:
-        condition: service_healthy
-    healthcheck:
-      test: 'curl -s localhost:5666/healthcheck || exit 1'
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
 ####################
 # End: Fakeproduct #
 ####################
-
 
 ######################
 # Begin: Battlelog #
@@ -643,45 +603,12 @@ services:
     depends_on:
       rmnginx:
         condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
-
-  blnginx:
-    <<: *nginxbuildinfo
-    volumes:
-      - nginx_templates:/nginx_templates
-      - ca_public:/ca_public
-      - le_certs:/le_certs
-    environment:
-      NGINX_HOST: *productdomain
-      NGINX_HTTPS_PORT: 4666
-      NGINX_UPSTREAM: "blapi"
-      NGINX_UPSTREAM_PORT: "3000"
-      NGINX_CERT_NAME: "rasenmaeher"
-      NGINX_TEMPLATE_DIR: "templates_productapi"
-      CFSSL_OCSP_BIND_PORT: *oscpport
-      NGINX_OCSP_UPSTREAM: *ocsphost
-      DNS_RESOLVER_IP: *dnsresolver
-    networks:
-      - productnet
-      - intranet
-      - ocspnet
-    ports:
-      - 4666:4666
-    depends_on:
-      miniwerk:
-        condition: service_completed_successfully
-      nginx_templates:
-        condition: service_completed_successfully
-      blapi:
+      rmapi:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     healthcheck:
-      test: 'curl -s localhost:5666/healthcheck || exit 1'
+      test: 'curl http://localhost:3000/api/v1/healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
@@ -734,6 +661,7 @@ services:
       - taknet
       - dbnet
       - intranet
+      - productnet
       - ocspnet
     ports:
       - '8443:8443'
@@ -878,34 +806,46 @@ services:
       retries: 3
       start_period: 45s
     restart: unless-stopped
+############
+# End: TAK #
+############
 
-  taknginx:
+#############################
+# BEGIN: consolidated NGinx #
+#############################
+  productsnginx:
     <<: *nginxbuildinfo
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
     environment:
-      NGINX_HOST: *takdomain
-      NGINX_HTTPS_PORT: *takapiport
-      NGINX_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
-      NGINX_UPSTREAM_PORT: "8003"
+      NGINX_HOST: *serverdomain
+      NGINX_HTTPS_PORT: *productport
+      NGINX_FP_UPSTREAM: "rmfpapi"
+      NGINX_FP_UPSTREAM_PORT: "8001"
+      NGINX_BL_UPSTREAM: "blapi"
+      NGINX_BL_UPSTREAM_PORT: "3000"
+      NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
+      NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_CERT_NAME: "rasenmaeher"
+      NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: *ocsphost
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_TEMPLATE_DIR: "templates_productapi"
     networks:
-      - taknet
+      - productnet
       - intranet
       - ocspnet
     ports:
-      - "${TAK_RMAPI_PORT:-4626}:${TAK_RMAPI_PORT:-4626}"
+      - "${NGINX_HTTPS_PRODUCT_PORT:-4625}:${NGINX_HTTPS_PRODUCT_PORT:-4625}"
     depends_on:
-      miniwerk:
-        condition: service_completed_successfully
       nginx_templates:
         condition: service_completed_successfully
+      rmfpapi:
+        condition: service_healthy
+      blapi:
+        condition: service_healthy
       takrmapi:
         condition: service_healthy
     healthcheck:
@@ -915,10 +855,9 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
-############
-# End: TAK #
-############
-
+###########################
+# END: consolidated NGinx #
+###########################
 
 ####################
 # Shared resources #
