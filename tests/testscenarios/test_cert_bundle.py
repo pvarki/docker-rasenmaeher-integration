@@ -35,6 +35,7 @@ class ValueStorage:
     call_sign = ""
     call_sign_jwt = ""
     approve_code = ""
+    user_pfx = b""
 
 
 @pytest_asyncio.fixture
@@ -322,7 +323,44 @@ async def test_9_check_if_enduser_pfx_available(
     LOGGER.debug("Fetching {}".format(url))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
     response.raise_for_status()
-    assert response.content
+    pfxdata = pkcs12.load_pkcs12(await response.read(), ValueStorage.call_sign.encode("utf-8"))
+    assert pfxdata.key
+    assert pfxdata.cert
+
+
+@pytest_asyncio.fixture
+async def user_mtls_session(
+    session_with_testcas: aiohttp.ClientSession,
+    nice_tmpdir: str,
+) -> AsyncGenerator[Tuple[aiohttp.ClientSession, str], None]:
+    """mTLS session for the enrolled user"""
+    client = session_with_testcas
+    if not ValueStorage.user_pfx:
+        client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
+        pfxresponse = await client.get(f"{API}/{VER}/enduserpfx/{ValueStorage.call_sign}.pfx", timeout=DEFAULT_TIMEOUT)
+        ValueStorage.user_pfx = await pfxresponse.read()
+        del client.headers["Authorization"]
+    datadir = Path(nice_tmpdir)
+    keypath = datadir / "user_mtls.key"
+    certpath = datadir / "user_mtls.cert"
+    pfxdata = pkcs12.load_pkcs12(ValueStorage.user_pfx, ValueStorage.call_sign.encode("utf-8"))
+    private_key = cast(rsa.RSAPrivateKey, pfxdata.key)
+    keypath.write_bytes(
+        private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption(),
+        )
+    )
+    assert pfxdata.cert
+    cert = pfxdata.cert.certificate
+    certpath.write_bytes(cert.public_bytes(encoding=serialization.Encoding.PEM))
+    async with get_session((certpath, keypath), CA_PATH) as client:
+        if "localmaeher" in API:
+            newapi = API.replace("localmaeher", "mtls.localmaeher")
+        else:
+            newapi = API.replace("https://", "https://mtls.")
+        yield client, newapi
 
 
 def parse_file_payload(fpl: Dict[str, str]) -> None:
@@ -340,14 +378,13 @@ def parse_file_payload(fpl: Dict[str, str]) -> None:
 @flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
 async def test_10_check_enduser_files(
-    session_with_testcas: aiohttp.ClientSession,
+    user_mtls_session: Tuple[aiohttp.ClientSession, str],
 ) -> None:
     """Check that we can get files from product integration apis"""
     # Wait a moment so we have less of race issues
     await asyncio.sleep(2.0)
-    client = session_with_testcas
-    client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
-    url = f"{API}/{VER}/instructions/user"
+    client, api = user_mtls_session
+    url = f"{api}/{VER}/instructions/user"
     LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
     response.raise_for_status()
@@ -371,7 +408,7 @@ async def test_10_check_enduser_files(
 
 
 @pytest.mark.asyncio
-async def test_11_check_user_revoke(
+async def test_12_check_user_revoke(
     session_with_testcas: aiohttp.ClientSession,
     first_admin_mtls_session: Tuple[aiohttp.ClientSession, str],
 ) -> None:
