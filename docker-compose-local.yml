@@ -838,7 +838,7 @@ services:
       - intranet
       - ocspnet
     ports:
-      - "${NGINX_HTTPS_PRODUCT_PORT:-4625}:${NGINX_HTTPS_PRODUCT_PORT:-4625}"
+      - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
