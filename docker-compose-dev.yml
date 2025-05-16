@@ -121,9 +121,9 @@ services:
       context: ./battlelog
       dockerfile: Dockerfile
       target: production
-    volumes:
-      - "./battlelog:/usr/src/app"
     # When BL has support for active reloads add the correct command
+    #volumes:
+    #  - "./battlelog:/usr/src/app"
     #command: []
 
 
