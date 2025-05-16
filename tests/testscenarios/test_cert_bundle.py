@@ -384,6 +384,7 @@ async def test_10_check_enduser_files(
     # Wait a moment so we have less of race issues
     await asyncio.sleep(2.0)
     client, api = user_mtls_session
+    # FIXME: After RUNE integrations this will work completely different
     url = f"{api}/{VER}/instructions/user"
     LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
