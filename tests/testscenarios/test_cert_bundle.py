@@ -407,6 +407,23 @@ async def test_10_check_enduser_files(
             parse_file_payload(fpl)
 
 
+@flaky(max_runs=3, min_passes=1)  # type: ignore
+@pytest.mark.asyncio
+@pytest.mark.parametrize("productname", ["bl", "tak", "fake"])
+async def test_11_check_product_healths(user_mtls_session: Tuple[aiohttp.ClientSession, str], productname: str) -> None:
+    """Check that we can get files from product integration apis"""
+    # Wait a moment so we have less of race issues
+    await asyncio.sleep(2.0)
+    client, api = user_mtls_session
+    base = api.replace(":4439/api", ":4626/").replace("mtls.", f"{productname}.")
+    url = f"{base}api/v1/healthcheck"
+    LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
+    response = await client.get(url, timeout=DEFAULT_TIMEOUT)
+    response.raise_for_status()
+    payload = await response.json()
+    LOGGER.debug("payload={} (for {})".format(payload, ValueStorage.call_sign))
+
+
 @pytest.mark.asyncio
 async def test_12_check_user_revoke(
     session_with_testcas: aiohttp.ClientSession,
