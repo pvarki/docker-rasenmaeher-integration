@@ -3,6 +3,7 @@ import asyncio
 from typing import AsyncGenerator, cast, Tuple
 import logging
 from pathlib import Path
+import json
 
 import aiohttp
 import pytest
@@ -369,13 +370,15 @@ async def test_10_check_instructions(user_mtls_session: Tuple[aiohttp.ClientSess
     # Wait a moment so we have less of race issues
     await asyncio.sleep(2.0)
     client, api = user_mtls_session
-    url = f"{api}/{VER}/{productname}/en"
+    url = f"{api}/{VER}/instructions/{productname}/en"
     LOGGER.debug("Fetching {} (for {})".format(url, ValueStorage.call_sign))
     response = await client.get(url, timeout=DEFAULT_TIMEOUT)
     response.raise_for_status()
     payload = await response.json()
-    # FIXME: Check something in the payload
     assert payload
+    instr = json.loads(payload["instructions"])
+    item = instr[0]
+    assert "type" in item
 
 
 @flaky(max_runs=3, min_passes=1)  # type: ignore
