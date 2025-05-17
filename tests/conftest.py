@@ -114,7 +114,10 @@ async def session_with_invalid_tpjwt(
 @pytest.fixture
 def call_sign_generator() -> str:
     """Return random work_id"""
-    return "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    ret = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    ret += "_"
+    ret += "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(2))
+    return ret
 
 
 # FIXME: rename this, or if only needed in one test file=module, move it there
