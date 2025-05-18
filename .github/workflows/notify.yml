@@ -25,8 +25,13 @@ jobs:
       - name: Notify
         env:
           NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+          NOTIFY_WEBHOOK_2: ${{ secrets.NOTIFY_WEBHOOK_2 }}
           NOTIFY_ID: ${{ secrets.NOTIFY_ID }}
         run: |
           curl -X POST -H "Content-Type: application/json" \
             -d "{\"content\": \"<@&$NOTIFY_ID> New Deploy App version released - **$LATEST_TAG**!\"}" \
             $NOTIFY_WEBHOOK
+
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"content\": \"New Deploy App version released - **$LATEST_TAG**!\"}" \
+            $NOTIFY_WEBHOOK_2
