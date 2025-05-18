@@ -1,0 +1,31 @@
+name: Notify on new tag
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Notify
+        env:
+          NOTIFY_WEBHOOK: ${{ secrets.NOTIFY_WEBHOOK }}
+          NOTIFY_ID: ${{ secrets.NOTIFY_ID }}
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"content\": \"<@&$NOTIFY_ID> New Deploy App version released - **$LATEST_TAG**!\"}" \
+            $NOTIFY_WEBHOOK
