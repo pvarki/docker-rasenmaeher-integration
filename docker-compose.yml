@@ -618,12 +618,16 @@ services:
       MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
       MTX_WEBRTCADDITIONALHOSTS: *serverdomain
     ports:
-      - "8554:8554"
-      - "1935:1935"
-      - "9888:9888"
-      - "9889:9889"
+      - "1936:1936"
+      - "8322:8322"
+      - "8890:8890"
       - "9000:9000"
       - "9001:9001"
+      - "9888:9888"
+      - "9889:9889"
+      - "9996:9996"
+      - "9998:9998"
+      - "9999:9999"
       - "8890:8890/udp"
       - "8189:8189/udp"
     depends_on:
