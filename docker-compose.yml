@@ -129,7 +129,7 @@ x-takserver_env: &takserver_env
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:1.3.5-d${RELEASE_TAG:-1.12.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:1.3.6-d${RELEASE_TAG:-1.12.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -563,7 +563,7 @@ services:
 # Begin: MediaMTX #
 ###################
   rmmtx:
-    image: pvarki/rmmtx:local${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:1.0.0-d${RELEASE_TAG:-1.12.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
