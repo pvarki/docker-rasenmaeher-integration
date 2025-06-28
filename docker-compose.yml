@@ -30,6 +30,7 @@ x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_HOST: postgres
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
