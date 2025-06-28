@@ -664,6 +664,51 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
+
+  mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    image: bash:latest
+    volumes:
+      - le_certs:/le_certs
+    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+
+  mediamtx:
+    image: bluenviron/mediamtx:1.12.3
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - ./mediamtx.yml:/mediamtx.yml
+    environment:
+      MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
+      MTX_WEBRTCADDITIONALHOSTS: *serverdomain
+    ports:
+      - "8554:8554"
+      - "1935:1935"
+      - "9888:9888"
+      - "9889:9889"
+      - "9000:9000"
+      - "9001:9001"
+      - "8890:8890/udp"
+      - "8189:8189/udp"
+    depends_on:
+      rmmtx:
+        condition: service_healthy
+      mediamtx_cert_perms:
+        condition: service_completed_successfully
+    healthcheck:
+      test: 'true'  # FIXME: Proper check
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
 #################
 # End: MediaMTX #
 #################
