@@ -45,6 +45,7 @@ runOnDisconnect:
 authMethod: http
 
 authHTTPAddress: http://rmmtx:8005/api/v1/mediamtx/auth
+authHTTPExclude: []
 
 
 ###############################################
