@@ -8,6 +8,7 @@ map $http_host $redir_uri {
     default "";
 
     ~^(.*?)tak\. https://$1tak.${NGINX_HOST}:8443;
+    ~^(.*?)mtx\. https://$1mtx.${NGINX_HOST}:9996;
     ~^(.*?)bl\. https://$1bl.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)fake\. https://$1fake.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)kc\. https://kc.${NGINX_HOST}:9443/admin/RASENMAEHER/console/;
