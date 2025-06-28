@@ -641,6 +641,8 @@ services:
     environment:
       <<: [*rmmtx_dbconfig_env]
       LOG_CONSOLE_FORMATTER: "local"
+      RMMTX_LOG_LEVEL: "debug"
+      UVICORN_LOG_LEVEL: "debug"
     ports:
       - "8005:8005"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
