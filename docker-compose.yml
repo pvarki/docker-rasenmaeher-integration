@@ -26,9 +26,9 @@ x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
 
 x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
-  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-mtxauthz}
+  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-rmmtx}
   RMMTX_DATABASE_HOST: postgres
-  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-mtxauthz}
+  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
@@ -52,6 +52,7 @@ x-postgres_env: &postgres_env
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
+  RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -137,14 +138,15 @@ services:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
-      MW_RMMTX__API_PORT: *productport
+      MW_MTX__API_PORT: *productport
+      MW_MTX__USER_PORT: 9996
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,rmmtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx"
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
@@ -585,7 +587,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
+      test: 'rmmtxauthz healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
@@ -865,11 +867,11 @@ services:
       nginx_templates:
         condition: service_completed_successfully
       blapi:
-        condition: service_healthy
+        condition: service_started
       takrmapi:
-        condition: service_healthy
+        condition: service_started
       rmmtx:
-        condition: service_healthy
+        condition: service_started
     healthcheck:
       test: 'curl -s localhost:5666/healthcheck || exit 1'
       interval: 5s

@@ -30,7 +30,7 @@ x-ldap_admin_env: &ldap_admin_env
 x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-mtxauthz}
   RMMTX_DATABASE_HOST: postgres
-  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-mtxauthz}
+  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:-mtxauthzdbpwd} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
@@ -138,7 +138,8 @@ services:
       MW_PRODUCTS: "tak,kc,fake,bl,rmmtx"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
-      MW_RMMTX__API_PORT: *productport
+      MW_MTX__API_PORT: *productport
+      MW_MTX__USER_PORT: 9996
       MW_FAKE__API_PORT: *productport
       MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *productport
@@ -658,7 +659,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
+      test: 'rmmtxauthz healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
@@ -942,11 +943,13 @@ services:
       nginx_templates:
         condition: service_completed_successfully
       rmfpapi:
-        condition: service_healthy
+        condition: service_started
       blapi:
-        condition: service_healthy
+        condition: service_started
       takrmapi:
-        condition: service_healthy
+        condition: service_started
+      rmmtx:
+        condition: service_started
     healthcheck:
       test: 'curl -s localhost:5666/healthcheck || exit 1'
       interval: 5s
