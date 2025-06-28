@@ -27,6 +27,12 @@ x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:-ldapadminpwd} # pragma: allowlist secret
   LDAP_ADMIN_USERNAME: &ldapadminuser admin
 
+x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
+  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-mtxauthz}
+  RMMTX_DATABASE_HOST: postgres
+  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-mtxauthz}
+  RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:-mtxauthzdbpwd} # pragma: allowlist secret
+
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
   POSTGRES_ADDRESS: postgres
@@ -49,6 +55,7 @@ x-postgres_env: &postgres_env
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
+  RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: true
@@ -128,9 +135,10 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl"
+      MW_PRODUCTS: "tak,kc,fake,bl,rmmtx"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
+      MW_RMMTX__API_PORT: *productport
       MW_FAKE__API_PORT: *productport
       MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *productport
@@ -144,11 +152,12 @@ services:
     ports:
       - "80:80" # For letsencrypt
     volumes:
+      - kraftwerk_data:/data/persistent
+      - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
-      - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
       - kraftwerk_shared_bl:/pvarkishares/bl
-      - kraftwerk_data:/data/persistent
+      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
       - le_certs:/le_certs
       - ca_public:/ca_public
 
@@ -618,6 +627,49 @@ services:
 # End: Battlelog #
 ####################
 
+###################
+# Begin: MediaMTX #
+###################
+  rmmtx:
+    image: pvarki/rmmtx:local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./mtxauthz
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: [*rmmtx_dbconfig_env]
+      LOG_CONSOLE_FORMATTER: "local"
+    ports:
+      - "8005:8005"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
+    networks:
+      - productnet
+      - intranet
+      - dbnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_rmmtx:/pvarki
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      rmapi:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+#################
+# End: MediaMTX #
+#################
+
+
+
 ##############
 # Begin: TAK #
 ##############
@@ -828,6 +880,8 @@ services:
       NGINX_BL_UPSTREAM_PORT: "3000"
       NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
       NGINX_TAK_UPSTREAM_PORT: "8003"
+      NGINX_RMMTX_UPSTREAM: "rmmtx"
+      NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
@@ -892,3 +946,4 @@ volumes:
   nginx_templates:
   kraftwerk_shared_bl:
   blapi_data:
+  kraftwerk_shared_rmmtx:

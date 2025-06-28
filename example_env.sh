@@ -15,3 +15,4 @@ export KEYCLOAK_PROFILEROOT_UUID="4f88fe8c-ffa5-4ae4-97c9-3831a500d502"  # use u
 export KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="chinchilla"  # pragma: allowlist secret
 export KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="iguaani"  # pragma: allowlist secret
 export BL_DATABASE_PASSWORD="rotta"  # pragma: allowlist secret
+export RMMTX_DATABASE_PASSWORD="capybara"  # pragma: allowlist secret
