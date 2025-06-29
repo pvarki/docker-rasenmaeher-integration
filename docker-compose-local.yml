@@ -640,6 +640,8 @@ services:
       target: production
     environment:
       <<: [*rmmtx_dbconfig_env]
+      RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:9997
+      RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       LOG_CONSOLE_FORMATTER: "local"
       RMMTX_LOG_LEVEL: "debug"
       UVICORN_LOG_LEVEL: "debug"
