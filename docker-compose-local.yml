@@ -28,7 +28,7 @@ x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_USERNAME: &ldapadminuser admin
 
 x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
-  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-mtxauthz}
+  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-rmmtx}
   RMMTX_DATABASE_HOST: postgres
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:-mtxauthzdbpwd} # pragma: allowlist secret
