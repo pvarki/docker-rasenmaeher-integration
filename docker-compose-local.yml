@@ -701,6 +701,7 @@ services:
       - "9888:9888"
       - "9889:9889"
       - "9996:9996"
+      - "9997:9997"  # Control API
       - "9998:9998"  # metrics: Do not expose in production
       - "9999:9999"  # pprof: Do not expose in production
       - "8890:8890/udp"
