@@ -122,8 +122,7 @@ x-takserver_env: &takserver_env
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
-  TAK_OCSP_UPSTREAM: &ocsphost "ocsp"
-  TAK_OCSP_PORT: *oscpport
+  TAK_OCSP_ENABLE: "true"
   WEBTAK_ENABLE: "true"
 
 
@@ -502,7 +501,7 @@ services:
       NGINX_UI_UPSTREAM: "rmui"
       NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
       NGINX_CERT_NAME: "rasenmaeher"
-      NGINX_OCSP_UPSTREAM: *ocsphost
+      NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
     networks:
@@ -941,7 +940,7 @@ services:
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
-      NGINX_OCSP_UPSTREAM: *ocsphost
+      NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
     networks:
       - productnet
