@@ -36,6 +36,22 @@ services:
     volumes:
       - "./api:/app"
 
+  rmmtx:
+    image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./mtxauthz
+      dockerfile: Dockerfile
+      target: devel_shell
+    command: ["-c", "source /root/.profile  && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+    healthcheck:
+      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    volumes:
+      - "./api:/app"
+
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
     build:

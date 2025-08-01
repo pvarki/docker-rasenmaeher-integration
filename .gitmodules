@@ -28,3 +28,6 @@
 [submodule "battlelog"]
 	path = battlelog
 	url = git@github.com:pvarki/typescript-liveloki-app.git
+[submodule "mtxauthz"]
+	path = mtxauthz
+	url = git@github.com:pvarki/python-mediamtx-rmmtxauthz.git
