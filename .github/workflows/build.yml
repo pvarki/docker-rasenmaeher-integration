@@ -87,6 +87,7 @@ jobs:
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker system prune --all --volumes --force
+        dcloc build takinit --pull
         dcloc build --pull
         dcloc pull --ignore-buildable
     - name: docker compose cleanup
@@ -170,6 +171,7 @@ jobs:
         shopt -s expand_aliases
         alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
         docker system prune --all --volumes --force
+        dcdev build takinit --pull
         dcdev build --pull
         dcdev pull --ignore-buildable
     - name: docker compose cleanup
