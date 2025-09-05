@@ -1,4 +1,5 @@
 """Get the openapi.json from the API container via NGinx proxy"""
+
 import logging
 
 import aiohttp
