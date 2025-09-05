@@ -809,6 +809,7 @@ services:
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
+      TAK_SERVER_NETWORKMESH_KEY_STR: ${TAK_SERVER_NETWORKMESH_KEY_STR:?must be defined}  # pragma: allowlist secret
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
