@@ -1,4 +1,5 @@
 """Test the CRL fetching via Nginx and API container"""
+
 import logging
 
 import requests
