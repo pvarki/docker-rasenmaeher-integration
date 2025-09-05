@@ -17,3 +17,4 @@ export KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="iguaani"  # pragma: allowlist secret
 export BL_DATABASE_PASSWORD="rotta"  # pragma: allowlist secret
 export RMMTX_DATABASE_PASSWORD="capybara"  # pragma: allowlist secret
 export RMMTX_API_PASSWORD="myyra"  # pragma: allowlist secret
+export TAK_SERVER_NETWORKMESH_KEY_STR="pallascat"  # pragma: allowlist secret

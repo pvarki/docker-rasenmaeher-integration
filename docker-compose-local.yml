@@ -893,6 +893,7 @@ services:
       LOG_CONSOLE_FORMATTER: "local"
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
+      TAK_SERVER_NETWORKMESH_KEY_STR: ${TAK_SERVER_NETWORKMESH_KEY_STR:-TakDevMeshPassphraseIsHereYouNeedToChangeThisInEnvironment}  # pragma: allowlist secret
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
