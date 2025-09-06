@@ -72,7 +72,7 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 
     location / {
@@ -124,7 +124,7 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 
     # Even though users sees code 400 the code is 495 http://nginx.org/en/docs/http/ngx_http_ssl_module.html#errors
