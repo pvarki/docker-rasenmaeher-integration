@@ -37,7 +37,7 @@ services:
       - "./api:/app"
 
   rmmtx:
-    image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
