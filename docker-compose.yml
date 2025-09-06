@@ -153,7 +153,7 @@ services:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
-      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
+      - kraftwerk_shared_rmmtx:/pvarkishares/mtx
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
