@@ -50,7 +50,8 @@ services:
       retries: 3
       start_period: 15s
     volumes:
-      - "./api:/app"
+      - "./mtxauthz:/app"
+      - "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
