@@ -80,7 +80,7 @@ server {
         }
 
         # Try loading content from the vite dev container
-        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT};
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -88,11 +88,7 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
-
-        index index.html;
-        root /var/empty;
-        try_files $uri $uri/ /index.html =404;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 }
 
@@ -150,7 +146,7 @@ server {
         }
 
         # Try loading content from the vite dev container
-        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT};
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -158,10 +154,6 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
-
-        index index.html;
-        root /var/empty;
-        try_files $uri $uri/ /index.html =404;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 }
