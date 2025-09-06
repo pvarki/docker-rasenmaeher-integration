@@ -109,6 +109,7 @@ services:
     command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
     volumes:
       - "./fpintegration:/app"
+      - "./fpintegration/rune/output/rune.json:/opt/templates/rune-fake.json"
     depends_on:
       rmnginx:
         condition: service_healthy
