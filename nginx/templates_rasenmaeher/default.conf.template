@@ -1,3 +1,4 @@
+#### NOTE: Any changes made here must also be made to templates_rasenmaeher_uidev ####
 
 ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
 ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
