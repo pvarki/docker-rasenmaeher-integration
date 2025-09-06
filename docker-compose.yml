@@ -581,6 +581,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
+      - rmmtx_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -939,3 +940,4 @@ volumes:
   kraftwerk_shared_bl:
   blapi_data:
   kraftwerk_shared_rmmtx:
+  rmmtx_data:
