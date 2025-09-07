@@ -427,6 +427,7 @@ services:
       UVICORN_LOG_LEVEL: "debug"
       RM_LOG_LEVEL: "DEBUG"
       RM_LOG_LEVEL_INT: "10"
+      RM_INTEGRATION_API_TIMEOUT: 10
       RELEASE_TAG: "local"
     networks:
       - apinet
