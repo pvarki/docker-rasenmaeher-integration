@@ -52,6 +52,7 @@ services:
     volumes:
       - "./mtxauthz:/app"
       - "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
+      - "./mtxauthz/rune/output/assets:/opt/templates/assets"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
@@ -110,6 +111,7 @@ services:
     volumes:
       - "./fpintegration:/app"
       - "./fpintegration/rune/output/rune.json:/opt/templates/rune-fake.json"
+      - "./fpintegration/rune/output/assets:/opt/templates/assets"
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -124,6 +126,7 @@ services:
     volumes:
       - "./takintegration:/app"
       - "./takintegration/rune/output/rune.json:/opt/templates/tak.json"
+      - "./takintegration/rune/output/assets:/opt/templates/assets"
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
       interval: 5s
