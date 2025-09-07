@@ -401,6 +401,7 @@ services:
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
+      RM_INTEGRATION_API_TIMEOUT: 5
       RELEASE_TAG: ${RELEASE_TAG:-1.12.1}
     networks:
       - apinet
