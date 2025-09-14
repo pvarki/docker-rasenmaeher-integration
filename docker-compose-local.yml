@@ -235,6 +235,8 @@ services:
       - canet
     environment:
       <<: *cfssl_env
+      OR_OCSP_LIFETIME: "1h"  # 1h is the default, must not be less than 1h
+      OR_CRL_REFRESH: 907  # Avoid having the refresh times match exactly with the lifetimes
     volumes:
       - cfssl_data:/data/persistent
       - ca_public:/ca_public
