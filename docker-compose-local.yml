@@ -328,7 +328,7 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnami/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
