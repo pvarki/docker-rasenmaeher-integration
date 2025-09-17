@@ -25,6 +25,13 @@ x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
   LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
 
+x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
+  RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-rmmtx}
+  RMMTX_DATABASE_HOST: postgres
+  RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
+  RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:?must be defined} # pragma: allowlist secret
+
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
   POSTGRES_ADDRESS: postgres
@@ -46,6 +53,7 @@ x-postgres_env: &postgres_env
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
+  RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -114,8 +122,7 @@ x-takserver_env: &takserver_env
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:?must be defined} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
-  TAK_OCSP_UPSTREAM: &ocsphost "ocsp"
-  TAK_OCSP_PORT: *oscpport
+  TAK_OCSP_ENABLE: "true"
 
 
 
@@ -131,20 +138,22 @@ services:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
-      MW_FAKE__API_PORT: *productport
-      MW_FAKE__USER_PORT: *productport
+      MW_MTX__API_PORT: *productport
+      MW_MTX__USER_PORT: 9996
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl"
+      MW_PRODUCTS: "tak,kc,bl,mtx"
     volumes:
+      - kraftwerk_data:/data/persistent
+      - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
-      - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
-      - kraftwerk_data:/data/persistent
+      - kraftwerk_shared_bl:/pvarkishares/bl
+      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
@@ -464,7 +473,7 @@ services:
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_UI_UPSTREAM: "rmui"
       NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
-      NGINX_OCSP_UPSTREAM: *ocsphost
+      NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
     networks:
@@ -549,6 +558,95 @@ services:
 ####################
 # End: Battlelog #
 ####################
+
+###################
+# Begin: MediaMTX #
+###################
+  rmmtx:
+    image: pvarki/rmmtx:1.0.0-d${RELEASE_TAG:-1.12.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./mtxauthz
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: [*rmmtx_dbconfig_env]
+      RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
+      RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:?domain must be defined}
+    networks:
+      - productnet
+      - intranet
+      - dbnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_rmmtx:/pvarki
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      rmapi:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: 'rmmtxauthz healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    image: bash:latest
+    volumes:
+      - le_certs:/le_certs
+    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    depends_on:
+      miniwerk:
+        condition: service_completed_successfully
+
+  mediamtx:
+    image: bluenviron/mediamtx:1.12.3
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - ./mediamtx.yml:/mediamtx.yml
+    environment:
+      MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
+      MTX_WEBRTCADDITIONALHOSTS: *serverdomain
+    ports:
+      - "1936:1936"
+      - "8322:8322"
+      - "8890:8890"
+      - "9000:9000"
+      - "9001:9001"
+      - "9888:9888"
+      - "9889:9889"
+      - "9996:9996"
+      - "9997:9997"  # Control API
+      - "8890:8890/udp"
+      - "8189:8189/udp"
+    depends_on:
+      rmmtx:
+        condition: service_healthy
+      mediamtx_cert_perms:
+        condition: service_completed_successfully
+    healthcheck:
+      test: 'true'  # FIXME: Proper check
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+#################
+# End: MediaMTX #
+#################
+
 
 ##############
 # Begin: TAK #
@@ -757,10 +855,12 @@ services:
       NGINX_BL_UPSTREAM_PORT: "3000"
       NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
       NGINX_TAK_UPSTREAM_PORT: "8003"
+      NGINX_RMMTX_UPSTREAM: "rmmtx"
+      NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
-      NGINX_OCSP_UPSTREAM: *ocsphost
+      NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
     networks:
       - productnet
@@ -772,9 +872,11 @@ services:
       nginx_templates:
         condition: service_completed_successfully
       blapi:
-        condition: service_healthy
+        condition: service_started
       takrmapi:
-        condition: service_healthy
+        condition: service_started
+      rmmtx:
+        condition: service_started
     healthcheck:
       test: 'curl -s localhost:5666/healthcheck || exit 1'
       interval: 5s
@@ -835,3 +937,4 @@ volumes:
   nginx_templates:
   kraftwerk_shared_bl:
   blapi_data:
+  kraftwerk_shared_rmmtx:
