@@ -379,7 +379,7 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:1.8.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.8.1-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -563,7 +563,7 @@ services:
 # Begin: MediaMTX #
 ###################
   rmmtx:
-    image: pvarki/rmmtx:1.0.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:1.0.1-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
