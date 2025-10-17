@@ -65,6 +65,8 @@ jobs:
       pull-requests: write
       checks: write
     steps:
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
     - uses: actions/checkout@v4
       with:
         submodules: recursive
@@ -146,6 +148,8 @@ jobs:
       pull-requests: write
       checks: write
     steps:
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@main
     - uses: actions/checkout@v4
       with:
         submodules: recursive
@@ -226,6 +230,8 @@ jobs:
         extra_env: ["none", "date"]
         asset_set: ["neutral", "fdf"]
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
