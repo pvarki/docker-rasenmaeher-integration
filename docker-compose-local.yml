@@ -338,8 +338,12 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     user: root
+    deploy:
+      resources:
+        limits:
+          memory: 1500M
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
@@ -357,7 +361,7 @@ services:
       - '8280:8080'  # do not expose this in production
       - '9443:9443'
     volumes:
-      - keycloak_data:/bitnami/keycloak/
+      - keycloak_data:/opt/keycloak/
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
