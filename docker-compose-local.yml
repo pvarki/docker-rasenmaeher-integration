@@ -344,6 +344,9 @@ services:
       resources:
         limits:
           memory: 1500M
+    command:
+      - start
+      - --verbose
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
@@ -361,7 +364,7 @@ services:
       - '8280:8080'  # do not expose this in production
       - '9443:9443'
     volumes:
-      - keycloak_data:/opt/keycloak/
+      - keycloak_data:/data/persistent/keycloak  # FIXME: Figure out correct path for persistent data
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
