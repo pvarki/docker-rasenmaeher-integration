@@ -26,7 +26,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile  && poetry install && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && rasenmaeher_api healthcheck" || exit 1'
       interval: 5s
@@ -37,12 +37,12 @@ services:
       - "./api:/app"
 
   rmmtx:
-    image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile  && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
     healthcheck:
       test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
       interval: 5s
@@ -50,7 +50,8 @@ services:
       retries: 3
       start_period: 15s
     volumes:
-      - "./api:/app"
+      - "./mtxauthz:/app"
+      - "./mtxauthz/rune/output:/opt/templates"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
@@ -105,9 +106,10 @@ services:
       context: ./fpintegration
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
     volumes:
       - "./fpintegration:/app"
+      - "./fpintegration/rune/output:/opt/templates"
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -118,9 +120,10 @@ services:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
+      - "./takintegration/rune/output:/opt/templates/rune"
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
       interval: 5s
