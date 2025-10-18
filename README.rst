@@ -71,11 +71,11 @@ The original example file is: https://github.com/pvarki/docker-rasenmaeher-integ
 
 Example .env-file with the minimal information needed::
 
-    KEYCLOAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KC_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RM_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
     LDAP_ADMIN_PASSWORD="input-secure-password"  # pragma: allowlist secret
-    KEYCLOAK_ADMIN_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KC_ADMIN_PASSWORD="input-secure-password"  # pragma: allowlist secret
     TAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     SERVER_DOMAIN="input-domain"
     CFSSL_CA_NAME="input-ca-name"
@@ -84,9 +84,9 @@ Example .env-file with the minimal information needed::
     TAKSERVER_CERT_PASS="input-secure-password"  # pragma: allowlist secret
     TAK_CA_PASS="input-secure-password"  # pragma: allowlist secret
     VITE_ASSET_SET="${VITE_ASSET_SET:-neutral}"
-    KEYCLOAK_PROFILEROOT_UUID="input-uuid"
-    KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
-    KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KC_PROFILEROOT_UUID="input-uuid"
+    KC_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    KC_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     BL_POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_POSTGRES_PASSWORD="input-secure-password"  # pragma: allowlist secret
 
@@ -227,15 +227,15 @@ are minified and baked in.
 TLDR::
 
     alias rmlocal="docker compose -p rmlocal -f docker-compose-local.yml"
-    rmlocal build takinit
-    rmlocal build
+    rmlocal build takinit miniwerk --pull
+    rmlocal build --pull
     rmlocal up
 
 or::
 
     alias rmdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-    rmdev build takinit
-    rmdev build
+    rmdev build takinit miniwerk --pull
+    rmdev build --pull
     rmdev up
 
 
