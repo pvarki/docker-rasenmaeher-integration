@@ -12,10 +12,10 @@ x-domains_env:
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
-  KEYCLOAK_DATABASE_NAME: &kcdbname keycloak
-  KEYCLOAK_DATABASE_HOST: postgres
-  KEYCLOAK_DATABASE_USER: &kcdbuser keycloak
-  KEYCLOAK_DATABASE_PASSWORD: &kcdbpass ${KEYCLOAK_DATABASE_PASSWORD:-keycloakpwd}  # pragma: allowlist secret
+  KC_DATABASE_NAME: &kcdbname keycloak
+  KC_DATABASE_HOST: postgres
+  KC_DATABASE_USER: &kcdbuser keycloak
+  KC_DATABASE_PASSWORD: &kcdbpass ${KC_DATABASE_PASSWORD:-keycloakpwd}  # pragma: allowlist secret
 
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_NAME: &rmdbname raesenmaeher
@@ -59,31 +59,31 @@ x-postgres_env: &postgres_env
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
-  KEYCLOAK_CREATE_ADMIN_USER: true
-  KEYCLOAK_ADMIN_USER: &kcadminuser admin
+  KC_CREATE_ADMIN_USER: true
+  KC_BOOTSTRAP_ADMIN_USERNAME: &kcadminuser admin
   # FIXME: take from env (which should be set to random)
-  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
+  KC_BOOTSTRAP_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
   KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
-  KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
+  KCP_MAIN_ID: "${KC_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
 
 x-keycloak_tls_env: &keycloak_tls_env
-  KEYCLOAK_ENABLE_HTTPS: true
+  KC_ENABLE_HTTPS: true
   KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
-  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:-kckspwd}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
-  KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
-  KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
-  #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
-  KEYCLOAK_HOSTNAME: *kcdomain
-  KEYCLOAK_HTTPS_PORT: 9443
+  KC_HTTPS_KEY_STORE_PASSWORD: ${KC_HTTPS_KEY_STORE_PASSWORD:-kckspwd}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_PASSWORD: ${KC_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/data/kcserver-truststore.jks
+  KC_HTTPS_KEY_STORE_FILE: /opt/keycloak/data/kcserver-keys.jks
+  KC_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
+  #KC_EXTRA_ARGS: "--https-client-auth=request"
+  KC_HOSTNAME: *kcdomain
+  KC_HTTPS_PORT: 9443
 
 x-keycloakinit_users_env: &keycloakinit_users_env
-  KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
-  KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
+  KC_BOOTSTRAP_ADMIN_USER: *kcadminuser # pragma: allowlist secret
+  KC_BOOTSTRAP_ADMIN_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
   image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-53}${DOCKER_TAG_EXTRA:-}"
@@ -338,33 +338,34 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: pvarki/keycloak:local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
     user: root
     deploy:
       resources:
         limits:
           memory: 1500M
     command:
-      - start
       - --verbose
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
       KC_HEALTH_ENABLED: "true"
-      KEYCLOAK_PRODUCTION: "true"
+      KC_PRODUCTION: "true"
       KC_RUN_IN_CONTAINER: "false"  # Setting this to true will just make Java hog RAM like there is no tomorrow
       KC_LOG_LEVEL: info
       #KC_LOG_LEVEL: debug
-      # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
+      # REMINDER: KC_EXTRA_ARGS is defined in keycloak_tls_env
     networks:
       - kcnet
       - dbnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - '8280:8080'  # do not expose this in production
       - '9443:9443'
     volumes:
-      - keycloak_data:/data/persistent/keycloak  # FIXME: Figure out correct path for persistent data
+      - keycloak_data:/opt/keycloak/data  # FIXME: Figure out correct path for persistent data
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
@@ -377,7 +378,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: "curl -s http://keycloak:8080/health/ready | grep status | grep UP || exit 1"
+      test: "curl --insecure -s https://keycloak:9443/health/ready | grep status | grep UP || exit 1"
       interval: 10s
       timeout: 10s
       retries: 10
@@ -386,7 +387,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
+    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KC_VERSION:-24}
     networks:
       - kcnet
     volumes:
@@ -394,14 +395,16 @@ services:
       - ca_public:/ca_public
     environment:
       <<: [*keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env]
-      KEYCLOAK_URL: http://keycloak:8080
-      KEYCLOAK_SSL-VERIFY: "false"  # We are using the internal port
+      KEYCLOAK_URL: https://keycloak:9443
+      KEYCLOAK_USER: *kcadminuser
+      KEYCLOAK_PASSWORD: *kcadminpass  # pragma: allowlist secret
+      KEYCLOAK_SSLVERIFY: "false"  # We are using the internal port
       KEYCLOAK_AVAILABILITYCHECK_ENABLED: "false"
       KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 15s
       IMPORT_VAR_SUBSTITUTION_ENABLED: "true"
       LDAP_CONNECTION_URL: ldap://openldap:1389
       LOGGING_LEVEL_KEYCLOAKCONFIGCLI: debug
-      #LOGGING_LEVEL_KEYCLOAKCONFIGCLI: info
+      LOGGING_LEVEL_HTTP: debug
     depends_on:
       keycloak:
         condition: service_healthy
