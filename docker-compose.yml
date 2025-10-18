@@ -636,13 +636,7 @@ services:
         condition: service_healthy
       mediamtx_cert_perms:
         condition: service_completed_successfully
-    healthcheck:
-      test: 'true'  # FIXME: Proper check
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
+    # Can't do healthchecks because the container has nothing but the mediamtx binary
 #################
 # End: MediaMTX #
 #################
