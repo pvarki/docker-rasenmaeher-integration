@@ -428,6 +428,7 @@ services:
       RM_LOG_LEVEL: "DEBUG"
       RM_LOG_LEVEL_INT: "10"
       RELEASE_TAG: "local"
+      RELEASE_STATUS: "alpha"
     networks:
       - apinet
       - kcnet
