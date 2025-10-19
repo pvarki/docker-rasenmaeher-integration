@@ -403,6 +403,7 @@ services:
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: 5
       RELEASE_TAG: ${RELEASE_TAG:-1.14.0}
+      RELEASE_STATUS: ${RELEASE_STATUS:-}
     networks:
       - apinet
       - kcnet
