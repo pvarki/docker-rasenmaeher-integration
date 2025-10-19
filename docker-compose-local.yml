@@ -86,12 +86,12 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.4-RELEASE-19}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-53}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.4-RELEASE-19}
+      TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-53}
 
 x-nginxbuilds: &nginxbuildinfo
   image: pvarki/nginx:1.27${DOCKER_TAG_EXTRA:-}
@@ -135,7 +135,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,rmmtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -158,7 +158,7 @@ services:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
-      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
+      - kraftwerk_shared_rmmtx:/pvarkishares/mtx
       - le_certs:/le_certs
       - ca_public:/ca_public
 
@@ -427,7 +427,9 @@ services:
       UVICORN_LOG_LEVEL: "debug"
       RM_LOG_LEVEL: "DEBUG"
       RM_LOG_LEVEL_INT: "10"
+      RM_INTEGRATION_API_TIMEOUT: 10
       RELEASE_TAG: "local"
+      RELEASE_STATUS: "alpha"
     networks:
       - apinet
       - kcnet
@@ -655,6 +657,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
+      - rmmtx_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -712,13 +715,8 @@ services:
         condition: service_healthy
       mediamtx_cert_perms:
         condition: service_completed_successfully
-    healthcheck:
-      test: 'true'  # FIXME: Proper check
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
     restart: unless-stopped
+    # Can't do healthchecks because the container has nothing but the mediamtx binary
 #################
 # End: MediaMTX #
 #################
@@ -881,7 +879,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.4-RELEASE-19}
+    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.5-RELEASE-53}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -893,6 +891,7 @@ services:
       LOG_CONSOLE_FORMATTER: "local"
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
+      TAK_SERVER_NETWORKMESH_KEY_STR: ${TAK_SERVER_NETWORKMESH_KEY_STR:-TakDevMeshPassphraseIsHereYouNeedToChangeThisInEnvironment}  # pragma: allowlist secret
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -1004,3 +1003,4 @@ volumes:
   kraftwerk_shared_bl:
   blapi_data:
   kraftwerk_shared_rmmtx:
+  rmmtx_data:

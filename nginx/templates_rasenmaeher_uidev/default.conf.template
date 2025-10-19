@@ -4,6 +4,16 @@ ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
 
 include /etc/nginx/includes/le_common_settings.conf;
 
+map $http_host $redir_uri {
+    default "";
+
+    ~^(.*?)tak\. https://$1tak.${NGINX_HOST}:8443;
+    ~^(.*?)mtx\. https://$1mtx.${NGINX_HOST}:9888;
+    ~^(.*?)bl\. https://$1bl.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
+    ~^(.*?)fake\. https://$1fake.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
+    ~^(.*?)kc\. https://kc.${NGINX_HOST}:9443/admin/RASENMAEHER/console/;
+}
+
 server {
     server_name ${NGINX_HOST};
 
@@ -19,8 +29,14 @@ server {
     # HTTPS configuration
     listen ${NGINX_HTTPS_PORT} ssl;
 
-    location /ca/crl {
-        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api/v1/utils/crl;
+    location ~ ^/ca/public/(.*)$ {
+        autoindex on;
+        root /ca_public;
+        try_files /$1 =404;
+    }
+
+    location /ca/crl/ {
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api/v1/utils/crl/;
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -28,8 +44,8 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
     }
-    location /ca/ocsp {
-        proxy_pass  http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    location /ca/ocsp {  # Do NOT add a trailing slash to this location
+        proxy_pass  http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT}/;
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -37,8 +53,17 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
     }
-    location /api {
-        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api;
+    location /ca/ocsp/ {  # FIXME: How to have only one directive for these two proxy cases
+        proxy_pass  http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT}/;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+    }
+    location /api/ {
+        proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api/;
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -49,8 +74,13 @@ server {
         proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
     }
 
-    location / {
-        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+    location /  {
+        if ($redir_uri != "") {
+            return 301 $redir_uri;
+        }
+
+        # Try loading content from the vite dev container
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT};
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -58,7 +88,7 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 }
 
@@ -79,10 +109,11 @@ server {
 
     ssl_client_certificate /ca_public/ca_chain.pem;
     ssl_verify_client       optional;
-    # solve issues with https://github.com/pvarki/docker-rasenmaeher-cfssl/issues/9 first
-    #ssl_ocsp leaf;
-    #ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    ssl_ocsp leaf;
+    ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    resolver ${DNS_RESOLVER_IP} ipv6=off;
     #ssl_crl /ca_public/crl.pem;
+    ssl_verify_depth 3;
 
     location /ca  {
         return 301 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}$request_uri;
@@ -90,7 +121,7 @@ server {
 
     location /api {
         if ($ssl_client_verify != SUCCESS) {
-            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
         }
         proxy_pass  http://${NGINX_UPSTREAM}:${NGINX_UPSTREAM_PORT}/api;
         proxy_redirect                      off;
@@ -103,11 +134,19 @@ server {
         proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
     }
 
-    location / {
-        if ($ssl_client_verify != SUCCESS) {
-            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
+    # Even though users sees code 400 the code is 495 http://nginx.org/en/docs/http/ngx_http_ssl_module.html#errors
+    error_page 495 =302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
+
+    location /  {
+        if ($redir_uri != "") {
+            return 301 $redir_uri;
         }
-        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT}/;
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
+        }
+
+        # Try loading content from the vite dev container
+        proxy_pass  http://${NGINX_UI_UPSTREAM}:${NGINX_UI_UPSTREAM_PORT};
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;
@@ -115,6 +154,6 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
     }
 }
