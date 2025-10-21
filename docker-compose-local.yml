@@ -86,12 +86,12 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.4-RELEASE-19}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.4-RELEASE-19}
+      TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-58}
 
 x-nginxbuilds: &nginxbuildinfo
   image: pvarki/nginx:1.27${DOCKER_TAG_EXTRA:-}
@@ -129,13 +129,16 @@ x-takserver_env: &takserver_env
 services:
   miniwerk:
     image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,rmmtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -158,12 +161,15 @@ services:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
-      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
+      - kraftwerk_shared_rmmtx:/pvarkishares/mtx
       - le_certs:/le_certs
       - ca_public:/ca_public
 
   jwtcopy:
     image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -182,6 +188,9 @@ services:
 
   cfssl:
     image: pvarki/cfssl:api-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -203,6 +212,9 @@ services:
 
   ocsp:
     image: pvarki/cfssl:ocsp-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -227,6 +239,9 @@ services:
 
   ocsprest:
     image: pvarki/cfssl:ocsprest-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -253,6 +268,9 @@ services:
   postgres:
     platform: linux/amd64  # It seems there are no arm images available
     image: postgis/postgis:15-3.4
+    logging:
+      options:
+        max-size: 50m
     networks:
       - dbnet
     ports:
@@ -276,6 +294,9 @@ services:
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -285,6 +306,9 @@ services:
 
   openldap:
     image: pvarki/openldap:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -330,6 +354,9 @@ services:
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -339,6 +366,9 @@ services:
 
   keycloak:
     image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    logging:
+      options:
+        max-size: 50m
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -380,6 +410,9 @@ services:
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
     image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
+    logging:
+      options:
+        max-size: 50m
     networks:
       - kcnet
     volumes:
@@ -401,6 +434,9 @@ services:
 
   rmapi:
     image: pvarki/rmapi:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -428,6 +464,7 @@ services:
       RM_LOG_LEVEL: "DEBUG"
       RM_LOG_LEVEL_INT: "10"
       RELEASE_TAG: "local"
+      RELEASE_STATUS: "alpha"
     networks:
       - apinet
       - kcnet
@@ -464,6 +501,9 @@ services:
 
   rmui:
     image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -476,6 +516,9 @@ services:
 
   nginx_templates:
     image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -485,6 +528,9 @@ services:
 
   rmnginx:
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
@@ -539,6 +585,9 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     image: pvarki/kw_product_init:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -555,6 +604,9 @@ services:
 ######################
   rmfpapi:
     image: pvarki/rmfpapi:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -591,6 +643,9 @@ services:
 ######################
   blapi:
     image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -633,6 +688,9 @@ services:
 ###################
   rmmtx:
     image: pvarki/rmmtx:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -655,6 +713,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
+      - rmmtx_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -672,6 +731,9 @@ services:
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -681,6 +743,9 @@ services:
 
   mediamtx:
     image: bluenviron/mediamtx:1.12.3
+    logging:
+      options:
+        max-size: 50m
     networks:
       - productnet
       - intranet
@@ -712,13 +777,8 @@ services:
         condition: service_healthy
       mediamtx_cert_perms:
         condition: service_completed_successfully
-    healthcheck:
-      test: 'true'  # FIXME: Proper check
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
     restart: unless-stopped
+    # Can't do healthchecks because the container has nothing but the mediamtx binary
 #################
 # End: MediaMTX #
 #################
@@ -730,6 +790,9 @@ services:
 ##############
   takinit:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -752,6 +815,9 @@ services:
 
   takconfig:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -788,6 +854,9 @@ services:
 
   takmsg:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -812,6 +881,9 @@ services:
 
   takapi:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -836,6 +908,9 @@ services:
 
   takreten:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -859,6 +934,9 @@ services:
 
   takplug:
     <<: *takbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -881,7 +959,10 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.4-RELEASE-19}
+    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.5-RELEASE-58}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -922,6 +1003,9 @@ services:
 #############################
   productsnginx:
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
@@ -1004,3 +1088,4 @@ volumes:
   kraftwerk_shared_bl:
   blapi_data:
   kraftwerk_shared_rmmtx:
+  rmmtx_data:

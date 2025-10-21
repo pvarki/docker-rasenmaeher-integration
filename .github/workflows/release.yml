@@ -13,7 +13,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Parse tag to ENV
         run: |
           echo RELEASE_TAG=$(docker run --rm -v ${PWD}:/workdir mikefarah/yq .version version.yml ) >> ${GITHUB_ENV}
