@@ -13,6 +13,9 @@ services:
 
   nginx_templates:
     image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -22,6 +25,9 @@ services:
 
   rmapi:
     image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -38,6 +44,9 @@ services:
 
   rmmtx:
     image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -55,6 +64,9 @@ services:
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -80,6 +92,9 @@ services:
 
   rmnginx:  # need to load different templates for uidev
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       NGINX_UI_UPSTREAM: "rmuidev"
       NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
@@ -94,6 +109,9 @@ services:
 
   kwinit_prod:  # For building the go executable needed by rmfpapi
     image: pvarki/kw_product_init:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -102,6 +120,9 @@ services:
 
   rmfpapi:
     image: pvarki/rmfpapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -115,6 +136,9 @@ services:
 
   takrmapi:
     image: pvarki/takrmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -134,6 +158,9 @@ services:
 
   blapi:
     image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -146,6 +173,9 @@ services:
 
   productsnginx:  # apparently we have to specify these here or it tries to start too early
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
@@ -159,6 +189,9 @@ services:
 
   kwinit:  # docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml exec kwinit zsh
     image: pvarki/kw_product_init:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
