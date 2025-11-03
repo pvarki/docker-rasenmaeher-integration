@@ -11,7 +11,7 @@ RUN chmod a+x /entrypoint_deliver.sh \
 ENTRYPOINT ["/entrypoint_deliver.sh"]
 
 # Actual NGinx container
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.29.3-alpine AS production
 COPY entrypoint_templates.sh /
 COPY crl_watcher.sh /usr/local/bin
 RUN apk add --no-cache inotify-tools bash procps
