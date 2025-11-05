@@ -264,7 +264,6 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-
   postgres:
     platform: linux/amd64  # It seems there are no arm images available
     image: postgis/postgis:15-3.4
@@ -784,8 +783,6 @@ services:
 # End: MediaMTX #
 #################
 
-
-
 ##############
 # Begin: TAK #
 ##############
@@ -982,6 +979,7 @@ services:
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -1012,6 +1010,7 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - ui_files:/ui_files
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
@@ -1091,3 +1090,4 @@ volumes:
   blapi_data:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
+  ui_files:
