@@ -29,6 +29,13 @@ server {
     #ssl_crl /ca_public/crl.pem;
     ssl_verify_depth 3;
 
+    location /ui/ {
+        alias /ui_files/;
+        autoindex on;
+        try_files $uri $uri/ =404;
+        add_header Access-Control-Allow-Origin *;
+    }
+
     location / {
         if ($ssl_client_verify != SUCCESS) {
             return 401;
