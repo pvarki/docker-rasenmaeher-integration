@@ -956,6 +956,7 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - ui_files:/ui_files
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
