@@ -535,6 +535,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - rmui_files:/rmui_files
+      - ui_files:/ui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -1008,7 +1009,6 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
-      - ui_files:/ui_files
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport

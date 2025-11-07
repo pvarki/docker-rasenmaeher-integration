@@ -134,12 +134,25 @@ server {
         proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
     }
 
+    location /ui/ {
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
+        }
+        alias /ui_files/;
+        autoindex on;
+        try_files $uri $uri/ =404;
+        add_header Access-Control-Allow-Origin * always;
+    }
+
     # Even though users sees code 400 the code is 495 http://nginx.org/en/docs/http/ngx_http_ssl_module.html#errors
     error_page 495 =302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
 
     location /  {
         if ($redir_uri != "") {
             return 301 $redir_uri;
+        }
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
         }
         if ($ssl_client_verify != SUCCESS) {
             return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;

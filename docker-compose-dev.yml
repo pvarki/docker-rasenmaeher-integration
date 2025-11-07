@@ -144,7 +144,7 @@ services:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/tak && cp -r /ui_build/* /ui_files/tak/ && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
     healthcheck:
