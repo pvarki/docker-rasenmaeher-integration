@@ -103,6 +103,16 @@ server {
         proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
     }
 
+    location /ui/ {
+        if ($ssl_client_verify != SUCCESS) {
+            return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail&exta=$ssl_client_verify;
+        }
+        alias /ui_files/;
+        autoindex on;
+        try_files $uri $uri/ =404;
+        add_header Access-Control-Allow-Origin * always;
+    }
+
     location / {
         if ($ssl_client_verify != SUCCESS) {
             return 302 https://${NGINX_HOST}:${NGINX_HTTPS_PORT}/error?code=mtls_fail;
