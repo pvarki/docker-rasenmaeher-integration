@@ -127,7 +127,7 @@ services:
       context: ./fpintegration
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/fake && cp -r /ui_build/* /ui_files/fake/ && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
     volumes:
       - "./fpintegration:/app"
     depends_on:
