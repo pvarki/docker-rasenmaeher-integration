@@ -58,7 +58,7 @@ services:
       context: ./ui
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "npm install && npm run dev -- --port 8002 --host 0.0.0.0"]
+    command: ["-c","pnpm install --frozen-lockfile && pnpm dev --port 8002 --host 0.0.0.0"]
     volumes:
       - "./ui:/app"
     environment:
@@ -66,6 +66,7 @@ services:
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
       RELEASE_TAG: "localdev"
+      CI: true
     networks:
       - intranet
     ports:  # REMINDER Do not expose these in production
@@ -105,7 +106,7 @@ services:
       context: ./fpintegration
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && mkdir -p /ui_files/fake && cp -r /ui_build/* /ui_files/fake/ && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
     volumes:
       - "./fpintegration:/app"
     depends_on:
@@ -118,7 +119,7 @@ services:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && mkdir -p /ui_files/tak && cp -r /ui_build/* /ui_files/tak/ && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
     healthcheck:
