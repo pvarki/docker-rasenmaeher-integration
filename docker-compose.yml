@@ -507,6 +507,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - rmui_files:/rmui_files
+      - ui_files:/ui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -895,6 +896,7 @@ services:
       - kraftwerk_shared_tak:/pvarki
       - tak_data:/opt/tak/data
       - takrmapi_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -1022,3 +1024,4 @@ volumes:
   blapi_data:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
+  ui_files:
