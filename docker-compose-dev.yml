@@ -13,6 +13,9 @@ services:
 
   nginx_templates:
     image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -22,11 +25,14 @@ services:
 
   rmapi:
     image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./api
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile  && poetry install && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && rasenmaeher_api healthcheck" || exit 1'
       interval: 5s
@@ -37,12 +43,15 @@ services:
       - "./api:/app"
 
   rmmtx:
-    image: pvarki/rmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile  && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
     healthcheck:
       test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
       interval: 5s
@@ -50,10 +59,14 @@ services:
       retries: 3
       start_period: 15s
     volumes:
-      - "./api:/app"
+      - "./mtxauthz:/app"
+      - "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./ui
       dockerfile: Dockerfile
@@ -79,6 +92,9 @@ services:
 
   rmnginx:  # need to load different templates for uidev
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     environment:
       NGINX_UI_UPSTREAM: "rmuidev"
       NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
@@ -93,6 +109,9 @@ services:
 
   kwinit_prod:  # For building the go executable needed by rmfpapi
     image: pvarki/kw_product_init:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -101,11 +120,14 @@ services:
 
   rmfpapi:
     image: pvarki/rmfpapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
     volumes:
       - "./fpintegration:/app"
     depends_on:
@@ -114,11 +136,14 @@ services:
 
   takrmapi:
     image: pvarki/takrmapi:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
     healthcheck:
@@ -133,6 +158,9 @@ services:
 
   blapi:
     image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -145,6 +173,9 @@ services:
 
   productsnginx:  # apparently we have to specify these here or it tries to start too early
     <<: *nginxbuildinfo
+    logging:
+      options:
+        max-size: 50m
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
@@ -158,6 +189,9 @@ services:
 
   kwinit:  # docker-compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml exec kwinit zsh
     image: pvarki/kw_product_init:devel_shell${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile

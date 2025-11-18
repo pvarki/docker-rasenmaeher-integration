@@ -1,4 +1,5 @@
 """Tests the firstuser"""
+
 from typing import Dict
 import logging
 
@@ -8,6 +9,7 @@ import pytest
 from ..conftest import DEFAULT_TIMEOUT, API, VER
 
 LOGGER = logging.getLogger(__name__)
+
 
 # pylint: disable=too-few-public-methods
 class ValueStorage:
