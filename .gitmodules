@@ -7,6 +7,7 @@
 [submodule "fpintegration"]
 	path = fpintegration
 	url = git@github.com:pvarki/python-rasenmaeher-rmfpapi.git
+	branch = modular-ui-dev
 [submodule "kw_product_init"]
 	path = kw_product_init
 	url = git@github.com:pvarki/golang-kraftwerk-init-helper-cli.git
