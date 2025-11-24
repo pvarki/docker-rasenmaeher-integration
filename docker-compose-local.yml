@@ -499,6 +499,7 @@ services:
       start_period: 30s
     restart: unless-stopped
 
+  # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
     logging:
