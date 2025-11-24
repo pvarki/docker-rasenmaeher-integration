@@ -72,7 +72,7 @@ services:
       target: devel_shell
     command: ["-c","pnpm install --frozen-lockfile && pnpm dev --port 8002 --host 0.0.0.0"]
     volumes:
-      - "./ui:/app"
+      - "./uiv2:/app"
     environment:
       SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
