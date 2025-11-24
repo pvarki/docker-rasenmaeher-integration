@@ -504,7 +504,7 @@ services:
       options:
         max-size: 50m
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
