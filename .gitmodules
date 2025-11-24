@@ -29,8 +29,11 @@
 	branch = modular-ui-dev
 [submodule "ui"]
 	path = ui
-	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
+	url = git@github.com:pvarki/rasenmaeher-ui.git
 [submodule "takintegration"]
 	path = takintegration
 	url = git@github.com:pvarki/python-tak-rmapi.git
 	branch = modular-ui-dev
+[submodule "uiv2"]
+	path = uiv2
+	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
