@@ -76,6 +76,7 @@ services:
     environment:
       SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
+      # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to develop asset sets
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
       RELEASE_TAG: "localdev"
       CI: true
