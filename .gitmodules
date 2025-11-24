@@ -27,9 +27,6 @@
 	path = api
 	url = git@github.com:pvarki/python-rasenmaeher-api.git
 	branch = modular-ui-dev
-[submodule "ui"]
-	path = ui
-	url = git@github.com:pvarki/rasenmaeher-ui.git
 [submodule "takintegration"]
 	path = takintegration
 	url = git@github.com:pvarki/python-tak-rmapi.git
