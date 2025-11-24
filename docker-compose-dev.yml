@@ -38,7 +38,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 45s
     volumes:
       - "./api:/app"
 
@@ -57,7 +57,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 75s
     volumes:
       - "./mtxauthz:/app"
 
@@ -88,7 +88,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 75s
 
   rmnginx:  # need to load different templates for uidev
     <<: *nginxbuildinfo
