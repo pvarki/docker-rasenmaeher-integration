@@ -448,6 +448,7 @@ services:
       JWT_PUBKEY_PATH: "/data/persistent/public"
       JWT_PRIVKEY_PATH: "/data/persistent/private/rm_jwtsign.key"
       JWT_PRIVKEY_PASS: "localmaeherjwtkeypass"  # pragma: allowlist secret
+      EXTERNAL_JWT_PUBKEY_B64: ${RMAPI_EXTERNAL_JWT_PUBKEY_B64:-}
       RM_CFSSL_HOST: "http://cfssl"
       RM_CFSSL_PORT: *cfsslport
       RM_OCSPREST_HOST: "http://ocsprest"
