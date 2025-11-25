@@ -51,7 +51,7 @@ services:
       context: ./mtxauthz
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/fake && cp -r /ui_build/* /ui_files/fake/ && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/mtx && cp -r /ui_build/* /ui_files/mtx/ && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
     healthcheck:
       test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
       interval: 5s
