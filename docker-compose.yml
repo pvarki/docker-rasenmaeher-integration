@@ -409,7 +409,7 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:1.8.1-d${RELEASE_TAG:-1.13.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.9.0-d${RELEASE_TAG:-1.13.1}${DOCKER_TAG_EXTRA:-}
     logging:
       options:
         max-size: 50m
