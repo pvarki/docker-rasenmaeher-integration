@@ -910,7 +910,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.0-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
