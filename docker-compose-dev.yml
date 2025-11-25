@@ -42,25 +42,25 @@ services:
     volumes:
       - "./api:/app"
 
-  rmmtx:
-    image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
-    build:
-      context: ./mtxauthz
-      dockerfile: Dockerfile
-      target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
-    healthcheck:
-      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    volumes:
-      - "./mtxauthz:/app"
-      - "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
+#  rmmtx:
+#    image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}
+#    logging:
+#      options:
+#        max-size: 50m
+#    build:
+#      context: ./mtxauthz
+#      dockerfile: Dockerfile
+#      target: devel_shell
+#    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+#    healthcheck:
+#      test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
+#      interval: 5s
+#      timeout: 5s
+#      retries: 3
+#      start_period: 15s
+#    volumes:
+#      - "./mtxauthz:/app"
+      #- "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
