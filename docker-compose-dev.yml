@@ -38,7 +38,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 45s
     volumes:
       - "./api:/app"
 
@@ -57,10 +57,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 75s
     volumes:
       - "./mtxauthz:/app"
-      - "./mtxauthz/rune/output/rune.json:/opt/templates/mediamtx.json"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
@@ -68,15 +67,16 @@ services:
       options:
         max-size: 50m
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: devel_shell
     command: ["-c","pnpm install --frozen-lockfile && pnpm dev --port 8002 --host 0.0.0.0"]
     volumes:
-      - "./ui:/app"
+      - "./uiv2:/app"
     environment:
       SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
+      # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to develop asset sets
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
       RELEASE_TAG: "localdev"
       CI: true
@@ -89,7 +89,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 75s
 
   rmnginx:  # need to load different templates for uidev
     <<: *nginxbuildinfo

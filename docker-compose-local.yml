@@ -207,7 +207,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 60s
     restart: unless-stopped
 
   ocsp:
@@ -231,7 +231,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
@@ -258,7 +258,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
@@ -288,7 +288,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
@@ -348,7 +348,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 60s
     restart: unless-stopped
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
@@ -403,7 +403,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-      start_period: 20s
+      start_period: 120s
     restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
@@ -495,16 +495,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     restart: unless-stopped
 
+  # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
     logging:
       options:
         max-size: 50m
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
@@ -580,7 +581,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
@@ -633,7 +634,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 ####################
 # End: Fakeproduct #
@@ -678,7 +679,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ####################
 # End: Battlelog #
@@ -727,7 +728,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
@@ -848,7 +849,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   takmsg:
@@ -875,7 +876,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takapi:
@@ -902,7 +903,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takreten:
@@ -928,7 +929,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takplug:
@@ -954,7 +955,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takrmapi:
@@ -992,7 +993,7 @@ services:
       interval: 15s
       timeout: 35s
       retries: 3
-      start_period: 45s
+      start_period: 80s
     restart: unless-stopped
 ############
 # End: TAK #
@@ -1048,7 +1049,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ###########################
 # END: consolidated NGinx #
