@@ -23,6 +23,7 @@
 [submodule "mtxauthz"]
 	path = mtxauthz
 	url = git@github.com:pvarki/python-mediamtx-rmmtxauthz.git
+	branch = modular-ui-dev
 [submodule "api"]
 	path = api
 	url = git@github.com:pvarki/python-rasenmaeher-api.git
