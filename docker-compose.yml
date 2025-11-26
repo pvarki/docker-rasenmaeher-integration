@@ -645,6 +645,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
       - rmmtx_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
