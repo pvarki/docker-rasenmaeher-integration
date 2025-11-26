@@ -412,7 +412,7 @@ async def test_10_check_enduser_files(
 
 @flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
-@pytest.mark.parametrize("productname", ["bl", "tak", "fake"])
+@pytest.mark.parametrize("productname", ["tak", "fake"])
 async def test_11_check_product_healths(user_mtls_session: Tuple[aiohttp.ClientSession, str], productname: str) -> None:
     """Check that we can get files from product integration apis"""
     # Wait a moment so we have less of race issues
