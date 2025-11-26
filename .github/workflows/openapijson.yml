@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: true
       - name: Build openapi.json
@@ -32,7 +32,7 @@ jobs:
           version: ^5.0.0
       - name: Deploy to gh-pages
         if: ${{ !env.ACT }}
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: swagger-ui
