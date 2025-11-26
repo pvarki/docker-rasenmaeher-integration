@@ -2,16 +2,20 @@ services:
 
   airguardtool:
     build:
-      context: ./airguardtool
+      context: ./airguardpractice/airguardian_practice_tool
       dockerfile: Dockerfile
     container_name: airguardtool
     volumes:
       - airguard_data:/data/airguard
+    ports:
+      - 3000:3000
     #environment:
     #  TEST: "ASD"
-    networks:
-      - taknet
+    #networks:
+    #  - taknet
     restart: unless-stopped
 
 volumes:
   airguard_data:
+
+
