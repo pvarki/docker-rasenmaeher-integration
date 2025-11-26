@@ -145,6 +145,9 @@ services:
       MW_MTX__USER_PORT: 9996
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
+      MW_BL__API_BASE: "/rmapi/"
+      MW_BL__API_PORT: *productport
+      MW_BL__USER_PORT: *productport
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
