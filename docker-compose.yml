@@ -125,8 +125,10 @@ x-takserver_env: &takserver_env
 
 x-logging: &logging
   logging:
+    driver: syslog
     options:
-      max-size: 50m
+      syslog-address: ${LOGGING_SYSLOG_ADDR:-unixgram:///dev/log}  # local rsyslog/journald socket
+      tag: "{{.ImageName}}/{{.Name}}"
 
 
 
