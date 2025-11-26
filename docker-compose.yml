@@ -576,7 +576,7 @@ services:
 # Begin: Battlelog #
 ######################
   blapi:
-    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-1.13.1}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/blapi:1.1.0-d${RELEASE_TAG:-1.13.1}${DOCKER_TAG_EXTRA:-}
     logging:
       options:
         max-size: 50m
