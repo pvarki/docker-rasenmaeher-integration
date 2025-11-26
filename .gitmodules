@@ -42,6 +42,9 @@
 [submodule "synapse"]
 	path = synapse
 	url = git@github.com:pvarki/docker-synapse-server.git
+[submodule "airguard-api"]
+	path = airguard-api
+	url = https://github.com/c5bravo/atak-airguardian-api
 [submodule "airguardpractice"]
 	path = airguardpractice
 	url = https://github.com/c5bravo/atak-airguardian-practice-tool.git
