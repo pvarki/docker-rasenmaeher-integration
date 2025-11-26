@@ -153,6 +153,7 @@ services:
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
       MW_PRODUCTS: "tak,kc,bl,mtx"
+      LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
@@ -235,6 +236,7 @@ services:
       - canet
     environment:
       <<: *cfssl_env
+      LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - cfssl_data:/data/persistent
       - ca_public:/ca_public
@@ -440,6 +442,7 @@ services:
       RM_INTEGRATION_API_TIMEOUT: 5
       RELEASE_TAG: ${RELEASE_TAG:-1.13.1}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
+      LOG_CONSOLE_FORMATTER: "local"
     networks:
       - apinet
       - kcnet
@@ -630,6 +633,7 @@ services:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
       RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:?domain must be defined}
+      LOG_CONSOLE_FORMATTER: "local"
     networks:
       - productnet
       - intranet
@@ -889,6 +893,7 @@ services:
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
+      LOG_CONSOLE_FORMATTER: "local"
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
