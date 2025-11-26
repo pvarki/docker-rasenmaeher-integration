@@ -31,6 +31,9 @@
 [submodule "mtxauthz"]
 	path = mtxauthz
 	url = git@github.com:pvarki/python-mediamtx-rmmtxauthz.git
+[submodule "airguard-api"]
+	path = airguard-api
+	url = https://github.com/c5bravo/atak-airguardian-api
 [submodule "airguardpractice"]
 	path = airguardpractice
 	url = https://github.com/c5bravo/atak-airguardian-practice-tool.git
