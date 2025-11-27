@@ -899,6 +899,8 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
+      NGINX_AIRGUARDIAN_UPSTREAM: "airgproxy"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8002"
     networks:
       - productnet
       - intranet
