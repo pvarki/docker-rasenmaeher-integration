@@ -7,12 +7,12 @@ services:
     container_name: airguardtool
     volumes:
       - airguard_data:/app/data
-    ports:
-      - 3000:3000
+    # ports:
+    #   - 3000:3000
     environment:
       DB_FILE_NAME: "file:/app/data/airguard.db"
-    #networks:
-    #  - taknet
+    networks:
+      - productnet
     restart: unless-stopped
 
 volumes:
