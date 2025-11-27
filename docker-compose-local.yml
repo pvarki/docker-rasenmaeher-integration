@@ -7,6 +7,7 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRGUARD_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
@@ -124,6 +125,9 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
   WEBTAK_ENABLE: "true"
+  TAK_AIRGUARD_DOMAIN: *airgdomain
+  TAK_FEED_AIRGUARD_ENABLE: "true"
+  TAK_FEED_AIRGUARD_PORT: "8090"
 
 x-logging: &logging
   logging:
