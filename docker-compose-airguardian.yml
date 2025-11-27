@@ -1,0 +1,24 @@
+services:
+  airgproxy:
+    build:
+      context: ./airguard-api
+    environment:
+      # SERVER_DOMAIN: *serverdomain
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    
+    networks:
+      - taknet
+      - productnet
+      - airguardnet
+
+networks:
+  taknet:
+  productnet:
+  airguardnet:
