@@ -5,9 +5,9 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
+  KC_DOMAIN: &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11} # Must be able to resolve docker internal names
+  OCSCP_RESPONDER: &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp" # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
@@ -62,9 +62,9 @@ x-keycloak_users_env: &keycloak_users_env
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
-  KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
-  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
+  KCI_SERVER_HOSTNAME: *serverdomain # TODO: Should we use a subdomain so we can do smart proxying ??
+  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined} # pragma: allowlist secret
+  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined} # pragma: allowlist secret
   KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
   KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
   #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
@@ -72,9 +72,9 @@ x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_HOSTNAME: *kcdomain
   KEYCLOAK_HTTPS_PORT: 9443
 
-
-x-keycloak_profile_env: &keycloak_profile_env
+x-keycloak_profile_env:
   # These can be expanded in keycloak-config/profile.json
+  &keycloak_profile_env
   KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
   KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:?must be defined}"
 
@@ -83,22 +83,21 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.4-RELEASE-19}-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-58}
+      TAK_RELEASE: ${TAK_RELEASE:-5.4-RELEASE-19}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.27-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.27-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
     target: production
   labels:
-      - "autoheal=true"
-
+    - "autoheal=true"
 
 x-cfssl_env: &cfssl_env
   INT_SHARED_CERT_FOLDER: /ca_public
@@ -124,19 +123,13 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
 
-
-
-
 services:
   miniwerk:
-    image: pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:1.3.6-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
       target: production
-    logging:
-      options:
-        max-size: 50m
     environment:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
@@ -146,8 +139,8 @@ services:
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
-      MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
-      MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
+      MW_LE_TEST: ${MW_LE_TEST:-true} # see example_env.sh
+      MW_MKCERT: ${MW_MKCERT:-false} # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
       MW_PRODUCTS: "tak,kc,bl,mtx"
     volumes:
@@ -156,23 +149,20 @@ services:
       - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
-      - kraftwerk_shared_rmmtx:/pvarkishares/mtx
-      - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
+      - kraftwerk_shared_rmmtx:/pvarkishares/rmmtx
+      - ./le_state:/data/persistent/le/conf # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
       - "80:80"
 
   cfssl:
-    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
       target: api
-    logging:
-      options:
-        max-size: 50m
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     networks:
       - canet
     environment:
@@ -189,16 +179,13 @@ services:
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
       target: ocsp
-    logging:
-      options:
-        max-size: 50m
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     networks:
       - ocspnet
     environment:
@@ -207,7 +194,7 @@ services:
       - cfssl_data:/data/persistent
       - ca_public:/ca_public
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -218,16 +205,13 @@ services:
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
       target: ocsprest
-    logging:
-      options:
-        max-size: 50m
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     networks:
       - canet
     environment:
@@ -248,11 +232,8 @@ services:
 
   postgres:
     image: postgis/postgis:15-3.4
-    logging:
-      options:
-        max-size: 50m
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     networks:
       - dbnet
     volumes:
@@ -274,37 +255,32 @@ services:
       start_period: 5s
     restart: unless-stopped
 
-  openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+  openldap_cert_perms:
+    # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
-    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    command: [ "/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs" ]
     depends_on:
       miniwerk:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
-    logging:
-      options:
-        max-size: 50m
     networks:
       - kcnet
       - dbnet
     ports:
-      - '1636:1636'  # LDAPs
+      - '1636:1636' # LDAPs
     environment:
       <<: *ldap_admin_env
       LDAP_SKIP_DEFAULT_TREE: "yes"
       LDAP_ALLOW_ANON_BINDING: "no"
       # FIXME: get from env ??
-      LDAP_ROOT: "dc=example,dc=org"  # Probably needs to match the custom ldfis
+      LDAP_ROOT: "dc=example,dc=org" # Probably needs to match the custom ldfis
       LDAP_LOGLEVEL: 0
       LDAP_ENABLE_TLS: "yes"
       LDAP_TLS_CERT_FILE: /le_certs/rasenmaeher/fullchain.pem
@@ -333,29 +309,24 @@ services:
       start_period: 20s
     restart: unless-stopped
 
-  keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+  keycloak_cert_perms:
+    # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
-    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    command: [ "/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs" ]
     depends_on:
       miniwerk:
         condition: service_completed_successfully
 
   keycloak:
     image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
-    logging:
-      options:
-        max-size: 50m
     user: root
     environment:
-      <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
+      <<: [ *kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env ]
       KC_HEALTH_ENABLED: "true"
       KEYCLOAK_PRODUCTION: "true"
-      KC_RUN_IN_CONTAINER: "false"  # Setting this to true will just make Java hog RAM like there is no tomorrow
+      KC_RUN_IN_CONTAINER: "false" # Setting this to true will just make Java hog RAM like there is no tomorrow
       KC_LOG_LEVEL: info
       #KC_LOG_LEVEL: debug
       # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
@@ -388,18 +359,15 @@ services:
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
     image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
-    logging:
-      options:
-        max-size: 50m
     networks:
       - kcnet
     volumes:
       - ./keycloak/keycloak-config:/config
       - ca_public:/ca
     environment:
-      <<: [*keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env]
+      <<: [ *keycloak_profile_env, *ldap_admin_env, *keycloakinit_users_env ]
       KEYCLOAK_URL: http://keycloak:8080/
-      KEYCLOAK_SSL-VERIFY: "false"  # We are using the internal port
+      KEYCLOAK_SSL-VERIFY: "false" # We are using the internal port
       KEYCLOAK_AVAILABILITYCHECK_ENABLED: "false"
       KEYCLOAK_AVAILABILITYCHECK_TIMEOUT: 15s
       IMPORT_VAR_SUBSTITUTION_ENABLED: "true"
@@ -418,9 +386,9 @@ services:
       dockerfile: Dockerfile
       target: production
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     environment:
-      <<: [*rmdbconfig_env]
+      <<: [ *rmdbconfig_env ]
       JWT_PUBKEY_PATH: "/data/persistent/public"
       JWT_PRIVKEY_PATH: "/data/persistent/private/rm_jwtsign.key"
       RM_CFSSL_HOST: "http://cfssl"
@@ -432,12 +400,10 @@ services:
       RM_TILAUSPALVELU_JWT: "https://${TILAUSPALVELU_DOMAIN:-tilaa.pvarki.fi}/api/v1/config/jwtPublicKey.pem"
       EXTERNAL_JWT_PUBKEY_B64: ${RMAPI_EXTERNAL_JWT_PUBKEY_B64:-}
       RM_KC_USERNAME: *kcadminuser
-      RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
+      RM_KC_PASSWORD: *kcadminpass # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
-      RM_INTEGRATION_API_TIMEOUT: 5
-      RELEASE_TAG: ${RELEASE_TAG:-1.14.0}
-      RELEASE_STATUS: ${RELEASE_STATUS:-}
+      RELEASE_TAG: ${RELEASE_TAG:-1.12.1}
     networks:
       - apinet
       - kcnet
@@ -456,7 +422,8 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_healthy
-      postgres:  # keycloak already depends on pg but for completenes' sake
+      postgres:
+        # keycloak already depends on pg but for completenes' sake
         condition: service_healthy
       keycloak-init:
         condition: service_completed_successfully
@@ -471,25 +438,19 @@ services:
     restart: unless-stopped
 
   rmui:
-    image: pvarki/rmui:1.3.1-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    image: pvarki/rmui:1.3.1-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./ui
       dockerfile: Dockerfile
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
-        RELEASE_TAG: ${RELEASE_TAG:-1.14.0}
+        RELEASE_TAG: ${RELEASE_TAG:-1.12.1}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
-    image: pvarki/nginx:templates-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    image: pvarki/nginx:templates-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -499,9 +460,6 @@ services:
 
   rmnginx:
     <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
@@ -551,37 +509,31 @@ services:
       start_period: 5s
     restart: unless-stopped
 
-  kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+  kwinit:
+    # Mostly to make sure it's built
+    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
       target: production
-    command: ["help"]
+    command: [ "help" ]
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
-
-######################
-# Begin: Battlelog #
-######################
+  ######################
+  # Begin: Battlelog #
+  ######################
   blapi:
-    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
       target: production
     environment:
-      <<: [*bldbconfig_env]
+      <<: [ *bldbconfig_env ]
     networks:
       - productnet
       - intranet
@@ -606,24 +558,21 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
-####################
-# End: Battlelog #
-####################
+  ####################
+  # End: Battlelog #
+  ####################
 
-###################
-# Begin: MediaMTX #
-###################
+  ###################
+  # Begin: MediaMTX #
+  ###################
   rmmtx:
-    image: pvarki/rmmtx:1.1.1-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    image: pvarki/rmmtx:1.0.1-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
       target: production
     environment:
-      <<: [*rmmtx_dbconfig_env]
+      <<: [ *rmmtx_dbconfig_env ]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
       RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:?domain must be defined}
     networks:
@@ -635,7 +584,6 @@ services:
     volumes:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
-      - rmmtx_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -651,23 +599,18 @@ services:
       start_period: 5s
     restart: unless-stopped
 
-  mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+  mediamtx_cert_perms:
+    # FIXME: make a separate volume or something and copy the certs for correct user under it
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
-    command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
+    command: [ "/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs" ]
     depends_on:
       miniwerk:
         condition: service_completed_successfully
 
   mediamtx:
     image: bluenviron/mediamtx:1.12.3
-    logging:
-      options:
-        max-size: 50m
     networks:
       - productnet
       - intranet
@@ -678,7 +621,7 @@ services:
       - le_certs:/le_certs
       - ./mediamtx.yml:/mediamtx.yml
     environment:
-      MTX_RTSPTRANSPORTS: "tcp"  # Can't do UDP without host mode network
+      MTX_RTSPTRANSPORTS: "tcp" # Can't do UDP without host mode network
       MTX_WEBRTCADDITIONALHOSTS: *serverdomain
     ports:
       - "1936:1936"
@@ -689,7 +632,7 @@ services:
       - "9888:9888"
       - "9889:9889"
       - "9996:9996"
-      - "9997:9997"  # Control API
+      - "9997:9997" # Control API
       - "8890:8890/udp"
       - "8189:8189/udp"
     depends_on:
@@ -697,22 +640,25 @@ services:
         condition: service_healthy
       mediamtx_cert_perms:
         condition: service_completed_successfully
-    # Can't do healthchecks because the container has nothing but the mediamtx binary
-#################
-# End: MediaMTX #
-#################
+    healthcheck:
+      test: 'true' # FIXME: Proper check
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+  #################
+  # End: MediaMTX #
+  #################
 
 
-##############
-# Begin: TAK #
-##############
+  ##############
+  # Begin: TAK #
+  ##############
   takinit:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       postgres:
         condition: service_healthy
@@ -733,14 +679,11 @@ services:
 
   takconfig:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       takinit:
-          condition: service_completed_successfully
+        condition: service_completed_successfully
     volumes:
       - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
@@ -759,7 +702,7 @@ services:
       - '8443:8443'
     command: ./opt/scripts/start-tak.sh config
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -768,11 +711,8 @@ services:
 
   takmsg:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       postgres:
         condition: service_healthy
@@ -786,7 +726,7 @@ services:
     network_mode: "service:takconfig"
     command: ./opt/scripts/start-tak.sh messaging
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -795,11 +735,8 @@ services:
 
   takapi:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       postgres:
         condition: service_healthy
@@ -813,7 +750,7 @@ services:
     network_mode: "service:takconfig"
     command: ./opt/scripts/start-tak.sh api
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -822,11 +759,8 @@ services:
 
   takreten:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       postgres:
         condition: service_healthy
@@ -839,7 +773,7 @@ services:
     network_mode: "service:takconfig"
     command: ./opt/scripts/start-tak.sh retention
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -848,11 +782,8 @@ services:
 
   takplug:
     <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
     environment:
-      <<: [*takdbconfig_env, *takserver_env]
+      <<: [ *takdbconfig_env, *takserver_env ]
     depends_on:
       postgres:
         condition: service_healthy
@@ -865,7 +796,7 @@ services:
     network_mode: "service:takconfig"
     command: ./opt/scripts/start-tak.sh pm
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
@@ -873,10 +804,7 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:1.6.1-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    image: pvarki/takrmapi:1.6.0-tak${TAK_RELEASE:-5.4-RELEASE-19}-d${RELEASE_TAG:-1.12.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -887,7 +815,7 @@ services:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
     labels:
-        - "autoheal=true"
+      - "autoheal=true"
     network_mode: "service:takconfig"
     volumes:
       - ca_public:/ca_public
@@ -909,18 +837,15 @@ services:
       retries: 3
       start_period: 45s
     restart: unless-stopped
-############
-# End: TAK #
-############
+  ############
+  # End: TAK #
+  ############
 
-#############################
-# BEGIN: consolidated NGinx #
-#############################
+  #############################
+  # BEGIN: consolidated NGinx #
+  #############################
   productsnginx:
     <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
@@ -933,10 +858,12 @@ services:
       NGINX_FP_UPSTREAM_PORT: "8001"
       NGINX_BL_UPSTREAM: "blapi"
       NGINX_BL_UPSTREAM_PORT: "3000"
-      NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
+      NGINX_TAK_UPSTREAM: "takconfig" # Due to the sidecar thing we must use the config container as host
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
+      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
@@ -964,19 +891,16 @@ services:
       retries: 3
       start_period: 5s
     restart: unless-stopped
-###########################
-# END: consolidated NGinx #
-###########################
+  ###########################
+  # END: consolidated NGinx #
+  ###########################
 
 
-##############################################################################
-# Workaround docker compose not having opton to restart unhealthy containers #
-##############################################################################
+  ##############################################################################
+  # Workaround docker compose not having opton to restart unhealthy containers #
+  ##############################################################################
   autoheal:
     image: willfarrell/autoheal:latest
-    logging:
-      options:
-        max-size: 50m
     tty: true
     restart: always
     environment:
@@ -986,19 +910,19 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-
 ####################
 # Shared resources #
 ####################
 networks:
-  productnet:
-  apinet:
-  kcnet:
-  canet:
-  ocspnet:
-  dbnet:
-  intranet:
-  taknet:
+  productnet:  # Productnginx to product backend
+  apinet:      # rmnginx to rasenmaeher-api
+  kcnet:       # Keycloack-Rasenmaeher net
+  canet:       # CA-Rasenmaeher net
+  ocspnet:     # nginx front- CA/ocsp net
+  dbnet:       # Backends to database net
+  intranet:    # Review needed ?
+  taknet:      # Tak internal services net
+
 
 volumes:
   kraftwerk_data:
@@ -1021,4 +945,3 @@ volumes:
   kraftwerk_shared_bl:
   blapi_data:
   kraftwerk_shared_rmmtx:
-  rmmtx_data:
