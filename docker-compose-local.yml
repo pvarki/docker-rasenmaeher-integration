@@ -160,7 +160,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix,synapse"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix,synapse,agpractice"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -1086,6 +1086,8 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
+      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       NGINX_MATRIX_UPSTREAM: "matrixrmapi"
