@@ -222,7 +222,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: pvarki/cfssl:ocsprest-1.0.4-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -400,7 +400,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: pvarki/rmapi:1.9.0-d${RELEASE_TAG:-1.15.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.10.0-d${RELEASE_TAG:-1.15.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -594,8 +594,8 @@ services:
 # Begin: MediaMTX #
 ###################
   rmmtx:
-    image: pvarki/rmmtx:1.1.1-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
     <<: *logging
+    image: pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -832,7 +832,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: pvarki/takrmapi:1.6.2-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/takrmapi:1.7.0-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-1.14.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
