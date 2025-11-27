@@ -5,10 +5,11 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  AIRGUARD_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:?domain must be defined}"
+  KC_DOMAIN:   &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:?domain must be defined}"
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}   # Must be able to resolve docker internal names
+  OCSCP_RESPONDER:   &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"   # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
