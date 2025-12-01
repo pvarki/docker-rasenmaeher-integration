@@ -430,7 +430,7 @@ services:
       JWT_LIFETIME: "7200"
       RM_OCSCP_RESPONDER: *publicocsp
       RM_TILAUSPALVELU_JWT: "https://${TILAUSPALVELU_DOMAIN:-tilaa.pvarki.fi}/api/v1/config/jwtPublicKey.pem"
-      EXTERNAL_JWT_PUBKEY_B64: ${RMAPI_EXTERNAL_JWT_PUBKEY_B64:-""}
+      EXTERNAL_JWT_PUBKEY_B64: ${RMAPI_EXTERNAL_JWT_PUBKEY_B64:-}
       RM_KC_USERNAME: *kcadminuser
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
