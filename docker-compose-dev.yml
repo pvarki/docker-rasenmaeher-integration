@@ -151,10 +151,10 @@ services:
       - "./takintegration/ui:/ui"
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
-      interval: 5s
-      timeout: 5s
+      interval: 15s
+      timeout: 35s
       retries: 3
-      start_period: 5s
+      start_period: 45s
     depends_on:
       rmnginx:
         condition: service_healthy

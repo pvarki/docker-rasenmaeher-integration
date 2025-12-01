@@ -6,6 +6,7 @@ x-domains_env:
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:?domain must be defined}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
 
@@ -401,6 +402,9 @@ services:
   rmapi:
     <<: *logging
     image: pvarki/rmapi:1.10.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    logging:
+      options:
+        max-size: 50m
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -843,6 +847,7 @@ services:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "local"
+      TI_MMTX_SERVER_FQDN: *mtxdomain
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"

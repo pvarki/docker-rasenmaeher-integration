@@ -8,6 +8,7 @@ x-domains_env:
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
@@ -449,6 +450,7 @@ services:
       RM_LOG_LEVEL_INT: "10"
       RELEASE_TAG: "local"
       RELEASE_STATUS: "alpha"
+      RM_INTEGRATION_API_TIMEOUT: ${RM_INTEGRATION_API_TIMEOUT:-3.0} # On slower dev environment might need to raise this
     networks:
       - apinet
       - kcnet
@@ -922,6 +924,7 @@ services:
       LOG_CONSOLE_FORMATTER: "local"
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
+      TI_MMTX_SERVER_FQDN: *mtxdomain
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
