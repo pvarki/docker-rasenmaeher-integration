@@ -125,13 +125,16 @@ x-takserver_env: &takserver_env
   TAK_OCSP_ENABLE: "true"
   WEBTAK_ENABLE: "true"
 
+x-logging: &logging
+  logging:
+    options:
+      max-size: 50m
+
 
 services:
   miniwerk:
+    <<: *logging
     image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -147,6 +150,9 @@ services:
       MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
+      MW_BL__API_BASE: "/rmapi/"
+      MW_BL__API_PORT: *productport
+      MW_BL__USER_PORT: *productport
       MW_TAK__EXTRAVAL: "this should be ignored"
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
@@ -166,10 +172,8 @@ services:
       - ca_public:/ca_public
 
   jwtcopy:
+    <<: *logging
     image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -187,10 +191,8 @@ services:
         condition: service_healthy
 
   cfssl:
+    <<: *logging
     image: pvarki/cfssl:api-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -207,14 +209,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 60s
     restart: unless-stopped
 
   ocsp:
+    <<: *logging
     image: pvarki/cfssl:ocsp-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -231,17 +231,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
     restart: unless-stopped
 
   ocsprest:
+    <<: *logging
     image: pvarki/cfssl:ocsprest-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -258,19 +256,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
     restart: unless-stopped
 
-
   postgres:
-    platform: linux/amd64  # It seems there are no arm images available
+    <<: *logging
     image: postgis/postgis:15-3.4
-    logging:
-      options:
-        max-size: 50m
+    platform: linux/amd64  # It seems there are no arm images available
     networks:
       - dbnet
     ports:
@@ -289,14 +284,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    <<: *logging
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -305,10 +298,8 @@ services:
         condition: service_completed_successfully
 
   openldap:
+    <<: *logging
     image: pvarki/openldap:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -349,14 +340,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 60s
     restart: unless-stopped
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    <<: *logging
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -365,10 +354,8 @@ services:
         condition: service_completed_successfully
 
   keycloak:
+    <<: *logging
     image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
-    logging:
-      options:
-        max-size: 50m
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -404,15 +391,13 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-      start_period: 20s
+      start_period: 120s
     restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
+    <<: *logging
     image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
-    logging:
-      options:
-        max-size: 50m
     networks:
       - kcnet
     volumes:
@@ -433,10 +418,8 @@ services:
         condition: service_healthy
 
   rmapi:
+    <<: *logging
     image: pvarki/rmapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -497,16 +480,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     restart: unless-stopped
 
+  # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
+    <<: *logging
     image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
@@ -516,10 +498,8 @@ services:
       - rmui_files:/deliver
 
   nginx_templates:
+    <<: *logging
     image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -528,15 +508,13 @@ services:
       - nginx_templates:/deliver
 
   rmnginx:
-    <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*nginxbuildinfo, *logging]
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
       - rmui_files:/rmui_files
+      - ui_files:/ui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -581,14 +559,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
+    <<: *logging
     image: pvarki/kw_product_init:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -604,10 +580,8 @@ services:
 # Begin: Fakeproduct #
 ######################
   rmfpapi:
+    <<: *logging
     image: pvarki/rmfpapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -625,6 +599,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_fake:/pvarki
       - rmfpapi_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -633,7 +608,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 ####################
 # End: Fakeproduct #
@@ -643,10 +618,8 @@ services:
 # Begin: Battlelog #
 ######################
   blapi:
+    <<: *logging
     image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -678,7 +651,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ####################
 # End: Battlelog #
@@ -688,10 +661,8 @@ services:
 # Begin: MediaMTX #
 ###################
   rmmtx:
+    <<: *logging
     image: pvarki/rmmtx:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -715,6 +686,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
       - rmmtx_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -727,14 +699,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
+    <<: *logging
     image: bash:latest
-    logging:
-      options:
-        max-size: 50m
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -743,10 +713,8 @@ services:
         condition: service_completed_successfully
 
   mediamtx:
+    <<: *logging
     image: bluenviron/mediamtx:1.12.3
-    logging:
-      options:
-        max-size: 50m
     networks:
       - productnet
       - intranet
@@ -784,16 +752,11 @@ services:
 # End: MediaMTX #
 #################
 
-
-
 ##############
 # Begin: TAK #
 ##############
   takinit:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -815,10 +778,7 @@ services:
     command: /opt/scripts/firstrun_rm.sh
 
   takconfig:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -851,14 +811,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   takmsg:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -878,14 +835,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takapi:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -905,14 +859,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takreten:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -931,14 +882,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takplug:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -957,14 +905,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takrmapi:
+    <<: *logging
     image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.5-RELEASE-58}
-    logging:
-      options:
-        max-size: 50m
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -982,6 +928,7 @@ services:
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -994,7 +941,7 @@ services:
       interval: 15s
       timeout: 35s
       retries: 3
-      start_period: 45s
+      start_period: 80s
     restart: unless-stopped
 ############
 # End: TAK #
@@ -1004,10 +951,7 @@ services:
 # BEGIN: consolidated NGinx #
 #############################
   productsnginx:
-    <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*nginxbuildinfo, *logging]
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
@@ -1050,7 +994,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ###########################
 # END: consolidated NGinx #
@@ -1091,3 +1035,4 @@ volumes:
   blapi_data:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
+  ui_files:
