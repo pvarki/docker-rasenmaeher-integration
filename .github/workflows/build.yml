@@ -160,7 +160,7 @@ jobs:
     strategy:
       matrix:
         extra_env: ["none", "date"]
-        asset_set: ["neutral", "fdf"]
+        asset_set: ["default", "fdf"]
     env:
       PVARKI_DOCKER_REPO: docker.io/
     steps:
@@ -177,9 +177,9 @@ jobs:
       - name: Fix ref slashes
         run: |
           echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
-      - name: Set VITE_ASSET_SET
+      - name: Set VITE_THEME
         run: |
-          echo "VITE_ASSET_SET=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
+          echo "VITE_THEME=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
       - name: Set DOCKER_TAG_EXTRA if date
         run: |
