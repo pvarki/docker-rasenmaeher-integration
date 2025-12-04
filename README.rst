@@ -91,7 +91,7 @@ Example .env-file with the minimal information needed::
     MW_LE_TEST="false"
     TAKSERVER_CERT_PASS="input-secure-password"  # pragma: allowlist secret
     TAK_CA_PASS="input-secure-password"  # pragma: allowlist secret
-    VITE_ASSET_SET="${VITE_ASSET_SET:-neutral}"
+    VITE_THEME="${VITE_THEME:-default}"
     KEYCLOAK_PROFILEROOT_UUID="input-uuid"
     KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret

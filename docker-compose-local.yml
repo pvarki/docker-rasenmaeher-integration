@@ -498,9 +498,9 @@ services:
       start_period: 30s
     restart: unless-stopped
 
-  # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to deliver desired asset sets
+  # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
-    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:${VITE_THEME:-default}-local${DOCKER_TAG_EXTRA:-}
     logging:
       options:
         max-size: 50m
@@ -509,7 +509,7 @@ services:
       dockerfile: Dockerfile
       target: production
       args:
-        VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+        VITE_THEME: ${VITE_THEME:-default}
         RELEASE_TAG: "local"
     volumes:
       - rmui_files:/deliver
