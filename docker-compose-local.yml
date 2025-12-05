@@ -7,7 +7,8 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
-  AIRGUARD_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRGUARDIAN_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRGUARDIAN_URL: &airguardianurl https://{*airgdomain}:4626/
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
@@ -929,6 +930,7 @@ services:
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
+      TI_AIRGUARDIAN_URL: *airguardianurl
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
