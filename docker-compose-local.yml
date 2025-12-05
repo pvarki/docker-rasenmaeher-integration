@@ -88,12 +88,12 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.2.0}-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-2}-d${RELEASE_TAG:-2.2.0}-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-58}
+      TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-2}
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.2.0}-local${DOCKER_TAG_EXTRA:-}
