@@ -5,7 +5,8 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  AIRGUARD_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:?domain must be defined}"
+  AIRGUARDIAN_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:?domain must be defined}"
+  AIRGUARDIAN_URL: &airguardianurl https://{*airgdomain}:4626/
   KC_DOMAIN:   &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}   # Must be able to resolve docker internal names
   OCSCP_RESPONDER:   &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"   # The public URL
@@ -844,6 +845,7 @@ services:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "local"
+      TI_AIRGUARDIAN_URL: *airguardianurl
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
