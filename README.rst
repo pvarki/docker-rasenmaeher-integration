@@ -201,7 +201,7 @@ Directories that are submodules
   - kw_product_init https://github.com/pvarki/golang-kraftwerk-init-helper-cli
   - openldap https://github.com/pvarki/docker-openldap
   - miniwerk https://github.com/pvarki/python-rasenmaeher-miniwerk
-  - ui https://github.com/pvarki/rasenmaeher-ui
+  - uiv2 https://github.com/pvarki/react-rasenmaeher-ui-v2
   - takserver https://github.com/pvarki/docker-atak-server
   - takintegration https://github.com/pvarki/python-tak-rmapi
   - battlelog https://github.com/pvarki/typescript-liveloki-app
