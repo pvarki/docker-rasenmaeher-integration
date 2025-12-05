@@ -83,7 +83,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-2}-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-2}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -91,7 +91,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-2}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.27-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+  image: pvarki/nginx:1.27-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -135,7 +135,7 @@ x-logging: &logging
 services:
   miniwerk:
     <<: *logging
-    image: pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -171,7 +171,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -195,7 +195,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -222,7 +222,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -286,7 +286,7 @@ services:
 
   openldap:
     <<: *logging
-    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -400,7 +400,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: pvarki/rmapi:1.10.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmapi:1.10.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -424,7 +424,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: 5
-      RELEASE_TAG: ${RELEASE_TAG:-2.0.0}
+      RELEASE_TAG: ${RELEASE_TAG:-2.1.0}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "local"
     networks:
@@ -462,20 +462,20 @@ services:
   # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: pvarki/rmui:2.0.0-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmui:2.0.0-${VITE_ASSET_SET:-neutral}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
         VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
-        RELEASE_TAG: ${RELEASE_TAG:-2.0.0}
+        RELEASE_TAG: ${RELEASE_TAG:-2.1.0}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: pvarki/nginx:templates-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/nginx:templates-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -537,7 +537,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -555,7 +555,7 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -595,7 +595,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -832,7 +832,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: pvarki/takrmapi:1.7.0-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.0.0}${DOCKER_TAG_EXTRA:-}
+    image: pvarki/takrmapi:1.7.0-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
