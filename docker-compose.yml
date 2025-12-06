@@ -247,7 +247,7 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgis/postgis:15-3.4
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}postgis/postgis:15-3.4
     logging:
       options:
         max-size: 50m
@@ -275,7 +275,7 @@ services:
     restart: unless-stopped
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     logging:
       options:
         max-size: 50m
@@ -334,7 +334,7 @@ services:
     restart: unless-stopped
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     logging:
       options:
         max-size: 50m
@@ -346,7 +346,7 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     logging:
       options:
         max-size: 50m
@@ -387,7 +387,7 @@ services:
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
     logging:
       options:
         max-size: 50m
@@ -652,7 +652,7 @@ services:
     restart: unless-stopped
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     logging:
       options:
         max-size: 50m
@@ -664,7 +664,7 @@ services:
         condition: service_completed_successfully
 
   mediamtx:
-    image: bluenviron/mediamtx:1.12.3
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bluenviron/mediamtx:1.12.3
     logging:
       options:
         max-size: 50m
@@ -973,7 +973,7 @@ services:
 # Workaround docker compose not having opton to restart unhealthy containers #
 ##############################################################################
   autoheal:
-    image: willfarrell/autoheal:latest
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}willfarrell/autoheal:latest
     logging:
       options:
         max-size: 50m
