@@ -38,7 +38,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 45s
     volumes:
       - "./api:/app"
 
@@ -51,15 +51,16 @@ services:
       context: ./mtxauthz
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8005 --log-level debug --factory rmmtxauthz.web.application:get_app --reload"]
+    command: ["/entrypoint-dev.sh"]
     healthcheck:
       test: 'curl http://localhost:8005/api/v1/healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 75s
     volumes:
       - "./mtxauthz:/app"
+      - "./mtxauthz/ui:/ui"
 
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
@@ -67,17 +68,19 @@ services:
       options:
         max-size: 50m
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "npm install && npm run dev -- --port 8002 --host 0.0.0.0"]
+    command: ["-c","pnpm install --frozen-lockfile && pnpm dev --port 8002 --host 0.0.0.0"]
     volumes:
-      - "./ui:/app"
+      - "./uiv2:/app"
     environment:
       SERVER_DOMAIN: ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
       API_PORT: ${NGINX_HTTPS_PORT:-4439}
+      # FIXME: New UI does not use the VITE_ASSET_SET ENV variable, figure out the correct:tm: way to develop asset sets
       VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
       RELEASE_TAG: "localdev"
+      CI: true
     networks:
       - intranet
     ports:  # REMINDER Do not expose these in production
@@ -87,7 +90,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 75s
 
   rmnginx:  # need to load different templates for uidev
     <<: *nginxbuildinfo
@@ -142,9 +145,10 @@ services:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/tak && cp -r /ui_build/* /ui_files/tak/ && (pnpm --dir /ui build --outDir /ui_files/tak --watch &) && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
+      - "./takintegration/ui:/ui"
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
       interval: 5s
