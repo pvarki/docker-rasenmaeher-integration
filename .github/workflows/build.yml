@@ -279,4 +279,4 @@ jobs:
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          docker compose pull
+          docker compose pull --ignore-pull-failures
