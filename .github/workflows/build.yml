@@ -87,6 +87,7 @@ jobs:
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker system prune --all --volumes --force
+        dcloc build --pull takinit miniwerk
         dcloc build --pull
         dcloc pull --ignore-buildable
     - name: docker compose cleanup
