@@ -148,6 +148,8 @@ jobs:
       matrix:
         extra_env: ["none", "date"]
         asset_set: ["neutral", "fdf"]
+    env:
+      PVARKI_DOCKER_REPO: docker.io/
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -175,27 +177,36 @@ jobs:
         run: |
           test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
-      - name: Build takinit and miniwerk
+      - name: Build takinit and miniwerk (main)
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose build takinit miniwerk
+          docker compose build --pull takinit miniwerk
+      - name: Build takinit and miniwerk (local)
+        run: |
+          docker compose -f docker-compose-local.yml build --pull takinit miniwerk
       - name: push takinit and miniwerk
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose push takinit miniwerk
-      - name: Build main composition
+          docker compose push takinit miniwerk
+          docker compose -f docker-compose-local.yml push takinit miniwerk
+      - name: Build main composition (main)
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose build
+          docker compose build --pull
+      - name: Build main composition (local)
+        run: |
+          docker compose -f docker-compose-local.yml build --pull
       - name: Push main composition
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose push
+          docker compose push
+          docker compose -f docker-compose-local.yml push
 
       - name: Warm Nexus cache
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
           docker compose pull --ignore-pull-failures
+          docker compose -f docker-compose-local.yml pull --ignore-pull-failures
