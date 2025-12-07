@@ -239,17 +239,22 @@ but also introduces extra variability to how things work.
 Make sure to always check your changes work correctly in rmlocal mode where assets
 are minified and baked in.
 
+Due to buildkit bugs with cache your need to run local registry::
+
+    docker run -d -p 5050:5000 --restart always --name registry registry:3
+
+
 TLDR::
 
-    alias rmlocal="docker compose -p rmlocal -f docker-compose-local.yml"
-    rmlocal build takinit miniwerk --pull
+    alias rmlocal="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmlocal -f docker-compose-local.yml"
+    rmlocal build takinit miniwerk --pull --push
     rmlocal build --pull
     rmlocal up
 
 or::
 
-    alias rmdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-    rmdev build takinit miniwerk --pull
+    alias rmdev="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
+    rmdev build takinit miniwerk --pull --push
     rmdev build --pull
     rmdev up
 
