@@ -48,7 +48,7 @@ import urllib.request
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 
 def sh(cmd: str) -> str:
@@ -58,6 +58,8 @@ def sh(cmd: str) -> str:
 
 @dataclass
 class PRInfo:
+    """Pull request metadata used for release notes."""
+
     number: int
     title: str
     body: str
@@ -67,6 +69,8 @@ class PRInfo:
 
 @dataclass
 class PRCommit:
+    """Commit data (subject + body) belonging to a PR."""
+
     sha: str
     subject: str
     body: str
@@ -74,6 +78,8 @@ class PRCommit:
 
 @dataclass
 class ReleaseEntry:
+    """Parsed release-relevant data for a single PR."""
+
     pr: PRInfo
     summary_lines: List[str]
     goal_lines: List[str]
@@ -82,9 +88,11 @@ class ReleaseEntry:
 
 @dataclass
 class SubmoduleCommit:
-    repo_slug: str    # e.g. "pvarki/docker-rasenmaeher-rmapi"
-    label: str        # e.g. "rmapi"
-    commit: PRCommit  # reuse same structure
+    """Commit in a submodule that is part of this integration release."""
+
+    repo_slug: str  # e.g. "pvarki/docker-rasenmaeher-rmapi"
+    label: str  # e.g. "rmapi"
+    commit: PRCommit
 
 
 def github_client() -> Dict[str, str]:
@@ -99,7 +107,7 @@ def github_client() -> Dict[str, str]:
     }
 
 
-def gh_get_json(path: str, params: Optional[Dict[str, str]] = None) -> object:
+def gh_get_json(path: str, params: Optional[Dict[str, str]] = None) -> Any:
     """
     Simple GitHub API GET helper for the *integration repo* using stdlib only.
 
@@ -138,14 +146,14 @@ def gh_get_json(path: str, params: Optional[Dict[str, str]] = None) -> object:
             return json.loads(data)
     except urllib.error.HTTPError as exc:
         raise RuntimeError(
-            f"GitHub API error {exc.code} for {url}: "
-            f"{exc.read().decode('utf-8', errors='ignore')}"
+            f"GitHub API error {exc.code} for {url}: " f"{exc.read().decode('utf-8', errors='ignore')}"
         ) from exc
 
 
-def gh_get_json_for_repo(repo_slug: str, path: str, params: Optional[Dict[str, str]] = None) -> object:
+def gh_get_json_for_repo(repo_slug: str, path: str, params: Optional[Dict[str, str]] = None) -> Any:
     """
     Simple GitHub API GET helper for an arbitrary repo given by slug "owner/repo".
+
     path: "/compare/old...new", etc.
     """
     client = github_client()
@@ -177,13 +185,16 @@ def gh_get_json_for_repo(repo_slug: str, path: str, params: Optional[Dict[str, s
             return json.loads(data)
     except urllib.error.HTTPError as exc:
         raise RuntimeError(
-            f"GitHub API error {exc.code} for {url}: "
-            f"{exc.read().decode('utf-8', errors='ignore')}"
+            f"GitHub API error {exc.code} for {url}: " f"{exc.read().decode('utf-8', errors='ignore')}"
         ) from exc
 
 
 def get_previous_tag(current_tag: str) -> str:
-    """Get the previous tag before the current one."""
+    """
+    Get the previous tag before the current one.
+
+    Assumes tags are plain semver-like (no enforced 'v' prefix).
+    """
     return sh(f"git describe --tags --abbrev=0 {current_tag}^")
 
 
@@ -290,9 +301,9 @@ def parse_lines(block: str) -> List[str]:
 #   feat(scope)!: description
 #   fix: description
 _CONVENTIONAL_RE = re.compile(
-    r"^(?P<type>\w+)"           # feat, fix, chore, etc.
-    r"(?:\([^)]*\))?"           # optional scope
-    r"(?P<breaking>!)?"         # optional !
+    r"^(?P<type>\w+)"  # feat, fix, chore, etc.
+    r"(?:\([^)]*\))?"  # optional scope
+    r"(?P<breaking>!)?"  # optional !
     r":\s*(?P<desc>.+)$"
 )
 
@@ -422,7 +433,7 @@ def get_submodules() -> Dict[str, str]:
         out_urls = ""
 
     for line in out_urls.splitlines():
-        key, url = line.split(" ", 1)
+        key, url = line.split(" ", 1)  # <-- '=' instead of 'in'
         parts = key.split(".")
         if len(parts) < 3:
             continue
@@ -431,10 +442,10 @@ def get_submodules() -> Dict[str, str]:
 
     result: Dict[str, str] = {}
     for name, path in name_to_path.items():
-        url = name_to_url.get(name)
-        if not url:
+        url_value = name_to_url.get(name)
+        if not url_value:
             continue
-        slug = github_repo_slug_from_url(url)
+        slug = github_repo_slug_from_url(url_value)
         if not slug:
             continue
         result[path] = slug
@@ -477,7 +488,13 @@ def get_submodule_commits_between(
         params={"per_page": "250"},
     )
 
+    if not isinstance(data, dict):
+        return []
+
     commits_data = data.get("commits") or []
+    if not isinstance(commits_data, list):
+        return []
+
     commits: List[SubmoduleCommit] = []
 
     for item in commits_data:
@@ -502,6 +519,10 @@ def generate_markdown(
     entries: Sequence[ReleaseEntry],
     submodule_commits: Sequence[SubmoduleCommit],
 ) -> str:
+    """
+    Render the final release notes markdown from PR entries and submodule commits.
+    """
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
     today = date.today().isoformat()
     main_repo_slug = github_client()["repo"]
 
@@ -511,10 +532,7 @@ def generate_markdown(
 
     # ---- TL;DR (all user-facing summary lines)
     all_summary_lines = [
-        line
-        for e in entries
-        for line in e.summary_lines
-        if line != "No user-facing summary provided."
+        line for e in entries for line in e.summary_lines if line != "No user-facing summary provided."
     ]
 
     if all_summary_lines:
@@ -539,13 +557,9 @@ def generate_markdown(
         for c in e.commits:
             logical_type, desc = classify_commit(c)
             if logical_type == "feature":
-                feature_lines.append(
-                    f"- {desc} ([#{pr_number}](https://github.com/{main_repo_slug}/pull/{pr_number}))"
-                )
+                feature_lines.append(f"- {desc} ([#{pr_number}](https://github.com/{main_repo_slug}/pull/{pr_number}))")
             elif logical_type == "fix":
-                fix_lines.append(
-                    f"- {desc} ([#{pr_number}](https://github.com/{main_repo_slug}/pull/{pr_number}))"
-                )
+                fix_lines.append(f"- {desc} ([#{pr_number}](https://github.com/{main_repo_slug}/pull/{pr_number}))")
             elif logical_type == "breaking":
                 breaking_lines.append(
                     f"- {desc} ([#{pr_number}](https://github.com/{main_repo_slug}/pull/{pr_number}))"
@@ -576,7 +590,7 @@ def generate_markdown(
         # internal ignored
 
     # Add one bullet about breaking changes to TL;DR
-    if breaking_desc_for_tldr:
+    if breaking_desc_for_tldr is not None:
         tldr_items.append(f"Breaking change: {breaking_desc_for_tldr}")
     else:
         tldr_items.append("No breaking changes.")
@@ -590,9 +604,7 @@ def generate_markdown(
     security_block = block(security_lines)
 
     contributors: Set[str] = {e.pr.author for e in entries}
-    contributors_block = (
-        "\n".join(f"- @{c}" for c in sorted(contributors)) if contributors else "- (none)"
-    )
+    contributors_block = "\n".join(f"- @{c}" for c in sorted(contributors)) if contributors else "- (none)"
 
     return f"""# {product_name} {version}
 
@@ -634,13 +646,18 @@ def generate_markdown(
 
 ---
 
-## 🧑Contributors
+## Contributors
 
 {contributors_block}
 """
 
 
 def main() -> None:
+    """
+    Entry point: compute previous tag, gather PRs and submodule commits,
+    and write docs/releases/<tag>.md.
+    """
+    # pylint: disable=too-many-locals
     if len(sys.argv) < 3:
         print(
             "Usage: generate_release_notes_from_prs.py <tag> <product_name>",
@@ -648,7 +665,7 @@ def main() -> None:
         )
         sys.exit(1)
 
-    tag = sys.argv[1]      # e.g. "1.15.0"
+    tag = sys.argv[1]  # e.g. "1.15.0"
     product = sys.argv[2]  # e.g. "docker-rasenmaeher-integration"
 
     try:
@@ -680,9 +697,7 @@ def main() -> None:
             continue
         # label: last path segment (e.g. "rmapi" from "submodules/rmapi")
         label = Path(path).name
-        submodule_commit_list.extend(
-            get_submodule_commits_between(repo_slug, old_sha, new_sha, label)
-        )
+        submodule_commit_list.extend(get_submodule_commits_between(repo_slug, old_sha, new_sha, label))
 
     md = generate_markdown(product, tag, entries, submodule_commit_list)
 

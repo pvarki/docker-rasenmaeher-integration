@@ -7,7 +7,7 @@
      - Adds modular UI that allows products supply UI items, so allowing integration of new products to be served via the app -->
 
 Summary:
-- 
+-
 
 
 ## Why It's Good for the Product (Release Goal)
@@ -16,4 +16,4 @@ Summary:
      - TAK updates are good for you
      - Important goal to achieve full integration capability and so to get new products distributed to use via Deploy App. -->
 
-- 
+-
