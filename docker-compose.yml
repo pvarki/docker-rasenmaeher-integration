@@ -157,7 +157,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx,agpractice,airguardian"
       LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - kraftwerk_data:/data/persistent
