@@ -5,9 +5,10 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
+  AIRGUARDIAN_URL: &airguardianurl "https://airguardian.${SERVER_DOMAIN:?domain must be defined}:4626/"
+  KC_DOMAIN:   &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}   # Must be able to resolve docker internal names
+  OCSCP_RESPONDER:   &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"   # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
@@ -155,7 +156,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx,agpractice,airguardian"
       LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -843,6 +844,7 @@ services:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "local"
+      TI_AIRGUARDIAN_URL: *airguardianurl
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
@@ -897,6 +899,10 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
+      NGINX_AIRGUARDIAN_UPSTREAM: "airgproxy"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8002"
+      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
+      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
     networks:
       - productnet
       - intranet
@@ -922,8 +928,50 @@ services:
 ###########################
 # END: consolidated NGinx #
 ###########################
+  airgproxy:
+    build:
+      context: ./airguard-api
+    environment:
+      API_HOST: "0.0.0.0"
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    
+    networks:
+      - taknet
+      - productnet
+      - airguardnet
+    healthcheck:
+      test: "echo 'fixme'" # FIXME: proxy needs healthcheck endpoint/url
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
 
-
+  airguardtool:
+    build:
+      context: ./airguardpractice
+      dockerfile: Dockerfile
+    volumes:
+      - airguard_data:/app/data
+    environment:
+      DB_FILE_NAME: "file:/app/data/airguard.db"
+    networks:
+      - productnet
+      - airguardnet
+    healthcheck:
+      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
 ##############################################################################
 # Workaround docker compose not having opton to restart unhealthy containers #
 ##############################################################################
@@ -951,7 +999,9 @@ networks:
   ocspnet:
   dbnet:
   intranet:
-  taknet:
+  taknet:  
+  airguardnet:
+
 
 volumes:
   kraftwerk_data:
@@ -976,3 +1026,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  airguard_data:
