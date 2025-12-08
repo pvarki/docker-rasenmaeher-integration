@@ -29,7 +29,6 @@ services:
     build:
       context: ./airguardpractice
       dockerfile: Dockerfile
-    container_name: airguardtool
     volumes:
       - airguard_data:/app/data
     environment:
