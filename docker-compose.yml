@@ -6,8 +6,7 @@ x-domains_env:
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  AIRGUARDIAN_DOMAIN: &airgdomain "airguardian.${SERVER_DOMAIN:?domain must be defined}"
-  AIRGUARDIAN_URL: &airguardianurl https://{*airgdomain}:4626/
+  AIRGUARDIAN_URL: &airguardianurl "https://airguardian.${SERVER_DOMAIN:?domain must be defined}:4626/"
   KC_DOMAIN:   &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:?domain must be defined}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}   # Must be able to resolve docker internal names
@@ -1076,7 +1075,6 @@ services:
     build:
       context: ./airguardpractice
       dockerfile: Dockerfile
-    container_name: airguardtool
     volumes:
       - airguard_data:/app/data
     environment:
