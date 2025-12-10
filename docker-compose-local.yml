@@ -449,6 +449,7 @@ services:
       RM_LOG_LEVEL_INT: "10"
       RELEASE_TAG: "local"
       RELEASE_STATUS: "alpha"
+      RM_INTEGRATION_API_TIMEOUT: "3.0" # Might need to raise this with slower/older CPU
     networks:
       - apinet
       - kcnet
