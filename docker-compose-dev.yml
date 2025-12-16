@@ -60,7 +60,7 @@ services:
       start_period: 75s
     volumes:
       - "./mtxauthz:/app"
-
+      - "./mtxauthz/ui:/ui"
   rmuidev:
     image: pvarki/rmui:devel_shell${DOCKER_TAG_EXTRA:-}
     logging:
