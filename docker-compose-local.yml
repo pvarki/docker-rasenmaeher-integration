@@ -628,29 +628,49 @@ services:
       context: ./airguard-api
       dockerfile: Dockerfile
       target: production
-    command: ["-c", "python", "-m", "app.main"]
+    command: ["python", "-m", "app.main"]
     environment:
-      LOG_CONSOLE_FORMATTER: "local"
-    ports:
-      - "8010:8010"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
+      API_HOST: "0.0.0.0"
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
     networks:
+      - taknet
       - productnet
-      - intranet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - rmagapi_data:/data/persistent
-      - ui_files:/ui_files
+      - airguardnet
     depends_on:
       rmnginx:
         condition: service_healthy
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME 
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  airguardtool:
+    build:
+      context: ./airguardpractice
+      dockerfile: Dockerfile
+    volumes:
+      - airguard_data:/app/data
+    environment:
+      DB_FILE_NAME: "file:/app/data/airguard.db"
+    networks:
+      - productnet
+      - airguardnet
+    healthcheck:
+      test: 'true' # FIXME: User proper health check. Healtcheck url to tool?
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 5s
     restart: unless-stopped
 ####################
 # End: Agintegration #
@@ -1012,8 +1032,8 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
-      NGINX_AIRGUARDIAN_UPSTREAM: "airgproxy"
-      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8002"
+      NGINX_AIRGUARDIAN_UPSTREAM: "rmagapi"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8010"
       NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
       NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
       NGINX_AG_UPSTREAM: "rmagapi"
@@ -1063,6 +1083,7 @@ networks:
   dbnet:
   intranet:
   taknet:
+  airguardnet:
 
 volumes:
   kraftwerk_data:
@@ -1087,4 +1108,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
-  rmagapi_data:
+  airguard_data:
