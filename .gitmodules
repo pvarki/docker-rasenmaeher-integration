@@ -37,7 +37,7 @@
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
 [submodule "airguard-api"]
 	path = airguard-api
-	url = https://github.com/c5bravo/atak-airguardian-api
+	url = git@github.com:c5bravo/atak-airguardian-api.git
 [submodule "airguardpractice"]
 	path = airguardpractice
-	url = https://github.com/c5bravo/atak-airguardian-practice-tool.git
+	url = git@github.com:c5bravo/atak-airguardian-practice-tool.git
