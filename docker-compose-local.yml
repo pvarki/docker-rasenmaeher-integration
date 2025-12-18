@@ -654,7 +654,7 @@ services:
       rmnginx:
         condition: service_healthy
     healthcheck:
-      test: 'true' # FIXME 
+      test: 'true' # FIXME
       interval: 10s
       timeout: 5s
       retries: 5
