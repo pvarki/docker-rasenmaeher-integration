@@ -206,7 +206,7 @@ services:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 3
       start_period: 5s
     depends_on:
       rmnginx:
