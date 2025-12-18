@@ -153,9 +153,6 @@ services:
       - airguardnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -265,9 +262,9 @@ services:
 
 networks:
   intranet:
+  productnet:
   airguardnet:
 
 volumes:
   nginx_templates:
   airguard_data:
-
