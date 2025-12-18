@@ -1122,7 +1122,7 @@ networks:
   ocspnet:
   dbnet:
   intranet:
-  taknet:  
+  taknet:
   airguardnet:
 
 
