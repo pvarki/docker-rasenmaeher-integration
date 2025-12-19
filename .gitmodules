@@ -35,6 +35,3 @@
 [submodule "uiv2"]
 	path = uiv2
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
-[submodule "airguardpractice"]
-	path = airguardpractice
-	url = https://github.com/c5bravo/atak-airguardian-practice-tool.git
