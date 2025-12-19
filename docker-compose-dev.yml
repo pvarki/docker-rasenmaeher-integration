@@ -144,17 +144,19 @@ services:
       context: ./airguard-api
       dockerfile: Dockerfile
       target: production
-    command: ["python", "-m", "app.main"]
+    command: ["-c", "python", "-m", "app.main"]
     environment:
       LOG_CONSOLE_FORMATTER: "local"
+    ports:
+      - "8010:8010"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
       - productnet
       - intranet
-      - airguardnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - ca_public:/ca_public
+      - rmagapi_data:/data/persistent
       - ui_files:/ui_files
     depends_on:
       rmnginx:
@@ -165,25 +167,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
-    restart: unless-stopped
-
-  airguardtool:
-    build:
-      context: ./airguardpractice
-      dockerfile: Dockerfile
-    volumes:
-      - airguard_data:/app/data
-    environment:
-      DB_FILE_NAME: "file:/app/data/airguard.db"
-    networks:
-      - productnet
-      - airguardnet
-    healthcheck:
-      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
     restart: unless-stopped
 ####################
 # End: Agintegration #
@@ -265,9 +248,6 @@ services:
 
 networks:
   intranet:
-  airguardnet:
 
 volumes:
   nginx_templates:
-  airguard_data:
-

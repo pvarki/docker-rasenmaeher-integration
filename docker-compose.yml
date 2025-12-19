@@ -901,8 +901,8 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_AIRGUARDIAN_UPSTREAM: "rmagapi"
-      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8010"
+      NGINX_AIRGUARDIAN_UPSTREAM: "airgproxy"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8002"
       NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
       NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
     networks:
@@ -930,13 +930,9 @@ services:
 ###########################
 # END: consolidated NGinx #
 ###########################
-  rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
+  airgproxy:
     build:
       context: ./airguard-api
-      dockerfile: Dockerfile
-      target: production
-    command: ["python", "-m", "app.main"]
     environment:
       API_HOST: "0.0.0.0"
       OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
@@ -947,15 +943,13 @@ services:
       DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
       PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
       PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    
     networks:
       - taknet
       - productnet
       - airguardnet
-    depends_on:
-      rmnginx:
-        condition: service_healthy
     healthcheck:
-      test: 'rmagapi healthcheck|| exit 1'
+      test: "echo 'fixme'" # FIXME: proxy needs healthcheck endpoint/url
       interval: 10s
       timeout: 5s
       retries: 5
