@@ -172,7 +172,6 @@ services:
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
-      - kraftwerk_shared_airguardian:/pvarkishares/airguardian
       - le_certs:/le_certs
       - ca_public:/ca_public
 
@@ -644,12 +643,6 @@ services:
       - taknet
       - productnet
       - airguardnet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - kraftwerk_shared_airguardian:/pvarki
-      - rmagapi_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -1098,14 +1091,12 @@ volumes:
   kraftwerk_shared_fake:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
-  kraftwerk_shared_airguardian:
   pg_data:
   cfssl_data:
   openldap_data:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
-  rmagapi_data:
   ca_public:
   le_certs:
   tak_data:
