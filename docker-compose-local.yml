@@ -145,7 +145,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx,agpractice,airguardian,ag"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,agpractice,airguardian"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -620,43 +620,6 @@ services:
 ####################
 
 ######################
-# Begin: Agintegration #
-######################
-  rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./airguard-api
-      dockerfile: Dockerfile
-      target: production
-    command: ["-c", "python", "-m", "app.main"]
-    environment:
-      LOG_CONSOLE_FORMATTER: "local"
-    ports:
-      - "8010:8010"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
-    networks:
-      - productnet
-      - intranet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - rmagapi_data:/data/persistent
-      - ui_files:/ui_files
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    restart: unless-stopped
-####################
-# End: Agintegration #
-####################
-
-######################
 # Begin: Battlelog #
 ######################
   blapi:
@@ -1016,8 +979,6 @@ services:
       NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8002"
       NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
       NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
-      NGINX_AG_UPSTREAM: "rmagapi"
-      NGINX_AG_UPSTREAM_PORT: "8010"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
@@ -1087,4 +1048,3 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
-  rmagapi_data:

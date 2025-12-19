@@ -135,43 +135,6 @@ services:
       rmnginx:
         condition: service_healthy
 
-######################
-# Begin: Agintegration #
-######################
-  rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./airguard-api
-      dockerfile: Dockerfile
-      target: production
-    command: ["-c", "python", "-m", "app.main"]
-    environment:
-      LOG_CONSOLE_FORMATTER: "local"
-    ports:
-      - "8010:8010"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
-    networks:
-      - productnet
-      - intranet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - rmagapi_data:/data/persistent
-      - ui_files:/ui_files
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    restart: unless-stopped
-####################
-# End: Agintegration #
-####################
-
   takrmapi:
     image: pvarki/takrmapi:devel_shell${DOCKER_TAG_EXTRA:-}
     logging:
@@ -189,7 +152,7 @@ services:
       test: '/bin/bash -c "source /root/.profile && takrmapi healthcheck" || exit 1'
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 3
       start_period: 5s
     depends_on:
       rmnginx:
