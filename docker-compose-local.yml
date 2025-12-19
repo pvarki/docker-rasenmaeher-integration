@@ -7,7 +7,9 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRGUARDIAN_URL: &airguardianurl "https://airguardian.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:4626/"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
@@ -86,7 +88,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -94,7 +96,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-58}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: pvarki/nginx:1.27${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -124,21 +126,26 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
   WEBTAK_ENABLE: "true"
+  TAK_FEED_AIRGUARD_ENABLE: "true"
+  TAK_FEED_AIRGUARD_PORT: "8090"
+
+x-logging: &logging
+  logging:
+    options:
+      max-size: 50m
 
 
 services:
   miniwerk:
-    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,agpractice,airguardian"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -147,6 +154,9 @@ services:
       MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
+      MW_BL__API_BASE: "/rmapi/"
+      MW_BL__API_PORT: *productport
+      MW_BL__USER_PORT: *productport
       MW_TAK__EXTRAVAL: "this should be ignored"
       CAROOT: "/data/persistent/mkcert"
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
@@ -162,14 +172,13 @@ services:
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
+      - kraftwerk_shared_airguardian:/pvarkishares/airguardian
       - le_certs:/le_certs
       - ca_public:/ca_public
 
   jwtcopy:
-    image: pvarki/miniwerk:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -187,10 +196,8 @@ services:
         condition: service_healthy
 
   cfssl:
-    image: pvarki/cfssl:api-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -207,14 +214,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 60s
     restart: unless-stopped
 
   ocsp:
-    image: pvarki/cfssl:ocsp-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -231,17 +236,15 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
     restart: unless-stopped
 
   ocsprest:
-    image: pvarki/cfssl:ocsprest-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -258,19 +261,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 30s
     depends_on:
       cfssl:
         condition: service_healthy
     restart: unless-stopped
 
-
   postgres:
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}postgis/postgis:15-3.4
     platform: linux/amd64  # It seems there are no arm images available
-    image: postgis/postgis:15-3.4
-    logging:
-      options:
-        max-size: 50m
     networks:
       - dbnet
     ports:
@@ -289,14 +289,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -305,10 +303,8 @@ services:
         condition: service_completed_successfully
 
   openldap:
-    image: pvarki/openldap:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -349,14 +345,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 60s
     restart: unless-stopped
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -365,10 +359,8 @@ services:
         condition: service_completed_successfully
 
   keycloak:
-    image: bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -404,15 +396,13 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-      start_period: 20s
+      start_period: 120s
     restart: unless-stopped
 
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
-    image: adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
     networks:
       - kcnet
     volumes:
@@ -433,10 +423,8 @@ services:
         condition: service_healthy
 
   rmapi:
-    image: pvarki/rmapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmapi:1.10.3-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -466,6 +454,7 @@ services:
       RM_LOG_LEVEL_INT: "10"
       RELEASE_TAG: "local"
       RELEASE_STATUS: "alpha"
+      RM_INTEGRATION_API_TIMEOUT: "3.0" # Might need to raise this with slower/older CPU
     networks:
       - apinet
       - kcnet
@@ -497,29 +486,26 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 30s
     restart: unless-stopped
 
+  # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
-    image: pvarki/rmui:${VITE_ASSET_SET:-neutral}-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
-      context: ./ui
+      context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
-        VITE_ASSET_SET: ${VITE_ASSET_SET:-neutral}
+        VITE_THEME: ${VITE_THEME:-default}
         RELEASE_TAG: "local"
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
-    image: pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:templates-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -528,15 +514,13 @@ services:
       - nginx_templates:/deliver
 
   rmnginx:
-    <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*nginxbuildinfo, *logging]
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
       - rmui_files:/rmui_files
+      - ui_files:/ui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -581,14 +565,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 
   kwinit:  # Mostly to make sure it's built
-    image: pvarki/kw_product_init:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -604,10 +586,8 @@ services:
 # Begin: Fakeproduct #
 ######################
   rmfpapi:
-    image: pvarki/rmfpapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmfpapi:1.4.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -625,6 +605,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_fake:/pvarki
       - rmfpapi_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -633,20 +614,81 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 15s
     restart: unless-stopped
 ####################
 # End: Fakeproduct #
 ####################
 
 ######################
+# Begin: Agintegration #
+######################
+  rmagapi:
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./airguard-api
+      dockerfile: Dockerfile
+      target: production
+    command: ["python", "-m", "app.main"]
+    environment:
+      API_HOST: "0.0.0.0"
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    networks:
+      - taknet
+      - productnet
+      - airguardnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_airguardian:/pvarki
+      - rmagapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'true' # FIXME
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  airguardtool:
+    build:
+      context: ./airguardpractice
+      dockerfile: Dockerfile
+    volumes:
+      - airguard_data:/app/data
+    environment:
+      DB_FILE_NAME: "file:/app/data/airguard.db"
+    networks:
+      - productnet
+      - airguardnet
+    healthcheck:
+      test: 'true' # FIXME: User proper health check. Healtcheck url to tool?
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+####################
+# End: Agintegration #
+####################
+
+######################
 # Begin: Battlelog #
 ######################
   blapi:
-    image: pvarki/blapi:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -678,7 +720,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ####################
 # End: Battlelog #
@@ -688,10 +730,8 @@ services:
 # Begin: MediaMTX #
 ###################
   rmmtx:
-    image: pvarki/rmmtx:local${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -715,6 +755,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_rmmtx:/pvarki
       - rmmtx_data:/data/persistent
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -727,14 +768,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
-    image: bash:latest
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -743,10 +782,8 @@ services:
         condition: service_completed_successfully
 
   mediamtx:
-    image: bluenviron/mediamtx:1.12.3
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bluenviron/mediamtx:1.12.3
     networks:
       - productnet
       - intranet
@@ -784,16 +821,11 @@ services:
 # End: MediaMTX #
 #################
 
-
-
 ##############
 # Begin: TAK #
 ##############
   takinit:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -815,10 +847,7 @@ services:
     command: /opt/scripts/firstrun_rm.sh
 
   takconfig:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -851,14 +880,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 60s
     restart: unless-stopped
 
   takmsg:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -878,14 +904,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takapi:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -905,14 +928,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takreten:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -931,14 +951,11 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takplug:
-    <<: *takbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*takbuildinfo, *logging]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
@@ -957,14 +974,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     restart: unless-stopped
 
   takrmapi:
-    image: pvarki/takrmapi:local${DOCKER_TAG_EXTRA:-}-tak${TAK_RELEASE:-5.5-RELEASE-58}
-    logging:
-      options:
-        max-size: 50m
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.1.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -976,12 +991,15 @@ services:
       LOG_CONSOLE_FORMATTER: "local"
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
+      TI_MTX_SERVER_FQDN: *mtxdomain
+      TI_AIRGUARDIAN_URL: *airguardianurl
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -994,7 +1012,7 @@ services:
       interval: 15s
       timeout: 35s
       retries: 3
-      start_period: 45s
+      start_period: 80s
     restart: unless-stopped
 ############
 # End: TAK #
@@ -1004,14 +1022,12 @@ services:
 # BEGIN: consolidated NGinx #
 #############################
   productsnginx:
-    <<: *nginxbuildinfo
-    logging:
-      options:
-        max-size: 50m
+    <<: [*nginxbuildinfo, *logging]
     volumes:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - ui_files:/ui_files
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
@@ -1023,6 +1039,12 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_AIRGUARDIAN_UPSTREAM: "rmagapi"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8010"
+      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
+      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
+      NGINX_AG_UPSTREAM: "rmagapi"
+      NGINX_AG_UPSTREAM_PORT: "8010"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
@@ -1050,7 +1072,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 25s
     restart: unless-stopped
 ###########################
 # END: consolidated NGinx #
@@ -1068,6 +1090,7 @@ networks:
   dbnet:
   intranet:
   taknet:
+  airguardnet:
 
 volumes:
   kraftwerk_data:
@@ -1075,12 +1098,14 @@ volumes:
   kraftwerk_shared_fake:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
+  kraftwerk_shared_airguardian:
   pg_data:
   cfssl_data:
   openldap_data:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
+  rmagapi_data:
   ca_public:
   le_certs:
   tak_data:
@@ -1091,3 +1116,5 @@ volumes:
   blapi_data:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
+  ui_files:
+  airguard_data:
