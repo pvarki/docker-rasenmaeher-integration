@@ -3,7 +3,7 @@ services:
     build:
       context: ./airguard-api
     environment:
-      API_HOST: "0.0.0.0"
+      # SERVER_DOMAIN: *serverdomain
       OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
       OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
       OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
