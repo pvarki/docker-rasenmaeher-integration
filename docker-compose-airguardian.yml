@@ -25,30 +25,7 @@ services:
       start_period: 30s
     restart: unless-stopped
 
-  airguardtool:
-    build:
-      context: ./airguardpractice
-      dockerfile: Dockerfile
-    container_name: airguardtool
-    volumes:
-      - airguard_data:/app/data
-    environment:
-      DB_FILE_NAME: "file:/app/data/airguard.db"
-    networks:
-      - productnet
-      - airguardnet
-    healthcheck:
-      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
-
-volumes:
-  airguard_data:
-
 networks:
   taknet:
   productnet:
-  airguardnet:  # airguard proxy to airguard practice tool
+  airguardnet:
