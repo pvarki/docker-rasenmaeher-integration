@@ -5,11 +5,10 @@ x-domains_env:
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
-  AIRGUARDIAN_URL: &airguardianurl "https://airguardian.${SERVER_DOMAIN:?domain must be defined}:4626/"
-  KC_DOMAIN:   &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
+  KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:?domain must be defined}"
-  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}   # Must be able to resolve docker internal names
-  OCSCP_RESPONDER:   &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"   # The public URL
+  DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
+  OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}/ca/ocsp"  # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
   KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
@@ -85,7 +84,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -93,7 +92,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.5-RELEASE-58}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -137,7 +136,7 @@ x-logging: &logging
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -157,7 +156,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx,agpractice,airguardian"
+      MW_PRODUCTS: "tak,kc,bl,mtx"
       LOG_CONSOLE_FORMATTER: "local"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -173,7 +172,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -197,7 +196,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -224,7 +223,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -288,7 +287,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -402,7 +401,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmapi:1.10.3-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmapi:1.10.3-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -426,7 +425,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: 5
-      RELEASE_TAG: ${RELEASE_TAG:-2.1.0}
+      RELEASE_TAG: ${RELEASE_TAG:-2.0.3}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "local"
     networks:
@@ -464,20 +463,20 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
         VITE_THEME: ${VITE_THEME:-default}
-        RELEASE_TAG: ${RELEASE_TAG:-2.1.0}
+        RELEASE_TAG: ${RELEASE_TAG:-2.0.3}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:templates-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/nginx:templates-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -539,7 +538,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -557,7 +556,7 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -597,7 +596,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -834,7 +833,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.1.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.5-RELEASE-58}-d${RELEASE_TAG:-2.0.3}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -846,7 +845,6 @@ services:
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "local"
       TI_MTX_SERVER_FQDN: *mtxdomain
-      TI_AIRGUARDIAN_URL: *airguardianurl
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
@@ -901,10 +899,6 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_AIRGUARDIAN_UPSTREAM: "rmagapi"
-      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8010"
-      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
-      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
     networks:
       - productnet
       - intranet
@@ -930,56 +924,8 @@ services:
 ###########################
 # END: consolidated NGinx #
 ###########################
-  rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./airguard-api
-      dockerfile: Dockerfile
-      target: production
-    command: ["python", "-m", "app.main"]
-    environment:
-      API_HOST: "0.0.0.0"
-      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
-      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
-      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
-      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
-      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
-      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
-      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
-      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
-    networks:
-      - taknet
-      - productnet
-      - airguardnet
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-    healthcheck:
-      test: 'rmagapi healthcheck|| exit 1'
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    restart: unless-stopped
 
-  airguardtool:
-    build:
-      context: ./airguardpractice
-      dockerfile: Dockerfile
-    volumes:
-      - airguard_data:/app/data
-    environment:
-      DB_FILE_NAME: "file:/app/data/airguard.db"
-    networks:
-      - productnet
-      - airguardnet
-    healthcheck:
-      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
+
 ##############################################################################
 # Workaround docker compose not having opton to restart unhealthy containers #
 ##############################################################################
@@ -1008,8 +954,6 @@ networks:
   dbnet:
   intranet:
   taknet:
-  airguardnet:
-
 
 volumes:
   kraftwerk_data:
@@ -1034,4 +978,3 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
-  airguard_data:
