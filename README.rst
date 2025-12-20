@@ -91,7 +91,7 @@ Example .env-file with the minimal information needed::
     MW_LE_TEST="false"
     TAKSERVER_CERT_PASS="input-secure-password"  # pragma: allowlist secret
     TAK_CA_PASS="input-secure-password"  # pragma: allowlist secret
-    VITE_ASSET_SET="${VITE_ASSET_SET:-neutral}"
+    VITE_THEME="${VITE_THEME:-default}"
     KEYCLOAK_PROFILEROOT_UUID="input-uuid"
     KEYCLOAK_HTTPS_KEY_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="input-secure-password"  # pragma: allowlist secret
@@ -201,7 +201,7 @@ Directories that are submodules
   - kw_product_init https://github.com/pvarki/golang-kraftwerk-init-helper-cli
   - openldap https://github.com/pvarki/docker-openldap
   - miniwerk https://github.com/pvarki/python-rasenmaeher-miniwerk
-  - ui https://github.com/pvarki/rasenmaeher-ui
+  - uiv2 https://github.com/pvarki/react-rasenmaeher-ui-v2
   - takserver https://github.com/pvarki/docker-atak-server
   - takintegration https://github.com/pvarki/python-tak-rmapi
   - battlelog https://github.com/pvarki/typescript-liveloki-app
@@ -239,17 +239,22 @@ but also introduces extra variability to how things work.
 Make sure to always check your changes work correctly in rmlocal mode where assets
 are minified and baked in.
 
+Due to buildkit bugs with cache your need to run local registry::
+
+    docker run -d -p 5050:5000 --restart always --name registry registry:3
+
+
 TLDR::
 
-    alias rmlocal="docker compose -p rmlocal -f docker-compose-local.yml"
-    rmlocal build takinit miniwerk --pull
+    alias rmlocal="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmlocal -f docker-compose-local.yml"
+    rmlocal build takinit miniwerk --pull --push
     rmlocal build --pull
     rmlocal up
 
 or::
 
-    alias rmdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-    rmdev build takinit miniwerk --pull
+    alias rmdev="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
+    rmdev build takinit miniwerk --pull --push
     rmdev build --pull
     rmdev up
 
