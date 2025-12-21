@@ -153,7 +153,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 120s
     depends_on:
       rmnginx:
         condition: service_healthy
