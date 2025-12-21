@@ -4,6 +4,7 @@ x-domains_env:
   MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
+  PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
   MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:?domain must be defined}"
@@ -885,6 +886,7 @@ services:
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
+      NGINX_EPHEMERAL_HTTPS_PORT: *productephemeralport
       # these must be defined for the template to work even if the product is not used
       NGINX_FP_UPSTREAM: "rmfpapi"
       NGINX_FP_UPSTREAM_PORT: "8001"
@@ -905,6 +907,7 @@ services:
       - ocspnet
     ports:
       - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
+      - "${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}:${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}"
     depends_on:
       nginx_templates:
         condition: service_completed_successfully

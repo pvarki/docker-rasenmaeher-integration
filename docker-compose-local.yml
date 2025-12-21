@@ -6,6 +6,7 @@ x-domains_env:
   MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
+  PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
@@ -813,7 +814,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 60s
+      start_period: 120s
     restart: unless-stopped
 
   takmsg:
@@ -925,6 +926,7 @@ services:
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
+      TI_PRODUCT_HTTPS_PORT: *productport
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -963,6 +965,7 @@ services:
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
+      NGINX_EPHEMERAL_HTTPS_PORT: *productephemeralport
       NGINX_FP_UPSTREAM: "rmfpapi"
       NGINX_FP_UPSTREAM_PORT: "8001"
       NGINX_BL_UPSTREAM: "blapi"
@@ -982,6 +985,7 @@ services:
       - ocspnet
     ports:
       - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
+      - "${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}:${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}"
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
