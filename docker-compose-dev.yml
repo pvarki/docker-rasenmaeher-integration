@@ -41,6 +41,8 @@ services:
       start_period: 45s
     volumes:
       - "./api:/app"
+    environment:
+      LOG_CONSOLE_FORMATTER: ecs
 
   rmmtx:
     image: pvarki/rmmtx:devel_shell${DOCKER_TAG_EXTRA:-}

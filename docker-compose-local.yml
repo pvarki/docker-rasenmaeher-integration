@@ -439,7 +439,7 @@ services:
       RM_OCSPREST_HOST: "http://ocsprest"
       RM_OCSPREST_PORT: 8887
       JWT_LIFETIME: "3456000"  # Long JWT lifetimes for testing
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
       RM_OCSCP_RESPONDER: *publicocsp
       #RM_TILAUSPALVELU_JWT: "file:///pvarki/publickeys/kraftwerk.pub"
       RM_TILAUSPALVELU_JWT: ""
@@ -590,7 +590,7 @@ services:
       dockerfile: Dockerfile
       target: production
     environment:
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
     ports:
       - "8001:8001"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
@@ -629,7 +629,7 @@ services:
       target: production
     environment:
       <<: [*bldbconfig_env]
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
     ports:
       - "8666:3000"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
@@ -674,7 +674,7 @@ services:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:9997
       RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
       RMMTX_LOG_LEVEL: "debug"
       UVICORN_LOG_LEVEL: "debug"
     ports:
@@ -922,7 +922,7 @@ services:
         TAKSERVER_IMAGE: *takimage
     network_mode: "service:takconfig"
     environment:
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
       UVICORN_LOG_LEVEL: "debug"
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
