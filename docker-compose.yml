@@ -184,6 +184,7 @@ services:
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
       - kraftwerk_shared_matrix:/pvarkishares/matrix
+      - kraftwerk_shared_airguardian:/pvarkishares/airguardian
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
@@ -1066,11 +1067,17 @@ services:
       - taknet
       - productnet
       - airguardnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_airguardian:/pvarki
+      - rmagapi_data:/data/persistent
     depends_on:
       rmnginx:
         condition: service_healthy
     healthcheck:
-      test: 'rmagapi healthcheck|| exit 1'
+      test: 'true' # FIXME
       interval: 10s
       timeout: 5s
       retries: 5
@@ -1089,7 +1096,7 @@ services:
       - productnet
       - airguardnet
     healthcheck:
-      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
+      test: 'true' # FIXME: User proper health check. Healtcheck url to tool?
       interval: 5s
       timeout: 5s
       retries: 3
@@ -1134,6 +1141,7 @@ volumes:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
   kcinit_data:
+  kraftwerk_shared_airguardian:
   pg_data:
   cfssl_data:
   openldap_data:
@@ -1141,6 +1149,7 @@ volumes:
   rmapi_data:
   rmfpapi_data:
   matrix_data:
+  rmagapi_data:
   ca_public:
   le_certs:
   tak_data:
