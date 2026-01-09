@@ -16,6 +16,10 @@ map $host $host_upstream_mapped {
     mtx.${NGINX_HOST}        ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
     rmmtx.${NGINX_HOST}        ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
 }
+map $host $host_ephemeral_upstream_mapped {
+    hostnames;
+    tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
+}
 
 server {
     # HTTPS configuration
@@ -28,6 +32,13 @@ server {
     resolver ${DNS_RESOLVER_IP} ipv6=off;
     #ssl_crl /ca_public/crl.pem;
     ssl_verify_depth 3;
+
+    location /ui/ {
+        alias /ui_files/;
+        autoindex on;
+        try_files $uri $uri/ =404;
+        add_header Access-Control-Allow-Origin *;
+    }
 
     location / {
         if ($ssl_client_verify != SUCCESS) {
@@ -45,4 +56,34 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $http_connection;
     }
+}
+
+
+server {
+    # HTTPS configuration
+    listen ${NGINX_EPHEMERAL_HTTPS_PORT} ssl;
+
+    ssl_client_certificate /ca_public/ca_chain.pem;
+    ssl_verify_client      off;
+    ssl_ocsp leaf;
+    ssl_ocsp_responder http://${NGINX_OCSP_UPSTREAM}:${CFSSL_OCSP_BIND_PORT};
+    resolver ${DNS_RESOLVER_IP} ipv6=off;
+    #ssl_crl /ca_public/crl.pem;
+    ssl_verify_depth 3;
+
+    location /ephemeral/api {
+        proxy_pass  http://$host_ephemeral_upstream_mapped$request_uri;
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
+        proxy_buffer_size          128k;
+        proxy_buffers              4 256k;
+        proxy_busy_buffers_size    256k;
+    }
+
 }

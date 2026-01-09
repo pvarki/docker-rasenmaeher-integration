@@ -25,6 +25,9 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11"] # , "3.12"]
+    env:
+      PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
+      POETRY_PYPI_MIRROR_URL: https://nexus.dev.pvarki.fi/repository/python/simple
     steps:
       - uses: actions/checkout@v5
         with:
@@ -37,6 +40,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry
+          poetry self add poetry-plugin-pypi-mirror
           cd api && poetry install
       - name: Prep docker
         run: |
@@ -64,9 +68,17 @@ jobs:
       contents: write
       pull-requests: write
       checks: write
+    env:
+      PVARKI_DOCKER_REPO: docker.io/
+      DOCKER_TAG_EXTRA: rmlocaltest
     steps:
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v5
       with:
         submodules: recursive
@@ -87,6 +99,7 @@ jobs:
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker system prune --all --volumes --force
+        dcloc build --pull takinit miniwerk --push
         dcloc build --pull
         dcloc pull --ignore-buildable
     - name: docker compose cleanup
@@ -140,87 +153,6 @@ jobs:
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         dcloc down -v || true
 
-  rmdev:
-    if: false
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      checks: write
-    steps:
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
-    - uses: actions/checkout@v5
-      with:
-        submodules: recursive
-    - name: install dependencies
-      id: install_dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r tests/requirements.txt
-    - name: pre-commit
-      id: pre_commit
-      run: |
-        export SKIP=no-commit-to-branch
-        source example_env.sh
-        pre-commit run --all-files
-    - name: docker compose build
-      id: compose_build
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        docker system prune --all --volumes --force
-        dcdev build --pull
-        dcdev pull --ignore-buildable
-    - name: docker compose cleanup
-      id: compose_clean_1
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
-        dcdev down -v || true
-        dcloc down -v || true
-    - name: docker compose up first attempt
-      id: compose_up_first
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        dcdev up --wait || ( dcdev logs && exit 1 )
-      continue-on-error: true
-    - name: docker compose up second attempt
-      if: ${{ steps.compose_up_first.outcome == 'failure' }}
-      id: compose_up_second
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        dcdev up --wait || ( dcdev logs && exit 1 )
-      continue-on-error: true
-    - name: add test users
-      id: add_test_users
-      run: |
-        docker ps
-        docker exec rmdev-rmapi-1 /.venv/bin/rasenmaeher_api addtestusers
-    - name: Test with pytest
-      id: run_pytest
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        py.test -v --junitxml=pytest-rmdev.xml tests/ || ( dcdev logs && exit 1 )
-    - name: Publish Test Report
-      uses: mikepenz/action-junit-report@v4
-      if: success() || failure() # always run even if the previous step fails
-      with:
-        report_paths: '**/pytest*.xml'
-        detailed_summary: true
-        include_passed: true
-        check_name: 'rmdev integration tests'
-    - name: docker compose cleanup
-      id: compose_clean_2
-      if: ${{ !cancelled() }}
-      run: |
-        shopt -s expand_aliases
-        alias dcdev="docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-        dcdev down -v || true
 
   build_and_publish:
     runs-on: ubuntu-latest
@@ -228,7 +160,9 @@ jobs:
     strategy:
       matrix:
         extra_env: ["none", "date"]
-        asset_set: ["neutral", "fdf"]
+        asset_set: ["default", "fdf"]
+    env:
+      PVARKI_DOCKER_REPO: docker.io/
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -243,9 +177,9 @@ jobs:
       - name: Fix ref slashes
         run: |
           echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
-      - name: Set VITE_ASSET_SET
+      - name: Set VITE_THEME
         run: |
-          echo "VITE_ASSET_SET=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
+          echo "VITE_THEME=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
       - name: Set DOCKER_TAG_EXTRA if date
         run: |
@@ -256,27 +190,36 @@ jobs:
         run: |
           test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
-      - name: Build takinit and miniwerk
+      - name: Build takinit and miniwerk (main)
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose build takinit miniwerk
+          docker compose build --pull takinit miniwerk
+      - name: Build takinit and miniwerk (local)
+        run: |
+          docker compose -f docker-compose-local.yml build --pull takinit miniwerk
       - name: push takinit and miniwerk
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose push takinit miniwerk
-      - name: Build main composition
+          docker compose push takinit miniwerk
+          docker compose -f docker-compose-local.yml push takinit miniwerk
+      - name: Build main composition (main)
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose build
+          docker compose build --pull
+      - name: Build main composition (local)
+        run: |
+          docker compose -f docker-compose-local.yml build --pull
       - name: Push main composition
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          PVARKI_DOCKER_REPO=docker.io/ docker compose push
+          docker compose push
+          docker compose -f docker-compose-local.yml push
 
       - name: Warm Nexus cache
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
           docker compose pull --ignore-pull-failures
+          docker compose -f docker-compose-local.yml pull --ignore-pull-failures
