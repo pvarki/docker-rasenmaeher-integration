@@ -1,7 +1,7 @@
 # NOTE!!: Use bump2version to bump the RELEASE_TAG default value
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
-  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:?domain must be defined}"
+  MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
