@@ -18,6 +18,15 @@ This `Disobey24 talk`_ explains a lot.
 
 .. _`Disobey24 talk`: https://www.youtube.com/watch?v=m3xd7uygpaY&list=PLLvAhAn5sGfiB9AlEt2KD7H9Dnr6kbd64&index=23
 
+Deploy App aims to provide a single, simple, and secure login and identity flow for a variety of services used in mission-critical tasks.
+New services can be introduced to Deploy App through integration APIs. These APIs provide the required UI content and access, allowing users to onboard to new services directly via the Deploy App UI.
+
+Our goals:
+- From zero to a running service with your team onboarded in 30 minutes
+- A fully reproducible deployment flow with no manual setup steps.
+- Security and quality first.
+
+Currently, Deploy App's deployment infrastructure is this Docker Compose.
 
 
 Running Deploy App in your own docker environment
@@ -51,10 +60,12 @@ And redirected to the server if behind NAT or similar.
 
   - 80
   - 443
+  - 8089 (TAK)
   - 8443 (TAK)
   - 8446 (TAK)
   - 9446 (Keycloak)
   - 4626 (Product integration APIs port)
+  - 4627 (ATAK Autoimport ephemeral download port)
   - 4666 (Battlelog API/UI port)
   - 1936 RTMPS
   - 8322 RTSPS
