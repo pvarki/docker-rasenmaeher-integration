@@ -1088,13 +1088,22 @@ services:
     build:
       context: ./airguardpractice
       dockerfile: Dockerfile
-    volumes:
-      - airguard_data:/app/data
     environment:
-      DB_FILE_NAME: "file:/app/data/airguard.db"
+      DB_FILE_NAME: "file:/data/persistent/airguard.db"
     networks:
       - productnet
       - airguardnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_airguardian:/pvarki
+      - rmagapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      rmagapi:
+        condition: service_healthy
     healthcheck:
       test: 'true' # FIXME: User proper health check. Healtcheck url to tool?
       interval: 5s
