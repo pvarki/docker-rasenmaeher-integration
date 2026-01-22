@@ -135,57 +135,6 @@ services:
       rmnginx:
         condition: service_healthy
 
-######################
-# Begin: Agintegration #
-######################
-  rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./airguard-api
-      dockerfile: Dockerfile
-      target: production
-    command: ["python", "-m", "app.main"]
-    environment:
-      LOG_CONSOLE_FORMATTER: "local"
-    networks:
-      - productnet
-      - intranet
-      - airguardnet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    restart: unless-stopped
-
-  airguardtool:
-    build:
-      context: ./airguardpractice
-      dockerfile: Dockerfile
-    volumes:
-      - airguard_data:/app/data
-    environment:
-      DB_FILE_NAME: "file:/app/data/airguard.db"
-    networks:
-      - productnet
-      - airguardnet
-    healthcheck:
-      test: 'curl -s  || exit 1' # FIXME: User proper health check. Healtcheck url to tool?
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    restart: unless-stopped
-####################
-# End: Agintegration #
-####################
-
   takrmapi:
     image: pvarki/takrmapi:devel_shell${DOCKER_TAG_EXTRA:-}
     logging:
