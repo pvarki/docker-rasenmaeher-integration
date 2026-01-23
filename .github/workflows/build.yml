@@ -7,7 +7,7 @@ on:
 
 jobs:
   versiontag:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     if: github.ref != 'refs/heads/main'
     steps:
       - uses: actions/checkout@v5
@@ -17,7 +17,7 @@ jobs:
           diff /tmp/main_version.yml ./version.yml && exit 1 || exit 0
 
   apiunits:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
@@ -63,7 +63,7 @@ jobs:
           check_name: 'api unit tests'
 
   rmlocal:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
@@ -155,7 +155,7 @@ jobs:
 
 
   build_and_publish:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     needs: [apiunits, rmlocal]
     strategy:
       matrix:
