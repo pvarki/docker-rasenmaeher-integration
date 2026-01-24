@@ -168,11 +168,6 @@ jobs:
     env:
       PVARKI_DOCKER_REPO: ghcr.io/
     steps:
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: actions/checkout@v5
         with:
           submodules: recursive
@@ -192,6 +187,12 @@ jobs:
         run: |
           test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build takinit and miniwerk (main)
         run: |
           source example_env.sh
@@ -218,6 +219,12 @@ jobs:
           source example_env.sh
           docker compose push
           docker compose -f docker-compose-local.yml push
+      - name: Log in to Docker Hub
+        if: '!cancelled()'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Push main composition to docker.io
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
