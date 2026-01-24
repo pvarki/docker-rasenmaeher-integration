@@ -218,8 +218,15 @@ jobs:
           source example_env.sh
           docker compose push
           docker compose -f docker-compose-local.yml push
+      - name: Push main composition to docker.io
+        if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
+        run: |
+          source example_env.sh
+          export PVARKI_DOCKER_REPO=docker.io/
+          docker compose push
+          docker compose -f docker-compose-local.yml push
       - name: Warm Nexus cache
-        if: ${{ !env.ACT }}
+        if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
           source example_env.sh
           export PVARKI_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
