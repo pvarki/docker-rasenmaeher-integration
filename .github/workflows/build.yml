@@ -218,10 +218,11 @@ jobs:
           source example_env.sh
           docker compose push
           docker compose -f docker-compose-local.yml push
-
       - name: Warm Nexus cache
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
+          export PVARKI_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
+          export HUB_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
           docker compose pull --ignore-pull-failures
           docker compose -f docker-compose-local.yml pull --ignore-pull-failures
