@@ -102,7 +102,7 @@ jobs:
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker system prune --all --volumes --force
-        dcloc build --pull takinit miniwerk --push
+        dcloc build --pull takinit miniwerk rmnginx --push
         dcloc build --pull
         dcloc pull --ignore-buildable
     - name: docker compose cleanup
@@ -196,7 +196,7 @@ jobs:
       - name: Build takinit and miniwerk (main)
         run: |
           source example_env.sh
-          docker compose build --pull takinit miniwerk
+          docker compose build --pull takinit miniwerk rmnginx
       - name: Build takinit and miniwerk (local)
         run: |
           docker compose -f docker-compose-local.yml build --pull takinit miniwerk
