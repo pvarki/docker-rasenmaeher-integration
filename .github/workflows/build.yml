@@ -29,6 +29,17 @@ jobs:
       PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
       POETRY_PYPI_MIRROR_URL: https://nexus.dev.pvarki.fi/repository/python/simple
     steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v5
         with:
           submodules: recursive
@@ -43,19 +54,13 @@ jobs:
           poetry self add poetry-plugin-pypi-mirror
           echo PATH=$PATH:/home/runner/.local/bin >> ${GITHUB_ENV}
           cd api && poetry install
-      - name: Log in to Docker Hub
-        if: '!cancelled()'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Prep docker
         run: |
           rm -rf api/tests/data/cfssl/*
           rm -rf api/tests/data/ca_public/*
           docker system prune --all --volumes --force
-          cd api/tests && docker compose -f docker-compose.yml build --pull
-          docker compose -f docker-compose.yml pull --ignore-buildable
+          cd api/tests
+          docker compose -f docker-compose.yml pull --ignore-pull-failures
           docker compose -f docker-compose.yml up -d --wait || docker compose -f docker-compose.yml logs
           docker compose -f docker-compose.yml down -v
       - name: Test with pytest
@@ -80,7 +85,7 @@ jobs:
       DOCKER_TAG_EXTRA: -rmlocaltest
     steps:
     - name: Log in to Docker Hub
-      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -175,7 +180,6 @@ jobs:
       PVARKI_DOCKER_REPO: ghcr.io/
     steps:
       - name: Log in to Docker Hub
-        if: '!cancelled()'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
