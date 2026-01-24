@@ -402,7 +402,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmapi:1.10.3-d${RELEASE_TAG:-2.3.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmapi:1.10.4-d${RELEASE_TAG:-2.3.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
