@@ -233,8 +233,8 @@ jobs:
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          docker compose push
-          docker compose -f docker-compose-local.yml push
+          .github/rate_limited_push.sh
+          .github/rate_limited_push.sh -f docker-compose-local.yml
       - name: Warm Nexus cache
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
@@ -251,6 +251,8 @@ jobs:
       matrix:
         extra_env: ["none", "date"]
         asset_set: ["default", "fdf"]
+    env:
+      PVARKI_DOCKER_REPO: group.docker.nexus.dev.pvarki.fi/ # Ensure we know the default repo
     steps:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -287,12 +289,11 @@ jobs:
           source example_env.sh
           docker compose pull
           docker compose -f docker-compose-local.yml pull
-      - name: build and push main composition to docker.io
+      - name: retag and push
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
+          NEW_REPO="docker.io/" ORIG_REPO=$PVARKI_DOCKER_REPO .github/retag_pvarki_images.sh
           export PVARKI_DOCKER_REPO=docker.io/
-          docker compose build --push takinit miniwerk rmnginx
-          docker compose build --push
-          docker compose -f docker-compose-local.yml build --push takinit miniwerk rmnginx
-          docker compose -f docker-compose-local.yml build --push
+          .github/rate_limited_push.sh
+          .github/rate_limited_push.sh -f docker-compose-local.yml
