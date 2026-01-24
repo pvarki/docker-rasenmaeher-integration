@@ -19,4 +19,4 @@ done
 }
 
 # Try three times
-push_tags || push_tags || push_tags
+push_tags || (sleep 10 && push_tags) || (sleep 10 && push_tags)
