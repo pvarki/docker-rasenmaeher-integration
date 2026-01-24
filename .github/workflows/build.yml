@@ -199,13 +199,13 @@ jobs:
           docker compose build --pull takinit miniwerk rmnginx
       - name: Build takinit and miniwerk (local)
         run: |
-          docker compose -f docker-compose-local.yml build --pull takinit miniwerk
+          docker compose -f docker-compose-local.yml build --pull takinit miniwerk rmnginx
       - name: push takinit and miniwerk
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
-          docker compose push takinit miniwerk
-          docker compose -f docker-compose-local.yml push takinit miniwerk
+          docker compose push takinit miniwerk rmnginx
+          docker compose -f docker-compose-local.yml push takinit miniwerk rmnginx
       - name: Build main composition (main)
         run: |
           source example_env.sh
@@ -225,13 +225,15 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Push main composition to docker.io
+      - name: build and push main composition to docker.io
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
           source example_env.sh
           export PVARKI_DOCKER_REPO=docker.io/
-          docker compose push
-          docker compose -f docker-compose-local.yml push
+          docker compose build --push takinit miniwerk rmnginx
+          docker compose build --push
+          docker compose -f docker-compose-local.yml build --push takinit miniwerk rmnginx
+          docker compose -f docker-compose-local.yml build --push
       - name: Warm Nexus cache
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
