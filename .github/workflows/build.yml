@@ -73,8 +73,6 @@ jobs:
       PVARKI_DOCKER_REPO: localhost:5050/
       DOCKER_TAG_EXTRA: -rmlocaltest
     steps:
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
     - name: Log in to Docker Hub
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
       with:
@@ -170,8 +168,6 @@ jobs:
     env:
       PVARKI_DOCKER_REPO: docker.io/
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
         with:
