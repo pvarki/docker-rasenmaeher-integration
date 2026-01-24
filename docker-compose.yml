@@ -597,7 +597,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.3.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.1-d${RELEASE_TAG:-2.3.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
