@@ -15,5 +15,6 @@ for IMGNAME in $(docker compose ${EXTRA_ARGS} config --format json | jq -r '.ser
 do
   # shellcheck disable=SC2001
   NEWNAME=$(echo "${IMGNAME}" | sed -e s%"${ORIG_REPO}"%"${NEW_REPO}"%g)
+  echo "docker image tag ${IMGNAME} ${NEWNAME}"
   docker image tag "${IMGNAME}" "${NEWNAME}"
 done

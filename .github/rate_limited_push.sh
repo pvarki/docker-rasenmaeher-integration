@@ -10,6 +10,7 @@ do
   then
     sleep $((RANDOM % 5))
   fi
+  echo "docker push ${IMGNAME}"
   if ! docker push ${IMGNAME}
   then
     return 1
