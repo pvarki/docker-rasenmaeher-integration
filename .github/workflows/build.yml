@@ -235,18 +235,6 @@ jobs:
           source example_env.sh
           docker compose push
           docker compose -f docker-compose-local.yml push
-      - name: build and push main composition to docker.io
-        if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
-        run: |
-          source example_env.sh
-          export PVARKI_DOCKER_REPO=docker.io/
-          docker compose build --push takinit miniwerk rmnginx
-          sleep $((RANDOM % 12))
-          docker compose build --push
-          sleep $((RANDOM % 12))
-          docker compose -f docker-compose-local.yml build --push takinit miniwerk rmnginx
-          sleep $((RANDOM % 12))
-          docker compose -f docker-compose-local.yml build --push
       - name: Warm Nexus cache
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
@@ -255,3 +243,56 @@ jobs:
           export HUB_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
           docker compose pull --ignore-pull-failures
           docker compose -f docker-compose-local.yml pull --ignore-pull-failures
+
+  build_and_publish_dockerhub:
+    runs-on: ubuntu-latest
+    needs: [build_and_publish]
+    strategy:
+      matrix:
+        extra_env: ["none", "date"]
+        asset_set: ["default", "fdf"]
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Fix ref slashes
+        run: |
+          echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
+      - name: Set VITE_THEME
+        run: |
+          echo "VITE_THEME=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
+          cat ${GITHUB_ENV}
+      - name: Set DOCKER_TAG_EXTRA if date
+        run: |
+          test "${{ matrix.extra_env }}" = "date" && echo "DOCKER_TAG_EXTRA=-$(date +%Y%m%d)" >> ${GITHUB_ENV} || true
+          cat ${GITHUB_ENV}
+      - name: Set DOCKER_TAG_EXTRA if not main
+        if: github.event.pull_request.merged != true
+        run: |
+          test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
+          cat ${GITHUB_ENV}
+      - name: Pull images
+        run: |
+          source example_env.sh
+          docker compose pull
+          docker compose -f docker-compose-local.yml pull
+      - name: build and push main composition to docker.io
+        if: ${{ !env.ACT }}
+        run: |
+          source example_env.sh
+          export PVARKI_DOCKER_REPO=docker.io/
+          docker compose build --push takinit miniwerk rmnginx
+          docker compose build --push
+          docker compose -f docker-compose-local.yml build --push takinit miniwerk rmnginx
+          docker compose -f docker-compose-local.yml build --push
