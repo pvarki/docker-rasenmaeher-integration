@@ -241,8 +241,11 @@ jobs:
           source example_env.sh
           export PVARKI_DOCKER_REPO=docker.io/
           docker compose build --push takinit miniwerk rmnginx
+          sleep $((RANDOM % 12))
           docker compose build --push
+          sleep $((RANDOM % 12))
           docker compose -f docker-compose-local.yml build --push takinit miniwerk rmnginx
+          sleep $((RANDOM % 12))
           docker compose -f docker-compose-local.yml build --push
       - name: Warm Nexus cache
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
