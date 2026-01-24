@@ -166,7 +166,7 @@ jobs:
         extra_env: ["none", "date"]
         asset_set: ["default", "fdf"]
     env:
-      PVARKI_DOCKER_REPO: docker.io/
+      PVARKI_DOCKER_REPO: ghcr.io/
     steps:
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
