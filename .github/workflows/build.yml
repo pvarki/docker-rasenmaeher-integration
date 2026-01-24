@@ -41,6 +41,7 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install poetry pre-commit
           poetry self add poetry-plugin-pypi-mirror
+          echo PATH=$PATH:/home/runner/.local/bin >> ${GITHUB_ENV}
           cd api && poetry install
       - name: Prep docker
         run: |
@@ -87,6 +88,7 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install pre-commit
+        echo PATH=$PATH:/home/runner/.local/bin >> ${GITHUB_ENV}
         pip install -r tests/requirements.txt
     - name: pre-commit
       id: pre_commit
