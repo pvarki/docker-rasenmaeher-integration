@@ -227,3 +227,38 @@ jobs:
         if: ${{ !env.ACT }}
         run: |
           docker buildx bake -f bakefile.hcl --push
+
+  upload_ext_images_to_acr:
+    runs-on: arc-runner-set
+    needs: [build_and_publish]
+    env:
+      PVARKI_DOCKER_REPO: ghcr.io/
+      ACR_REPO: ${{ vars.ACR_REPO }}
+      HUB_DOCKER_REPO: docker.io/
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_REPO }}
+          username: ${{ vars.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Retag and push
+        if: ${{ !env.ACT }}
+        run: |
+          source example_env.sh
+          docker compose pull --ignore-pull-failures
+          .github/retag_push_ext_images.sh
