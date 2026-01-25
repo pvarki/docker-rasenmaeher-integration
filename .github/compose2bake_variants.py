@@ -5,12 +5,13 @@ import asyncio
 import json
 import sys
 import datetime
+import os
 
 VITE_THEMES = ("default", "fdf")
 PLATFORMS = ("linux/amd64",)  #  add "linux/arm64" when we can actually build them
 ISODATE = datetime.datetime.now(datetime.UTC).date().isoformat()
 ORIG_REPO = "ghcr.io"
-ALT_REPOS = ("docker.io",)
+ALT_REPOS = ("docker.io", os.environ.get("ACR_REPO", None))
 
 
 def theme_hcl(servicename: str, servicedef: Dict[str, Any]) -> Tuple[Sequence[str], str]:
@@ -20,6 +21,8 @@ def theme_hcl(servicename: str, servicedef: Dict[str, Any]) -> Tuple[Sequence[st
     imgtags_orig = [f"{img_wotheme}", f"{img_wotheme}-{ISODATE}"]
     imgtags_more = []
     for alt_repo in ALT_REPOS:
+        if not alt_repo:
+            continue
         imgtags_more += [tag.replace(ORIG_REPO, alt_repo) for tag in imgtags_orig]
     imgtags = imgtags_orig + imgtags_more
     hcl_targets += f"""
@@ -58,6 +61,8 @@ def service_hcl(servicename: str, servicedef: Dict[str, Any]) -> Tuple[Sequence[
     imgtags_orig = [f"{servicedef['image']}", f"{servicedef['image']}-{ISODATE}"]
     imgtags_more = []
     for alt_repo in ALT_REPOS:
+        if not alt_repo:
+            continue
         imgtags_more += [tag.replace(ORIG_REPO, alt_repo) for tag in imgtags_orig]
     imgtags = imgtags_orig + imgtags_more
     hcl_targets += f"""
