@@ -258,14 +258,14 @@ Due to buildkit bugs with cache your need to run local registry::
 TLDR::
 
     alias rmlocal="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmlocal -f docker-compose-local.yml"
-    rmlocal build takinit miniwerk --pull --push
+    rmlocal build takinit miniwerk rmnginx --pull --push
     rmlocal build --pull
     rmlocal up
 
 or::
 
     alias rmdev="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
-    rmdev build takinit miniwerk --pull --push
+    rmdev build takinit miniwerk rmnginx --pull --push
     rmdev build --pull
     rmdev up
 

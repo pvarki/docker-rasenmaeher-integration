@@ -7,7 +7,7 @@ on:
 
 jobs:
   versiontag:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     if: github.ref != 'refs/heads/main'
     steps:
       - uses: actions/checkout@v5
@@ -17,7 +17,7 @@ jobs:
           diff /tmp/main_version.yml ./version.yml && exit 1 || exit 0
 
   apiunits:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
@@ -28,7 +28,19 @@ jobs:
     env:
       PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
       POETRY_PYPI_MIRROR_URL: https://nexus.dev.pvarki.fi/repository/python/simple
+      COMPOSE_BAKE: true
     steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v5
         with:
           submodules: recursive
@@ -38,17 +50,18 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install poetry
+          python3 -m pip install --upgrade pip
+          pip install poetry pre-commit
           poetry self add poetry-plugin-pypi-mirror
+          echo PATH=$PATH:/home/runner/.local/bin >> ${GITHUB_ENV}
           cd api && poetry install
       - name: Prep docker
         run: |
           rm -rf api/tests/data/cfssl/*
           rm -rf api/tests/data/ca_public/*
           docker system prune --all --volumes --force
-          cd api/tests && docker compose -f docker-compose.yml build --pull
-          docker compose -f docker-compose.yml pull --ignore-buildable
+          cd api/tests
+          docker compose -f docker-compose.yml pull --ignore-pull-failures
           docker compose -f docker-compose.yml up -d --wait || docker compose -f docker-compose.yml logs
           docker compose -f docker-compose.yml down -v
       - name: Test with pytest
@@ -63,21 +76,20 @@ jobs:
           check_name: 'api unit tests'
 
   rmlocal:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     permissions:
       contents: write
       pull-requests: write
       checks: write
     env:
-      PVARKI_DOCKER_REPO: docker.io/
-      DOCKER_TAG_EXTRA: rmlocaltest
+      PVARKI_DOCKER_REPO: localhost:5050/
+      DOCKER_TAG_EXTRA: -rmlocaltest
+      COMPOSE_BAKE: true
     steps:
-    - name: Free Disk Space (Ubuntu)
-      uses: jlumbroso/free-disk-space@main
     - name: Log in to Docker Hub
-      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        username: ${{ vars.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - uses: actions/checkout@v5
       with:
@@ -85,7 +97,9 @@ jobs:
     - name: install dependencies
       id: install_dependencies
       run: |
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
+        pip install pre-commit
+        echo PATH=$PATH:/home/runner/.local/bin >> ${GITHUB_ENV}
         pip install -r tests/requirements.txt
     - name: pre-commit
       id: pre_commit
@@ -93,13 +107,16 @@ jobs:
         export SKIP=no-commit-to-branch
         source example_env.sh
         pre-commit run --all-files
+    - name: local Docker registry
+      run: |
+          docker run -d -p 5050:5000 --restart always --name registry registry:3
     - name: docker compose build
       id: compose_build
       run: |
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker system prune --all --volumes --force
-        dcloc build --pull takinit miniwerk --push
+        dcloc build --pull takinit miniwerk rmnginx --push
         dcloc build --pull
         dcloc pull --ignore-buildable
     - name: docker compose cleanup
@@ -155,71 +172,93 @@ jobs:
 
 
   build_and_publish:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     needs: [apiunits, rmlocal]
+    env:
+      PVARKI_DOCKER_REPO: ghcr.io/
+      ACR_REPO: ${{ vars.ACR_REPO }}
     strategy:
       matrix:
-        extra_env: ["none", "date"]
-        asset_set: ["default", "fdf"]
-    env:
-      PVARKI_DOCKER_REPO: docker.io/
+        compose_extra: ["", "-f docker-compose-local.yml"]
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
       - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_REPO }}
+          username: ${{ vars.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
       - uses: actions/checkout@v5
         with:
           submodules: recursive
       - name: Fix ref slashes
         run: |
           echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
-      - name: Set VITE_THEME
-        run: |
-          echo "VITE_THEME=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
-          cat ${GITHUB_ENV}
-      - name: Set DOCKER_TAG_EXTRA if date
-        run: |
-          test "${{ matrix.extra_env }}" = "date" && echo "DOCKER_TAG_EXTRA=-$(date +%Y%m%d)" >> ${GITHUB_ENV} || true
-          cat ${GITHUB_ENV}
       - name: Set DOCKER_TAG_EXTRA if not main
         if: github.event.pull_request.merged != true
         run: |
           test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
-      - name: Build takinit and miniwerk (main)
+      - name: Generate bakefile
         run: |
           source example_env.sh
-          docker compose build --pull takinit miniwerk
-      - name: Build takinit and miniwerk (local)
+          docker compose ${{ matrix.compose_extra }} config --format json | .github/compose2bake_variants.py >bakefile.hcl
+      - name: Build takinit and miniwerk
         run: |
-          docker compose -f docker-compose-local.yml build --pull takinit miniwerk
+          docker buildx bake -f bakefile.hcl --pull --load takinit miniwerk rmnginx
       - name: push takinit and miniwerk
         if: ${{ !env.ACT }}
         run: |
-          source example_env.sh
-          docker compose push takinit miniwerk
-          docker compose -f docker-compose-local.yml push takinit miniwerk
-      - name: Build main composition (main)
+          docker buildx bake -f bakefile.hcl --push takinit miniwerk rmnginx
+      - name: Build main composition
         run: |
-          source example_env.sh
-          docker compose build --pull
-      - name: Build main composition (local)
-        run: |
-          docker compose -f docker-compose-local.yml build --pull
+          docker buildx bake -f bakefile.hcl --pull --load
       - name: Push main composition
         if: ${{ !env.ACT }}
         run: |
-          source example_env.sh
-          docker compose push
-          docker compose -f docker-compose-local.yml push
+          docker buildx bake -f bakefile.hcl --push
 
-      - name: Warm Nexus cache
+  upload_ext_images_to_acr:
+    runs-on: arc-runner-set
+    needs: [build_and_publish]
+    env:
+      PVARKI_DOCKER_REPO: ghcr.io/
+      ACR_REPO: ${{ vars.ACR_REPO }}
+      HUB_DOCKER_REPO: docker.io/
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.ACR_REPO }}
+          username: ${{ vars.ACR_USERNAME }}
+          password: ${{ secrets.ACR_TOKEN }}
+      - uses: actions/checkout@v5
+        with:
+          submodules: recursive
+      - name: Retag and push
         if: ${{ !env.ACT }}
         run: |
           source example_env.sh
           docker compose pull --ignore-pull-failures
-          docker compose -f docker-compose-local.yml pull --ignore-pull-failures
+          .github/retag_push_ext_images.sh
