@@ -83,6 +83,7 @@ jobs:
     env:
       PVARKI_DOCKER_REPO: localhost:5050/
       DOCKER_TAG_EXTRA: -rmlocaltest
+      COMPOSE_BAKE: true
     steps:
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
@@ -172,10 +173,6 @@ jobs:
   build_and_publish:
     runs-on: arc-runner-set
     needs: [apiunits, rmlocal]
-    strategy:
-      matrix:
-        extra_env: ["none", "date"]
-        asset_set: ["default", "fdf"]
     env:
       PVARKI_DOCKER_REPO: ghcr.io/
     steps:
@@ -196,45 +193,29 @@ jobs:
       - name: Fix ref slashes
         run: |
           echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
-      - name: Set VITE_THEME
-        run: |
-          echo "VITE_THEME=${{ matrix.asset_set }}" >> ${GITHUB_ENV}
-          cat ${GITHUB_ENV}
-      - name: Set DOCKER_TAG_EXTRA if date
-        run: |
-          test "${{ matrix.extra_env }}" = "date" && echo "DOCKER_TAG_EXTRA=-$(date +%Y%m%d)" >> ${GITHUB_ENV} || true
-          cat ${GITHUB_ENV}
       - name: Set DOCKER_TAG_EXTRA if not main
         if: github.event.pull_request.merged != true
         run: |
           test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
-      - name: Build takinit and miniwerk (main)
+      - name: Generate bakefile
         run: |
           source example_env.sh
-          docker compose build --pull takinit miniwerk rmnginx
-      - name: Build takinit and miniwerk (local)
+          docker compose config --format json | .github/compose2bake_variants.py >bakefile.hcl
+      - name: Build takinit and miniwerk
         run: |
-          docker compose -f docker-compose-local.yml build --pull takinit miniwerk rmnginx
+          docker buildx bake -f bakefile.hcl --pull --load takinit miniwerk rmnginx
       - name: push takinit and miniwerk
         if: ${{ !env.ACT }}
         run: |
-          source example_env.sh
-          docker compose push takinit miniwerk rmnginx
-          docker compose -f docker-compose-local.yml push takinit miniwerk rmnginx
-      - name: Build main composition (main)
+          docker buildx bake -f bakefile.hcl --push takinit miniwerk rmnginx
+      - name: Build main composition
         run: |
-          source example_env.sh
-          docker compose build --pull
-      - name: Build main composition (local)
-        run: |
-          docker compose -f docker-compose-local.yml build --pull
+          docker buildx bake -f bakefile.hcl --pull --load
       - name: Push main composition
         if: ${{ !env.ACT }}
         run: |
-          source example_env.sh
-          .github/rate_limited_push.sh
-          .github/rate_limited_push.sh -f docker-compose-local.yml
+          docker buildx bake -f bakefile.hcl --push
       - name: Warm Nexus cache
         if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
         run: |
@@ -242,4 +223,3 @@ jobs:
           export PVARKI_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
           export HUB_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
           docker compose pull --ignore-pull-failures
-          docker compose -f docker-compose-local.yml pull --ignore-pull-failures
