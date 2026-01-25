@@ -227,10 +227,3 @@ jobs:
         if: ${{ !env.ACT }}
         run: |
           docker buildx bake -f bakefile.hcl --push
-      - name: Warm Nexus cache
-        if: '!cancelled()'  # FIXME: Figure out how to check also env.ACT
-        run: |
-          source example_env.sh
-          export PVARKI_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
-          export HUB_DOCKER_REPO=group.docker.nexus.dev.pvarki.fi/
-          docker compose pull --ignore-pull-failures
