@@ -175,6 +175,9 @@ jobs:
     needs: [apiunits, rmlocal]
     env:
       PVARKI_DOCKER_REPO: ghcr.io/
+    strategy:
+      matrix:
+        compose_extra: ["", "-f docker-compose-local.yaml"]
     steps:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -201,7 +204,7 @@ jobs:
       - name: Generate bakefile
         run: |
           source example_env.sh
-          docker compose config --format json | .github/compose2bake_variants.py >bakefile.hcl
+          docker compose ${{ matrix.compose_extra }} config --format json | .github/compose2bake_variants.py >bakefile.hcl
       - name: Build takinit and miniwerk
         run: |
           docker buildx bake -f bakefile.hcl --pull --load takinit miniwerk rmnginx
