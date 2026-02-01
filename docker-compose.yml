@@ -428,7 +428,7 @@ services:
       RM_INTEGRATION_API_TIMEOUT: 5
       RELEASE_TAG: ${RELEASE_TAG:-2.3.3}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
     networks:
       - apinet
       - kcnet

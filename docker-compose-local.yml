@@ -439,7 +439,7 @@ services:
       RM_OCSPREST_HOST: "http://ocsprest"
       RM_OCSPREST_PORT: 8887
       JWT_LIFETIME: "3456000"  # Long JWT lifetimes for testing
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "ecs"
       RM_OCSCP_RESPONDER: *publicocsp
       #RM_TILAUSPALVELU_JWT: "file:///pvarki/publickeys/kraftwerk.pub"
       RM_TILAUSPALVELU_JWT: ""
