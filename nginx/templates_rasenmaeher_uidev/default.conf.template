@@ -89,6 +89,7 @@ server {
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
         proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
+        proxy_set_header  X-Request-ID $request_id;
     }
 }
 
@@ -131,7 +132,10 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
+        proxy_set_header  X-Request-ID             $request_id;
+        proxy_set_header  X-SSL-Client-Verify      $ssl_client_verify;
+        proxy_set_header  X-SSL-Client-Fingerprint $ssl_client_fingerprint;
     }
 
     location /ui/ {

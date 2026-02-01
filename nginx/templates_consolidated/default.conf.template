@@ -52,7 +52,7 @@ server {
         proxy_set_header  X-Forwarded-Proto $scheme;
         proxy_read_timeout                  900;
         proxy_set_header  X-ClientCert-DN   $ssl_client_s_dn;
-        proxy_set_header  X-ClientCert-Serial   ssl_client_serial;
+        proxy_set_header  X-ClientCert-Serial   $ssl_client_serial;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $http_connection;
     }
