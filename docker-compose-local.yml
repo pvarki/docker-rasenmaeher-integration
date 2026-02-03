@@ -10,6 +10,7 @@ x-domains_env:
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRMARINE_URL: &airmarineurl "https://airmarine.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:4626/"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
@@ -143,7 +144,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,airmarine"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -578,6 +579,46 @@ services:
       - le_certs:/le_certs
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
+######################
+# Begin: AIRMARINEintegration #
+######################
+  airmarine:
+    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}airmarine/airmarine:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./atak-air-marine-api
+      dockerfile: Dockerfile
+      target: production
+    command: ["python", "-m", "app.main"]
+    environment:
+      API_HOST: "0.0.0.0"
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    networks:
+      - productnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'true' # FIXME
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+####################
+# End: AIRMARINEintegration #
+####################
 
 ######################
 # Begin: Fakeproduct #
@@ -974,6 +1015,8 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_AIRMARINE_UPSTREAM: "airmarine"
+      NGINX_AIRMARINE_UPSTREAM_PORT: "8011"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport

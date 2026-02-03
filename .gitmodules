@@ -31,3 +31,6 @@
 [submodule "uiv2"]
 	path = uiv2
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
+[submodule "atak-air-marine-api"]
+	path = atak-air-marine-api
+	url = git@github.com:c5bravo/atak-air-marine-api.git
