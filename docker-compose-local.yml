@@ -605,6 +605,7 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ca_public:/ca_public
+      - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
