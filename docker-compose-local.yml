@@ -634,7 +634,7 @@ services:
 ######################
   matrix:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/matrix:1.4.0-d${RELEASE_TAG:-2.3.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix:1.4.0-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./python-matrix-rmapi
       dockerfile: Dockerfile
