@@ -143,7 +143,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -167,6 +167,7 @@ services:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
       - kraftwerk_shared_fake:/pvarkishares/fake
+      - kraftwerk_shared_matrix:/pvarkishares/matrix
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
@@ -577,6 +578,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - kraftwerk_shared_fake:/pvarki
+      - kraftwerk_shared_matrix:/pvarki
       - kwinit_data:/data/persistent
 
 ######################
@@ -616,6 +618,45 @@ services:
 ####################
 # End: Fakeproduct #
 ####################
+
+######################
+# Begin: Matrix #
+######################
+  matrix:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/matrix:1.4.0-d${RELEASE_TAG:-2.3.2}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./python-matrix-rmapi
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      LOG_CONSOLE_FORMATTER: "local"
+    ports:
+      - "8012:8012"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_matrix:/pvarki
+      - matrix_data:/data/persistent
+      - ui_files:/ui_files
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'true'  # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+####################
+# End: Matrix #
+####################
+
 
 ######################
 # Begin: Battlelog #
@@ -976,6 +1017,8 @@ services:
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
+      NGINX_MATRIX_UPSTREAM: "matrix"
+      NGINX_MATRIX_UPSTREAM_PORT: "8012"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
@@ -1025,6 +1068,7 @@ volumes:
   kraftwerk_data:
   kwinit_data:
   kraftwerk_shared_fake:
+  kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
   pg_data:
@@ -1033,6 +1077,7 @@ volumes:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
+  matrix_data:
   ca_public:
   le_certs:
   tak_data:
