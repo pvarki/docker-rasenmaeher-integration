@@ -13,6 +13,7 @@
 [submodule "miniwerk"]
 	path = miniwerk
 	url = git@github.com:pvarki/python-rasenmaeher-miniwerk.git
+	branch = matrix-dev/main
 [submodule "takserver"]
 	path = takserver
 	url = git@github.com:pvarki/docker-atak-server.git
@@ -25,12 +26,13 @@
 [submodule "api"]
 	path = api
 	url = git@github.com:pvarki/python-rasenmaeher-api.git
+	branch = matrix-dev/main
 [submodule "takintegration"]
 	path = takintegration
 	url = git@github.com:pvarki/python-tak-rmapi.git
 [submodule "uiv2"]
 	path = uiv2
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
-[submodule "python-matrix-rmapi"]
-	path = python-matrix-rmapi
+[submodule "matrixrmapi"]
+	path = matrixrmapi
 	url = git@github.com:pvarki/python-matrix-rmapi.git
