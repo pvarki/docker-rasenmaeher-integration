@@ -31,3 +31,6 @@
 [submodule "uiv2"]
 	path = uiv2
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
+[submodule "python-matrix-rmapi"]
+	path = python-matrix-rmapi
+	url = git@github.com:pvarki/python-matrix-rmapi.git
