@@ -88,7 +88,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-6}-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-6}-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -96,7 +96,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-6}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -136,7 +136,7 @@ x-logging: &logging
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -175,7 +175,7 @@ services:
 
   jwtcopy:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -194,7 +194,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -216,7 +216,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -241,7 +241,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -301,7 +301,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -421,7 +421,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmapi:1.12.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmapi:1.12.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -489,7 +489,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
@@ -502,7 +502,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/nginx:templates-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/nginx:templates-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -567,7 +567,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -584,7 +584,7 @@ services:
 ######################
   rmfpapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmfpapi:1.4.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmfpapi:1.4.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -622,7 +622,7 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -665,7 +665,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/rmmtx:1.2.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -913,7 +913,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-6}-d${RELEASE_TAG:-2.3.3}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-group.docker.nexus.dev.pvarki.fi/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-6}-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
