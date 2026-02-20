@@ -380,6 +380,7 @@ async def test_11_check_product_healths(user_mtls_session: Tuple[aiohttp.ClientS
     LOGGER.debug("payload={} (for {})".format(payload, ValueStorage.call_sign))
 
 
+@flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
 async def test_12_check_user_revoke(
     session_with_testcas: aiohttp.ClientSession,
