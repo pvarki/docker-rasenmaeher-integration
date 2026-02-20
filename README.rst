@@ -287,11 +287,11 @@ The docker NodeJS distribution probably is not compatible with whatever you have
 Gaining first admin access in dev and production mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In dev mode::
+In local mode::
 
-    docker exec -it rmdev-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+    rmlocal exec rmapi -it /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
 
-Under dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
+Under local/dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
 
 In VM production mode::
 
