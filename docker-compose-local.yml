@@ -630,6 +630,8 @@ services:
     environment:
       <<: [*bldbconfig_env]
       LOG_CONSOLE_FORMATTER: "local"
+      RM_MTLS_ENFORCE: "true"
+      RM_EXPECTED_CERT_CN: "rasenmaeher"
     ports:
       - "8666:3000"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
     networks:
