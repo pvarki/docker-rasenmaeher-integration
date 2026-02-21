@@ -564,6 +564,8 @@ services:
       target: production
     environment:
       <<: [*bldbconfig_env]
+      RM_MTLS_ENFORCE: "true"
+      RM_EXPECTED_CERT_CN: "rasenmaeher"
     networks:
       - productnet
       - intranet
