@@ -59,20 +59,23 @@ x-postgres_env: &postgres_env
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN_USER: &kcadminuser admin
+  KEYCLOAK_ADMIN: &kcadminuser admin
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
+  KC_BOOTSTRAP_ADMIN_USERNAME: *kcadminuser
+  KC_BOOTSTRAP_ADMIN_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
   KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
-  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
-  KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
+  KC_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/data/kcserver-truststore.jks
+  KC_HTTPS_KEY_STORE_FILE: /opt/keycloak/data/kcserver-keys.jks
   #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
-  KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
-  KEYCLOAK_HOSTNAME: *kcdomain
-  KEYCLOAK_HTTPS_PORT: 9443
+  KC_EXTRA_ARGS: "--https-client-auth=request"
+  KC_HTTP_ENABLED: true
+  KC_HOSTNAME: *kcdomain
+  KC_HTTPS_PORT: 9443
 
 
 x-keycloak_profile_env: &keycloak_profile_env
@@ -343,7 +346,14 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+      args:
+        KC_VERSION_TAG: 24.0.5
+    command:
+      - start
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -359,7 +369,7 @@ services:
     ports:
       - '9443:9443'
     volumes:
-      - keycloak_data:/bitnami/keycloak/
+      - keycloak_data:/opt/keycloak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
