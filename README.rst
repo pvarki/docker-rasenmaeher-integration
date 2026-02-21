@@ -269,6 +269,8 @@ or::
     rmdev build --pull
     rmdev up
 
+We also provide pre-built images for local composition if you only want to test things and not build
+your own changes. In that case remove the "PVARKI_DOCKER_REPO=localhost:5050/" part from the alias.
 
 OpenLDAP and keycloak-init sometimes fail on first start, just run up again.
 
