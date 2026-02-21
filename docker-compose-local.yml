@@ -266,7 +266,7 @@ services:
 
   postgres:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}postgis/postgis:15-3.4
+    image: ${HUB_DOCKER_REPO:-docker.io/}postgis/postgis:15-3.4
     platform: linux/amd64  # It seems there are no arm images available
     networks:
       - dbnet
@@ -291,7 +291,7 @@ services:
 
   openldap_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
+    image: ${HUB_DOCKER_REPO:-docker.io/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -347,7 +347,7 @@ services:
 
   keycloak_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
+    image: ${HUB_DOCKER_REPO:-docker.io/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -357,7 +357,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: ${HUB_DOCKER_REPO:-docker.io/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -399,7 +399,7 @@ services:
   # init container that sets up profile with realm on keycloak instance
   keycloak-init:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
+    image: ${HUB_DOCKER_REPO:-docker.io/}adorsys/keycloak-config-cli:6.1.6-${INIT_KEYCLOAK_VERSION:-24}
     networks:
       - kcnet
     volumes:
@@ -707,7 +707,7 @@ services:
 
   mediamtx_cert_perms:  # FIXME: make a separate volume or something and copy the certs for correct user under it
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bash:latest
+    image: ${HUB_DOCKER_REPO:-docker.io/}bash:latest
     volumes:
       - le_certs:/le_certs
     command: ["/usr/local/bin/bash", "-c", "chmod a+rwx -R /le_certs"]
@@ -717,7 +717,7 @@ services:
 
   mediamtx:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-nexus.dev.pvarki.fi/}bluenviron/mediamtx:1.12.3
+    image: ${HUB_DOCKER_REPO:-docker.io/}bluenviron/mediamtx:1.12.3
     networks:
       - productnet
       - intranet
