@@ -269,6 +269,8 @@ or::
     rmdev build --pull
     rmdev up
 
+We also provide pre-built images for local composition if you only want to test things and not build
+your own changes. In that case remove the "PVARKI_DOCKER_REPO=localhost:5050/" part from the alias.
 
 OpenLDAP and keycloak-init sometimes fail on first start, just run up again.
 
@@ -281,17 +283,17 @@ switching between environments.
 The dev version launches all the services and runs rasenmaeher-api in uvicorn reload mode so any edits
 you make under /api will soon be reflected in the running instance.
 
-If rasenmaeher-ui devel server complains make sure to delete ``ui/node_modules`` -directory from host first.
+If rasenmaeher-ui devel server complains make sure to delete ``uiv2/node_modules`` -directory from host first.
 The docker NodeJS distribution probably is not compatible with whatever you have installed on the host.
 
 Gaining first admin access in dev and production mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In dev mode::
+In local mode::
 
-    docker exec -it rmdev-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+    rmlocal exec rmapi -it /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
 
-Under dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
+Under local/dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
 
 In VM production mode::
 
