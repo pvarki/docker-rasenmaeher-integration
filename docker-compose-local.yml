@@ -807,14 +807,12 @@ services:
       - productnet
       - ocspnet
     ports:
-      - '8443:8443'
-      - '8444:8444'
-      - '8446:8446'
       - '8089:8089'
       - '8090-8094:8090-8094' # Reserved for data feeds
+      - '8443:8443'
+      - "9000-9002:9000-9002"  # Federation
       - '8080:8080'  # NOTE: Do *NOT* expose this in production, this is non-tls port for debugging
       - "8003:8003"  # NOTE: Do *NOT* expose this in production, this is the port for takrmapi
-      - "9000-9002:9000-9002"  # Federation
     command: ./opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
