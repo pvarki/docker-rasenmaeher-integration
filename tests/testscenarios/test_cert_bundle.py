@@ -380,7 +380,6 @@ async def test_11_check_product_healths(user_mtls_session: Tuple[aiohttp.ClientS
     LOGGER.debug("payload={} (for {})".format(payload, ValueStorage.call_sign))
 
 
-@flaky(max_runs=3, min_passes=1)  # type: ignore
 @pytest.mark.asyncio
 async def test_12_check_user_revoke(
     session_with_testcas: aiohttp.ClientSession,
@@ -407,3 +406,27 @@ async def test_12_check_user_revoke(
     resp2 = await client.get(f"{API}/{VER}/instructions/user")
     assert resp2.status == 403
     # TODO: Test the cert revocation too once we get OCSP working
+
+
+@flaky(max_runs=3, min_passes=1)  # type: ignore
+@pytest.mark.asyncio
+async def test_13_user_is_revoked(
+    session_with_testcas: aiohttp.ClientSession,
+    first_admin_mtls_session: Tuple[aiohttp.ClientSession, str],
+) -> None:
+    """Test revoking the user"""
+    admin, api = first_admin_mtls_session
+    url = f"{api}/{VER}/people/{ValueStorage.call_sign}"
+    resp = await admin.delete(url)
+    LOGGER.debug("got response {} from {}".format(resp, url))
+    assert resp.status == 404
+
+    await asyncio.sleep(1)
+
+    # FIXME: Use mTLS for the end-user too.
+    client = session_with_testcas
+    client.headers.update({"Authorization": f"Bearer {ValueStorage.call_sign_jwt}"})
+    resp = await client.get(f"{API}/{VER}/instructions/user")
+    assert resp.status == 403
+    # TODO: Test the cert revocation too once we get OCSP working
+
