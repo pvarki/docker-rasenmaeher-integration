@@ -429,4 +429,3 @@ async def test_13_user_is_revoked(
     resp = await client.get(f"{API}/{VER}/instructions/user")
     assert resp.status == 403
     # TODO: Test the cert revocation too once we get OCSP working
-
