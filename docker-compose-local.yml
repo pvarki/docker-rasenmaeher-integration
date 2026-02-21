@@ -567,7 +567,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.0.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
