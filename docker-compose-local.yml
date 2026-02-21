@@ -584,7 +584,7 @@ services:
 ######################
   rmfpapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.0-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.1-d${RELEASE_TAG:-2.4.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
