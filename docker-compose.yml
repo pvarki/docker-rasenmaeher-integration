@@ -59,20 +59,23 @@ x-postgres_env: &postgres_env
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
-  KEYCLOAK_ADMIN_USER: &kcadminuser admin
+  KEYCLOAK_ADMIN: &kcadminuser admin
   KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:?must be defined} # pragma: allowlist secret
+  KC_BOOTSTRAP_ADMIN_USERNAME: *kcadminuser
+  KC_BOOTSTRAP_ADMIN_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
   KCI_SERVER_HOSTNAME: *serverdomain  # TODO: Should we use a subdomain so we can do smart proxying ??
-  KEYCLOAK_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
-  KEYCLOAK_HTTPS_TRUST_STORE_FILE: /bitnami/keycloak/kcserver-truststore.jks
-  KEYCLOAK_HTTPS_KEY_STORE_FILE: /bitnami/keycloak/kcserver-keys.jks
+  KC_HTTPS_KEY_STORE_PASSWORD: ${KEYCLOAK_HTTPS_KEY_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:?must be defined}  # pragma: allowlist secret
+  KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/data/kcserver-truststore.jks
+  KC_HTTPS_KEY_STORE_FILE: /opt/keycloak/data/kcserver-keys.jks
   #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
-  KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
-  KEYCLOAK_HOSTNAME: *kcdomain
-  KEYCLOAK_HTTPS_PORT: 9443
+  KC_EXTRA_ARGS: "--https-client-auth=request"
+  KC_HTTP_ENABLED: true
+  KC_HOSTNAME: *kcdomain
+  KC_HTTPS_PORT: 9443
 
 
 x-keycloak_profile_env: &keycloak_profile_env
@@ -85,7 +88,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -93,7 +96,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-20}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -137,7 +140,7 @@ x-logging: &logging
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -173,7 +176,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -197,7 +200,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -224,7 +227,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -288,7 +291,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -343,7 +346,14 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}bitnamilegacy/keycloak:${KEYCLOAK_VERSION:-24.0.5}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile
+      args:
+        KC_VERSION_TAG: 24.0.5
+    command:
+      - start
     user: root
     environment:
       <<: [*kcdbconfig_env, *keycloak_users_env, *keycloak_tls_env]
@@ -359,7 +369,7 @@ services:
     ports:
       - '9443:9443'
     volumes:
-      - keycloak_data:/bitnami/keycloak/
+      - keycloak_data:/opt/keycloak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
       - ./nginx/includes/dhparam.pem:/dhparam.pem
@@ -402,7 +412,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.12.2-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.12.2-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -426,7 +436,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: 5
-      RELEASE_TAG: ${RELEASE_TAG:-2.4.0}
+      RELEASE_TAG: ${RELEASE_TAG:-2.5.0}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "local"
     networks:
@@ -464,20 +474,20 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
         VITE_THEME: ${VITE_THEME:-default}
-        RELEASE_TAG: ${RELEASE_TAG:-2.4.0}
+        RELEASE_TAG: ${RELEASE_TAG:-2.5.0}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -539,7 +549,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -557,7 +567,7 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.0.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -597,7 +607,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.2.1-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.3.0-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -662,14 +672,10 @@ services:
       - "1936:1936"
       - "8322:8322"
       - "8890:8890"
-      - "9000:9000"
-      - "9001:9001"
       - "9888:9888"
       - "9889:9889"
       - "9996:9996"
       - "9997:9997"  # Control API
-      - "8890:8890/udp"
-      - "8189:8189/udp"
     depends_on:
       rmmtx:
         condition: service_healthy
@@ -729,6 +735,7 @@ services:
       - '8089:8089'
       - '8090-8094:8090-8094' # Reserved for data feeds
       - '8443:8443'
+      - "9000-9002:9000-9002"  # Federation
     command: ./opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
@@ -834,7 +841,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.4.0}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.5.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile

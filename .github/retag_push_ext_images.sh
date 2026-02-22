@@ -10,11 +10,15 @@ then
   ORIG_REPO=docker.io/
 fi
 export HUB_DOCKER_REPO=${ORIG_REPO}
+PLATFORMS="linux/amd64 linux/arm64"
 # shellcheck disable=SC2086
 for IMGNAME in $(docker compose ${EXTRA_ARGS} config --format json | jq -r '.services[].image' | sort | uniq | grep "${ORIG_REPO}")
 do
-  echo "docker pull ${IMGNAME}"
-  docker pull ${IMGNAME}
+  for PLATFORM in $PLATFORMS
+  do
+    echo "docker pull --platform=${PLATFORM} ${IMGNAME}"
+    docker pull --platform=${PLATFORM} ${IMGNAME}
+  done
   # shellcheck disable=SC2001
   NEWNAME=$(echo "${IMGNAME}" | sed -e s%"${ORIG_REPO}"%"${ACR_REPO}/"%g)
   echo "docker image tag ${IMGNAME} ${NEWNAME}"
