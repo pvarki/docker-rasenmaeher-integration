@@ -52,6 +52,12 @@ x-battlelog_dbconfig_env: &bldbconfig_env
   # Currently need to be defined separately because of the way the image is built
   DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:-battlelogpwd}@postgres:5432/battlelog"
 
+x-synapse_dbconfig_env: &synapsedbconfig_env
+  POSTGRES_DB: synapse
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: synapse
+  POSTGRES_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:-synapsedbpwd} # pragma: allowlist secret
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: &pgrootpwd ${POSTGRES_PASSWORD:-pg_R00t_user_password} # pragma: allowlist secret
@@ -59,6 +65,7 @@ x-postgres_env: &postgres_env
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
+  SYNAPSE_PASSWORD: *synapse_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: true
@@ -135,6 +142,12 @@ x-logging: &logging
     options:
       max-size: 50m
 
+x-matrix_env: &matrix_env
+  SYNAPSE_DB_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:-synapsedbpwd}
+  SERVER_DOMAIN: "${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  NGINX_HTTPS_PORT: *apiport
+  KCDOMAIN: *kcdomain
+  KCREALM: *kc_realm
 
 services:
   miniwerk:
@@ -379,8 +392,10 @@ services:
       #KC_LOG_LEVEL: debug
       # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
     networks:
-      - kcnet
-      - dbnet
+      kcnet:
+        aliases:
+          - "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+      dbnet:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -543,6 +558,8 @@ services:
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
+      NGINX_SYNAPSE_UPSTREAM: "synapse"
+      NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
       - apinet
       - kcnet
@@ -588,7 +605,6 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
       - kraftwerk_shared_fake:/pvarki
-      - kraftwerk_shared_matrix:/pvarki
       - kwinit_data:/data/persistent
 
 ######################
@@ -632,14 +648,45 @@ services:
 ######################
 # Begin: Matrix #
 ######################
-  matrix:
+  synapse:
+    build:
+      context: ./synapse
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - dbnet
+      - productnet
+      - kcnet
+      - intranet
+    volumes:
+      - synapse_config_vol:/data
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      <<: [*matrix_env, *synapsedbconfig_env]
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix:1.4.0-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./matrixrmapi
       dockerfile: Dockerfile
       target: production
     environment:
+      <<: *matrix_env
       LOG_CONSOLE_FORMATTER: "local"
     ports:
       - "8012:8012"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
@@ -656,12 +703,14 @@ services:
     depends_on:
       rmnginx:
         condition: service_healthy
+      synapse:
+        condition: service_healthy
     healthcheck:
-      test: 'true'  # FIXME
+      test: 'true' # FIXME
       interval: 5s
       timeout: 5s
       retries: 3
-      start_period: 15s
+      start_period: 60s
     restart: unless-stopped
 ####################
 # End: Matrix #
@@ -1022,11 +1071,13 @@ services:
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
-      NGINX_MATRIX_UPSTREAM: "matrix"
+      NGINX_MATRIX_UPSTREAM: "matrixrmapi"
       NGINX_MATRIX_UPSTREAM_PORT: "8012"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
+      NGINX_SYNAPSE_UPSTREAM: "synapse"
+      NGINX_SYNAPSE_UPSTREAM_PORT: "8448"
     networks:
       - productnet
       - intranet
@@ -1094,3 +1145,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  synapse_config_vol:

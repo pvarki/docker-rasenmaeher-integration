@@ -12,6 +12,7 @@ map $http_host $redir_uri {
     ~^(.*?)mtx\. https://$1mtx.${NGINX_HOST}:9888;
     ~^(.*?)bl\. https://$1bl.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)fake\. https://$1fake.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
+    ~^(.*?)matrix\. https://$1matrix.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)kc\. https://kc.${NGINX_HOST}:9443/admin/RASENMAEHER/console/;
 }
 
@@ -154,5 +155,26 @@ server {
         index index.html;
         root /rmui_files;
         try_files $uri $uri/ /index.html =404;
+    }
+}
+
+# Synapse (Matrix)
+server {
+    server_name synapse.${NGINX_HOST};
+
+    listen ${NGINX_HTTPS_PORT} ssl;
+
+    client_max_body_size 100M;
+
+    location / {
+        proxy_pass  http://${NGINX_SYNAPSE_UPSTREAM}:${NGINX_SYNAPSE_UPSTREAM_PORT};
+        proxy_redirect                      off;
+        proxy_set_header  Host              $http_host;
+        proxy_set_header  X-Real-IP         $remote_addr;
+        proxy_set_header  X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_read_timeout                  900;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_connection;
     }
 }
