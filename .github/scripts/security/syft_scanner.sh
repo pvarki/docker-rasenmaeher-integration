@@ -4,6 +4,7 @@ set -euo pipefail
 OUTPUT_DIR="${OUTPUT_DIR:-syft_scans}"
 mkdir -p "$OUTPUT_DIR"
 MANIFEST_PATH="${MANIFEST_PATH:-$OUTPUT_DIR/manifest.tsv}"
+SYFT_OUTPUT_FORMAT="${SYFT_OUTPUT_FORMAT:-cyclonedx-json@1.5}"
 printf 'image\tsbom_file\n' > "$MANIFEST_PATH"
 
 if docker image ls >/dev/null 2>&1; then
@@ -54,10 +55,10 @@ while IFS= read -r image; do
   echo "Scanning $image..."
   filename="$(sanitize_filename "$image").json"
   sbom_path="$OUTPUT_DIR/$filename"
-  "${syft_cmd[@]}" "$image" -o cyclonedx-json > "$sbom_path"
+  "${syft_cmd[@]}" "$image" -o "$SYFT_OUTPUT_FORMAT" > "$sbom_path"
   printf '%s\t%s\n' "$image" "$sbom_path" >> "$MANIFEST_PATH"
   scan_count=$((scan_count + 1))
 done < <("${docker_cmd[@]}" image ls --format '{{.Repository}}:{{.Tag}}')
 
-echo "Success! Generated $scan_count SBOM file(s) in '$OUTPUT_DIR'. Skipped $skip_count image(s)."
+echo "Success! Generated $scan_count SBOM file(s) in '$OUTPUT_DIR' using format '$SYFT_OUTPUT_FORMAT'. Skipped $skip_count image(s)."
 echo "Manifest written to '$MANIFEST_PATH'."
