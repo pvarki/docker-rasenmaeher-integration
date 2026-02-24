@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=missing-module-docstring,missing-class-docstring,missing-function-docstring,protected-access
 from __future__ import annotations
 
 import argparse
@@ -108,7 +109,9 @@ def image_repo_from_image_ref(image_ref: str) -> str:
 
 
 def is_allowed_repo(repo_name: str) -> bool:
-    return repo_name in ALLOWED_EXACT_REPOS or repo_name.startswith(ALLOWED_PREFIX_REPOS)
+    return repo_name in ALLOWED_EXACT_REPOS or repo_name.startswith(
+        ALLOWED_PREFIX_REPOS
+    )
 
 
 def infer_repo_from_report_filename(filename: str) -> Optional[str]:
@@ -183,6 +186,7 @@ def read_manifest_entries(manifest_path: Path) -> list[UploadEntry]:
             continue
 
         report_path = resolve_report_path_from_manifest(manifest_path, report_file)
+        repo_name: Optional[str]
 
         if image_ref:
             try:
@@ -207,11 +211,13 @@ def read_manifest_entries(manifest_path: Path) -> list[UploadEntry]:
     return entries
 
 
-def discover_report_entries(reports_dir: Path, manifest_path: Optional[Path]) -> list[UploadEntry]:
+def discover_report_entries(
+    reports_dir: Path, manifest_path: Optional[Path]
+) -> list[UploadEntry]:
     if manifest_path and manifest_path.exists():
-        entries = read_manifest_entries(manifest_path)
-        if entries:
-            return entries
+        manifest_entries = read_manifest_entries(manifest_path)
+        if manifest_entries:
+            return manifest_entries
 
     entries: list[UploadEntry] = []
     for report_path in sorted(reports_dir.glob("*_grype.json")):
@@ -231,13 +237,17 @@ def discover_report_entries(reports_dir: Path, manifest_path: Optional[Path]) ->
     return entries
 
 
-def build_multipart_payload(fields: dict[str, str], file_path: Path) -> tuple[str, bytes]:
+def build_multipart_payload(
+    fields: dict[str, str], file_path: Path
+) -> tuple[str, bytes]:
     boundary = f"----DefectDojoBoundary{uuid.uuid4().hex}"
     body = io.BytesIO()
 
     for key, value in fields.items():
         body.write(f"--{boundary}\r\n".encode("utf-8"))
-        body.write(f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8"))
+        body.write(
+            f'Content-Disposition: form-data; name="{key}"\r\n\r\n'.encode("utf-8")
+        )
         body.write(str(value).encode("utf-8"))
         body.write(b"\r\n")
 
@@ -281,7 +291,9 @@ def reimport_scan(config: UploadConfig, entry: UploadEntry) -> tuple[int, str]:
         ssl_context = ssl._create_unverified_context()
 
     try:
-        with urllib.request.urlopen(request, context=ssl_context, timeout=120) as response:
+        with urllib.request.urlopen(
+            request, context=ssl_context, timeout=120
+        ) as response:
             response_body = response.read().decode("utf-8", errors="replace")
             return response.getcode(), response_body
     except urllib.error.HTTPError as error:
@@ -371,13 +383,17 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Upload Grype JSON reports to DefectDojo via reimport-scan."
     )
-    parser.add_argument("--reports-dir", default="grype_scans", help="Directory with Grype JSON reports")
+    parser.add_argument(
+        "--reports-dir", default="grype_scans", help="Directory with Grype JSON reports"
+    )
     parser.add_argument(
         "--manifest",
         default=None,
         help="Optional TSV manifest (defaults to <reports-dir>/manifest.tsv when present)",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Print actions without uploading")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Print actions without uploading"
+    )
     parser.add_argument(
         "--verify-ssl",
         choices=["true", "false"],
@@ -429,11 +445,16 @@ def main() -> int:
         print("Warning: DD_BASE_URL has no scheme; assuming https://", file=sys.stderr)
 
     if not args.dry_run and (not base_url or not api_token):
-        print("DD_BASE_URL and DD_API_TOKEN are required unless --dry-run is used.", file=sys.stderr)
+        print(
+            "DD_BASE_URL and DD_API_TOKEN are required unless --dry-run is used.",
+            file=sys.stderr,
+        )
         return 2
 
     if args.dry_run and (not base_url or not api_token):
-        print("Warning: DD_BASE_URL/DD_API_TOKEN missing; continuing because --dry-run is enabled.")
+        print(
+            "Warning: DD_BASE_URL/DD_API_TOKEN missing; continuing because --dry-run is enabled."
+        )
 
     manifest_path: Optional[Path]
     if args.manifest:
