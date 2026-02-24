@@ -1,6 +1,9 @@
 name: Security Scan (Syft + Grype + DefectDojo)
 
 on:
+  push:
+    branches:
+      - security-scanning
   workflow_run:
     workflows:
       - ".github/workflows/build.yml"
@@ -16,7 +19,7 @@ concurrency:
 
 jobs:
   scan-and-upload:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: arc-runner-set
     permissions:
       contents: read
