@@ -75,6 +75,7 @@ jobs:
           "$grype_cmd" version
 
       - name: Resolve allowlisted images and pull
+        id: resolve_images
         shell: bash
         run: |
           set -euo pipefail
@@ -121,16 +122,49 @@ jobs:
 
           if [[ ! -s images_to_scan.txt ]]; then
             echo "No allowlisted images resolved from compose config."
-            exit 1
+            if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+              exit 1
+            fi
+            echo "pulled_count=0" >> "$GITHUB_OUTPUT"
+            echo "missing_count=0" >> "$GITHUB_OUTPUT"
+            echo "scan_ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           cat images_to_scan.txt
 
+          pulled_count=0
+          missing_count=0
+          : > pulled_images.txt
+
           while IFS= read -r image; do
-            docker pull "$image"
+            if docker pull "$image"; then
+              echo "$image" >> pulled_images.txt
+              pulled_count=$((pulled_count + 1))
+              continue
+            fi
+            echo "Unable to pull image: $image" >&2
+            missing_count=$((missing_count + 1))
           done < images_to_scan.txt
 
+          echo "pulled_count=$pulled_count" >> "$GITHUB_OUTPUT"
+          echo "missing_count=$missing_count" >> "$GITHUB_OUTPUT"
+
+          if [[ "${{ github.event_name }}" == "workflow_run" && "$missing_count" -gt 0 ]]; then
+            echo "Failing workflow_run because required images were not available."
+            exit 1
+          fi
+
+          if [[ "$pulled_count" -eq 0 ]]; then
+            echo "No pullable images are available for this event. Skipping scan and upload."
+            echo "scan_ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "scan_ready=true" >> "$GITHUB_OUTPUT"
+
       - name: Prepare scanner scripts and clean outputs
+        if: steps.resolve_images.outputs.scan_ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -141,16 +175,25 @@ jobs:
           rm -rf syft_scans grype_scans
 
       - name: Run Syft scanner script
+        if: steps.resolve_images.outputs.scan_ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
           ./.github/scripts/security/syft_scanner.sh
 
       - name: Run Grype scanner script
+        if: steps.resolve_images.outputs.scan_ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
           ./.github/scripts/security/grype_scanner.sh
+
+      - name: Scan skipped summary
+        if: steps.resolve_images.outputs.scan_ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Skipping Syft/Grype/DefectDojo upload because no pullable images are available yet."
 
       - name: Upload scan artifacts
         if: always()
@@ -159,11 +202,14 @@ jobs:
           name: security-scan-${{ github.run_id }}
           path: |
             images_to_scan.txt
+            pulled_images.txt
             syft_scans/
             grype_scans/
+          if-no-files-found: warn
           retention-days: 14
 
       - name: Upload reports to DefectDojo
+        if: steps.resolve_images.outputs.scan_ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
