@@ -7,6 +7,7 @@ import os
 import ssl
 import sys
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 from dataclasses import dataclass
@@ -344,6 +345,28 @@ def parse_bool(value: str) -> bool:
     raise ValueError(f"Invalid boolean value: {value}")
 
 
+def normalize_base_url(value: str) -> str:
+    normalized = value.strip()
+    if not normalized:
+        return normalized
+
+    has_scheme = "://" in normalized
+    if not has_scheme:
+        normalized = f"https://{normalized.lstrip('/')}"
+
+    parsed = urllib.parse.urlsplit(normalized)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        raise ValueError(
+            "DD_BASE_URL must be a valid URL (for example: https://defectdojo.example.com)"
+        )
+
+    if parsed.query or parsed.fragment:
+        raise ValueError("DD_BASE_URL must not include query string or fragment")
+
+    base_path = parsed.path.rstrip("/")
+    return f"{parsed.scheme}://{parsed.netloc}{base_path}"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Upload Grype JSON reports to DefectDojo via reimport-scan."
@@ -393,8 +416,17 @@ def main() -> int:
         print(str(error), file=sys.stderr)
         return 2
 
-    base_url = os.getenv("DD_BASE_URL", "").strip()
+    base_url_raw = os.getenv("DD_BASE_URL", "").strip()
     api_token = os.getenv("DD_API_TOKEN", "").strip()
+
+    try:
+        base_url = normalize_base_url(base_url_raw)
+    except ValueError as error:
+        print(str(error), file=sys.stderr)
+        return 2
+
+    if base_url_raw and "://" not in base_url_raw:
+        print("Warning: DD_BASE_URL has no scheme; assuming https://", file=sys.stderr)
 
     if not args.dry_run and (not base_url or not api_token):
         print("DD_BASE_URL and DD_API_TOKEN are required unless --dry-run is used.", file=sys.stderr)
