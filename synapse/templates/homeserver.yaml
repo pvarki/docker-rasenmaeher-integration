@@ -42,10 +42,10 @@ enable_registration_without_verification: false
 database:
   name: psycopg2
   args:
-    user: synapse
-    password: "${SYNAPSE_DB_PASSWORD}"
-    database: synapse
-    host: postgres
+    user: ${POSTGRES_USER}
+    password: "${POSTGRES_PASSWORD}"
+    database: ${POSTGRES_DB}
+    host: ${POSTGRES_HOST}
     cp_min: 5
     cp_max: 10
 

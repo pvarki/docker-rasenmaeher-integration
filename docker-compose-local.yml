@@ -143,8 +143,7 @@ x-logging: &logging
       max-size: 50m
 
 x-matrix_env: &matrix_env
-  SYNAPSE_DB_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:-synapsedbpwd}
-  SERVER_DOMAIN: "${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  SERVER_DOMAIN: *serverdomain
   NGINX_HTTPS_PORT: *apiport
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
@@ -645,9 +644,9 @@ services:
 # End: Fakeproduct #
 ####################
 
-######################
-# Begin: Matrix #
-######################
+###################
+#  Begin: Matrix  #
+###################
   synapse:
     build:
       context: ./synapse
@@ -712,9 +711,9 @@ services:
       retries: 3
       start_period: 60s
     restart: unless-stopped
-####################
-# End: Matrix #
-####################
+###################
+#   End: Matrix   #
+###################
 
 
 ######################
@@ -1076,8 +1075,6 @@ services:
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
-      NGINX_SYNAPSE_UPSTREAM: "synapse"
-      NGINX_SYNAPSE_UPSTREAM_PORT: "8448"
     networks:
       - productnet
       - intranet

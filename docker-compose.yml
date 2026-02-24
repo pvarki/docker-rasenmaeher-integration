@@ -49,6 +49,12 @@ x-battlelog_dbconfig_env: &bldbconfig_env
   # Currently need to be defined separately because of the way the image is built
   DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:?must be defined}@postgres:5432/battlelog"
 
+x-synapse_dbconfig_env: &synapsedbconfig_env
+  POSTGRES_DB: synapse
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: synapse
+  POSTGRES_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?must be defined} # pragma: allowlist secret
@@ -76,7 +82,6 @@ x-keycloak_tls_env: &keycloak_tls_env
   KC_HTTP_ENABLED: true
   KC_HOSTNAME: *kcdomain
   KC_HTTPS_PORT: 9443
-
 
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
@@ -135,7 +140,11 @@ x-logging: &logging
       syslog-address: ${LOGGING_SYSLOG_ADDR:-unixgram:///dev/log}  # local rsyslog/journald socket
       tag: "{{.ImageName}}/{{.Name}}"
 
-
+x-matrix_env: &matrix_env
+  SERVER_DOMAIN: *serverdomain
+  NGINX_HTTPS_PORT: *apiport
+  KCDOMAIN: *kcdomain
+  KCREALM: *kc_realm
 
 services:
   miniwerk:
@@ -160,7 +169,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx,matrix"
       LOG_CONSOLE_FORMATTER: "ecs"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -169,6 +178,7 @@ services:
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
+      - kraftwerk_shared_matrix:/pvarkishares/matrix
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
@@ -517,6 +527,8 @@ services:
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
+      NGINX_SYNAPSE_UPSTREAM: "synapse"
+      NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
       - apinet
       - kcnet
@@ -562,9 +574,9 @@ services:
       - kwinit_data:/data/persistent
 
 
-######################
+####################
 # Begin: Battlelog #
-######################
+####################
   blapi:
     <<: *logging
     image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-d${RELEASE_TAG:-2.6.1}${DOCKER_TAG_EXTRA:-}
@@ -599,8 +611,77 @@ services:
       start_period: 25s
     restart: unless-stopped
 ####################
-# End: Battlelog #
+#  End: Battlelog  #
 ####################
+
+###################
+#  Begin: Matrix  #
+###################
+  synapse:
+    build:
+      context: ./synapse
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    networks:
+      - dbnet
+      - productnet
+      - kcnet
+      - intranet
+    volumes:
+      - synapse_config_vol:/data
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      <<: [*matrix_env, *synapsedbconfig_env]
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  matrixrmapi:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./matrixrmapi
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: *matrix_env
+      LOG_CONSOLE_FORMATTER: "local"
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_matrix:/pvarki
+      - matrix_data:/data/persistent
+      - ui_files:/ui_files
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      synapse:
+        condition: service_healthy
+    healthcheck:
+      test: 'true' # FIXME
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+###################
+#   End: Matrix   #
+###################
 
 ###################
 # Begin: MediaMTX #
@@ -905,6 +986,8 @@ services:
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
+      NGINX_MATRIX_UPSTREAM: "matrixrmapi"
+      NGINX_MATRIX_UPSTREAM_PORT: "8012"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
@@ -969,6 +1052,7 @@ volumes:
   kraftwerk_data:
   kwinit_data:
   kraftwerk_shared_fake:
+  kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
   pg_data:
@@ -977,6 +1061,7 @@ volumes:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
+  matrix_data:
   ca_public:
   le_certs:
   tak_data:
@@ -988,3 +1073,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  synapse_config_vol:
