@@ -67,10 +67,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "$(dirname "${{ steps.syft.outputs.cmd }}")" >> "$GITHUB_PATH"
-          echo "$(dirname "${{ steps.grype.outputs.cmd }}")" >> "$GITHUB_PATH"
-          syft version
-          grype version
+          syft_cmd="${{ steps.syft.outputs.cmd }}"
+          grype_cmd="${{ steps.grype.outputs.cmd }}"
+          echo "$(dirname "$syft_cmd")" >> "$GITHUB_PATH"
+          echo "$(dirname "$grype_cmd")" >> "$GITHUB_PATH"
+          "$syft_cmd" version
+          "$grype_cmd" version
 
       - name: Resolve allowlisted images and pull
         shell: bash
