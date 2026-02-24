@@ -25,9 +25,9 @@ jobs:
     env:
       DD_BASE_URL: ${{ secrets.DD_BASE_URL }}
       DD_API_TOKEN: ${{ secrets.DD_API_TOKEN }}
-      DD_PRODUCT_TYPE_NAME: ${{ vars.DD_PRODUCT_TYPE_NAME }}
-      DD_ENGAGEMENT_NAME: ${{ vars.DD_ENGAGEMENT_NAME }}
-      DD_VERIFY_SSL: ${{ vars.DD_VERIFY_SSL }}
+      DD_PRODUCT_TYPE_NAME: ${{ secrets.DD_PRODUCT_TYPE_NAME }}
+      DD_ENGAGEMENT_NAME: ${{ secrets.DD_ENGAGEMENT_NAME }}
+      DD_VERIFY_SSL: ${{ secrets.DD_VERIFY_SSL }}
 
     steps:
       - name: Checkout target commit
