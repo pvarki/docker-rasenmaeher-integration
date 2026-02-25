@@ -172,7 +172,7 @@ server {
         set $synapse_backend "http://${NGINX_SYNAPSE_UPSTREAM}:${NGINX_SYNAPSE_UPSTREAM_PORT}";
 
         proxy_pass $synapse_backend;
-        
+
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;

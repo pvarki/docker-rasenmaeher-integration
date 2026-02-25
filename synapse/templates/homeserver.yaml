@@ -19,7 +19,6 @@ listeners:
       - names: [client]
         compress: false
 
-
 report_stats: no
 media_store_path: /data/media_store
 
@@ -58,9 +57,6 @@ password_config:
 #Online offline status
 presence:
   enabled: false
-
-enable_registration: false
-
 
 oidc_providers:
   # https://element-hq.github.io/synapse/latest/openid.html#keycloak
