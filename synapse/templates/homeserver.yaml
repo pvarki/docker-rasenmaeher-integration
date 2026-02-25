@@ -1,7 +1,7 @@
 server_name: "${SERVER_DOMAIN}"
 public_baseurl: "https://synapse.${SERVER_DOMAIN}:${NGINX_HTTPS_PORT}/"
 pid_file: /data/homeserver.pid
-macaroon_secret_key: "some-random-secret"
+macaroon_secret_key: "${SYNAPSE_MACAROON_SECRET_KEY}"
 
 listeners:
   - port: 8448
