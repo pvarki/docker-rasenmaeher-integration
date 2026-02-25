@@ -27,8 +27,6 @@ server {
     # HTTPS configuration
     listen ${NGINX_HTTPS_PORT} ssl;
 
-    client_max_body_size 100M;  # Allow larger file uploads (images/video) for Matrix
-
     ssl_client_certificate /ca_public/ca_chain.pem;
     ssl_verify_client      on;
     ssl_ocsp leaf;

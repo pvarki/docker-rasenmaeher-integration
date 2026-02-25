@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Resolve our magic names to docker internal ip
+GW_IP=$(getent ahostsv4 host.docker.internal | grep RAW | awk '{ print $1 }')
+echo "GW_IP=$GW_IP"
+grep -v -F -e "localmaeher"  -- /etc/hosts >/etc/hosts.new && cat /etc/hosts.new >/etc/hosts
+echo "$GW_IP kc.localmaeher.dev.pvarki.fi" >>/etc/hosts
+echo "*** BEGIN /etc/hosts ***"
+cat /etc/hosts
+echo "*** END /etc/hosts ***"
+
 if [[ -d "/ca_public" ]]; then
   echo "Installing custom CAs from /ca_public into OS trust store..."
   mkdir -p /usr/local/share/ca-certificates/
@@ -27,10 +36,17 @@ CERT_DIR="$DATA_DIR/certs"
 CONFIG_TEMPLATE="/opt/synapse/templates/homeserver.yaml"
 CONFIG_FILE="$DATA_DIR/homeserver.yaml"
 
-# Initialize certs for inbound traffic
 /opt/synapse/scripts/init_certs.sh
 
-# Populate homeserver.yaml from template
+OIDC_FILE="/config/registration.json"
+echo "Waiting for $OIDC_FILE to be generated..."
+until [[ -f "$OIDC_FILE" ]]; do
+  sleep 2
+done
+
+export CLIENT_ID=$(jq -r '.client_id' /config/registration.json)
+export CLIENT_SECRET=$(jq -r '.client_secret' /config/registration.json)
+
 if [[ ! -f "$CONFIG_FILE" ]]; then
   echo "Creating homeserver.yaml..."
   mkdir -p "$DATA_DIR"
@@ -42,6 +58,5 @@ fi
 
 wait-for-it.sh postgres:5432 --timeout=30 -- echo "Postgres is up!"
 
-# Start Synapse
 echo "Starting Synapse..."
 python -m synapse.app.homeserver --config-path "$CONFIG_FILE"
