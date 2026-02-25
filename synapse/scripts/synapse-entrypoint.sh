@@ -20,7 +20,7 @@ if [[ -d "/ca_public" ]]; then
     echo "  -> installing $pem as ${base}.crt"
     cp "$pem" "/usr/local/share/ca-certificates/${base}.crt"
   done
-  
+
   update-ca-certificates --fresh
 
   echo "CA store updated."
