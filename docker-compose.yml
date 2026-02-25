@@ -665,6 +665,8 @@ services:
     restart: unless-stopped
 
   synapse:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse:${RELEASE_TAG:-2.6.1}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./synapse
       dockerfile: Dockerfile
