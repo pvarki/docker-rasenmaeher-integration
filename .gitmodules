@@ -36,3 +36,6 @@
 [submodule "matrixrmapi"]
 	path = matrixrmapi
 	url = git@github.com:pvarki/python-matrix-rmapi.git
+[submodule "kc_client_init"]
+	path = kc_client_init
+	url = git@github.com:pvarki/golang-keycloak-client-init-helper-cli.git

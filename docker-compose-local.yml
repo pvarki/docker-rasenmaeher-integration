@@ -3,7 +3,7 @@
 
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
-  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
@@ -144,6 +144,7 @@ x-logging: &logging
 
 x-matrix_env: &matrix_env
   SERVER_DOMAIN: *serverdomain
+  MTLS_DOMAIN: *mtlsdomain
   NGINX_HTTPS_PORT: *apiport
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
@@ -391,10 +392,8 @@ services:
       #KC_LOG_LEVEL: debug
       # REMINDER: KEYCLOAK_EXTRA_ARGS is defined in keycloak_tls_env
     networks:
-      kcnet:
-        aliases:
-          - "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
-      dbnet:
+      - kcnet
+      - dbnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -606,6 +605,19 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+  kcinit:  # Mostly to make sure it's built
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:latest-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./kc_client_init
+      dockerfile: Dockerfile
+      target: production
+    command: ["help"]
+    volumes:
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - kcinit_data:/data/persistent
+
 ######################
 # Begin: Fakeproduct #
 ######################
@@ -647,36 +659,6 @@ services:
 ###################
 #  Begin: Matrix  #
 ###################
-  synapse:
-    build:
-      context: ./synapse
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    depends_on:
-      keycloak-init:
-        condition: service_completed_successfully
-      postgres:
-        condition: service_healthy
-      keycloak:
-        condition: service_healthy
-    networks:
-      - dbnet
-      - productnet
-      - kcnet
-      - intranet
-    volumes:
-      - synapse_config_vol:/data
-      - ca_public:/ca_public
-      - le_certs:/le_certs
-    environment:
-      <<: [*matrix_env, *synapsedbconfig_env]
-    healthcheck:
-      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-
   matrixrmapi:
     <<: *logging
     image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
@@ -698,19 +680,52 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_matrix:/pvarki
       - matrix_data:/data/persistent
+      - synapse_config_vol:/data/persistent/oidc
       - ui_files:/ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
-      synapse:
-        condition: service_healthy
     healthcheck:
-      test: 'true' # FIXME
+      test: 'matrixrmapi healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
       start_period: 60s
     restart: unless-stopped
+
+  synapse:
+    build:
+      context: ./synapse
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      matrixrmapi:
+        condition: service_started
+    networks:
+      - dbnet
+      - productnet
+      - kcnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - synapse_config_vol:/config
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      <<: [*matrix_env, *synapsedbconfig_env]
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
 ###################
 #   End: Matrix   #
 ###################
@@ -1124,6 +1139,7 @@ volumes:
   kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
+  kcinit_data:
   pg_data:
   cfssl_data:
   openldap_data:

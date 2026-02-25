@@ -185,7 +185,12 @@ server {
     client_max_body_size 100M;
 
     location / {
-        proxy_pass  http://${NGINX_SYNAPSE_UPSTREAM}:${NGINX_SYNAPSE_UPSTREAM_PORT};
+        resolver ${DNS_RESOLVER_IP} valid=30s ipv6=off;
+
+        set $synapse_backend "http://${NGINX_SYNAPSE_UPSTREAM}:${NGINX_SYNAPSE_UPSTREAM_PORT}";
+
+        proxy_pass $synapse_backend;
+        
         proxy_redirect                      off;
         proxy_set_header  Host              $http_host;
         proxy_set_header  X-Real-IP         $remote_addr;

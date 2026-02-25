@@ -67,8 +67,8 @@ oidc_providers:
   - idp_id: keycloak
     idp_name: "Keycloak"
     issuer: "https://${KCDOMAIN}:9443/realms/${KCREALM}"
-    client_id: "synapse"
-    client_secret: "gB1SFcmGFIRqnswfTKK4K9a98n1rHbpM" # TODO: CHANGE TO ENV
+    client_id: "${CLIENT_ID}"
+    client_secret: "${CLIENT_SECRET}"
     scopes: ["openid", "profile"]
     user_mapping_provider:
       config:
