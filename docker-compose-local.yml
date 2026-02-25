@@ -148,6 +148,7 @@ x-matrix_env: &matrix_env
   NGINX_HTTPS_PORT: *apiport
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
+  SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:-secretsynapsemacaroonkey}
 
 services:
   miniwerk:
