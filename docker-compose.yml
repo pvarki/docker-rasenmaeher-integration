@@ -142,6 +142,7 @@ x-logging: &logging
 
 x-matrix_env: &matrix_env
   SERVER_DOMAIN: *serverdomain
+  MTLS_DOMAIN: *mtlsdomain
   NGINX_HTTPS_PORT: *apiport
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
