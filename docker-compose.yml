@@ -634,7 +634,7 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./matrixrmapi
       dockerfile: Dockerfile
