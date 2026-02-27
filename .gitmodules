@@ -13,6 +13,7 @@
 [submodule "miniwerk"]
 	path = miniwerk
 	url = git@github.com:pvarki/python-rasenmaeher-miniwerk.git
+	branch = matrix-dev/main
 [submodule "takserver"]
 	path = takserver
 	url = git@github.com:pvarki/docker-atak-server.git
@@ -25,9 +26,25 @@
 [submodule "api"]
 	path = api
 	url = git@github.com:pvarki/python-rasenmaeher-api.git
+	branch = matrix-dev/main
 [submodule "takintegration"]
 	path = takintegration
 	url = git@github.com:pvarki/python-tak-rmapi.git
 [submodule "uiv2"]
 	path = uiv2
 	url = git@github.com:pvarki/react-rasenmaeher-ui-v2.git
+[submodule "matrixrmapi"]
+	path = matrixrmapi
+	url = git@github.com:pvarki/python-matrix-rmapi.git
+[submodule "kc_client_init"]
+	path = kc_client_init
+	url = git@github.com:pvarki/golang-keycloak-client-init-helper-cli.git
+[submodule "synapse"]
+	path = synapse
+	url = git@github.com:pvarki/docker-synapse-server.git
+[submodule "airguard-api"]
+	path = airguard-api
+	url = git@github.com:c5bravo/atak-airguardian-api.git
+[submodule "airguardpractice"]
+	path = airguardpractice
+	url = git@github.com:c5bravo/atak-airguardian-practice-tool.git
