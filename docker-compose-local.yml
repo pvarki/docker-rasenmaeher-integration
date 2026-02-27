@@ -160,7 +160,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix,synapse"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
