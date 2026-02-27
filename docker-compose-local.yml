@@ -742,7 +742,7 @@ services:
 # Begin: Agintegration #
 ######################
   rmagapi:
-    image: ${PVARKI_DOCKER_REPO:-nexus.dev.pvarki.fi/}pvarki/rmagapi:1.4.0-d${RELEASE_TAG:-2.0.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmagapi:0.0.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./airguard-api
       dockerfile: Dockerfile
@@ -780,6 +780,7 @@ services:
     restart: unless-stopped
 
   airguardtool:
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/airguardtool:0.0.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./airguardpractice
       dockerfile: Dockerfile
