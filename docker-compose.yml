@@ -62,6 +62,7 @@ x-postgres_env: &postgres_env
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
+  SYNAPSE_PASSWORD: *synapse_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -172,7 +173,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx,matrix"
+      MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse"
       LOG_CONSOLE_FORMATTER: "ecs"
     volumes:
       - kraftwerk_data:/data/persistent
