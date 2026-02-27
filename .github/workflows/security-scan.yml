@@ -1,0 +1,216 @@
+name: Security Scan (Syft + Grype + DefectDojo)
+
+on:
+  push:
+    branches:
+      - security-scanning
+  workflow_run:
+    workflows:
+      - ".github/workflows/build.yml"
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: security-scan-${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  scan-and-upload:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: arc-runner-set
+    permissions:
+      contents: read
+      packages: read
+
+    env:
+      DD_BASE_URL: ${{ secrets.DD_BASE_URL }}
+      DD_API_TOKEN: ${{ secrets.DD_API_TOKEN }}
+      DD_PRODUCT_TYPE_NAME: ${{ secrets.DD_PRODUCT_TYPE_NAME }}
+      DD_ENGAGEMENT_NAME: ${{ secrets.DD_ENGAGEMENT_NAME }}
+      DD_VERIFY_SSL: ${{ secrets.DD_VERIFY_SSL }}
+
+    steps:
+      - name: Checkout target commit
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+          submodules: recursive
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Syft
+        id: syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Install Grype (with DB cache)
+        id: grype
+        uses: anchore/scan-action/download-grype@v7
+        with:
+          grype-version: v0.107.1
+          cache-db: true
+
+      - name: Add Syft and Grype to PATH
+        shell: bash
+        run: |
+          set -euo pipefail
+          syft_cmd="${{ steps.syft.outputs.cmd }}"
+          grype_cmd="${{ steps.grype.outputs.cmd }}"
+          echo "$(dirname "$syft_cmd")" >> "$GITHUB_PATH"
+          echo "$(dirname "$grype_cmd")" >> "$GITHUB_PATH"
+          "$syft_cmd" version
+          "$grype_cmd" version
+
+      - name: Resolve allowlisted images and pull
+        id: resolve_images
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          source example_env.sh
+          export PVARKI_DOCKER_REPO="ghcr.io/"
+          export DOCKER_TAG_EXTRA=""
+
+          python3 - <<'PY' > images_to_scan.txt
+          import subprocess
+
+          allow_prefix = ("ghcr.io/pvarki/",)
+          allow_exact = {
+              "postgis/postgis",
+              "bluenviron/mediamtx",
+              "adorsys/keycloak-config-cli",
+          }
+
+          out = subprocess.check_output(
+              [
+                  "docker",
+                  "compose",
+                  "-f",
+                  "docker-compose.yml",
+                  "-f",
+                  "docker-compose-local.yml",
+                  "config",
+                  "--images",
+              ],
+              text=True,
+          )
+
+          def image_repo(image: str) -> str:
+              if "@" in image:
+                  return image.split("@", 1)[0]
+              return image.rsplit(":", 1)[0] if ":" in image else image
+
+          images = sorted(set(line.strip() for line in out.splitlines() if line.strip()))
+          for image in images:
+              repo = image_repo(image)
+              if repo in allow_exact or repo.startswith(allow_prefix):
+                  print(image)
+          PY
+
+          if [[ ! -s images_to_scan.txt ]]; then
+            echo "No allowlisted images resolved from compose config."
+            if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+              exit 1
+            fi
+            echo "pulled_count=0" >> "$GITHUB_OUTPUT"
+            echo "missing_count=0" >> "$GITHUB_OUTPUT"
+            echo "scan_ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          cat images_to_scan.txt
+
+          pulled_count=0
+          missing_count=0
+          : > pulled_images.txt
+
+          while IFS= read -r image; do
+            if docker pull "$image"; then
+              echo "$image" >> pulled_images.txt
+              pulled_count=$((pulled_count + 1))
+              continue
+            fi
+            echo "Unable to pull image: $image" >&2
+            missing_count=$((missing_count + 1))
+          done < images_to_scan.txt
+
+          echo "pulled_count=$pulled_count" >> "$GITHUB_OUTPUT"
+          echo "missing_count=$missing_count" >> "$GITHUB_OUTPUT"
+
+          if [[ "${{ github.event_name }}" == "workflow_run" && "$missing_count" -gt 0 ]]; then
+            echo "Failing workflow_run because required images were not available."
+            exit 1
+          fi
+
+          if [[ "$pulled_count" -eq 0 ]]; then
+            echo "No pullable images are available for this event. Skipping scan and upload."
+            echo "scan_ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "scan_ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare scanner scripts and clean outputs
+        if: steps.resolve_images.outputs.scan_ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          chmod +x \
+            .github/scripts/security/syft_scanner.sh \
+            .github/scripts/security/grype_scanner.sh \
+            .github/scripts/security/upload_to_defectdojo.py
+          rm -rf syft_scans grype_scans
+
+      - name: Run Syft scanner script
+        if: steps.resolve_images.outputs.scan_ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./.github/scripts/security/syft_scanner.sh
+
+      - name: Run Grype scanner script
+        if: steps.resolve_images.outputs.scan_ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./.github/scripts/security/grype_scanner.sh
+
+      - name: Scan skipped summary
+        if: steps.resolve_images.outputs.scan_ready != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Skipping Syft/Grype/DefectDojo upload because no pullable images are available yet."
+
+      - name: Upload scan artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-${{ github.run_id }}
+          path: |
+            images_to_scan.txt
+            pulled_images.txt
+            syft_scans/
+            grype_scans/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload reports to DefectDojo
+        if: steps.resolve_images.outputs.scan_ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/security/upload_to_defectdojo.py --reports-dir grype_scans --manifest grype_scans/manifest.tsv
