@@ -7,14 +7,16 @@ map_hash_max_size 128;
 map_hash_bucket_size 128;
 map $host $host_upstream_mapped {
     hostnames;
-    tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
-    bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
-    mtls.tak.${NGINX_HOST}       ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
-    mtls.bl.${NGINX_HOST}        ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
-    fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
+    tak.${NGINX_HOST}           ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
+    bl.${NGINX_HOST}            ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
+    mtls.tak.${NGINX_HOST}      ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
+    mtls.bl.${NGINX_HOST}       ${NGINX_BL_UPSTREAM}:${NGINX_BL_UPSTREAM_PORT};
+    fake.${NGINX_HOST}          ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
     mtls.fake.${NGINX_HOST}     ${NGINX_FP_UPSTREAM}:${NGINX_FP_UPSTREAM_PORT};
-    mtx.${NGINX_HOST}        ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
-    rmmtx.${NGINX_HOST}        ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
+    mtx.${NGINX_HOST}           ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
+    rmmtx.${NGINX_HOST}         ${NGINX_RMMTX_UPSTREAM}:${NGINX_RMMTX_UPSTREAM_PORT};
+    matrix.${NGINX_HOST}        ${NGINX_MATRIX_UPSTREAM}:${NGINX_MATRIX_UPSTREAM_PORT};
+    mtls.matrix.${NGINX_HOST}   ${NGINX_MATRIX_UPSTREAM}:${NGINX_MATRIX_UPSTREAM_PORT};
 }
 map $host $host_ephemeral_upstream_mapped {
     hostnames;
