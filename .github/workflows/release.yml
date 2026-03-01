@@ -14,13 +14,48 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
+
       - name: Parse tag to ENV
         run: |
           echo RELEASE_TAG=$(docker run --rm -v ${PWD}:/workdir mikefarah/yq .version version.yml ) >> ${GITHUB_ENV}
           cat ${GITHUB_ENV}
-      - uses: rickstaa/action-create-tag@v1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Generate OpenAPI JSON (with x-generated-date)
+        run: |
+          cd api
+          pip install .
+          rasenmaeher_api openapi > ../openapi.json
+
+      - name: Verify x-generated-date is present in openapi.json
+        run: |
+          python -c "
+          import json, sys
+          data = json.load(open('openapi.json'))
+          if 'x-generated-date' not in data:
+              print('ERROR: x-generated-date missing from openapi.json')
+              sys.exit(1)
+          print('x-generated-date:', data['x-generated-date'])
+          "
+
+      - name: Create tag
+        uses: rickstaa/action-create-tag@v1
         if: ${{ !env.ACT }}
         id: "tag_create"
         with:
           tag: ${{ env.RELEASE_TAG }}
           tag_exists_error: false
+
+      - name: Upload openapi.json to release
+        uses: softprops/action-gh-release@v2
+        if: ${{ !env.ACT }}
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: openapi.json
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
