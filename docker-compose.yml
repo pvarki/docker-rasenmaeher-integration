@@ -503,6 +503,7 @@ services:
       - le_certs:/le_certs
       - rmui_files:/rmui_files
       - ui_files:/ui_files
+      - admin_ui_files:/admin_ui_files
     environment:
       <<: *cfssl_env
       NGINX_HOST: *serverdomain
@@ -988,3 +989,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  admin_ui_files:
