@@ -700,6 +700,7 @@ services:
       - kraftwerk_shared_rmmtx:/pvarki
       - rmmtx_data:/data/persistent
       - ui_files:/ui_files
+      - admin_ui_files:/admin_ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -1049,3 +1050,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  admin_ui_files:
