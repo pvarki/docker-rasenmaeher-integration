@@ -507,6 +507,7 @@ services:
       args:
         VITE_THEME: ${VITE_THEME:-default}
         RELEASE_TAG: "local"
+        SERVER_DOMAIN: ${SERVER_DOMAIN}
     volumes:
       - rmui_files:/deliver
 
@@ -700,6 +701,7 @@ services:
       - kraftwerk_shared_rmmtx:/pvarki
       - rmmtx_data:/data/persistent
       - ui_files:/ui_files
+      - admin_ui_files:/admin_ui_files
     depends_on:
       rmnginx:
         condition: service_healthy
@@ -1049,3 +1051,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  admin_ui_files:
