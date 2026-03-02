@@ -211,6 +211,9 @@ services:
 
 networks:
   intranet:
+  productnet:
+  airguardnet:
 
 volumes:
   nginx_templates:
+  airguard_data:

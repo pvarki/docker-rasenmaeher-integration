@@ -3,11 +3,12 @@
 
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
-  MTLS_DOMAIN: &mtlsdomein "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-4439}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  AIRGUARDIAN_URL: &airguardianurl "https://airguardian.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:4626/"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
@@ -52,6 +53,12 @@ x-battlelog_dbconfig_env: &bldbconfig_env
   # Currently need to be defined separately because of the way the image is built
   DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:-battlelogpwd}@postgres:5432/battlelog"
 
+x-synapse_dbconfig_env: &synapsedbconfig_env
+  POSTGRES_DB: synapse
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: synapse
+  POSTGRES_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:-synapsedbpwd} # pragma: allowlist secret
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: &pgrootpwd ${POSTGRES_PASSWORD:-pg_R00t_user_password} # pragma: allowlist secret
@@ -59,6 +66,7 @@ x-postgres_env: &postgres_env
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
+  SYNAPSE_PASSWORD: *synapse_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: true
@@ -91,7 +99,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -99,7 +107,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-20}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -129,24 +137,33 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
   WEBTAK_ENABLE: "true"
+  TAK_FEED_AIRGUARD_ENABLE: "true"
+  TAK_FEED_AIRGUARD_PORT: "8090"
 
 x-logging: &logging
   logging:
     options:
       max-size: 50m
 
+x-matrix_env: &matrix_env
+  SERVER_DOMAIN: *serverdomain
+  MTLS_DOMAIN: *mtlsdomain
+  NGINX_HTTPS_PORT: *apiport
+  KCDOMAIN: *kcdomain
+  KCREALM: *kc_realm
+  SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:-secretsynapsemacaroonkey}
 
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx"
+      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix,synapse,agpractice,airguardian"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -170,15 +187,17 @@ services:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
       - kraftwerk_shared_fake:/pvarkishares/fake
+      - kraftwerk_shared_matrix:/pvarkishares/matrix
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
+      - kraftwerk_shared_airguardian:/pvarkishares/airguardian
       - le_certs:/le_certs
       - ca_public:/ca_public
 
   jwtcopy:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.4.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -197,7 +216,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -219,7 +238,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -244,7 +263,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -304,7 +323,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -360,7 +379,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak
       dockerfile: Dockerfile
@@ -431,7 +450,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.13.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.13.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -499,7 +518,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
@@ -512,7 +531,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -542,6 +561,8 @@ services:
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
+      NGINX_SYNAPSE_UPSTREAM: "synapse"
+      NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
       - apinet
       - kcnet
@@ -577,7 +598,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -589,12 +610,25 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+  kcinit:  # Mostly to make sure it's built
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:latest-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./kc_client_init
+      dockerfile: Dockerfile
+      target: production
+    command: ["help"]
+    volumes:
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - kcinit_data:/data/persistent
+
 ######################
 # Begin: Fakeproduct #
 ######################
   rmfpapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.1-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -627,12 +661,162 @@ services:
 # End: Fakeproduct #
 ####################
 
+###################
+#  Begin: Matrix  #
+###################
+  matrixrmapi:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./matrixrmapi
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: *matrix_env
+      LOG_CONSOLE_FORMATTER: "local"
+    ports:
+      - "8012:8012"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_matrix:/pvarki
+      - matrix_data:/data/persistent
+      - synapse_config_vol:/data/persistent/oidc
+      - ui_files:/ui_files
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'matrixrmapi healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  synapse:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse:${RELEASE_TAG:-2.7.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./synapse
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      matrixrmapi:
+        condition: service_started
+    networks:
+      - dbnet
+      - productnet
+      - kcnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - synapse_config_vol:/config
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      <<: [*matrix_env, *synapsedbconfig_env]
+    healthcheck:
+      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+###################
+#   End: Matrix   #
+###################
+
+
+######################
+# Begin: Agintegration #
+######################
+  rmagapi:
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmagapi:0.0.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./airguard-api
+      dockerfile: Dockerfile
+      target: production
+    command: ["python", "-m", "app.main"]
+    environment:
+      API_HOST: "0.0.0.0"
+      OPENSKY_CLIENT_ID: ${AIRGUARD_OPENSKY_CLIENT_ID:-}
+      OPENSKY_CLIENT_SECRET: ${AIRGUARD_OPENSKY_CLIENT_SECRET:-}
+      OPENSKY_API_URL: ${AIRGUARD_OPENSKY_API_URL:-}
+      OPENSKY_TOKEN_URL: ${AIRGUARD_OPENSKY_TOKEN_URL:-}
+      DATAMIRROR_TAK_HOST: ${AIRGUARD_DATAMIRROR_TAK_HOST:-takconfig}
+      DATAMIRROR_TAK_PORT: ${AIRGUARD_DATAMIRROR_TAK_PORT:-8090}
+      PRACTOOL_HOST: ${AIRGUARD_PRACTOOL_HOST:-airguardtool}
+      PRACTOOL_PORT: ${AIRGUARD_PRACTOOL_PORT:-3000}
+    networks:
+      - taknet
+      - productnet
+      - airguardnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_airguardian:/pvarki
+      - rmagapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'true' # FIXME
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  airguardtool:
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/airguardtool:0.0.1-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./airguardpractice
+      dockerfile: Dockerfile
+    environment:
+      DB_FILE_NAME: "file:/data/persistent/airguard.db"
+    networks:
+      - productnet
+      - airguardnet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_airguardian:/pvarki
+      - rmagapi_data:/data/persistent
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+      rmagapi:
+        condition: service_healthy
+    healthcheck:
+      test: 'true' # FIXME: User proper health check. Healtcheck url to tool?
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+####################
+# End: Agintegration #
+####################
+
 ######################
 # Begin: Battlelog #
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -675,7 +859,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.3.0-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.3.0-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -918,7 +1102,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.6.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.7.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -932,6 +1116,7 @@ services:
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
       TI_PRODUCT_HTTPS_PORT: *productport
+      TI_AIRGUARDIAN_URL: *airguardianurl
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -979,8 +1164,16 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_AIRGUARDIAN_UPSTREAM: "rmagapi"
+      NGINX_AIRGUARDIAN_UPSTREAM_PORT: "8010"
+      NGINX_AGPRACTICE_UPSTREAM: "airguardtool"
+      NGINX_AGPRACTICE_UPSTREAM_PORT: "3000"
+      NGINX_AG_UPSTREAM: "rmagapi"
+      NGINX_AG_UPSTREAM_PORT: "8010"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
+      NGINX_MATRIX_UPSTREAM: "matrixrmapi"
+      NGINX_MATRIX_UPSTREAM_PORT: "8012"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
@@ -1025,19 +1218,25 @@ networks:
   dbnet:
   intranet:
   taknet:
+  airguardnet:
 
 volumes:
   kraftwerk_data:
   kwinit_data:
   kraftwerk_shared_fake:
+  kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
+  kcinit_data:
+  kraftwerk_shared_airguardian:
   pg_data:
   cfssl_data:
   openldap_data:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
+  matrix_data:
+  rmagapi_data:
   ca_public:
   le_certs:
   tak_data:
@@ -1049,3 +1248,5 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  synapse_config_vol:
+  airguard_data:
