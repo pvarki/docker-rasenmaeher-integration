@@ -482,6 +482,7 @@ services:
       args:
         VITE_THEME: ${VITE_THEME:-default}
         RELEASE_TAG: ${RELEASE_TAG:-2.6.2}
+        SERVER_DOMAIN: ${SERVER_DOMAIN}
     volumes:
       - rmui_files:/deliver
 
