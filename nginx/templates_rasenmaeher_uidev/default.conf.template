@@ -9,6 +9,7 @@ map $http_host $redir_uri {
 
     ~^(.*?)tak\. https://$1tak.${NGINX_HOST}:8443;
     ~^(.*?)mtx\. https://$1mtx.${NGINX_HOST}:9888;
+    ~^(.*?)cryptpad\. https://$1cryptpad.${NGINX_HOST}:${NGINX_CRYPTPAD_PORT};
     ~^(.*?)bl\. https://$1bl.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)fake\. https://$1fake.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
     ~^(.*?)matrix\. https://$1matrix.${NGINX_HOST}:${NGINX_PRODUCTAPI_PORT};
