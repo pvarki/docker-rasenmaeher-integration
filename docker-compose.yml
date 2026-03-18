@@ -800,6 +800,7 @@ services:
       CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
       CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
       CPAD_SSO_NAME: ${CPAD_SSO_NAME:-rmcryptpad}
+      CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000
       CPAD_SSO_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       CPAD_SSO_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
       CPAD_SSO_CLIENT_SECRET: *rmcryptpad_oidc_client_secret
