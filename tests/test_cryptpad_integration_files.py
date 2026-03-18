@@ -8,6 +8,7 @@ NGINX_TEMPLATE = REPO_ROOT / "nginx" / "templates_consolidated" / "default.conf.
 RMAPI_CONTAINER_INIT = REPO_ROOT / "api" / "docker" / "container-init.sh"
 LOCAL_COMPOSE = REPO_ROOT / "docker-compose-local.yml"
 MAIN_COMPOSE = REPO_ROOT / "docker-compose.yml"
+CRYPTPAD_SSO_CONFIG = REPO_ROOT / "cryptpad" / "config" / "sso.js"
 
 
 def _read(path: Path) -> str:
@@ -46,3 +47,13 @@ def test_main_compose_keeps_cryptpad_manifest_hosts_explicit() -> None:
     compose = _read(MAIN_COMPOSE)
     assert 'MW_CRYPTPAD__API_HOST: "rmcryptpad"' in compose
     assert 'MW_CRYPTPAD__USER_HOST: "mtls.cryptpad"' in compose
+
+
+def test_cryptpad_oidc_discovery_uses_internal_rmcryptpad_service() -> None:
+    """CryptPad server-side issuer discovery must not depend on localhost-pointing FQDN DNS."""
+    local_compose = _read(LOCAL_COMPOSE)
+    main_compose = _read(MAIN_COMPOSE)
+    sso_config = _read(CRYPTPAD_SSO_CONFIG)
+    assert "CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000" in local_compose
+    assert "CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000" in main_compose
+    assert "process.env.CPAD_SSO_DISCOVERY_URL" in sso_config
