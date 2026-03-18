@@ -4,6 +4,7 @@ x-domains_env:
   MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
+  CRYPTPAD_HTTPS_PORT: &cryptpadport ${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
@@ -34,6 +35,13 @@ x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
   RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:?must be defined} # pragma: allowlist secret
 
+x-rmcryptpad_dbconfig_env: &rmcryptpad_dbconfig_env
+  RMCRYPTPAD_DATABASE_DATABASE: &rmcryptpad_dbname ${RMCRYPTPAD_DATABASE_DATABASE:-rmcryptpad}
+  RMCRYPTPAD_DATABASE_HOST: postgres
+  RMCRYPTPAD_DATABASE_USER: &rmcryptpad_dbuser ${RMCRYPTPAD_DATABASE_USER:-rmcryptpad}
+  RMCRYPTPAD_DATABASE_PASSWORD: &rmcryptpad_dbpass ${RMCRYPTPAD_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMCRYPTPAD_OIDC_CLIENT_SECRET: &rmcryptpad_oidc_client_secret ${RMCRYPTPAD_OIDC_CLIENT_SECRET:?must be defined} # pragma: allowlist secret
+
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
   POSTGRES_ADDRESS: postgres
@@ -56,6 +64,7 @@ x-postgres_env: &postgres_env
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
+  RMCRYPTPAD_PASSWORD: *rmcryptpad_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -156,11 +165,15 @@ services:
       MW_BL__API_BASE: "/rmapi/"
       MW_BL__API_PORT: *productport
       MW_BL__USER_PORT: *productport
+      MW_CRYPTPAD__API_HOST: "rmcryptpad"
+      MW_CRYPTPAD__API_PORT: *productport
+      MW_CRYPTPAD__USER_HOST: "mtls.cryptpad"
+      MW_CRYPTPAD__USER_PORT: *cryptpadport
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx,cryptpad"
       LOG_CONSOLE_FORMATTER: "ecs"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -169,6 +182,7 @@ services:
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
+      - kraftwerk_shared_cryptpad:/pvarkishares/cryptpad
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
@@ -509,6 +523,7 @@ services:
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-80}
       NGINX_HTTPS_PORT: *apiport
       NGINX_PRODUCTAPI_PORT: *productport
+      NGINX_CRYPTPAD_PORT: *cryptpadport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_CERT_NAME: "rasenmaeher"
@@ -684,6 +699,146 @@ services:
     # Can't do healthchecks because the container has nothing but the mediamtx binary
 #################
 # End: MediaMTX #
+#################
+
+###################
+# Begin: CryptPad #
+###################
+  cryptpad_data_perms:
+    <<: *logging
+    image: ${HUB_DOCKER_REPO:-docker.io/}bash:latest
+    user: "0:0"
+    command:
+      [
+        "/usr/local/bin/bash",
+        "-lc",
+        "mkdir -p /cryptpad/blob /cryptpad/block /cryptpad/data /cryptpad/files /data/oidc && chown -R 4001:4001 /cryptpad /data/oidc",
+      ]
+    volumes:
+      - cryptpad_blob:/cryptpad/blob
+      - cryptpad_block:/cryptpad/block
+      - cryptpad_data:/cryptpad/data
+      - cryptpad_files:/cryptpad/files
+      - rmcryptpad_oidc:/data/oidc
+    restart: "no"
+
+  rmcryptpad_ui_sync:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./cryptpad
+      dockerfile: rmcryptpad/Dockerfile
+    user: "0:0"
+    command:
+      [
+        "/bin/sh",
+        "-lc",
+        "rm -rf /ui_files/cryptpad && mkdir -p /ui_files/cryptpad && cp -r /opt/ui/cryptpad/. /ui_files/cryptpad/",
+      ]
+    volumes:
+      - ui_files:/ui_files
+    restart: "no"
+
+  rmcryptpad:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./cryptpad
+      dockerfile: rmcryptpad/Dockerfile
+    user: "4001:4001"
+    environment:
+      <<: [*rmcryptpad_dbconfig_env]
+      RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
+      RMCRYPTPAD_OIDC_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
+      RMCRYPTPAD_RMCN: ${RMCRYPTPAD_RMCN:-rasenmaeher}
+      LOG_CONSOLE_FORMATTER: "ecs"
+    networks:
+      - productnet
+      - intranet
+      - dbnet
+    volumes:
+      - kraftwerk_shared_cryptpad:/pvarki
+      - rmcryptpad_oidc:/data/oidc
+    depends_on:
+      postgres:
+        condition: service_healthy
+      cryptpad_data_perms:
+        condition: service_completed_successfully
+      rmcryptpad_ui_sync:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/v1/healthcheck', timeout=5).status == 200 else 1)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+
+  cryptpad:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad:${CRYPTPAD_VERSION:-2025.9.0}-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./cryptpad
+      dockerfile: docker/cryptpad/Dockerfile
+      args:
+        CRYPTPAD_VERSION: ${CRYPTPAD_VERSION:-2025.9.0}
+        CRYPTPAD_SSO_VERSION: ${CRYPTPAD_SSO_VERSION:-0.4.0}
+        NODE_IMAGE: ${CRYPTPAD_NODE_IMAGE:-node:22-bookworm-slim@sha256:4f77a690f2f8946ab16fe1e791a3ac0667ae1c3575c3e4d0d4589e9ed5bfaf3d}
+    user: "4001:4001"
+    environment:
+      CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      CPAD_SSO_NAME: ${CPAD_SSO_NAME:-rmcryptpad}
+      CPAD_SSO_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
+      CPAD_SSO_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
+      CPAD_SSO_CLIENT_SECRET: *rmcryptpad_oidc_client_secret
+      CPAD_CONF: /cryptpad/config/config.js
+      HOME: /tmp
+    networks:
+      - productnet
+      - intranet
+    volumes:
+      - cryptpad_blob:/cryptpad/blob
+      - cryptpad_block:/cryptpad/block
+      - cryptpad_data:/cryptpad/data
+      - cryptpad_files:/cryptpad/datastore
+      - ./cryptpad/config/config.js:/cryptpad/config/config.js:ro
+      - ./cryptpad/customize/application_config.js:/cryptpad/customize/application_config.js:ro
+    depends_on:
+      cryptpad_data_perms:
+        condition: service_completed_successfully
+      rmcryptpad:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://127.0.0.1:3000', (res) => process.exit(res.statusCode >= 200 && res.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 90s
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+#################
+# End: CryptPad #
 #################
 
 
@@ -890,9 +1045,11 @@ services:
       - nginx_templates:/nginx_templates
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - ui_files:/ui_files
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
+      NGINX_CRYPTPAD_PORT: *cryptpadport
       NGINX_EPHEMERAL_HTTPS_PORT: *productephemeralport
       # these must be defined for the template to work even if the product is not used
       NGINX_FP_UPSTREAM: "rmfpapi"
@@ -903,6 +1060,12 @@ services:
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
+      NGINX_CRYPTPAD_UPSTREAM: "cryptpad"
+      NGINX_CRYPTPAD_UPSTREAM_PORT: "3000"
+      NGINX_CRYPTPAD_WEBSOCKET_UPSTREAM: "cryptpad"
+      NGINX_CRYPTPAD_WEBSOCKET_UPSTREAM_PORT: "3003"
+      NGINX_RMCRYPTPAD_UPSTREAM: "rmcryptpad"
+      NGINX_RMCRYPTPAD_UPSTREAM_PORT: "8000"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
       CFSSL_OCSP_BIND_PORT: *oscpport
@@ -914,6 +1077,7 @@ services:
       - ocspnet
     ports:
       - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
+      - "${NGINX_HTTPS_CRYPTPAD_PORT:-8555}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}"
       - "${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}:${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}"
     depends_on:
       nginx_templates:
@@ -923,6 +1087,12 @@ services:
       takrmapi:
         condition: service_started
       rmmtx:
+        condition: service_started
+      rmcryptpad:
+        condition: service_started
+      rmcryptpad_ui_sync:
+        condition: service_completed_successfully
+      cryptpad:
         condition: service_started
     healthcheck:
       test: 'curl -s localhost:5666/healthcheck || exit 1'
@@ -986,5 +1156,11 @@ volumes:
   kraftwerk_shared_bl:
   blapi_data:
   kraftwerk_shared_rmmtx:
+  kraftwerk_shared_cryptpad:
   rmmtx_data:
+  rmcryptpad_oidc:
+  cryptpad_blob:
+  cryptpad_block:
+  cryptpad_data:
+  cryptpad_files:
   ui_files:

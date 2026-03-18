@@ -63,6 +63,7 @@ And redirected to the server if behind NAT or similar.
   - 8089 (TAK)
   - 8443 (TAK)
   - 8446 (TAK)
+  - 8555 (CryptPad)
   - 9446 (Keycloak)
   - 4626 (Product integration APIs port)
   - 4627 (ATAK Autoimport ephemeral download port)
