@@ -806,10 +806,12 @@ services:
       CPAD_SSO_CLIENT_SECRET: *rmcryptpad_oidc_client_secret
       CPAD_CONF: /cryptpad/config/config.js
       HOME: /tmp
+      NODE_EXTRA_CA_CERTS: /tmp/cryptpad-extra-ca.pem
     networks:
       - productnet
       - intranet
     volumes:
+      - ca_public:/ca_public
       - cryptpad_blob:/cryptpad/blob
       - cryptpad_block:/cryptpad/block
       - cryptpad_data:/cryptpad/data
@@ -1073,9 +1075,17 @@ services:
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
     networks:
-      - productnet
-      - intranet
-      - ocspnet
+      productnet:
+        aliases:
+          - "rmcryptpad.${SERVER_DOMAIN:?domain must be defined}"
+          - "mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+          - "mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+      intranet:
+        aliases:
+          - "rmcryptpad.${SERVER_DOMAIN:?domain must be defined}"
+          - "mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+          - "mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+      ocspnet:
     ports:
       - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
       - "${NGINX_HTTPS_CRYPTPAD_PORT:-8555}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}"

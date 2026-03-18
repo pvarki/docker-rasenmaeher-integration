@@ -9,6 +9,7 @@ RMAPI_CONTAINER_INIT = REPO_ROOT / "api" / "docker" / "container-init.sh"
 LOCAL_COMPOSE = REPO_ROOT / "docker-compose-local.yml"
 MAIN_COMPOSE = REPO_ROOT / "docker-compose.yml"
 CRYPTPAD_SSO_CONFIG = REPO_ROOT / "cryptpad" / "config" / "sso.js"
+CRYPTPAD_ENTRYPOINT = REPO_ROOT / "cryptpad" / "docker" / "cryptpad" / "docker-entrypoint.sh"
 
 
 def _read(path: Path) -> str:
@@ -57,3 +58,30 @@ def test_cryptpad_oidc_discovery_uses_internal_rmcryptpad_service() -> None:
     assert "CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000" in local_compose
     assert "CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000" in main_compose
     assert "process.env.CPAD_SSO_DISCOVERY_URL" in sso_config
+
+
+def test_productsnginx_advertises_cryptpad_fqdns_on_docker_networks() -> None:
+    """CryptPad callback exchange uses public OIDC endpoint URLs and needs them resolvable in-container."""
+    local_compose = _read(LOCAL_COMPOSE)
+    main_compose = _read(MAIN_COMPOSE)
+    for compose in (local_compose, main_compose):
+        assert '- "rmcryptpad.${SERVER_DOMAIN' in compose
+        assert '- "mtls.cryptpad.${SERVER_DOMAIN' in compose
+        assert '- "mtls.sandbox.cryptpad.${SERVER_DOMAIN' in compose
+
+
+def test_cryptpad_trusts_stack_ca_for_oidc_callback_exchange() -> None:
+    """CryptPad's Node worker must trust the local stack CA when it calls public OIDC HTTPS endpoints."""
+    local_compose = _read(LOCAL_COMPOSE)
+    main_compose = _read(MAIN_COMPOSE)
+    for compose in (local_compose, main_compose):
+        assert "NODE_EXTRA_CA_CERTS: /tmp/cryptpad-extra-ca.pem" in compose
+        assert "- ca_public:/ca_public" in compose
+
+
+def test_cryptpad_entrypoint_builds_extra_ca_bundle_from_stack_cas() -> None:
+    """The runtime entrypoint should combine all local stack trust roots into the Node extra CA bundle."""
+    entrypoint = _read(CRYPTPAD_ENTRYPOINT)
+    assert "/ca_public/miniwerk_ca.pem" in entrypoint
+    assert "/ca_public/ca_chain.pem" in entrypoint
+    assert "cryptpad-extra-ca.pem" in entrypoint
