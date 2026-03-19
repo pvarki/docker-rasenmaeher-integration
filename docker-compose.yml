@@ -4,7 +4,6 @@ x-domains_env:
   MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
   API_HTTPS_PORT: &apiport ${NGINX_HTTPS_PORT:-443}
   PRODUCT_HTTPS_PORT: &productport ${NGINX_HTTPS_PRODUCT_PORT:-4626}
-  CRYPTPAD_HTTPS_PORT: &cryptpadport ${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:?domain must be defined}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:?domain must be defined}"
@@ -185,7 +184,7 @@ services:
       MW_CRYPTPAD__API_HOST: "rmcryptpad"
       MW_CRYPTPAD__API_PORT: *productport
       MW_CRYPTPAD__USER_HOST: "mtls.cryptpad"
-      MW_CRYPTPAD__USER_PORT: *cryptpadport
+      MW_CRYPTPAD__USER_PORT: *productport
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
@@ -542,7 +541,6 @@ services:
       NGINX_HTTP_PORT: ${NGINX_HTTP_PORT:-80}
       NGINX_HTTPS_PORT: *apiport
       NGINX_PRODUCTAPI_PORT: *productport
-      NGINX_CRYPTPAD_PORT: *cryptpadport
       NGINX_UPSTREAM: "rmapi"
       NGINX_UPSTREAM_PORT: "8000"
       NGINX_CERT_NAME: "rasenmaeher"
@@ -857,8 +855,8 @@ services:
     user: "4001:4001"
     environment:
       <<: [*rmcryptpad_dbconfig_env]
-      RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
-      RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
+      RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       RMCRYPTPAD_OIDC_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
       RMCRYPTPAD_RMCN: ${RMCRYPTPAD_RMCN:-rasenmaeher}
@@ -906,8 +904,8 @@ services:
         NODE_IMAGE: ${CRYPTPAD_NODE_IMAGE:-node:22-bookworm-slim@sha256:4f77a690f2f8946ab16fe1e791a3ac0667ae1c3575c3e4d0d4589e9ed5bfaf3d}
     user: "4001:4001"
     environment:
-      CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
-      CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}
+      CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
+      CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       CPAD_SSO_NAME: ${CPAD_SSO_NAME:-rmcryptpad}
       CPAD_SSO_DISCOVERY_URL: http://rmcryptpad:8000
       CPAD_SSO_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
@@ -1161,7 +1159,6 @@ services:
     environment:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
-      NGINX_CRYPTPAD_PORT: *cryptpadport
       NGINX_EPHEMERAL_HTTPS_PORT: *productephemeralport
       # these must be defined for the template to work even if the product is not used
       NGINX_FP_UPSTREAM: "rmfpapi"
@@ -1199,7 +1196,6 @@ services:
       ocspnet:
     ports:
       - "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}"
-      - "${NGINX_HTTPS_CRYPTPAD_PORT:-8555}:${NGINX_HTTPS_CRYPTPAD_PORT:-8555}"
       - "${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}:${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}"
     depends_on:
       nginx_templates:
