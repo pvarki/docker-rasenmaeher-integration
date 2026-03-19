@@ -8,7 +8,6 @@ export SYNAPSE_DATABASE_PASSWORD="mammutti"  # pragma: allowlist secret
 export SYNAPSE_MACAROON_SECRET_KEY="krokotiili" # pragma: allowlist secret
 export SYNAPSE_REGISTRATION_SECRET="kirahvi" # pragma: allowlist secret
 export SERVER_DOMAIN="localmaeher.dev.pvarki.fi"
-export NGINX_HTTPS_CRYPTPAD_PORT="${NGINX_HTTPS_CRYPTPAD_PORT:-8555}"
 export CFSSL_CA_NAME="localmaeher"
 export MW_LE_EMAIL="example@example.com"
 export MW_LE_TEST="true"  # switch to false when you are ready for production
