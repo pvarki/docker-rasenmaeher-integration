@@ -43,12 +43,17 @@ These need to point to your WAN address.
   - tak.domain
   - bl.domain
   - mtx.domain
+  - cryptpad.domain
+  - sandbox.cryptpad.domain
+  - rmcryptpad.domain
   - mtls.domain
   - mtls.kc.domain
   - mtls.tak.domain
   - mtls.kc.domain
   - mtls.bl.domain
   - mtls.mtx.domain
+  - mtls.cryptpad.domain
+  - mtls.sandbox.cryptpad.domain
 
 When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
 for all products listed in the composition for miniwerk service variable MW_PRODUCTS and "kc" for Keycloak.
