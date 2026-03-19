@@ -50,6 +50,26 @@ def test_main_compose_keeps_cryptpad_manifest_hosts_explicit() -> None:
     assert 'MW_CRYPTPAD__USER_HOST: "mtls.cryptpad"' in compose
 
 
+def test_main_compose_cryptpad_runtime_urls_are_domain_parameterized() -> None:
+    """Real deployments must build CryptPad URLs from SERVER_DOMAIN, not from local-only hostnames."""
+    compose = _read(MAIN_COMPOSE)
+    cryptpad_section = compose.split("###################\n# Begin: CryptPad #\n###################", maxsplit=1)[1]
+    cryptpad_section = cryptpad_section.split("#################\n# End: CryptPad #\n#################", maxsplit=1)[0]
+    assert "CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
+    assert (
+        "CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+        in cryptpad_section
+    )
+    assert "CPAD_SSO_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
+    assert "RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
+    assert (
+        "RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
+        in cryptpad_section
+    )
+    assert "RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
+    assert "cryptpad.localhost" not in cryptpad_section
+
+
 def test_cryptpad_oidc_discovery_uses_internal_rmcryptpad_service() -> None:
     """CryptPad server-side issuer discovery must not depend on localhost-pointing FQDN DNS."""
     local_compose = _read(LOCAL_COMPOSE)
