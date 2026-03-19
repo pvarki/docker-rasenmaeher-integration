@@ -29,7 +29,7 @@ server {
         sandbox.cryptpad.${NGINX_HOST}
         mtls.sandbox.cryptpad.${NGINX_HOST};
 
-    listen ${NGINX_CRYPTPAD_PORT} ssl;
+    listen ${NGINX_HTTPS_PORT} ssl;
 
     ssl_client_certificate /ca_public/ca_chain.pem;
     ssl_verify_client      on;

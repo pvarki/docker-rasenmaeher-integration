@@ -5,7 +5,6 @@ export LDAP_ADMIN_PASSWORD="pupu"  # pragma: allowlist secret
 export KEYCLOAK_ADMIN_PASSWORD="marsu"  # pragma: allowlist secret
 export TAK_DATABASE_PASSWORD="laama"  # pragma: allowlist secret
 export SERVER_DOMAIN="localmaeher.dev.pvarki.fi"
-export NGINX_HTTPS_CRYPTPAD_PORT="${NGINX_HTTPS_CRYPTPAD_PORT:-8555}"
 export CFSSL_CA_NAME="localmaeher"
 export MW_LE_EMAIL="example@example.com"
 export MW_LE_TEST="true"  # switch to false when you are ready for production

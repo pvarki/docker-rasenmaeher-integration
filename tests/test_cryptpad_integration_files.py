@@ -55,16 +55,22 @@ def test_main_compose_cryptpad_runtime_urls_are_domain_parameterized() -> None:
     compose = _read(MAIN_COMPOSE)
     cryptpad_section = compose.split("###################\n# Begin: CryptPad #\n###################", maxsplit=1)[1]
     cryptpad_section = cryptpad_section.split("#################\n# End: CryptPad #\n#################", maxsplit=1)[0]
-    assert "CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
     assert (
-        "CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
-        in cryptpad_section
+        "CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:"
+        "${NGINX_HTTPS_PRODUCT_PORT:-4626}" in cryptpad_section
+    )
+    assert (
+        "CPAD_SANDBOX_DOMAIN: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:"
+        "${NGINX_HTTPS_PRODUCT_PORT:-4626}" in cryptpad_section
     )
     assert "CPAD_SSO_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
-    assert "RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
     assert (
-        "RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}"
-        in cryptpad_section
+        "RMCRYPTPAD_PUBLIC_URL: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:"
+        "${NGINX_HTTPS_PRODUCT_PORT:-4626}" in cryptpad_section
+    )
+    assert (
+        "RMCRYPTPAD_PUBLIC_SANDBOX_URL: https://mtls.sandbox.cryptpad.${SERVER_DOMAIN:?domain must be defined}:"
+        "${NGINX_HTTPS_PRODUCT_PORT:-4626}" in cryptpad_section
     )
     assert "RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}" in cryptpad_section
     assert "cryptpad.localhost" not in cryptpad_section
@@ -88,6 +94,18 @@ def test_productsnginx_advertises_cryptpad_fqdns_on_docker_networks() -> None:
         assert '- "rmcryptpad.${SERVER_DOMAIN' in compose
         assert '- "mtls.cryptpad.${SERVER_DOMAIN' in compose
         assert '- "mtls.sandbox.cryptpad.${SERVER_DOMAIN' in compose
+
+
+def test_cryptpad_uses_shared_product_port_in_compose_and_nginx() -> None:
+    """CryptPad should share the standard product ingress port instead of reserving its own."""
+    local_compose = _read(LOCAL_COMPOSE)
+    main_compose = _read(MAIN_COMPOSE)
+    template = _read(NGINX_TEMPLATE)
+    for compose in (local_compose, main_compose):
+        assert "NGINX_HTTPS_CRYPTPAD_PORT" not in compose
+        assert "NGINX_CRYPTPAD_PORT" not in compose
+        assert "${NGINX_HTTPS_PRODUCT_PORT:-4626}:${NGINX_HTTPS_PRODUCT_PORT:-4626}" in compose
+    assert "listen ${NGINX_CRYPTPAD_PORT} ssl;" not in template
 
 
 def test_cryptpad_trusts_stack_ca_for_oidc_callback_exchange() -> None:
