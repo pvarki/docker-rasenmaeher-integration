@@ -833,7 +833,7 @@ services:
 
   rmcryptpad_ui_sync:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.7.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -850,7 +850,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmcryptpad:0.1.0-d${RELEASE_TAG:-2.7.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -896,7 +896,7 @@ services:
 
   cryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad:${CRYPTPAD_VERSION:-2025.9.0}-d${RELEASE_TAG:-2.6.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad:${CRYPTPAD_VERSION:-2025.9.0}-d${RELEASE_TAG:-2.7.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: docker/cryptpad/Dockerfile
