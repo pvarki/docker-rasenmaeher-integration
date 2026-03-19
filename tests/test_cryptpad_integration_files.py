@@ -30,10 +30,10 @@ def test_rmcryptpad_proxy_forwards_client_verify_header() -> None:
     assert "proxy_set_header X-SSL-Client-Verify $ssl_client_verify;" in rmcryptpad_server
 
 
-def test_rmapi_local_bootstrap_maps_rmcryptpad_hostname() -> None:
-    """Local rmapi calls need a host mapping for the CryptPad product API host."""
+def test_rmapi_submodule_stays_free_of_cryptpad_specific_local_host_hacks() -> None:
+    """The integration must not require local-only rmcryptpad host edits in the api submodule."""
     bootstrap = _read(RMAPI_CONTAINER_INIT)
-    assert "rmcryptpad.localmaeher.dev.pvarki.fi" in bootstrap
+    assert "rmcryptpad.localmaeher.dev.pvarki.fi" not in bootstrap
 
 
 def test_local_compose_keeps_cryptpad_manifest_hosts_explicit() -> None:
