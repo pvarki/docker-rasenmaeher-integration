@@ -43,12 +43,18 @@ These need to point to your WAN address.
   - tak.domain
   - bl.domain
   - mtx.domain
+  - cryptpad.domain
+  - sandbox.cryptpad.domain
+  - rmcryptpad.domain
   - mtls.domain
   - mtls.kc.domain
   - mtls.tak.domain
   - mtls.kc.domain
   - mtls.bl.domain
   - mtls.mtx.domain
+  - mtls.cryptpad.domain
+  - mtls.sandbox.cryptpad.domain
+  - mtls.rmcryptpad.domain
 
 When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
 for all products listed in the composition for miniwerk service variable MW_PRODUCTS and "kc" for Keycloak.
@@ -109,6 +115,8 @@ Example .env-file with the minimal information needed::
     BL_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_API_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    RMCRYPTPAD_DATABASE_PASSWORD="input-secure-password" # pragma: allowlist secret
+    RMCRYPTPAD_OIDC_CLIENT_SECRET="input-secure-secret" # pragma: allowlist secret
 
 Replace "intput-secure-password" with a good passphrase that is unique for each replacment. You can generate an UUID with::
 

@@ -17,3 +17,5 @@ export KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD="iguaani"  # pragma: allowlist secret
 export BL_DATABASE_PASSWORD="rotta"  # pragma: allowlist secret
 export RMMTX_DATABASE_PASSWORD="capybara"  # pragma: allowlist secret
 export RMMTX_API_PASSWORD="myyra"  # pragma: allowlist secret
+export RMCRYPTPAD_DATABASE_PASSWORD="saukko"  # pragma: allowlist secret
+export RMCRYPTPAD_OIDC_CLIENT_SECRET="naali"  # pragma: allowlist secret
