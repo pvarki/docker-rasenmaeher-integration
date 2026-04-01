@@ -43,12 +43,15 @@ These need to point to your WAN address.
   - tak.domain
   - bl.domain
   - mtx.domain
+  - matrix.domain
+  - synapse.domain
   - mtls.domain
   - mtls.kc.domain
   - mtls.tak.domain
   - mtls.kc.domain
   - mtls.bl.domain
   - mtls.mtx.domain
+  - mtls.matrix.domain
 
 When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
 for all products listed in the composition for miniwerk service variable MW_PRODUCTS and "kc" for Keycloak.
@@ -109,8 +112,22 @@ Example .env-file with the minimal information needed::
     BL_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_API_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    SYNAPSE_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    SYNAPSE_MACAROON_SECRET_KEY="input-random-64-char-hex"  # pragma: allowlist secret
+    SYNAPSE_REGISTRATION_SECRET="input-random-64-char-hex"  # pragma: allowlist secret
 
-Replace "intput-secure-password" with a good passphrase that is unique for each replacment. You can generate an UUID with::
+Replace "input-secure-password" with a good passphrase unique for each field.
+For ``SYNAPSE_MACAROON_SECRET_KEY`` and ``SYNAPSE_REGISTRATION_SECRET`` use a random hex string::
+
+    openssl rand -hex 32
+
+Federation between Matrix homeservers is controlled by ``SYNAPSE_FEDERATION`` (defaults to open)::
+
+    SYNAPSE_FEDERATION="*"                   # open — federate with any server (default)
+    SYNAPSE_FEDERATION="off"                 # disabled — no server-to-server traffic
+    SYNAPSE_FEDERATION="pvarki.fi,ally.org"  # allowlist — only listed domains
+
+You can generate an UUID with::
 
     python -c 'import uuid; print(uuid.uuid4())'
 
@@ -288,10 +305,13 @@ The docker NodeJS distribution probably is not compatible with whatever you have
 
 Gaining first admin access in dev and production mode
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 In local mode::
 
-    rmlocal exec rmapi -it /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+    docker exec -it rmlocal-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+
+In dev mode::
+
+    docker exec -it rmdev-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
 
 Under local/dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
 

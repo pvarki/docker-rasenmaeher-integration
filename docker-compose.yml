@@ -148,6 +148,10 @@ x-matrix_env: &matrix_env
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
   SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:?must be defined}
+  SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET:?must be defined}
+  SYNAPSE_BOT_USERNAME: ${SYNAPSE_BOT_USERNAME:-matrixrmapi-bot}
+  # Federation mode: * = open, off = disabled, or comma-separated domain allowlist
+  SYNAPSE_FEDERATION: ${SYNAPSE_FEDERATION:-*}
 
 
 services:
@@ -690,6 +694,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
+      - synapse_data:/data
       - synapse_config_vol:/config
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -1096,4 +1101,5 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  synapse_data:
   synapse_config_vol:

@@ -22,6 +22,7 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-yaml
+        exclude: "synapse/templates/.*\\.yaml"
     -   id: check-added-large-files
     -   id: check-case-conflict
     -   id: check-json
