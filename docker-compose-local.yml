@@ -893,7 +893,7 @@ services:
       - cryptpad_data:/cryptpad/data
       - cryptpad_files:/cryptpad/datastore
       - ./cryptpad/config/config.js:/cryptpad/config/config.js:ro
-      - ./cryptpad/customize/application_config.js:/cryptpad/customize/application_config.js:ro
+      - ./cryptpad/customize:/cryptpad/customize.local:ro
     depends_on:
       cryptpad_data_perms:
         condition: service_completed_successfully
