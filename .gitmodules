@@ -13,7 +13,6 @@
 [submodule "miniwerk"]
 	path = miniwerk
 	url = git@github.com:pvarki/python-rasenmaeher-miniwerk.git
-	branch = matrix-dev/main
 [submodule "takserver"]
 	path = takserver
 	url = git@github.com:pvarki/docker-atak-server.git

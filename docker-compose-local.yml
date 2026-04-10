@@ -154,7 +154,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.7.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.7.0-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -595,7 +595,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.7.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.1-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
