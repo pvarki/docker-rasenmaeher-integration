@@ -6,6 +6,7 @@ export KEYCLOAK_ADMIN_PASSWORD="marsu"  # pragma: allowlist secret
 export TAK_DATABASE_PASSWORD="laama"  # pragma: allowlist secret
 export SYNAPSE_DATABASE_PASSWORD="mammutti"  # pragma: allowlist secret
 export SYNAPSE_MACAROON_SECRET_KEY="90c8e4f9-01a0-4c91-9857-358790577517" # pragma: allowlist secret
+export SYNAPSE_REGISTRATION_SECRET="kirahvi"
 export SERVER_DOMAIN="localmaeher.dev.pvarki.fi"
 export CFSSL_CA_NAME="localmaeher"
 export MW_LE_EMAIL="example@example.com"
