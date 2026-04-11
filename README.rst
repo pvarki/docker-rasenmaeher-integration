@@ -109,6 +109,8 @@ Example .env-file with the minimal information needed::
     BL_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     RMMTX_API_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    RMMTX_SRT_PUB_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    RMMTX_SRT_READ_PASSWORD="input-secure-password"  # pragma: allowlist secret
 
 Replace "intput-secure-password" with a good passphrase that is unique for each replacment. You can generate an UUID with::
 
