@@ -1,0 +1,75 @@
+name: PR Preview — Mock UI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_MOCK_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_MOCK_PROJECT_ID }}
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Build mock UI
+        uses: ./.github/actions/build-mock-ui
+        with:
+          products: "all"
+          vite_theme: "default"
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_MOCK_TOKEN }}
+        working-directory: uiv2
+
+      - name: Build with Vercel (generates .vercel/output)
+        run: vercel build --token=${{ secrets.VERCEL_MOCK_TOKEN }}
+        working-directory: uiv2
+        env:
+          VITE_MOCK: "true"
+
+      - name: Deploy preview to Vercel
+        id: vercel_deploy
+        run: |
+          DEPLOY_URL=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_MOCK_TOKEN }} 2>&1 | tail -n 1)
+          echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+        working-directory: uiv2
+
+      - name: Find existing preview comment
+        uses: peter-evans/find-comment@v3
+        id: find_comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: "<!-- mock-ui-preview -->"
+
+      - name: Post or update preview URL comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find_comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
+          body: |
+            <!-- mock-ui-preview -->
+            ## Mock UI Preview
+
+            | | |
+            |---|---|
+            | **Preview URL** | https://demo-preview.dev.pvarki.fi/ |
+            | **Commit** | ${{ github.event.pull_request.head.sha }} |
+            | **Branch** | `${{ github.head_ref }}` |
+            | **Products included** | `tak`, `mtx` |
+
+            > Built with `VITE_MOCK=true` all API calls are mocked and product integrations are loaded via Module Federation from pre-built remotes.
