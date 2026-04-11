@@ -612,7 +612,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:latest-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:1.0.0-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kc_client_init
       dockerfile: Dockerfile
