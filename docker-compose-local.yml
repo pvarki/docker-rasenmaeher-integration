@@ -726,7 +726,7 @@ services:
     environment:
       <<: [*matrix_env, *synapsedbconfig_env]
     healthcheck:
-      test: ["CMD", "curl", "-fSs", "http://localhost:8008/health"]
+      test: 'curl -fSs http://localhost:8008/health || exit 1'
       interval: 15s
       timeout: 5s
       retries: 3
