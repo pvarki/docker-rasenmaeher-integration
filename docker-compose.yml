@@ -33,6 +33,8 @@ x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
   RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_SRT_PUB_PASSWORD: ${RMMTX_SRT_PUB_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_SRT_READ_PASSWORD: ${RMMTX_SRT_READ_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
@@ -712,7 +714,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.3.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.4.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
