@@ -150,6 +150,7 @@ x-matrix_env: &matrix_env
   KCREALM: *kc_realm
   SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:-secretsynapsemacaroonkey}
   SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET:-secretsynapseregistrationsecret}
+  SYNAPSE_BOT_USERNAME: matrixrmapi-bot
 
 services:
   miniwerk:

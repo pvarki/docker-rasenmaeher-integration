@@ -149,6 +149,7 @@ x-matrix_env: &matrix_env
   KCREALM: *kc_realm
   SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:?must be defined}
   SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET:?must be defined}
+  SYNAPSE_BOT_USERNAME: matrixrmapi-bot
 
 
 services:
