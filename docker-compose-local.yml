@@ -609,7 +609,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:latest-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:latest-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kc_client_init
       dockerfile: Dockerfile
@@ -663,7 +663,7 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.6.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:0.0.1-d${RELEASE_TAG:-2.8.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./matrixrmapi
       dockerfile: Dockerfile
@@ -697,7 +697,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse:${RELEASE_TAG:-2.6.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse:${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./synapse
       dockerfile: Dockerfile
