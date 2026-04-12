@@ -441,6 +441,7 @@ services:
       <<: [*rmdbconfig_env]
       JWT_PUBKEY_PATH: "/data/persistent/public"
       JWT_PRIVKEY_PATH: "/data/persistent/private/rm_jwtsign.key"
+      JWT_COOKIE_NAME: "rm_jwt_cookie"
       RM_CFSSL_HOST: "http://cfssl"
       RM_CFSSL_PORT: *cfsslport
       RM_OCSPREST_HOST: "http://ocsprest"
