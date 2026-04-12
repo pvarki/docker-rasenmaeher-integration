@@ -1,0 +1,85 @@
+name: Build Mock UI
+description: Builds product integration UIs and the uiv2 mock app
+
+inputs:
+  products:
+    description: >
+      Comma-separated list of product shortnames to build, e.g. "tak,mtx".
+      Use "all" to build every product. Default is "all".
+    required: false
+    default: "all"
+  vite_theme:
+    description: Theme to use for the build
+    required: false
+    default: "default"
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
+    # ---- Product integrations ----
+    - name: Build TAK integration (mock)
+      if: ${{ inputs.products == 'all' || contains(inputs.products, 'tak') }}
+      shell: bash
+      working-directory: takintegration/ui
+      run: |
+        pnpm install
+        pnpm build:mock
+      env:
+        VITE_MOCK: "true"
+
+    - name: Build MTX integration (mock)
+      if: ${{ inputs.products == 'all' || contains(inputs.products, 'mtx') }}
+      shell: bash
+      working-directory: mtxauthz/ui
+      run: |
+        pnpm install
+        pnpm build:mock
+      env:
+        VITE_MOCK: "true"
+
+    - name: Copy TAK build to uiv2/public/ui/
+      if: ${{ inputs.products == 'all' || contains(inputs.products, 'tak') }}
+      shell: bash
+      working-directory: uiv2
+      run: |
+        mkdir -p public/ui/tak
+        cp -r ../takintegration/ui/dist/* public/ui/tak/
+        cp ../takintegration/ui/public/product-manifest.json public/ui/tak/
+
+    - name: Copy MTX build to uiv2/public/ui/
+      if: ${{ inputs.products == 'all' || contains(inputs.products, 'mtx') }}
+      shell: bash
+      working-directory: uiv2
+      run: |
+        mkdir -p public/ui/mtx
+        cp -r ../mtxauthz/ui/dist/* public/ui/mtx/
+        cp ../mtxauthz/ui/public/product-manifest.json public/ui/mtx/
+
+    - name: Generate product-integrations.json
+      shell: bash
+      working-directory: uiv2
+      run: node scripts/generate-integrations-json.js
+
+    # ---- uiv2 ----
+    - name: Install uiv2 dependencies
+      shell: bash
+      working-directory: uiv2
+      run: pnpm install --frozen-lockfile
+
+    - name: Build uiv2 mock app
+      shell: bash
+      working-directory: uiv2
+      run: pnpm build:mock
+      env:
+        VITE_MOCK: "true"
+        VITE_THEME: ${{ inputs.vite_theme }}
