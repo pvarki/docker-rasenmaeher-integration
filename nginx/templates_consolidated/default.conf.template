@@ -3,8 +3,6 @@ ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;
 
 include /etc/nginx/includes/le_common_settings.conf;
 
-map_hash_max_size 128;
-map_hash_bucket_size 128;
 map $host $host_upstream_mapped {
     hostnames;
     tak.${NGINX_HOST}           ${NGINX_TAK_UPSTREAM}:${NGINX_TAK_UPSTREAM_PORT};
