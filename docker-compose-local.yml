@@ -785,7 +785,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: 'curl http://localhost:3000/api/v1/healthcheck || exit 1'
+      test: 'curl http://localhost:3000/rmapi/api/v1/healthcheck || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3

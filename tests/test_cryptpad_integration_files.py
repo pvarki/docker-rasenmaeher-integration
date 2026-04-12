@@ -123,3 +123,11 @@ def test_cryptpad_entrypoint_builds_extra_ca_bundle_from_stack_cas() -> None:
     assert "/ca_public/miniwerk_ca.pem" in entrypoint
     assert "/ca_public/ca_chain.pem" in entrypoint
     assert "cryptpad-extra-ca.pem" in entrypoint
+
+
+def test_battlelog_healthcheck_uses_rmapi_route_without_user_mtls() -> None:
+    """Container healthchecks must not call user-authenticated Battlelog API routes."""
+    for compose_path in (LOCAL_COMPOSE, MAIN_COMPOSE):
+        compose = compose_path.read_text(encoding="utf-8")
+        assert "curl http://localhost:3000/rmapi/api/v1/healthcheck || exit 1" in compose
+        assert "curl http://localhost:3000/api/v1/healthcheck || exit 1" not in compose
