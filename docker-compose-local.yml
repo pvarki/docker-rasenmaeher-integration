@@ -786,7 +786,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.4.0-d${RELEASE_TAG:-2.8.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.5.0-d${RELEASE_TAG:-2.8.1}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
