@@ -33,6 +33,8 @@ x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
   RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_SRT_PUB_PASSWORD: ${RMMTX_SRT_PUB_PASSWORD:?must be defined} # pragma: allowlist secret
+  RMMTX_SRT_READ_PASSWORD: ${RMMTX_SRT_READ_PASSWORD:?must be defined} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_DB: &takdbname ${TAK_DATABASE_NAME:-tak}
@@ -49,6 +51,12 @@ x-battlelog_dbconfig_env: &bldbconfig_env
   # Currently need to be defined separately because of the way the image is built
   DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:?must be defined}@postgres:5432/battlelog"
 
+x-synapse_dbconfig_env: &synapsedbconfig_env
+  POSTGRES_DB: synapse
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: synapse
+  POSTGRES_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?must be defined} # pragma: allowlist secret
@@ -56,6 +64,7 @@ x-postgres_env: &postgres_env
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
+  SYNAPSE_PASSWORD: *synapse_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -77,7 +86,6 @@ x-keycloak_tls_env: &keycloak_tls_env
   KC_HOSTNAME: *kcdomain
   KC_HTTPS_PORT: 9443
 
-
 x-keycloak_profile_env: &keycloak_profile_env
   # These can be expanded in keycloak-config/profile.json
   KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
@@ -88,15 +96,15 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.6-RELEASE-20}
+      TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-8}
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.27-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -135,12 +143,21 @@ x-logging: &logging
       syslog-address: ${LOGGING_SYSLOG_ADDR:-unixgram:///dev/log}  # local rsyslog/journald socket
       tag: "{{.ImageName}}/{{.Name}}"
 
+x-matrix_env: &matrix_env
+  SERVER_DOMAIN: *serverdomain
+  MTLS_DOMAIN: *mtlsdomain
+  NGINX_HTTPS_PORT: *apiport
+  KCDOMAIN: *kcdomain
+  KCREALM: *kc_realm
+  SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:?must be defined}
+  SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET:?must be defined}
+  SYNAPSE_BOT_USERNAME: matrixrmapi-bot
 
 
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.6.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.7.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -160,7 +177,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx"
+      MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse"
       LOG_CONSOLE_FORMATTER: "ecs"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -169,6 +186,7 @@ services:
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
       - kraftwerk_shared_rmmtx:/pvarkishares/mtx
+      - kraftwerk_shared_matrix:/pvarkishares/matrix
       - ./le_state:/data/persistent/le/conf  # At least during testing we want to keep LE certs outside of the volumes
       - le_certs:/le_certs
     ports:
@@ -176,7 +194,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -200,7 +218,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -227,7 +245,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -291,7 +309,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -346,7 +364,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak
       dockerfile: Dockerfile
@@ -412,7 +430,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.15.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.15.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -436,7 +454,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: 5
-      RELEASE_TAG: ${RELEASE_TAG:-2.7.1}
+      RELEASE_TAG: ${RELEASE_TAG:-2.8.0}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "ecs"
     networks:
@@ -474,20 +492,20 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.0.0-${VITE_THEME:-default}-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
       target: production
       args:
         VITE_THEME: ${VITE_THEME:-default}
-        RELEASE_TAG: ${RELEASE_TAG:-2.7.1}
+        RELEASE_TAG: ${RELEASE_TAG:-2.8.0}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -517,6 +535,8 @@ services:
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
+      NGINX_SYNAPSE_UPSTREAM: "synapse"
+      NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
       - apinet
       - kcnet
@@ -549,7 +569,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.1-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -561,13 +581,26 @@ services:
       - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
+  kcinit:  # Mostly to make sure it's built
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:1.0.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./kc_client_init
+      dockerfile: Dockerfile
+      target: production
+    command: ["help"]
+    volumes:
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+      - kcinit_data:/data/persistent
 
-######################
+
+####################
 # Begin: Battlelog #
-######################
+####################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -599,15 +632,89 @@ services:
       start_period: 25s
     restart: unless-stopped
 ####################
-# End: Battlelog #
+#  End: Battlelog  #
 ####################
+
+###################
+#  Begin: Matrix  #
+###################
+  matrixrmapi:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:1.0.1-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./matrixrmapi
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      <<: *matrix_env
+      LOG_CONSOLE_FORMATTER: "local"
+    networks:
+      - productnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ca_public:/ca_public
+      - kraftwerk_shared_matrix:/pvarki
+      - matrix_data:/data/persistent
+      - synapse_config_vol:/data/persistent/oidc
+      - ui_files:/ui_files
+    depends_on:
+      rmnginx:
+        condition: service_healthy
+    healthcheck:
+      test: 'matrixrmapi healthcheck || exit 1'
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  synapse:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-dist:1.0.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./synapse
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      matrixrmapi:
+        condition: service_started
+    networks:
+      - dbnet
+      - productnet
+      - kcnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - synapse_config_vol:/config
+      - ca_public:/ca_public
+      - le_certs:/le_certs
+    environment:
+      <<: [*matrix_env, *synapsedbconfig_env]
+    healthcheck:
+      test: 'curl -fSs http://localhost:8008/health || exit 1'
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+###################
+#   End: Matrix   #
+###################
 
 ###################
 # Begin: MediaMTX #
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.3.0-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.4.0-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -842,7 +949,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.7.1-tak${TAK_RELEASE:-5.6-RELEASE-20}-d${RELEASE_TAG:-2.7.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.12.0-tak${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.0}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -906,6 +1013,8 @@ services:
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
       NGINX_CERT_NAME: "rasenmaeher"
       NGINX_TEMPLATE_DIR: "templates_consolidated"
+      NGINX_MATRIX_UPSTREAM: "matrixrmapi"
+      NGINX_MATRIX_UPSTREAM_PORT: "8012"
       CFSSL_OCSP_BIND_PORT: *oscpport
       NGINX_OCSP_UPSTREAM: "ocsp"
       DNS_RESOLVER_IP: *dnsresolver
@@ -970,14 +1079,17 @@ volumes:
   kraftwerk_data:
   kwinit_data:
   kraftwerk_shared_fake:
+  kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
+  kcinit_data:
   pg_data:
   cfssl_data:
   openldap_data:
   keycloak_data:
   rmapi_data:
   rmfpapi_data:
+  matrix_data:
   ca_public:
   le_certs:
   tak_data:
@@ -989,3 +1101,4 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
+  synapse_config_vol:
