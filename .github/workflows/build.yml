@@ -26,8 +26,9 @@ jobs:
       matrix:
         python-version: ["3.11"] # , "3.12"]
     env:
-      PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
-      POETRY_PYPI_MIRROR_URL: https://nexus.dev.pvarki.fi/repository/python/simple
+# Disable fetching everything from nexus until we have gotten a pro license
+#      PIP_INDEX_URL: https://nexus.dev.pvarki.fi/repository/python/simple
+#      POETRY_PYPI_MIRROR_URL: https://nexus.dev.pvarki.fi/repository/python/simple
       COMPOSE_BAKE: true
     steps:
       - name: Log in to Docker Hub
