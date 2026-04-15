@@ -1,5 +1,4 @@
 import type { Locator, Page } from "@playwright/test";
-import { closeTransientDialogs } from "./screenshots";
 
 export async function isInViewport(page: Page, locator: Locator): Promise<boolean> {
   const box = await locator.boundingBox();
@@ -54,7 +53,6 @@ export async function clickSafe(locator: Locator): Promise<void> {
 }
 
 export async function clickReady(page: Page, testId: string): Promise<void> {
-  await closeTransientDialogs(page);
   const target = await pickInViewportByTestId(page, testId);
   await clickSafe(target);
 }

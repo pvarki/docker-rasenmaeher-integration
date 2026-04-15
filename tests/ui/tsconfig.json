@@ -8,15 +8,18 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "types": ["node"],
+    "typeRoots": ["./node_modules/@types"],
     "paths": {
       "@fixtures/*": ["./fixtures/*"],
-      "@helpers/*": ["./tests/helpers/*"]
+      "@helpers/*": ["./helpers/*"]
     }
   },
   "include": [
     "fixtures/**/*.ts",
+    "helpers/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
-    "../../**/e2e/**/*.ts"
+    "../../**/e2e/**/*.ts",
+    "../../**/ui/e2e/**/*.ts"
   ]
 }

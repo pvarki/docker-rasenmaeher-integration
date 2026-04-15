@@ -64,39 +64,69 @@ const clientCertificates = adminMeta
     ]
   : undefined;
 
-// Scan repo root for directories containing an e2e/ folder to auto-discover products.
+// Scan repo root for directories containing e2e specs to auto-discover products.
+// Supports both <product>/e2e and <product>/ui/e2e layouts.
 const repoRoot = path.resolve(_dirname, "..", "..");
-const products = fs.readdirSync(repoRoot, { withFileTypes: true })
-  .filter(d => d.isDirectory() && fs.existsSync(path.join(repoRoot, d.name, "e2e")))
-  .map(d => d.name);
+const rawProductFilter =
+  process.env.RM_UI_PRODUCTS || process.env.RM_UI_PRODUCT || "";
+const selectedProducts = new Set(
+  rawProductFilter
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean),
+);
+
+function productTestGlob(name: string): string | null {
+  if (fs.existsSync(path.join(repoRoot, name, "e2e"))) {
+    return `**/${name}/e2e/**/*.spec.ts`;
+  }
+  if (fs.existsSync(path.join(repoRoot, name, "ui", "e2e"))) {
+    return `**/${name}/ui/e2e/**/*.spec.ts`;
+  }
+  return null;
+}
+
+const products = fs
+  .readdirSync(repoRoot, { withFileTypes: true })
+  .filter((d) => d.isDirectory())
+  .filter((d) => selectedProducts.size === 0 || selectedProducts.has(d.name))
+  .flatMap((d) => {
+    const glob = productTestGlob(d.name);
+    return glob ? [{ name: d.name, glob }] : [];
+  });
 
 const browsers = [
-  { suffix: "chromium", use: { ...devices["Desktop Chrome"], channel: "chromium" } },
-  { suffix: "android",  use: { ...devices["Pixel 7"], channel: "chromium" } },
+  {
+    suffix: "chromium",
+    use: { ...devices["Desktop Chrome"], channel: "chromium" },
+  },
+  { suffix: "android", use: { ...devices["Pixel 7"], channel: "chromium" } },
 ];
 
-const projects = products.length > 0
-  ? products.flatMap(product =>
-      browsers.map(browser => ({
-        name: `${product}-${browser.suffix}`,
-        testMatch: `**/${product}/e2e/**/*.spec.ts`,
+const projects =
+  products.length > 0
+    ? products.flatMap((product) =>
+        browsers.map((browser) => ({
+          name: `${product.name}-${browser.suffix}`,
+          testMatch: product.glob,
+          use: browser.use,
+        })),
+      )
+    : browsers.map((browser) => ({
+        name: browser.suffix,
+        testMatch: "**/e2e/**/*.spec.ts",
         use: browser.use,
-      }))
-    )
-  : browsers.map(browser => ({
-      name: browser.suffix,
-      testMatch: "**/e2e/**/*.spec.ts",
-      use: browser.use,
-    }));
+      }));
 
 export default defineConfig({
   // Discover specs from any submodule that follows the e2e/ convention.
   testDir: "../..",
   tsconfig: "./tsconfig.json",
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 1,
-  timeout: process.env.CI ? 60_000 : 45_000,
+  timeout: 30_000,
+  expect: { timeout: 15_000 },
   workers: process.env.CI ? 2 : 4,
   reporter: [
     ["list"],

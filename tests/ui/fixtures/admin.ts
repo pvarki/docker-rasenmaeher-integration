@@ -89,14 +89,6 @@ export async function suppressWalkthroughDialogs(page: Page): Promise<void> {
   });
 }
 
-export async function loginAsAdmin(
-  page: Page,
-  meta: AdminMeta,
-): Promise<void> {
-  await page.goto(`/login?code=${encodeURIComponent(meta.ui_login_code)}`);
-  await page.waitForURL(/\/callsign-setup/, { timeout: 30_000 });
-}
-
 type Fixtures = {
   adminMeta: AdminMeta;
   adminPage: Page;
@@ -106,8 +98,9 @@ export const test = base.extend<Fixtures>({
   adminMeta: async ({}, use) => {
     await use(getAdminMeta());
   },
-  adminPage: async ({ page, adminMeta }, use) => {
-    await loginAsAdmin(page, adminMeta);
+  adminPage: async ({ page }, use) => {
+    await setLanguage(page, "en");
+    await suppressWalkthroughDialogs(page);
     await use(page);
   },
 });

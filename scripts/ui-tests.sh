@@ -13,6 +13,8 @@ Options:
   --screenshots      Enable screenshot-capture specs.
   --theme NAME       Theme label for screenshot output.
                      Default: $RM_THEME or "default"
+  --product NAME     Restrict suite to product(s) discovered by tests/ui/playwright.config.ts.
+                     Comma-separated values are supported (e.g. takintegration,uiv2).
   --project NAME     Force compose project (rmlocal|rmdev).
   --base-url URL     Override UI base URL.
   --username NAME    Admin callsign to create.
@@ -54,11 +56,13 @@ AUTO_YES=0
 EXTRA_ARGS=()
 UI_TEST_IMAGE="${RM_UI_TEST_IMAGE:-rasenmaeher-uitests}"
 THEME="${RM_THEME:-default}"
+PRODUCT_FILTER="${RM_UI_PRODUCTS:-${RM_UI_PRODUCT:-}}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --screenshots) SCREENSHOTS=1; shift ;;
     --theme)      THEME="${2:-}"; shift 2 ;;
+    --product)    PRODUCT_FILTER="${2:-}"; shift 2 ;;
     --project)    FORCE_PROJECT="${2:-}"; shift 2 ;;
     --base-url)   BASE_URL_OVERRIDE="${2:-}"; shift 2 ;;
     --username)   USERNAME="${2:-}"; shift 2 ;;
@@ -169,6 +173,11 @@ docker_args=(
   -e "RM_THEME=$THEME"
   -e "RM_BASE_URL=$TEST_BASE_URL"
 )
+
+if [[ -n "$PRODUCT_FILTER" ]]; then
+  docker_args+=( -e "RM_UI_PRODUCTS=$PRODUCT_FILTER" )
+  info "Product filter: $PRODUCT_FILTER"
+fi
 
 if [[ ! "$BASE_HOST" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ && "$BASE_HOST" != "localhost" && "$BASE_HOST" != "::1" ]]; then
   docker_args+=(
