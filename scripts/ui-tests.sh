@@ -13,6 +13,10 @@ Options:
   --screenshots      Enable screenshot-capture specs.
   --theme NAME       Theme label for screenshot output.
                      Default: $RM_THEME or "default"
+  --langs LIST       Languages to capture in screenshot specs.
+                     "all" or unset captures en,fi,sv. Pass a comma-separated
+                     subset (e.g. "en" or "en,fi") to narrow.
+                     Default: $SCREENSHOT_LANGS or "all"
   --product NAME     Restrict suite to product(s) discovered by tests/ui/playwright.config.ts.
                      Comma-separated values are supported (e.g. takintegration,uiv2).
   --project NAME     Force compose project (rmlocal|rmdev).
@@ -57,11 +61,13 @@ EXTRA_ARGS=()
 UI_TEST_IMAGE="${RM_UI_TEST_IMAGE:-rasenmaeher-uitests}"
 THEME="${RM_THEME:-default}"
 PRODUCT_FILTER="${RM_UI_PRODUCTS:-${RM_UI_PRODUCT:-}}"
+SCREENSHOT_LANGS="${SCREENSHOT_LANGS:-}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --screenshots) SCREENSHOTS=1; shift ;;
     --theme)      THEME="${2:-}"; shift 2 ;;
+    --langs)      SCREENSHOT_LANGS="${2:-}"; shift 2 ;;
     --product)    PRODUCT_FILTER="${2:-}"; shift 2 ;;
     --project)    FORCE_PROJECT="${2:-}"; shift 2 ;;
     --base-url)   BASE_URL_OVERRIDE="${2:-}"; shift 2 ;;
@@ -191,6 +197,10 @@ for proxy_var in HTTP_PROXY HTTPS_PROXY http_proxy https_proxy NO_PROXY no_proxy
 done
 
 [[ "$SCREENSHOTS" == "1" ]] && docker_args+=(-e "SCREENSHOTS=1")
+if [[ "$SCREENSHOTS" == "1" && -n "$SCREENSHOT_LANGS" ]]; then
+  docker_args+=(-e "SCREENSHOT_LANGS=$SCREENSHOT_LANGS")
+  info "Screenshot languages: $SCREENSHOT_LANGS"
+fi
 
 set +e
 docker run "${docker_args[@]}" "$UI_TEST_IMAGE" "${playwright_args[@]}"

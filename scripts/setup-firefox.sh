@@ -20,9 +20,18 @@ Options:
 USAGE
 }
 
-info() { printf '[INFO] %s\n' "$*"; }
-warn() { printf '[WARN] %s\n' "$*" >&2; }
-die()  { printf '[ERROR] %s\n' "$*" >&2; exit 1; }
+if [[ -t 1 ]]; then
+  BOLD=$'\033[1m'    DIM=$'\033[2m'   RESET=$'\033[0m'
+  GREEN=$'\033[32m'  RED=$'\033[31m'  CYAN=$'\033[36m' YELLOW=$'\033[33m'
+else
+  BOLD='' DIM='' RESET='' GREEN='' RED='' CYAN='' YELLOW=''
+fi
+
+info()  { printf '%s\n' "${DIM}│${RESET} $*"; }
+step()  { printf '\n%s\n' "${CYAN}${BOLD}━━━ $*${RESET}"; }
+ok()    { printf '%s\n' "${GREEN}${BOLD}✔ $*${RESET}"; }
+warn()  { printf '%s\n' "${YELLOW}${BOLD}! $*${RESET}" >&2; }
+die()   { printf '%s\n' "${RED}${BOLD}✘ $*${RESET}" >&2; exit 1; }
 
 require_cmd() {
   command -v "$1" >/dev/null 2>&1 || die "Required command not found: $1"
@@ -126,6 +135,7 @@ fi
 
 # --- confirmation ---
 
+step "Summary"
 info "Stack:    $COMPOSE_PROJECT"
 info "Base URL: $BASE_URL"
 info "User:     $USERNAME"
@@ -138,11 +148,11 @@ info ""
 info "Any existing certificate with the same name will be removed first."
 
 if [[ $AUTO_YES -eq 0 ]]; then
-  read -r -p "[INFO] Proceed? [y/N] " answer
+  read -r -p "${DIM}│${RESET} Proceed? [y/N] " answer
   [[ "$answer" =~ ^[yY](es)?$ ]] || die "Cancelled by user"
 fi
 
-info "[1/3] Creating admin and client certificate ..."
+step "Step 1/3 · Creating admin and client certificate"
 "$SCRIPT_DIR/create-admin.sh" \
   --project "$COMPOSE_PROJECT" \
   --base-url "$BASE_URL" \
@@ -152,11 +162,12 @@ meta_path="$TMPDIR_WORK/admin.json"
 pfx_path="$(json_file_field "$meta_path" pfx_path)"
 [[ -s "$pfx_path" ]] || die "create-admin.sh did not produce a certificate"
 pfx_size="$(stat -c%s "$pfx_path" 2>/dev/null || stat -f%z "$pfx_path")"
-info "  Certificate: $pfx_size bytes"
+info "Certificate: $pfx_size bytes"
+ok "Admin provisioned"
 
 # --- import into Firefox ---
 
-info "[2/3] Importing certificate into Firefox profiles ..."
+step "Step 2/3 · Importing certificate into Firefox profiles"
 
 for profile in "${FIREFOX_PROFILES[@]}"; do
   profile_name="$(basename "$profile")"
@@ -179,17 +190,20 @@ for profile in "${FIREFOX_PROFILES[@]}"; do
     || certutil -L -d "$db_spec" -n "$CERT_NICKNAME" >/dev/null 2>&1 \
     || die "Certificate verification failed in profile $profile_name"
 
-  info "  Imported into $profile_name"
+  info "Imported into $profile_name"
 done
+ok "Certificate imported into ${#FIREFOX_PROFILES[@]} profile(s)"
 
 # --- open browser ---
 
+step "Step 3/3 · Launching Firefox"
 if [[ $OPEN_BROWSER -eq 1 ]]; then
-  info "[3/3] Opening Firefox ..."
+  info "Opening $BASE_URL"
   firefox "$BASE_URL" &>/dev/null &
   disown
 else
-  info "[3/3] Skipped opening Firefox (--no-open)"
+  info "Skipped opening Firefox (--no-open)"
 fi
 
-info "Done. User '$USERNAME' is enrolled."
+printf "\n"
+ok "Done. User '$USERNAME' is enrolled."

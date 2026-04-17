@@ -6,17 +6,32 @@ import { expect, type Page } from "@playwright/test";
 export const SCREENSHOTS_ENABLED = process.env.SCREENSHOTS === "1";
 export const THEME = process.env.RM_THEME || "default";
 export const LANGUAGES = ["en", "fi", "sv"] as const;
+
+/**
+ * Languages to capture in screenshot specs.
+ * Environment variable SCREENSHOT_LANGS:
+ *  - default ("all"/empty)         -> captures all languages
+ *  - list ("en", "en,fi")          -> captures the matching languages
+ */
+function parseScreenshotLanguages(): readonly string[] {
+  const raw = (process.env.SCREENSHOT_LANGS ?? "").trim().toLowerCase();
+  if (!raw || raw === "all") return LANGUAGES;
+  const requested = new Set(
+    raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  );
+  const filtered = LANGUAGES.filter((lang) => requested.has(lang));
+  return filtered.length > 0 ? filtered : LANGUAGES;
+}
+
+export const SCREENSHOT_LANGUAGES: readonly string[] =
+  parseScreenshotLanguages();
 const _dirname = path.dirname(fileURLToPath(import.meta.url));
 export const SCREENSHOT_DIR = path.resolve(_dirname, "..", "screenshots");
 
-const INTERACTIVE_RECOVERY_ATTEMPTS = 4;
-
-export async function seedWaitingRoomState(page: Page): Promise<void> {
-  await page.addInitScript(() => {
-    localStorage.setItem("callsign", "PLAYWRIGHT_USER");
-    localStorage.setItem("approveCode", "PLAYW123");
-  });
-}
+const INTERACTIVE_RECOVERY_ATTEMPTS = 6;
 
 export function getMtlsUrl(baseUrl: string, pathname: string): string {
   const url = new URL(baseUrl);
@@ -69,7 +84,11 @@ async function blurActiveElement(page: Page): Promise<void> {
   await page
     .evaluate(() => {
       const active = document.activeElement as HTMLElement | null;
-      if (active && active !== document.body && typeof active.blur === "function") {
+      if (
+        active &&
+        active !== document.body &&
+        typeof active.blur === "function"
+      ) {
         active.blur();
       }
       if (typeof window.getSelection === "function") {
@@ -91,7 +110,10 @@ export async function waitForTransientUiToClear(page: Page): Promise<void> {
     .catch(() => undefined);
 }
 
-export async function captureFullPage(page: Page, screenshotPath: string): Promise<void> {
+export async function captureFullPage(
+  page: Page,
+  screenshotPath: string,
+): Promise<void> {
   await fs.mkdir(path.dirname(screenshotPath), { recursive: true });
   await settleBeforeScreenshot(page);
   await page.screenshot({
@@ -116,8 +138,10 @@ async function isMtlsFailPage(page: Page): Promise<boolean> {
 
   try {
     const url = new URL(page.url());
-    return url.pathname.startsWith("/error") &&
-      (url.searchParams.get("code") ?? "").toLowerCase() === "mtls_fail";
+    return (
+      url.pathname.startsWith("/error") &&
+      (url.searchParams.get("code") ?? "").toLowerCase() === "mtls_fail"
+    );
   } catch {
     return false;
   }
@@ -138,16 +162,24 @@ async function isPageInteractive(page: Page): Promise<boolean> {
   }
 }
 
-export async function waitForInteractivePage(page: Page): Promise<void> {
+export async function waitForInteractivePage(
+  page: Page,
+  recoverUrl?: string,
+): Promise<void> {
   let lastError: unknown;
 
-  for (let attempt = 1; attempt <= INTERACTIVE_RECOVERY_ATTEMPTS; attempt += 1) {
+  for (
+    let attempt = 1;
+    attempt <= INTERACTIVE_RECOVERY_ATTEMPTS;
+    attempt += 1
+  ) {
     await page.waitForLoadState("domcontentloaded").catch(() => undefined);
 
     try {
       await expect
         .poll(() => isPageInteractive(page), {
           message: "Page did not become interactive in time",
+          timeout: 5_000,
         })
         .toBeTruthy();
 
@@ -156,7 +188,9 @@ export async function waitForInteractivePage(page: Page): Promise<void> {
         return;
       }
 
-      lastError = new Error("Landed on mTLS failure page after readiness check");
+      lastError = new Error(
+        "Landed on mTLS failure page after readiness check",
+      );
     } catch (error) {
       lastError = error;
     }
@@ -165,8 +199,17 @@ export async function waitForInteractivePage(page: Page): Promise<void> {
       break;
     }
 
-    await page.waitForTimeout(400 * attempt).catch(() => undefined);
-    await page.reload({ waitUntil: "domcontentloaded" }).catch(() => undefined);
+    await page.waitForTimeout(500 * attempt).catch(() => undefined);
+    //recover from mTLS error
+    if (recoverUrl) {
+      await page
+        .goto(recoverUrl, { waitUntil: "domcontentloaded" })
+        .catch(() => undefined);
+    } else {
+      await page
+        .reload({ waitUntil: "domcontentloaded" })
+        .catch(() => undefined);
+    }
   }
 
   if (lastError instanceof Error) {
@@ -174,4 +217,9 @@ export async function waitForInteractivePage(page: Page): Promise<void> {
   }
 
   throw new Error("Page did not become interactive in time");
+}
+
+export async function gotoInteractive(page: Page, url: string): Promise<void> {
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+  await waitForInteractivePage(page, url);
 }

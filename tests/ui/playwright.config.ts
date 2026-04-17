@@ -95,10 +95,19 @@ const products = fs
     return glob ? [{ name: d.name, glob }] : [];
   });
 
+const screenshotsEnabled = process.env.SCREENSHOTS === "1";
+const screenshotTestIgnore = screenshotsEnabled
+  ? undefined
+  : /screenshots[^/]*\.spec\.ts$/;
+
 const browsers = [
   {
     suffix: "chromium",
-    use: { ...devices["Desktop Chrome"], channel: "chromium" },
+    use: {
+      ...devices["Desktop Chrome"],
+      channel: "chromium",
+      viewport: { width: 1600, height: 900 },
+    },
   },
   { suffix: "android", use: { ...devices["Pixel 7"], channel: "chromium" } },
 ];
@@ -109,12 +118,14 @@ const projects =
         browsers.map((browser) => ({
           name: `${product.name}-${browser.suffix}`,
           testMatch: product.glob,
+          testIgnore: screenshotTestIgnore,
           use: browser.use,
         })),
       )
     : browsers.map((browser) => ({
         name: browser.suffix,
         testMatch: "**/e2e/**/*.spec.ts",
+        testIgnore: screenshotTestIgnore,
         use: browser.use,
       }));
 

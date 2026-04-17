@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
-# ui-tests-interactive.sh — Interactive host Playwright runner for test authoring.
+# ui-tests-local.sh — Host Playwright runner for fast iteration and test authoring.
 
 set -Eeuo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: ui-tests-interactive.sh [OPTIONS] [-- <extra playwright args>]
+Usage: ui-tests-local.sh [OPTIONS] [-- <extra playwright args>]
 
-Run Playwright in local interactive UI mode against a running rmlocal/rmdev stack.
+Run Playwright on the host against a running rmlocal/rmdev stack.
+
+Modes:
+  Default            Headless host run.
+  --ui               Open Playwright's interactive UI.
+
+For a reproducible, CI-like run
+use ./scripts/ui-tests.sh instead.
 
 Options:
+  --ui               Launch Playwright's interactive UI explorer.
   --screenshots      Enable screenshot-capture specs.
+  --langs LIST       Languages to capture in screenshot specs.
+                     "all" or unset captures en,fi,sv. Pass a comma-separated
+                     subset (e.g. "en" or "en,fi") to narrow.
+                     Default: $SCREENSHOT_LANGS or "all"
   --product NAME     Restrict suite to product(s) discovered by tests/ui/playwright.config.ts.
                      Comma-separated values are supported (e.g. takintegration,uiv2).
   --project NAME     Force compose project (rmlocal|rmdev).
@@ -48,13 +60,17 @@ USERNAME="playwright-$(date +%s)"
 SCREENSHOTS=0
 SKIP_INSTALL=0
 AUTO_YES=0
+INTERACTIVE_UI=0
 EXTRA_ARGS=()
 THEME="${RM_THEME:-default}"
 PRODUCT_FILTER="${RM_UI_PRODUCTS:-${RM_UI_PRODUCT:-}}"
+SCREENSHOT_LANGS="${SCREENSHOT_LANGS:-}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --ui)           INTERACTIVE_UI=1; shift ;;
     --screenshots)  SCREENSHOTS=1; shift ;;
+    --langs)        SCREENSHOT_LANGS="${2:-}"; shift 2 ;;
     --product)      PRODUCT_FILTER="${2:-}"; shift 2 ;;
     --project)      FORCE_PROJECT="${2:-}"; shift 2 ;;
     --base-url)     BASE_URL_OVERRIDE="${2:-}"; shift 2 ;;
@@ -122,6 +138,7 @@ export RM_THEME="$THEME"
 export RM_BASE_URL="$TEST_BASE_URL"
 [[ -n "$PRODUCT_FILTER" ]] && export RM_UI_PRODUCTS="$PRODUCT_FILTER"
 [[ "${SCREENSHOTS:-0}" == "1" ]] && export SCREENSHOTS=1
+[[ "${SCREENSHOTS:-0}" == "1" && -n "$SCREENSHOT_LANGS" ]] && export SCREENSHOT_LANGS="$SCREENSHOT_LANGS"
 
 PLAYWRIGHT_OUTPUT_DIR="$OUTDIR/test-results"
 mkdir -p "$PLAYWRIGHT_OUTPUT_DIR"
@@ -133,17 +150,25 @@ for arg in "${EXTRA_ARGS[@]}"; do
   [[ "$arg" == --reporter || "$arg" == --reporter=* ]] && HAS_REPORTER_ARG=1
 done
 
-playwright_args=(--ui --config "$UI_DIR/playwright.config.ts")
+playwright_args=(--config "$UI_DIR/playwright.config.ts")
+[[ "$INTERACTIVE_UI" == "1" ]] && playwright_args=(--ui "${playwright_args[@]}")
 [[ "$HAS_OUTPUT_ARG" == "0" ]] && playwright_args+=(--output "$PLAYWRIGHT_OUTPUT_DIR")
 [[ "$HAS_REPORTER_ARG" == "0" ]] && playwright_args+=(--reporter list)
 playwright_args+=("${EXTRA_ARGS[@]}")
 
-step "Step 3/3 · Running Playwright (interactive UI mode)"
+if [[ "$INTERACTIVE_UI" == "1" ]]; then
+  step "Step 3/3 · Running Playwright (interactive UI mode)"
+else
+  step "Step 3/3 · Running Playwright (headless)"
+fi
 if [[ ${#EXTRA_ARGS[@]} -gt 0 ]]; then
   info "Args: ${EXTRA_ARGS[*]}"
 fi
 if [[ -n "$PRODUCT_FILTER" ]]; then
   info "Product filter: $PRODUCT_FILTER"
+fi
+if [[ "${SCREENSHOTS:-0}" == "1" && -n "$SCREENSHOT_LANGS" ]]; then
+  info "Screenshot languages: $SCREENSHOT_LANGS"
 fi
 
 cd "$UI_DIR"
@@ -155,7 +180,7 @@ set -e
 printf "\n"
 [[ "${SCREENSHOTS:-0}" == "1" ]] && info "Screenshots: $UI_DIR/screenshots/$THEME/"
 if [[ "$HAS_REPORTER_ARG" == "0" ]]; then
-  info "Report: not generated (interactive mode uses --reporter list)"
+  info "Report: not generated (host run uses --reporter list; use ./scripts/ui-tests.sh for HTML report)"
 else
   info "Report: $UI_DIR/playwright-report/index.html"
 fi
