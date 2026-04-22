@@ -4,3 +4,4 @@ playwright-report/
 screenshots/
 blob-report/
 playwright/.cache/
+.rm-ui-test.*

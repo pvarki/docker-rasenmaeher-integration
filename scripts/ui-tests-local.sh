@@ -87,7 +87,7 @@ command -v docker >/dev/null 2>&1 || die "docker is required"
 command -v python3 >/dev/null 2>&1 || die "python3 is required"
 command -v npm >/dev/null 2>&1 || die "npm is required"
 
-OUTDIR="$(mktemp -d "${TMPDIR:-/tmp}/rm-ui-test.XXXXXX")"
+OUTDIR="$(mktemp -d "$UI_DIR/.rm-ui-test.XXXXXX")"
 cleanup() {
   rm -rf "$OUTDIR"
 }

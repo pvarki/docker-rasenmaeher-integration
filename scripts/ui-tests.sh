@@ -83,7 +83,7 @@ done
 command -v docker >/dev/null 2>&1 || die "docker is required"
 command -v python3 >/dev/null 2>&1 || die "python3 is required"
 
-OUTDIR="$(mktemp -d "${TMPDIR:-/tmp}/rm-ui-test.XXXXXX")"
+OUTDIR="$(mktemp -d "$UI_DIR/.rm-ui-test.XXXXXX")"
 trap 'rm -rf "$OUTDIR"' EXIT
 
 provision_args=("$USERNAME" "$OUTDIR")
@@ -100,9 +100,11 @@ COMPOSE_PROJECT="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]
 [[ -n "$COMPOSE_PROJECT" ]] || die "admin.json is missing compose_project"
 
 # The provision script writes a host-absolute pfx_path into admin.json.
-# Playwright runs inside Docker, so rewrite pfx_path to the mounted container path.
+# Playwright runs inside Docker; rewrite pfx_path to the container-side path
+# where OUTDIR is bind-mounted below (under /workspace/tests/ui).
+CONTAINER_OUTDIR="/workspace/tests/ui/$(basename "$OUTDIR")"
 CONTAINER_META="$OUTDIR/admin.docker.json"
-python3 - "$META" "$(basename "$PFX")" "$CONTAINER_META" <<'PY'
+python3 - "$META" "$(basename "$PFX")" "$CONTAINER_META" "$CONTAINER_OUTDIR" <<'PY'
 import json
 import pathlib
 import sys
@@ -110,9 +112,10 @@ import sys
 src = pathlib.Path(sys.argv[1])
 pfx_name = sys.argv[2]
 dst = pathlib.Path(sys.argv[3])
+container_outdir = sys.argv[4]
 
 meta = json.loads(src.read_text())
-meta["pfx_path"] = f"/tmp/admin/{pfx_name}"
+meta["pfx_path"] = f"{container_outdir}/{pfx_name}"
 dst.write_text(json.dumps(meta))
 PY
 
@@ -170,12 +173,12 @@ docker run --rm --entrypoint /bin/sh \
 
 docker_args=(
   --rm
-  -v "$OUTDIR:/tmp/admin"
+  -v "$OUTDIR:$CONTAINER_OUTDIR"
   -v "$TEST_RESULTS_DIR:/workspace/tests/ui/test-results"
   -v "$REPORT_DIR:/workspace/tests/ui/playwright-report"
   -v "$SCREENSHOT_ROOT:/workspace/tests/ui/screenshots"
-  -e "RM_ADMIN_META=/tmp/admin/$(basename "$CONTAINER_META")"
-  -e "RM_ADMIN_PFX=/tmp/admin/$(basename "$PFX")"
+  -e "RM_ADMIN_META=$CONTAINER_OUTDIR/$(basename "$CONTAINER_META")"
+  -e "RM_ADMIN_PFX=$CONTAINER_OUTDIR/$(basename "$PFX")"
   -e "RM_THEME=$THEME"
   -e "RM_BASE_URL=$TEST_BASE_URL"
 )
