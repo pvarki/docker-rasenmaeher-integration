@@ -1,5 +1,5 @@
 {
-  "description": "Playwright runner framework for UI tests living in each integration's e2e/ directory.",
+  "description": "Playwright runner framework for UI tests living in each integration's rm_e2e/ directory.",
   "devDependencies": {
     "@playwright/test": "^1.49.0",
     "@types/node": "^22.10.0",

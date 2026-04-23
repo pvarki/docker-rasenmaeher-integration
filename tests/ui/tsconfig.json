@@ -27,7 +27,7 @@
     "helpers/**/*.ts",
     "tests/**/*.ts",
     "playwright.config.ts",
-    "../../**/e2e/**/*.ts",
-    "../../**/ui/e2e/**/*.ts"
+    "../../**/rm_e2e/**/*.ts",
+    "../../**/ui/rm_e2e/**/*.ts"
   ]
 }

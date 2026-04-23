@@ -64,8 +64,8 @@ const clientCertificates = adminMeta
     ]
   : undefined;
 
-// Scan repo root for directories containing e2e specs to auto-discover products.
-// Supports both <product>/e2e and <product>/ui/e2e layouts.
+// Scan repo root for directories containing rm_e2e specs to auto-discover products.
+// Supports both <product>/rm_e2e and <product>/ui/rm_e2e layouts.
 const repoRoot = path.resolve(_dirname, "..", "..");
 const rawProductFilter =
   process.env.RM_UI_PRODUCTS || process.env.RM_UI_PRODUCT || "";
@@ -77,11 +77,11 @@ const selectedProducts = new Set(
 );
 
 function productTestGlob(name: string): string | null {
-  if (fs.existsSync(path.join(repoRoot, name, "e2e"))) {
-    return `**/${name}/e2e/**/*.spec.ts`;
+  if (fs.existsSync(path.join(repoRoot, name, "rm_e2e"))) {
+    return `**/${name}/rm_e2e/**/*.spec.ts`;
   }
-  if (fs.existsSync(path.join(repoRoot, name, "ui", "e2e"))) {
-    return `**/${name}/ui/e2e/**/*.spec.ts`;
+  if (fs.existsSync(path.join(repoRoot, name, "ui", "rm_e2e"))) {
+    return `**/${name}/ui/rm_e2e/**/*.spec.ts`;
   }
   return null;
 }
@@ -124,21 +124,21 @@ const projects =
       )
     : browsers.map((browser) => ({
         name: browser.suffix,
-        testMatch: "**/e2e/**/*.spec.ts",
+        testMatch: "**/rm_e2e/**/*.spec.ts",
         testIgnore: screenshotTestIgnore,
         use: browser.use,
       }));
 
 export default defineConfig({
-  // Discover specs from any submodule that follows the e2e/ convention.
+  // Discover specs from any submodule that follows the rm_e2e/ convention.
   testDir: "../..",
   tsconfig: "./tsconfig.json",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 1,
+  retries: 1,
   timeout: 30_000,
   expect: { timeout: 15_000 },
-  workers: process.env.CI ? 2 : 4,
+  workers: process.env.CI ? 1 : 2,
   reporter: [
     ["list"],
     ["junit", { outputFile: "test-results/junit.xml" }],
