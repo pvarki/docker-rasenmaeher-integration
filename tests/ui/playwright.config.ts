@@ -135,10 +135,10 @@ export default defineConfig({
   tsconfig: "./tsconfig.json",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 1 : 1,
+  retries: 1,
   timeout: 30_000,
   expect: { timeout: 15_000 },
-  workers: process.env.CI ? 2 : 4,
+  workers: process.env.CI ? 1 : 2,
   reporter: [
     ["list"],
     ["junit", { outputFile: "test-results/junit.xml" }],

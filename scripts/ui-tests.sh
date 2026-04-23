@@ -173,6 +173,8 @@ docker run --rm --entrypoint /bin/sh \
 
 docker_args=(
   --rm
+  --ipc=host
+  --shm-size=2g
   -v "$OUTDIR:$CONTAINER_OUTDIR"
   -v "$TEST_RESULTS_DIR:/workspace/tests/ui/test-results"
   -v "$REPORT_DIR:/workspace/tests/ui/playwright-report"
@@ -181,6 +183,7 @@ docker_args=(
   -e "RM_ADMIN_PFX=$CONTAINER_OUTDIR/$(basename "$PFX")"
   -e "RM_THEME=$THEME"
   -e "RM_BASE_URL=$TEST_BASE_URL"
+  -e "CI=${CI:-}"
 )
 
 if [[ -n "$PRODUCT_FILTER" ]]; then
