@@ -43,12 +43,16 @@ These need to point to your WAN address.
   - tak.domain
   - bl.domain
   - mtx.domain
+  - matrix.domain
+  - synapse.domain
   - mtls.domain
   - mtls.kc.domain
   - mtls.tak.domain
   - mtls.kc.domain
   - mtls.bl.domain
   - mtls.mtx.domain
+  - mtls.matrix.domain
+  - mtls.synapse.domain
 
 When more products are added to the deployment they will follow the same naming pattern, you will need subdomains
 for all products listed in the composition for miniwerk service variable MW_PRODUCTS and "kc" for Keycloak.
@@ -82,6 +86,13 @@ Be mindfull on where you download the repository, you will need to perform rest 
 Getting the repository from github (on Windows **first** see "Windows notes" below)::
 
     git clone --recurse-submodules -j8 git@github.com:pvarki/docker-rasenmaeher-integration.git
+
+It is recommended to use tags using the services. That way you can get the right combination of the submodules::
+
+    git tag (list availabe tags)
+    git checkout <TAG_NAME> (choose specific tag)
+    git submodule update --init --recursive (update to the tags version of submodules)
+    docker compose build (build the new set)
 
 Create ``.env`` file that defines environmental variables for Deploy App setup. File must be located inside downloaded repository
 and file type must be named literally ``.env`` (not ``something.env``)  to work.
