@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@fixtures/*": [
+        "./fixtures/*"
+      ],
+      "@helpers/*": [
+        "./helpers/*"
+      ]
+    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "fixtures/**/*.ts",
+    "helpers/**/*.ts",
+    "tests/**/*.ts",
+    "playwright.config.ts",
+    "../../**/e2e/**/*.ts",
+    "../../**/ui/e2e/**/*.ts"
+  ]
+}

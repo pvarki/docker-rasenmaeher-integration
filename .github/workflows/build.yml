@@ -163,6 +163,26 @@ jobs:
         detailed_summary: true
         include_passed: true
         check_name: 'rmlocal integration tests'
+    - name: Run UI tests
+      id: run_ui_tests
+      run: |
+        ./scripts/ui-tests.sh -y
+    - name: Upload Playwright artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: |
+          tests/ui/playwright-report/
+          tests/ui/test-results/
+        retention-days: 14
+    - name: Publish Playwright JUnit
+      uses: mikepenz/action-junit-report@v4
+      if: success() || failure()
+      with:
+        report_paths: 'tests/ui/test-results/junit.xml'
+        detailed_summary: true
+        check_name: 'UI tests'
     - name: docker compose cleanup
       id: compose_clean_2
       if: ${{ !cancelled() }}
