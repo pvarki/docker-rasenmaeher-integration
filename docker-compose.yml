@@ -608,10 +608,29 @@ services:
       target: production
     environment:
       <<: [*bldbconfig_env]
+      # TAK integration: connect to the prod TAK server using the RM-issued
+      # mtlsclient cert that kw_product_init writes to /data/persistent on
+      # first run. See battlelog/docs/prod-tak.md for details.
+      TAK_ENABLED: "true"
+      TAK_HOST: takconfig
+      TAK_TLS_SERVERNAME: *takdomain
+      TAK_STREAM_PORT: "8089"
+      TAK_STREAM_TLS: "true"
+      TAK_REJECT_UNAUTHORIZED: "true"
+      TAK_CLIENT_CERT_PATH: /data/persistent/public/mtlsclient.pem
+      TAK_CLIENT_KEY_PATH: /data/persistent/private/mtlsclient.key
+      TAK_CA_PATH: /ca_public/ca_chain.pem
+      TAK_DB_POLL_ENABLED: "true"
+      TAK_DB_HOST: postgres
+      TAK_DB_PORT: "5432"
+      TAK_DB_NAME: *takdbname
+      TAK_DB_USER: *takdbuser
+      TAK_DB_PASSWORD: *takdbpass
     networks:
       - productnet
       - intranet
       - dbnet
+      - taknet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -624,6 +643,8 @@ services:
       rmapi:
         condition: service_healthy
       postgres:
+        condition: service_healthy
+      takmsg:
         condition: service_healthy
     healthcheck:
       test: 'curl http://localhost:3000/api/v1/healthcheck || exit 1'
