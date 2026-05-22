@@ -194,7 +194,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0_260427-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -218,7 +218,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0_260427-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -245,7 +245,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.6-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.7_260427-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
