@@ -42,8 +42,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
           submodules: recursive
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
