@@ -145,9 +145,11 @@ jobs:
     - name: add test users
       id: add_test_users
       run: |
+        shopt -s expand_aliases
+        alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         docker ps
-        docker exec rmlocal-rmapi-1 rasenmaeher_api addtestusers
-        docker exec rmlocal-rmapi-1 cat /etc/hosts
+        dcloc exec rmapi rasenmaeher_api addtestusers || (dcloc logs && exit 1)
+        dcloc exec rmapi cat /etc/hosts
     - name: Test with pytest
       id: run_pytest
       run: |
