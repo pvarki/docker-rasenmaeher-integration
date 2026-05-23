@@ -79,6 +79,7 @@ jobs:
 
   rmlocal:
     runs-on: arc-runner-set
+    if: github.ref != 'refs/heads/main'
     permissions:
       contents: write
       pull-requests: write
@@ -180,6 +181,10 @@ jobs:
   build_and_publish:
     runs-on: arc-runner-set
     needs: [apiunits, rmlocal]
+    if: |
+      !cancelled() &&
+      needs.apiunits.result == 'success' &&
+      (needs.rmlocal.result == 'success' || needs.rmlocal.result == 'skipped')
     env:
       PVARKI_DOCKER_REPO: ghcr.io/
       ACR_REPO: ${{ vars.ACR_REPO }}
