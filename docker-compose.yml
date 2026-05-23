@@ -157,7 +157,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.7.0-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.8.0-260512-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
