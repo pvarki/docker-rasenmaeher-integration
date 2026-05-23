@@ -950,7 +950,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.12.0-tak${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.0-260508-tak${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
