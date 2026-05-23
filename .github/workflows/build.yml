@@ -134,6 +134,7 @@ jobs:
       run: |
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
+        export RMAPI_INTEGRATION_API_TIMEOUT=8
         dcloc up --wait || (dcloc logs && exit 1)
       continue-on-error: true
     - name: docker compose up second attempt
@@ -142,6 +143,7 @@ jobs:
       run: |
         shopt -s expand_aliases
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
+        export RMAPI_INTEGRATION_API_TIMEOUT=8
         dcloc up --wait || (dcloc logs && exit 1)
       continue-on-error: true
     - name: add test users

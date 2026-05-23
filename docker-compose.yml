@@ -454,7 +454,7 @@ services:
       RM_KC_PASSWORD: *kcadminpass  # pragma: allowlist secret
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
-      RM_INTEGRATION_API_TIMEOUT: 5
+      RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
       RELEASE_TAG: ${RELEASE_TAG:-2.8.2}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "ecs"
