@@ -430,7 +430,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.16.0-260508-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.16.0-260523-d${RELEASE_TAG:-2.8.2}${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
