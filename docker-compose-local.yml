@@ -100,12 +100,12 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.2}-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-32}-d${RELEASE_TAG:-2.8.2}-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-8}
+      TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-32}
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-2.8.2}-local${DOCKER_TAG_EXTRA:-}
@@ -1031,7 +1031,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.0-260508-tak${TAK_RELEASE:-5.7-RELEASE-8}-d${RELEASE_TAG:-2.8.2}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.0-260508-tak${TAK_RELEASE:-5.7-RELEASE-32}-d${RELEASE_TAG:-2.8.2}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
