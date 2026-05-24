@@ -764,7 +764,7 @@ services:
 
   mediamtx:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}bluenviron/mediamtx:1.12.3
+    image: ${HUB_DOCKER_REPO:-docker.io/}bluenviron/mediamtx:1.18.2
     networks:
       - productnet
       - intranet
