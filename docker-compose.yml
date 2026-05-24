@@ -142,6 +142,7 @@ x-logging: &logging
     options:
       syslog-address: ${LOGGING_SYSLOG_ADDR:-unixgram:///dev/log}  # local rsyslog/journald socket
       tag: "{{.ImageName}}/{{.Name}}"
+  platform: ${COMPOSE_FORCE_PLATFORM:-}
 
 x-matrix_env: &matrix_env
   SERVER_DOMAIN: *serverdomain

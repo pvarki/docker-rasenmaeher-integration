@@ -143,6 +143,7 @@ x-logging: &logging
   logging:
     options:
       max-size: 50m
+  platform: ${COMPOSE_FORCE_PLATFORM:-}
 
 x-matrix_env: &matrix_env
   SERVER_DOMAIN: *serverdomain
