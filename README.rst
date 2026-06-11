@@ -109,7 +109,10 @@ Example .env-file with the minimal information needed::
     TAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     SYNAPSE_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     SYNAPSE_MACAROON_SECRET_KEY="input-secure-password"  # pragma: allowlist secret
-    SYNAPSE_REGISTRATION_SECRET="input-secure-password"  # pragma: allowlist secret
+    MAS_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    MAS_ENCRYPTION_SECRET="input-32-byte-hex-string"  # pragma: allowlist secret
+    MAS_SYNAPSE_SECRET="input-secure-password"  # pragma: allowlist secret
+    MAS_ADMIN_CLIENT_SECRET="input-secure-password"  # pragma: allowlist secret
     SERVER_DOMAIN="input-domain"
     CFSSL_CA_NAME="input-ca-name"
     MW_LE_EMAIL="input-email-for-lets-encrypt"

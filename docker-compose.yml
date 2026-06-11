@@ -57,6 +57,12 @@ x-synapse_dbconfig_env: &synapsedbconfig_env
   POSTGRES_USER: synapse
   POSTGRES_PASSWORD: &synapse_dbpass ${SYNAPSE_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
 
+x-mas_dbconfig_env: &masdbconfig_env
+  POSTGRES_DB: mas
+  POSTGRES_HOST: postgres
+  POSTGRES_USER: mas
+  POSTGRES_PASSWORD: &mas_dbpass ${MAS_DATABASE_PASSWORD:?must be defined} # pragma: allowlist secret
+
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?must be defined} # pragma: allowlist secret
@@ -65,6 +71,7 @@ x-postgres_env: &postgres_env
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
   RMMTX_PASSWORD: *rmmtx_dbpass # pragma: allowlist secret
   SYNAPSE_PASSWORD: *synapse_dbpass # pragma: allowlist secret
+  MAS_PASSWORD: *mas_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
   KEYCLOAK_CREATE_ADMIN_USER: "true"
@@ -151,9 +158,14 @@ x-matrix_env: &matrix_env
   KCDOMAIN: *kcdomain
   KCREALM: *kc_realm
   SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:?must be defined}
-  SYNAPSE_REGISTRATION_SECRET: ${SYNAPSE_REGISTRATION_SECRET:?must be defined}
   SYNAPSE_BOT_USERNAME: matrixrmapi-bot
 
+# Shared secret between Synapse and MAS (delegated auth)
+x-mas_synapse_env: &mas_synapse_env
+  MAS_SYNAPSE_SECRET: ${MAS_SYNAPSE_SECRET:?must be defined} # pragma: allowlist secret
+
+x-mas_admin_client_env: &mas_admin_client_env
+  MAS_ADMIN_CLIENT_SECRET: ${MAS_ADMIN_CLIENT_SECRET:?must be defined} # pragma: allowlist secret
 
 services:
   miniwerk:
@@ -178,7 +190,7 @@ services:
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
-      MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse"
+      MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,mas"
       LOG_CONSOLE_FORMATTER: "ecs"
     volumes:
       - kraftwerk_data:/data/persistent
@@ -539,6 +551,8 @@ services:
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
       NGINX_SYNAPSE_UPSTREAM: "synapse"
       NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
+      NGINX_MAS_UPSTREAM: "mas"
+      NGINX_MAS_UPSTREAM_PORT: "8080"
     networks:
       - apinet
       - kcnet
@@ -648,7 +662,7 @@ services:
       dockerfile: Dockerfile
       target: production
     environment:
-      <<: *matrix_env
+      <<: [*matrix_env, *mas_admin_client_env]
       LOG_CONSOLE_FORMATTER: "local"
     networks:
       - productnet
@@ -659,7 +673,7 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_matrix:/pvarki
       - matrix_data:/data/persistent
-      - synapse_config_vol:/data/persistent/oidc
+      - matrix_oidc_vol:/data/persistent/oidc
       - ui_files:/ui_files
     depends_on:
       rmnginx:
@@ -671,6 +685,42 @@ services:
       retries: 3
       start_period: 60s
     restart: unless-stopped
+
+  mas:
+    <<: *logging
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mas:1.18.0-d${RELEASE_TAG:-2.9.0}${DOCKER_TAG_EXTRA:-}
+    build:
+      context: ./mas
+      dockerfile: Dockerfile
+      target: run
+    restart: unless-stopped
+    depends_on:
+      keycloak-init:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+      matrixrmapi:
+        condition: service_started  # produces /config/registration.json and mas_admin_client_id
+    networks:
+      - dbnet
+      - intranet
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - matrix_oidc_vol:/config
+      - mas_data:/data
+      - ca_public:/ca_public
+    environment:
+      <<: [*matrix_env, *masdbconfig_env, *mas_synapse_env, *mas_admin_client_env]
+      MAS_ENCRYPTION_SECRET: ${MAS_ENCRYPTION_SECRET:?must be defined}
+    healthcheck:
+      test: 'curl -fSs http://localhost:8081/health || exit 1'
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 120s  # first boot waits for matrixrmapi's OIDC client registration
 
   synapse:
     <<: *logging
@@ -688,6 +738,8 @@ services:
         condition: service_healthy
       matrixrmapi:
         condition: service_started
+      mas:
+        condition: service_healthy
     networks:
       - dbnet
       - productnet
@@ -696,11 +748,10 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - synapse_config_vol:/config
       - ca_public:/ca_public
       - le_certs:/le_certs
     environment:
-      <<: [*matrix_env, *synapsedbconfig_env]
+      <<: [*matrix_env, *synapsedbconfig_env, *mas_synapse_env]
     healthcheck:
       test: 'curl -fSs http://localhost:8008/health || exit 1'
       interval: 15s
@@ -1103,4 +1154,5 @@ volumes:
   kraftwerk_shared_rmmtx:
   rmmtx_data:
   ui_files:
-  synapse_config_vol:
+  matrix_oidc_vol:
+  mas_data:
