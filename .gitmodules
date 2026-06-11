@@ -40,3 +40,6 @@
 [submodule "synapse"]
 	path = synapse
 	url = git@github.com:pvarki/docker-synapse-server.git
+[submodule "mas"]
+	path = mas
+	url = git@github.com:pvarki/docker-mas-server.git
