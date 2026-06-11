@@ -101,7 +101,7 @@ services:
       NGINX_UI_UPSTREAM_PORT: ${NGINX_UI_UPSTREAM_PORT:-8002}
       NGINX_ENVSUBST_TEMPLATE_DIR: /templates_uidev
     volumes:
-      - ./nginx/templates_rasenmaeher_uidev:/templates_uidev
+      - ./mas_nginx/templates_rasenmaeher_uidev:/templates_uidev
     depends_on:
       rmapi:
         condition: service_healthy
