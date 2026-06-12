@@ -240,8 +240,7 @@ jobs:
           docker buildx bake -f bakefile.hcl --push
 
   upload_ext_images_to_acr:
-    runs-on: arc-runner-set
-    needs: [build_and_publish]
+    runs-on: ubuntu-latest
     env:
       PVARKI_DOCKER_REPO: ghcr.io/
       ACR_REPO: ${{ vars.ACR_REPO }}
