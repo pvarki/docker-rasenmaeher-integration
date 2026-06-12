@@ -302,8 +302,7 @@ services:
 
   postgres:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}postgis/postgis:15-3.4
-    platform: linux/amd64  # It seems there are no arm images available
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/postgis-server:15.3.5-260524
     networks:
       - dbnet
     ports:
