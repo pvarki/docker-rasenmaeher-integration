@@ -107,11 +107,7 @@ x-takbuilds: &takbuildinfo
   image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.7-RELEASE-32${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-2.10.0}${DOCKER_TAG_EXTRA:-}
-  build:
-    context: ./nginx
-    dockerfile: Dockerfile
-    target: production
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260613${DOCKER_TAG_EXTRA:-}
   labels:
       - "autoheal=true"
 
@@ -161,7 +157,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}miniwerk-tool:1.8.2-260524${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.8.2-260612${DOCKER_TAG_EXTRA:-}
     environment:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
@@ -199,7 +195,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}cfssl-api:1.0.7-260427${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl-api:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
@@ -219,7 +215,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}ocsp-api:1.0.7-260427${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/ocsp-api:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
@@ -242,7 +238,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}ocsprest-server:1.0.7-260427${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/ocsprest-server:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
@@ -423,7 +419,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.17.3-260609${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.17.3-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -482,24 +478,13 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.5.0-260613-${VITE_THEME:-default}-d${RELEASE_TAG:-2.10.0}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./uiv2
-      dockerfile: Dockerfile
-      target: production
-      args:
-        VITE_THEME: ${VITE_THEME:-default}
-        RELEASE_TAG: ${RELEASE_TAG:-2.10.0}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.4.0-260613${DOCKER_TAG_EXTRA:-}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.10.0}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-      target: configs
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260613${DOCKER_TAG_EXTRA:-}
     volumes:
       - nginx_templates:/deliver
 
@@ -658,7 +643,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.1.0-260507${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.1.1-260612${DOCKER_TAG_EXTRA:-}
     restart: unless-stopped
     depends_on:
       keycloak-init:
@@ -697,7 +682,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.0-260513-${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.1-260612${DOCKER_TAG_EXTRA:-}
     environment:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
@@ -1071,13 +1056,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.0-260508-tak${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.0}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./takintegration
-      dockerfile: Dockerfile
-      target: production
-      args:
-        TAKSERVER_IMAGE: *takimage
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.13.1-260612${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
