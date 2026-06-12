@@ -287,7 +287,7 @@ services:
 
   postgres:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}postgis/postgis:15-3.4
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/postgis-server:15.3.5-260524
     labels:
         - "autoheal=true"
     networks:
