@@ -1,5 +1,6 @@
 # For local testing
 #   `docker-compose -p rmloc -f docker-compose-local.yml up -d`
+# NOTE!!: Use bump-my-version to bump the RELEASE_TAG default value
 
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
