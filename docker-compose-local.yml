@@ -1,6 +1,6 @@
 # For local testing
 #   `docker-compose -p rmloc -f docker-compose-local.yml up -d`
-# NOTE!!: Use bump-my-version to bump the RELEASE_TAG default value
+# NOTE!!: Use `bump-my-version bump calver` to bump the RELEASE_TAG default value
 
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}
@@ -109,7 +109,15 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
+<<<<<<< HEAD
   image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}"
+=======
+<<<<<<< HEAD
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}"
+=======
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-32}-d${RELEASE_TAG:-260513}-local${DOCKER_TAG_EXTRA:-}"
+>>>>>>> 9d8cfd2 (feat: use calver for releases in future)
+>>>>>>> 9cc71f9 (feat: use calver for releases in future)
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -117,7 +125,15 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-43}
 
 x-nginxbuilds: &nginxbuildinfo
+<<<<<<< HEAD
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+=======
+<<<<<<< HEAD
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}
+=======
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-260513}-local${DOCKER_TAG_EXTRA:-}
+>>>>>>> 9d8cfd2 (feat: use calver for releases in future)
+>>>>>>> 9cc71f9 (feat: use calver for releases in future)
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -167,7 +183,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.10.0-260613-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.8.2-260524-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -212,7 +228,7 @@ services:
 
   jwtcopy:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.8.2-260524-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.8.2-260524-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -231,7 +247,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0_260427-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0_260427-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -253,7 +269,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0_260427-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0_260427-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -278,7 +294,7 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.7_260427-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.7_260427-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cfssl
       dockerfile: Dockerfile
@@ -337,7 +353,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -393,7 +409,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak
       dockerfile: Dockerfile
@@ -464,7 +480,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.17.6-260613-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.16.0-260523-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -533,7 +549,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.5.0-260613-${VITE_THEME:-default}-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.3.1-260506-${VITE_THEME:-default}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
@@ -546,7 +562,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -613,7 +629,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.1-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.1-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -627,7 +643,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:1.0.0-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:1.0.0-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kc_client_init
       dockerfile: Dockerfile
@@ -643,7 +659,7 @@ services:
 ######################
   rmfpapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.2-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.2-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./fpintegration
       dockerfile: Dockerfile
@@ -681,7 +697,7 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:1.1.1-260512-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:1.1.1-260512-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./matrixrmapi
       dockerfile: Dockerfile
@@ -715,7 +731,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-dist:1.1.0-260507-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-dist:1.1.0-260507-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./synapse
       dockerfile: Dockerfile
@@ -758,7 +774,7 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-260612-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
@@ -801,7 +817,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.6.0-260513-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.6.0-260513-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -1191,7 +1207,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.3-260810-tak${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.0-260508-tak${TAK_RELEASE:-5.7-RELEASE-32}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile

@@ -1,4 +1,4 @@
-# NOTE!!: Use bump-my-version to bump the RELEASE_TAG default value
+# NOTE!!: Use `bump-my-version bump calver` to bump the RELEASE_TAG default value
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
   MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
@@ -435,7 +435,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-2.10.0}
+      RELEASE_TAG: ${RELEASE_TAG:-260513}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "ecs"
     networks:
