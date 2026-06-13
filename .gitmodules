@@ -4,9 +4,6 @@
 [submodule "keycloak2"]
 	path = keycloak
 	url = git@github.com:pvarki/docker-keycloak.git
-[submodule "fpintegration"]
-	path = fpintegration
-	url = git@github.com:pvarki/python-rasenmaeher-rmfpapi.git
 [submodule "kw_product_init"]
 	path = kw_product_init
 	url = git@github.com:pvarki/golang-kraftwerk-init-helper-cli.git
