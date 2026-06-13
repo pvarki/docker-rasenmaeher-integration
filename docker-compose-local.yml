@@ -174,7 +174,7 @@ services:
       target: production
     environment:
       MW_DOMAIN: *serverdomain
-      MW_PRODUCTS: "tak,kc,fake,bl,mtx,matrix,synapse,cryptpad"
+      MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,cryptpad"
       MW_RASENMAEHER__API_PORT: *apiport
       MW_RASENMAEHER__USER_PORT: *apiport
       MW_MTX__API_PORT: *productport
@@ -183,8 +183,6 @@ services:
       MW_CRYPTPAD__API_PORT: *productport
       MW_CRYPTPAD__USER_HOST: "mtls.cryptpad"
       MW_CRYPTPAD__USER_PORT: *productport
-      MW_FAKE__API_PORT: *productport
-      MW_FAKE__USER_PORT: *productport
       MW_TAK__API_PORT: *productport
       MW_TAK__USER_PORT: 8443
       MW_BL__API_BASE: "/rmapi/"
@@ -638,44 +636,6 @@ services:
       - le_certs:/le_certs
       - kcinit_data:/data/persistent
 
-######################
-# Begin: Fakeproduct #
-######################
-  rmfpapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmfpapi:1.4.2-local${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./fpintegration
-      dockerfile: Dockerfile
-      target: production
-    environment:
-      LOG_CONSOLE_FORMATTER: "local"
-    ports:
-      - "8001:8001"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
-    networks:
-      - productnet
-      - intranet
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    volumes:
-      - ca_public:/ca_public
-      - kraftwerk_shared_fake:/pvarki
-      - rmfpapi_data:/data/persistent
-      - ui_files:/ui_files
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-    healthcheck:
-      test: 'true'  # FIXME
-      interval: 5s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
-    restart: unless-stopped
-####################
-# End: Fakeproduct #
-####################
-
 ###################
 #  Begin: Matrix  #
 ###################
@@ -911,7 +871,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -960,7 +920,7 @@ services:
 
   rmcryptpad_ui_sync:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -977,7 +937,7 @@ services:
 
   cryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260614-d${RELEASE_TAG:-2.10.1}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260614-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: docker/cryptpad/Dockerfile
@@ -1283,8 +1243,6 @@ services:
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
-      rmfpapi:
-        condition: service_started
       blapi:
         condition: service_started
       takrmapi:
