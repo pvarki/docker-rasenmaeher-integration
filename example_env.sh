@@ -22,3 +22,5 @@ export RMMTX_DATABASE_PASSWORD="capybara"  # pragma: allowlist secret
 export RMMTX_API_PASSWORD="myyra"  # pragma: allowlist secret
 export RMMTX_SRT_PUB_PASSWORD="mesimayra"  # pragma: allowlist secret
 export RMMTX_SRT_READ_PASSWORD="gerbiili"  # pragma: allowlist secret
+export RMCRYPTPAD_DATABASE_PASSWORD="saukko"  # pragma: allowlist secret
+export RMCRYPTPAD_OIDC_CLIENT_SECRET="naali"  # pragma: allowlist secret

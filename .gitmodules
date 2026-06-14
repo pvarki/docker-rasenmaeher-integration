@@ -40,3 +40,6 @@
 [submodule "synapse"]
 	path = synapse
 	url = git@github.com:pvarki/docker-synapse-server.git
+[submodule "cryptpad"]
+	path = cryptpad
+	url = git@github.com:pvarki/cryptpad.git
