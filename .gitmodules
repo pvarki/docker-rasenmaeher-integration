@@ -40,3 +40,6 @@
 [submodule "cryptpad"]
 	path = cryptpad
 	url = git@github.com:pvarki/cryptpad.git
+[submodule "nginx"]
+	path = nginx
+	url = git@github.com:pvarki/docker-nginx.git
