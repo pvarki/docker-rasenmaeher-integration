@@ -301,7 +301,7 @@ services:
 
   postgres:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/postgis-server:15.3.5-260524
+    image: ${PVARKI_DOCKER_REPO_NOBUILD:-ghcr.io/}pvarki/postgis-server:15.3.5-260524
     networks:
       - dbnet
     ports:
