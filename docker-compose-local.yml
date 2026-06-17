@@ -636,6 +636,10 @@ services:
       - le_certs:/le_certs
       - kcinit_data:/data/persistent
 
+  takserver_dist:  # Here to help CI copy images to alternate registries without adding special logic
+    image: ${HUB_DOCKER_REPO:-docker.io/}pvarki/tak-server-dist:${TAK_RELEASE:-5.7-RELEASE-43}
+    command: ["true"]
+
 ###################
 #  Begin: Matrix  #
 ###################

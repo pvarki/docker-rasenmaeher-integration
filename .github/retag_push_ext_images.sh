@@ -11,7 +11,7 @@ then
 fi
 export HUB_DOCKER_REPO=${ORIG_REPO}
 # shellcheck disable=SC2086
-for IMGNAME in $(docker compose ${EXTRA_ARGS} config --format json | jq -r '.services[].image' | sort | uniq | grep "${ORIG_REPO}")
+for IMGNAME in $(docker compose -f docker-compose-local.yaml ${EXTRA_ARGS} config --format json | jq -r '.services[].image' | sort | uniq | grep "${ORIG_REPO}")
 do
   # shellcheck disable=SC2001
   NEWNAME=$(echo "${IMGNAME}" | sed -e s%"${ORIG_REPO}"%"${ACR_REPO}/"%g)
