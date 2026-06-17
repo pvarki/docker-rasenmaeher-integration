@@ -107,7 +107,7 @@ x-takbuilds: &takbuildinfo
   image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.7.43-260614${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260613${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617{DOCKER_TAG_EXTRA:-}
   labels:
       - "autoheal=true"
 
@@ -478,7 +478,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260613${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260617{DOCKER_TAG_EXTRA:-}
     volumes:
       - nginx_templates:/deliver
 
