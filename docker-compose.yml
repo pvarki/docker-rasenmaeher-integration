@@ -178,7 +178,7 @@ services:
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
       MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,cryptpad"
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
@@ -245,7 +245,7 @@ services:
       - canet
     environment:
       <<: *cfssl_env
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
       - cfssl_data:/data/persistent
       - ca_public:/ca_public
@@ -437,7 +437,7 @@ services:
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
       RELEASE_TAG: ${RELEASE_TAG:-260513}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - apinet
       - kcnet
@@ -601,7 +601,7 @@ services:
     image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.2.1-260614${DOCKER_TAG_EXTRA:-}
     environment:
       <<: *matrix_env
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -670,7 +670,7 @@ services:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
       RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:?domain must be defined}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -787,7 +787,7 @@ services:
       RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       RMCRYPTPAD_OIDC_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
       RMCRYPTPAD_RMCN: ${RMCRYPTPAD_RMCN:-rasenmaeher}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -1030,7 +1030,7 @@ services:
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       TI_MTX_SERVER_FQDN: *mtxdomain
     labels:
         - "autoheal=true"
