@@ -868,7 +868,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
