@@ -10,40 +10,40 @@ x-domains_env:
   PRODUCT_HTTPS_EPHEMERAL_PORT: &productephemeralport ${NGINX_HTTPS_EPHEMERAL_PRODUCT_PORT:-4627}
   TAK_DOMAIN: &takdomain "tak.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   KC_DOMAIN:  &kcdomain "kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
-  MTX_DOMAIN:  &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
+  MTX_DOMAIN: &mtxdomain "mtx.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}"
   DNS_RESOLVER_IP: &dnsresolver ${DNS_RESOLVER_IP:-127.0.0.11}  # Must be able to resolve docker internal names
   OCSCP_RESPONDER:  &publicocsp "https://${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/ca/ocsp"  # The public URL
 
 x-kc_dbconfig_env: &kcdbconfig_env
-  KEYCLOAK_DATABASE_NAME: &kcdbname keycloak
+  KEYCLOAK_DATABASE_NAME: &kcdbname ${KEYCLOAK_DATABASE_NAME:-keycloak}
   KEYCLOAK_DATABASE_HOST: postgres
-  KEYCLOAK_DATABASE_USER: &kcdbuser keycloak
-  KEYCLOAK_DATABASE_PASSWORD: &kcdbpass ${KEYCLOAK_DATABASE_PASSWORD:-keycloakpwd}  # pragma: allowlist secret
+  KEYCLOAK_DATABASE_USER: &kcdbuser ${KEYCLOAK_DATABASE_USER:-keycloak}
+  KEYCLOAK_DATABASE_PASSWORD: &kcdbpass ${KEYCLOAK_DATABASE_PASSWORD:-keycloakpwd} # pragma: allowlist secret
 
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
-  RM_DATABASE_NAME: &rmdbname raesenmaeher
+  RM_DATABASE_NAME: &rmdbname ${RM_DATABASE_NAME:-raesenmaeher}
   RM_DATABASE_HOST: postgres
-  RM_DATABASE_USER: &rmdbuser raesenmaeher
+  RM_DATABASE_USER: &rmdbuser ${RM_DATABASE_USER:-raesenmaeher}
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
 x-ldap_admin_env: &ldap_admin_env
   LDAP_ADMIN_PASSWORD: &ldapadminpass ${LDAP_ADMIN_PASSWORD:-ldapadminpwd} # pragma: allowlist secret
-  LDAP_ADMIN_USERNAME: &ldapadminuser admin
+  LDAP_ADMIN_USERNAME: &ldapadminuser ${LDAP_ADMIN_USERNAME:-admin}
 
 x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-rmmtx}
   RMMTX_DATABASE_HOST: postgres
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:-mtxauthzdbpwd} # pragma: allowlist secret
-  RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:-rmmtxpasswd} # pragma: allowlist secret
-  RMMTX_SRT_PUB_PASSWORD: "localsrtpub"  # pragma: allowlist secret
-  RMMTX_SRT_READ_PASSWORD: "localsrtread"  # pragma: allowlist secret
+  RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:-mtxauthzapipwd} # pragma: allowlist secret
+  RMMTX_SRT_PUB_PASSWORD: ${RMMTX_SRT_PUB_PASSWORD:-mtxauthzsrtpubpwd} # pragma: allowlist secret
+  RMMTX_SRT_READ_PASSWORD: ${RMMTX_SRT_READ_PASSWORD:-mtxauthzsrtreadpwd} # pragma: allowlist secret
 
 x-rmcryptpad_dbconfig_env: &rmcryptpad_dbconfig_env
   RMCRYPTPAD_DATABASE_DATABASE: &rmcryptpad_dbname ${RMCRYPTPAD_DATABASE_DATABASE:-rmcryptpad}
   RMCRYPTPAD_DATABASE_HOST: postgres
   RMCRYPTPAD_DATABASE_USER: &rmcryptpad_dbuser ${RMCRYPTPAD_DATABASE_USER:-rmcryptpad}
-  RMCRYPTPAD_DATABASE_PASSWORD: &rmcryptpad_dbpass ${RMCRYPTPAD_DATABASE_PASSWORD:-rmcryptpadpwd} # pragma: allowlist secret
+  RMCRYPTPAD_DATABASE_PASSWORD: &rmcryptpad_dbpass ${RMCRYPTPAD_DATABASE_PASSWORD:-rmcryptpaddbpwd} # pragma: allowlist secret
   RMCRYPTPAD_OIDC_CLIENT_SECRET: &rmcryptpad_oidc_client_secret ${RMCRYPTPAD_OIDC_CLIENT_SECRET:-rmcryptpadclientsecret} # pragma: allowlist secret
 
 x-tak_dbconfig_env: &takdbconfig_env
@@ -51,16 +51,15 @@ x-tak_dbconfig_env: &takdbconfig_env
   POSTGRES_ADDRESS: postgres
   POSTGRES_USER: &takdbuser ${TAK_DATABASE_USER:-tak}
   POSTGRES_PASSWORD: &takdbpass ${TAK_DATABASE_PASSWORD:-takdbpwd} # pragma: allowlist secret
-  LDAP_BIND_USER: *ldapadminuser
   LDAP_BIND_PASSWORD: *ldapadminpass
 
 x-battlelog_dbconfig_env: &bldbconfig_env
   BL_POSTGRES_HOST: postgres
   BL_POSTGRES_DB: &bldbname battlelog
   BL_POSTGRES_USER: &bldbuser battlelog
-  BL_POSTGRES_PASSWORD: &bldbpass ${BL_DATABASE_PASSWORD:-battlelogpwd} # pragma: allowlist secret
+  BL_POSTGRES_PASSWORD: &bldbpass ${BL_DATABASE_PASSWORD:-bldbpwd} # pragma: allowlist secret
   # Currently need to be defined separately because of the way the image is built
-  DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:-battlelogpwd}@postgres:5432/battlelog"
+  DATABASE_URL: "postgresql://${BL_DATABASE_USER:-battlelog}:${BL_DATABASE_PASSWORD:-bldbpwd}@postgres:5432/battlelog"
 
 x-synapse_dbconfig_env: &synapsedbconfig_env
   POSTGRES_DB: synapse
@@ -70,7 +69,7 @@ x-synapse_dbconfig_env: &synapsedbconfig_env
 
 x-postgres_env: &postgres_env
   KEYCLOAK_PASSWORD: *kcdbpass # pragma: allowlist secret
-  POSTGRES_PASSWORD: &pgrootpwd ${POSTGRES_PASSWORD:-pg_R00t_user_password} # pragma: allowlist secret
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pgrootpwd} # pragma: allowlist secret
   RAESENMAEHER_PASSWORD: *rmdbpass # pragma: allowlist secret
   TAK_PASSWORD: *takdbpass # pragma: allowlist secret
   BATTLELOG_PASSWORD: *bldbpass # pragma: allowlist secret
@@ -79,17 +78,11 @@ x-postgres_env: &postgres_env
   RMCRYPTPAD_PASSWORD: *rmcryptpad_dbpass # pragma: allowlist secret
 
 x-keycloak_users_env: &keycloak_users_env
-  KEYCLOAK_CREATE_ADMIN_USER: true
+  KEYCLOAK_CREATE_ADMIN_USER: "true"
   KEYCLOAK_ADMIN: &kcadminuser admin
-  # FIXME: take from env (which should be set to random)
-  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass kcadminpw # pragma: allowlist secret
+  KEYCLOAK_ADMIN_PASSWORD: &kcadminpass ${KEYCLOAK_ADMIN_PASSWORD:-kcadminpwd} # pragma: allowlist secret
   KC_BOOTSTRAP_ADMIN_USERNAME: *kcadminuser
   KC_BOOTSTRAP_ADMIN_PASSWORD: *kcadminpass # pragma: allowlist secret
-
-x-keycloak_profile_env: &keycloak_profile_env
-  # These can be expanded in keycloak-config/profile.json
-  KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
-  KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
 
 x-keycloak_tls_env: &keycloak_tls_env
   KEYCLOAK_ENABLE_HTTPS: true
@@ -98,23 +91,23 @@ x-keycloak_tls_env: &keycloak_tls_env
   KC_HTTPS_TRUST_STORE_PASSWORD: ${KEYCLOAK_HTTPS_TRUST_STORE_PASSWORD:-kctspwd}  # pragma: allowlist secret
   KC_HTTPS_TRUST_STORE_FILE: /opt/keycloak/data/kcserver-truststore.jks
   KC_HTTPS_KEY_STORE_FILE: /opt/keycloak/data/kcserver-keys.jks
-  KC_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
-  #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request"
+  #KEYCLOAK_EXTRA_ARGS: "--https-client-auth=request --hostname-debug=true --cache=local"
+  KC_EXTRA_ARGS: "--https-client-auth=request"
   KC_HTTP_ENABLED: true
   KC_HOSTNAME: *kcdomain
   KC_HTTPS_PORT: 9443
+
+x-keycloak_profile_env: &keycloak_profile_env
+  # These can be expanded in keycloak-config/profile.json
+  KCP_REALM: &kc_realm "${KCP_REALM:-RASENMAEHER}"
+  KCP_MAIN_ID: "${KEYCLOAK_PROFILEROOT_UUID:-4f88fe8c-ffa5-4ae4-97c9-3831a500d502}"
 
 x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
-x-takbuilds: &takbuildinfo # FIXME: update tag when pr-125 is merged
+x-takbuilds: &takbuildinfo  # FIXME: update tag when pr-125 is merged
   image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260818-pr125${DOCKER_TAG_EXTRA:-}"
-  build:
-    context: ./takserver
-    dockerfile: Dockerfile
-    args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-43}
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
