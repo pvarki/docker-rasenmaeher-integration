@@ -103,8 +103,8 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
-x-takbuilds: &takbuildinfo  # FIXME: update tag when pr-125 is merged
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260818-pr125${DOCKER_TAG_EXTRA:-}"
+x-takbuilds: &takbuildinfo
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260818${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -1026,7 +1026,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.13.1-260612${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.0-260821${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
