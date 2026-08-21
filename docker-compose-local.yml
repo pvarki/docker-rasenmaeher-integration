@@ -108,8 +108,8 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_USER: *kcadminuser # pragma: allowlist secret
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
-x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.7.43-260614-local${DOCKER_TAG_EXTRA:-}"
+x-takbuilds: &takbuildinfo # FIXME: update tag when pr-125 is merged
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260818-pr125${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
