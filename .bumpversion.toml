@@ -1,5 +1,5 @@
 [tool.bumpversion]
-current_version = "260513"
+current_version = "260822"
 parse = "(?P<calver>\\d+)"
 serialize = ["{calver}"]
 search = "{current_version}"
@@ -31,10 +31,5 @@ replace = 'version: "{new_version}"'
 
 [[tool.bumpversion.files]]
 filename = "docker-compose.yml"
-search = 'RELEASE_TAG:-{current_version}'
-replace = 'RELEASE_TAG:-{new_version}'
-
-[[tool.bumpversion.files]]
-filename = "docker-compose-local.yml"
 search = 'RELEASE_TAG:-{current_version}'
 replace = 'RELEASE_TAG:-{new_version}'
