@@ -563,7 +563,7 @@ services:
 ####################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/battlelog-api:1.1.0-260612${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/battlelog-server:2.3.0-260823${DOCKER_TAG_EXTRA:-}
     environment:
       <<: [*bldbconfig_env]
     networks:

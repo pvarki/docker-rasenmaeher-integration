@@ -15,7 +15,7 @@
 	url = git@github.com:pvarki/docker-atak-server.git
 [submodule "battlelog"]
 	path = battlelog
-	url = git@github.com:pvarki/typescript-liveloki-app.git
+	url = git@github.com:pvarki/battlelog.git
 [submodule "mtxauthz"]
 	path = mtxauthz
 	url = git@github.com:pvarki/python-mediamtx-rmmtxauthz.git
