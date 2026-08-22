@@ -493,6 +493,7 @@ services:
       RELEASE_TAG: "local"
       RELEASE_STATUS: "alpha"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
     networks:
       - apinet
       - kcnet
@@ -1154,7 +1155,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.1-260822-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile

@@ -438,6 +438,7 @@ services:
       RELEASE_TAG: ${RELEASE_TAG:-260822}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
     networks:
       - apinet
       - kcnet
@@ -1026,7 +1027,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.1-260822${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
