@@ -353,7 +353,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-server:1.0.0-260520${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-server:24.0.5-260616${DOCKER_TAG_EXTRA:-}
     command:
       - start
     user: root
@@ -414,7 +414,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.17.6-260613${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.18.2-260805${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -473,7 +473,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.5.0-260613${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.6.2-260811${DOCKER_TAG_EXTRA:-}
     volumes:
       - rmui_files:/deliver
 
@@ -549,7 +549,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-helper-tool:1.1.0-260513${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-helper-tool:1.1.2-260630${DOCKER_TAG_EXTRA:-}
     command: ["help"]
     volumes:
       - ca_public:/ca_public
@@ -598,7 +598,7 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.2.1-260614${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.3.2-260822${DOCKER_TAG_EXTRA:-}
     environment:
       <<: *matrix_env
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
@@ -626,7 +626,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.1.1-260612${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.0-260708${DOCKER_TAG_EXTRA:-}
     restart: unless-stopped
     depends_on:
       keycloak-init:
@@ -665,7 +665,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.1-260612${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.3-260818${DOCKER_TAG_EXTRA:-}
     environment:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
@@ -778,7 +778,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.1-260722${DOCKER_TAG_EXTRA:-}
     user: "4001:4001"
     environment:
       <<: [*rmcryptpad_dbconfig_env]
