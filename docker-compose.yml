@@ -1,4 +1,4 @@
-# NOTE!!: Use bump2version to bump the RELEASE_TAG default value
+# NOTE!!: Use `bump-my-version bump calver` to bump the RELEASE_TAG default value
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
   MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
@@ -104,19 +104,10 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takserver:${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}"
-  build:
-    context: ./takserver
-    dockerfile: Dockerfile
-    args:
-      TAK_RELEASE: ${TAK_RELEASE:-5.7-RELEASE-43}
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260823${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:1.31-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-  build:
-    context: ./nginx
-    dockerfile: Dockerfile
-    target: production
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
   labels:
       - "autoheal=true"
 
@@ -166,11 +157,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk:1.10.0-260613-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./miniwerk
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.10.0-260613${DOCKER_TAG_EXTRA:-}
     environment:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
@@ -191,7 +178,7 @@ services:
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
       MW_KEYTYPE: "rsa"
       MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,cryptpad"
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
@@ -208,11 +195,7 @@ services:
 
   cfssl:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:api-1.2.0_260427-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cfssl
-      dockerfile: Dockerfile
-      target: api
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl-api:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
@@ -232,11 +215,7 @@ services:
 
   ocsp:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsp-1.2.0_260427-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cfssl
-      dockerfile: Dockerfile
-      target: ocsp
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/ocsp-api:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
@@ -259,18 +238,14 @@ services:
 
   ocsprest:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cfssl:ocsprest-1.0.7_260427-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cfssl
-      dockerfile: Dockerfile
-      target: ocsprest
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/ocsprest-server:1.0.7-260612${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     networks:
       - canet
     environment:
       <<: *cfssl_env
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
       - cfssl_data:/data/persistent
       - ca_public:/ca_public
@@ -287,7 +262,7 @@ services:
 
   postgres:
     <<: *logging
-    image: ${HUB_DOCKER_REPO:-docker.io/}postgis/postgis:15-3.4
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/postgis-server:15.3.5-260524
     labels:
         - "autoheal=true"
     networks:
@@ -323,7 +298,7 @@ services:
 
   openldap:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap:1.0.0-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/openldap-server:1.0.0-260520${DOCKER_TAG_EXTRA:-}
     build:
       context: ./keycloak/openldap
       dockerfile: Dockerfile
@@ -378,12 +353,7 @@ services:
 
   keycloak:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak:24.0.5-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./keycloak
-      dockerfile: Dockerfile
-      args:
-        KC_VERSION_TAG: 24.0.5
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-server:24.0.5-260616${DOCKER_TAG_EXTRA:-}
     command:
       - start
     user: root
@@ -444,11 +414,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmapi:1.17.6-260613-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.0-260822${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -469,9 +435,10 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-2.10.1}
+      RELEASE_TAG: ${RELEASE_TAG:-260822}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
     networks:
       - apinet
       - kcnet
@@ -507,24 +474,13 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmui:2.5.0-260613-${VITE_THEME:-default}-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./uiv2
-      dockerfile: Dockerfile
-      target: production
-      args:
-        VITE_THEME: ${VITE_THEME:-default}
-        RELEASE_TAG: ${RELEASE_TAG:-2.10.1}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.6.2-260811${DOCKER_TAG_EXTRA:-}
     volumes:
       - rmui_files:/deliver
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx:templates-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-      target: configs
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260617${DOCKER_TAG_EXTRA:-}
     volumes:
       - nginx_templates:/deliver
 
@@ -584,11 +540,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kw_product_init:1.1.1-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./kw_product_init
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kraftwerk-helper-tool:1.3.0-260513${DOCKER_TAG_EXTRA:-}
     command: ["help"]
     volumes:
       - ca_public:/ca_public
@@ -598,11 +550,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kc_client_init:1.0.0-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./kc_client_init
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-helper-tool:1.1.2-260630${DOCKER_TAG_EXTRA:-}
     command: ["help"]
     volumes:
       - ca_public:/ca_public
@@ -615,11 +563,7 @@ services:
 ####################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/blapi:1.1.0-260612-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./battlelog
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/battlelog-api:1.1.0-260612${DOCKER_TAG_EXTRA:-}
     environment:
       <<: [*bldbconfig_env]
     networks:
@@ -655,14 +599,10 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrixrmapi:1.1.1-260512-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./matrixrmapi
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.2.2-260702${DOCKER_TAG_EXTRA:-}
     environment:
       <<: *matrix_env
-      LOG_CONSOLE_FORMATTER: "local"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -687,10 +627,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-dist:1.1.0-260507-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./synapse
-      dockerfile: Dockerfile
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.1.2-260630${DOCKER_TAG_EXTRA:-}
     restart: unless-stopped
     depends_on:
       keycloak-init:
@@ -729,16 +666,12 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rmmtx:1.6.0-260513-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./mtxauthz
-      dockerfile: Dockerfile
-      target: production
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.3-260818${DOCKER_TAG_EXTRA:-}
     environment:
       <<: [*rmmtx_dbconfig_env]
       RMMTX_API_URL: https://mtx.${SERVER_DOMAIN:?domain must be defined}:9997
       RMMTX_MTX_ADDRESS: mtx.${SERVER_DOMAIN:?domain must be defined}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -832,10 +765,7 @@ services:
 
   rmcryptpad_ui_sync:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cryptpad
-      dockerfile: rmcryptpad/Dockerfile
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614${DOCKER_TAG_EXTRA:-}
     user: "0:0"
     command:
       [
@@ -849,10 +779,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cryptpad
-      dockerfile: rmcryptpad/Dockerfile
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.1-260722${DOCKER_TAG_EXTRA:-}
     user: "4001:4001"
     environment:
       <<: [*rmcryptpad_dbconfig_env]
@@ -861,7 +788,7 @@ services:
       RMCRYPTPAD_OIDC_ISSUER: https://rmcryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
       RMCRYPTPAD_OIDC_CLIENT_ID: ${RMCRYPTPAD_OIDC_CLIENT_ID:-cryptpad}
       RMCRYPTPAD_RMCN: ${RMCRYPTPAD_RMCN:-rasenmaeher}
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     networks:
       - productnet
       - intranet
@@ -895,14 +822,7 @@ services:
 
   cryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260614-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./cryptpad
-      dockerfile: docker/cryptpad/Dockerfile
-      args:
-        CRYPTPAD_VERSION: ${CRYPTPAD_VERSION:-2025.9.0}
-        CRYPTPAD_SSO_VERSION: ${CRYPTPAD_SSO_VERSION:-0.4.0}
-        NODE_IMAGE: ${CRYPTPAD_NODE_IMAGE:-node:22-bookworm-slim@sha256:4f77a690f2f8946ab16fe1e791a3ac0667ae1c3575c3e4d0d4589e9ed5bfaf3d}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260614${DOCKER_TAG_EXTRA:-}
     user: "4001:4001"
     environment:
       CPAD_MAIN_DOMAIN: https://mtls.cryptpad.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PRODUCT_PORT:-4626}
@@ -1107,17 +1027,11 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/takrmapi:1.13.3-260810-tak${TAK_RELEASE:-5.7-RELEASE-43}-d${RELEASE_TAG:-2.10.1}${DOCKER_TAG_EXTRA:-}
-    build:
-      context: ./takintegration
-      dockerfile: Dockerfile
-      target: production
-      args:
-        TAKSERVER_IMAGE: *takimage
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
-      LOG_CONSOLE_FORMATTER: "ecs"
+      LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       TI_MTX_SERVER_FQDN: *mtxdomain
     labels:
         - "autoheal=true"

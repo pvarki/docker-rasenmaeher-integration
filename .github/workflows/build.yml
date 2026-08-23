@@ -177,68 +177,6 @@ jobs:
         alias dcloc="docker compose -p rmlocal -f docker-compose-local.yml"
         dcloc down -v || true
 
-
-  build_and_publish:
-    runs-on: arc-runner-set
-    needs: [apiunits, rmlocal]
-    if: |
-      !cancelled() &&
-      needs.apiunits.result == 'success' &&
-      (needs.rmlocal.result == 'success' || needs.rmlocal.result == 'skipped')
-    env:
-      PVARKI_DOCKER_REPO: ghcr.io/
-      ACR_REPO: ${{ vars.ACR_REPO }}
-    strategy:
-      matrix:
-        compose_extra: ["", "-f docker-compose-local.yml"]
-    steps:
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Login to Azure Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ vars.ACR_REPO }}
-          username: ${{ vars.ACR_USERNAME }}
-          password: ${{ secrets.ACR_TOKEN }}
-      - uses: actions/checkout@v5
-        with:
-          submodules: recursive
-      - name: Fix ref slashes
-        run: |
-          echo REF_NO_SLASHES=$(echo "${{ github.ref_name }}" | sed 's/\//-/g') >> ${GITHUB_ENV}
-      - name: Set DOCKER_TAG_EXTRA if not main
-        if: github.event.pull_request.merged != true
-        run: |
-          test "${{ github.ref }}" = "refs/heads/main" || echo "DOCKER_TAG_EXTRA=-$REF_NO_SLASHES" >> ${GITHUB_ENV}
-          cat ${GITHUB_ENV}
-      - name: Generate bakefile
-        run: |
-          source example_env.sh
-          docker compose ${{ matrix.compose_extra }} config --format json | .github/compose2bake_variants.py >bakefile.hcl
-      - name: Build takinit and miniwerk
-        run: |
-          docker buildx bake -f bakefile.hcl --pull --load takinit miniwerk rmnginx
-      - name: push takinit and miniwerk
-        if: ${{ !env.ACT }}
-        run: |
-          docker buildx bake -f bakefile.hcl --push takinit miniwerk rmnginx
-      - name: Build main composition
-        run: |
-          docker buildx bake -f bakefile.hcl --pull --load
-      - name: Push main composition
-        if: ${{ !env.ACT }}
-        run: |
-          docker buildx bake -f bakefile.hcl --push
-
   upload_ext_images_to_acr:
     runs-on: ubuntu-latest
     env:
