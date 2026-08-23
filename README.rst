@@ -239,7 +239,7 @@ Directories that are submodules
   - uiv2 https://github.com/pvarki/react-rasenmaeher-ui-v2
   - takserver https://github.com/pvarki/docker-atak-server
   - takintegration https://github.com/pvarki/python-tak-rmapi
-  - battlelog https://github.com/pvarki/typescript-liveloki-app
+  - battlelog https://github.com/pvarki/battlelog
   - mtxauthz https://github.com/pvarki/python-mediamtx-rmmtxauthz
   - cryptpad https://github.com/pvarki/cryptpad
 
