@@ -460,8 +460,8 @@ services:
         condition: service_healthy
 
   rmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.0-260822-local${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIME: Remove the -pr -part before merge
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.1-260823-pr180-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -1155,7 +1155,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.0-260824-pr147-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -1169,6 +1169,7 @@ services:
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
       TI_PRODUCT_HTTPS_PORT: *productport
+      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-RSA}}"
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
