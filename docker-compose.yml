@@ -1027,14 +1027,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.0-260823-pr146${DOCKER_TAG_EXTRA:-}
-    # FIXME: remove before commit
-    build:
-      context: ./takintegration
-      dockerfile: Dockerfile
-      target: production
-      args:
-        TAKSERVER_IMAGE: *takimage
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.0-260824-pr147${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
