@@ -722,13 +722,22 @@ services:
 ######################
   blapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/battlelog-server:2.3.0-260823-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/battlelog-server:2.4.0-260825-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./battlelog
       dockerfile: Dockerfile
       target: production
     environment:
       <<: [*bldbconfig_env]
+      # TAK CoT ingest. Setting the host is what turns it on; what actually gets
+      # ingested is chosen at runtime in BattleLog's own ingest settings.
+      # blapi presents the mtlsclient cert kw_product_init writes on first run,
+      # and takrmapi enrols that CN as a TAK user over the interop API.
+      TAK_STREAM_HOST: takconfig
+      TAK_TLS_SERVERNAME: *takdomain
+      # Matrix ingest. The access token comes from matrixrmapi over interop, so
+      # there is no Matrix secret in this container's environment.
+      MATRIX_HOMESERVER_URL: "http://synapse:8008"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-local}"
     ports:
       - "8666:3000"  # NOTE: Do *NOT* expose this in production, always pass through NGinx proxy
@@ -736,6 +745,8 @@ services:
       - productnet
       - intranet
       - dbnet
+      # For the CoT stream on takconfig:8089
+      - taknet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
@@ -749,8 +760,15 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+      # The ingester reconnects on its own, but starting after the broker is
+      # healthy saves a pointless round of connect-fail-retry on every boot.
+      takmsg:
+        condition: service_healthy
     healthcheck:
-      test: 'curl http://localhost:3000/api/v1/healthcheck || exit 1'
+      # /healthz, not /api/v1/healthcheck: the app has never served that path,
+      # and the SPA catch-all answered it with index.html and a 200, so the
+      # check passed even with the server's database broken.
+      test: 'curl -fsS http://localhost:3000/healthz || exit 1'
       interval: 5s
       timeout: 5s
       retries: 3
@@ -1155,7 +1173,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.0-260825-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile

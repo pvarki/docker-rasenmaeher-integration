@@ -1,5 +1,5 @@
 [tool.bumpversion]
-current_version = "260823"
+current_version = "260825"
 parse = "(?P<calver>\\d+)"
 serialize = ["{calver}"]
 search = "{current_version}"
