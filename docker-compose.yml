@@ -1068,7 +1068,17 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:feat-interop-cert-enrolment${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:fix-enrolment-jvm-timeout${DOCKER_TAG_EXTRA:-}
+    # fix-enrolment-jvm-timeout, not feat-interop-cert-enrolment: the feat
+    # branch enrols a peer cert with a bare `certmod`, which leaves the user in
+    # __ANON__, and x509addAnonymous="false" then drops every connection it
+    # makes. The fix branch adds `certmod -g <group>`, raises the 5s shell
+    # timeout that was killing the JVM mid-enrolment, and serialises concurrent
+    # enrolments. It is a content superset of the feat branch (both carry the
+    # interop endpoint; the feature commit was recreated, so git sees them as
+    # diverged). This is also what makes TAK Data Sync feeds visible at all:
+    # the Marti mission API filters by the caller's group vector, so a peer in
+    # __ANON__ gets an empty feed list rather than an error.
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
