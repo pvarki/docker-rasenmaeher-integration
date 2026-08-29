@@ -2,12 +2,26 @@
 # NOTE: the four product images below are pinned to BRANCH tags for this test
 # delivery, not to release versions. config-ci-library's publish-image action
 # gates the version tags behind enable={{is_default_branch}}, so
-# battlelog-server:2.5.0-260827 and friends do not exist on ghcr until these
+# battlelog-server:2.6.1-260829 and friends do not exist on ghcr until these
 # branches merge. rasenmaeher-api is pinned to a branch tag for the same reason:
 # it carries the interop double-slash fix (pvarki/python-rasenmaeher-api#181),
 # without which no product can ever be registered for interop with another.
-# branches merge; the branch tag is what every PR build publishes. Swap them
-# back to the version tags once the product PRs land.
+#
+# A BRANCH TAG IS NOT REBUILT BY PUSHING. An earlier version of this note said
+# "the branch tag is what every PR build publishes", which is the opposite of
+# the truth and will waste your afternoon. publish-image builds that tag from
+# `github.ref_name`, and on a pull_request event ref_name is "<PR>/merge", so a
+# PR build publishes battlelog-server:25-merge. Only a workflow_dispatch run
+# ON THE BRANCH REF emits the branch tag:
+#   gh workflow run pull_request.yml --repo pvarki/battlelog \
+#     --ref feat/ingest-tak-and-matrix
+# That route is gated on Snyk. When Snyk is down (it returns 503 during their
+# maintenance windows, and the publish job is then skipped, not failed), the
+# publish job in push_to_main.yml has no `needs:` and can be dispatched against
+# the same feature branch to emit the identical single tag. Despite its name it
+# neither pushes to nor touches main.
+#
+# Swap these back to the version tags once the product PRs land.
 x-domains_env:
   SERVER_DOMAIN: &serverdomain ${SERVER_DOMAIN:?domain must be defined}
   MTLS_DOMAIN: &mtlsdomain "mtls.${SERVER_DOMAIN:?domain must be defined}"
