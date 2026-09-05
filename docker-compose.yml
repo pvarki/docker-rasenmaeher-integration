@@ -104,7 +104,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260823${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260905-pr130${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -134,6 +134,14 @@ x-takserver_env: &takserver_env
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:?must be defined} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
+  # Federation. Empty TAK_FEDERATION_PEERS disables it; set the SAME space-separated
+  # list of peer hostnames on every member and each one filters itself out and works
+  # out which side dials. See takfedinit below for where the identity comes from.
+  TAK_FEDERATION_PEERS: ${TAK_FEDERATION_PEERS:-}
+  TAK_FEDERATION_GROUP: ${TAK_FEDERATION_GROUP:-default __ANON__}
+  # federation-init.sh always writes this file, falling back to a copy of
+  # takserver.jks when no federation identity exists, so it is safe to set always.
+  TAK_FED_KEYSTORE_FILE: /opt/tak/data/certs/files/fed-keystore.jks
 
 x-logging: &logging
   logging:
@@ -898,12 +906,54 @@ services:
       - ca_public:/ca_public
     command: /opt/scripts/firstrun_rm.sh
 
-  takconfig:
+  # Federation identity + peer trust. Runs between takinit and takconfig because
+  # firstrun_rm.sh seeds fed-truststore.jks and this adds the peers on top of it.
+  # The identity has to be a "peer" profile cert (client auth AND server auth):
+  # federation v2 is mutual TLS, and RASENMAEHER signs everything with the "client"
+  # profile, so the product mtlsclient cert cannot serve inbound 9001.
+  takfedinit:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
     depends_on:
       takinit:
+        condition: service_completed_successfully
+      cfssl:
+        condition: service_healthy
+    networks:
+      - taknet
+      - canet
+    volumes:
+      - tak_data:/opt/tak/data
+      - ca_public:/ca_public
+      - tak_fed_certs:/fed_certs
+    command:
+      - /bin/bash
+      - -c
+      - |
+        set -e
+        if [ -n "$${TAK_FEDERATION_PEERS:-}" ] && [ ! -s /fed_certs/tls.crt ]; then
+          echo "Requesting a federation identity from cfssl"
+          # CSR + /sign rather than /newcert: newcert crashes this cfssl build (the
+          # connection closes with an empty reply and the container restarts). /sign
+          # is also the endpoint RASENMAEHER itself uses, so it is the proven path.
+          openssl req -new -newkey rsa:2048 -nodes \
+            -keyout /fed_certs/tls.key -out /tmp/fed.csr \
+            -subj "/CN=$${TAK_SERVER_ADDRESS}" \
+            -addext "subjectAltName=DNS:$${TAK_SERVER_ADDRESS}"
+          curl -fsS -X POST "http://cfssl:8888/api/v1/cfssl/sign" \
+            -d "{\"certificate_request\":$(jq -Rs . < /tmp/fed.csr),\"profile\":\"peer\"}" \
+            -o /tmp/fed.json
+          jq -er .result.certificate /tmp/fed.json > /fed_certs/tls.crt
+        fi
+        exec /opt/scripts/federation-init.sh
+
+  takconfig:
+    <<: [*logging, *takbuildinfo]
+    environment:
+      <<: [*takdbconfig_env, *takserver_env]
+    depends_on:
+      takfedinit:
           condition: service_completed_successfully
     volumes:
       - ./takserver/update:/opt/tak/webcontent/update
@@ -1186,6 +1236,7 @@ volumes:
   ca_public:
   le_certs:
   tak_data:
+  tak_fed_certs:
   takrmapi_data:
   rmui_files:
   nginx_templates:
