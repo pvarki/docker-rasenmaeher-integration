@@ -104,7 +104,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260905-pr130${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260907-pr130${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -443,7 +443,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-260822}
+      RELEASE_TAG: ${RELEASE_TAG:-260907}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
@@ -971,7 +971,10 @@ services:
       - '8089:8089'
       - '8090-8094:8090-8094' # Reserved for data feeds
       - '8443:8443'
-      - "9000-9002:9000-9002"  # Federation
+      # Only 9001 (federation v2). 9000 is v1, disabled in CoreConfig; 9002 is
+      # token auth, a second front door that bypasses the federation truststore
+      # and <federateCA> pinning. Neither is used, so neither is published.
+      - "9001:9001"  # Federation v2
     command: ./opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
