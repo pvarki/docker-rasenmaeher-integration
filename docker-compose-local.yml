@@ -145,10 +145,16 @@ x-takserver_env: &takserver_env
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
-  # Federation. Empty TAK_FEDERATION_PEERS disables it; set the SAME space-separated
-  # list of peer hostnames on every member and each one filters itself out and works
-  # out which side dials. See takfedinit below for where the identity comes from.
+  # Federation, automatic mode: set the SAME space-separated list of peer hostnames on
+  # every member and each one filters itself out, fetches the peers' CAs and works out
+  # which side dials. Empty means no peer is configured automatically - which is the
+  # normal case when you intend to peer by hand, and then you want
+  # TAK_FEDERATION_ENABLED=true below so the identity still exists.
   TAK_FEDERATION_PEERS: ${TAK_FEDERATION_PEERS:-}
+  # Mint the federation identity even with no peers set, so the server is ready to be
+  # federated by hand (admin GUI / API) without a redeploy. k8s already does this
+  # unconditionally via the tak-federation Certificate; this is the compose equivalent.
+  TAK_FEDERATION_ENABLED: ${TAK_FEDERATION_ENABLED:-false}
   TAK_FEDERATION_GROUP: ${TAK_FEDERATION_GROUP:-default __ANON__}
   # federation-init.sh always writes this file, falling back to a copy of
   # takserver.jks when no federation identity exists, so it is safe to set always.
@@ -1057,7 +1063,12 @@ services:
       - -c
       - |
         set -e
-        if [ -n "$${TAK_FEDERATION_PEERS:-}" ] && [ ! -s /fed_certs/tls.crt ]; then
+        # Mint when peers are configured, or when federation is explicitly enabled for
+        # hand-configured peering. Without an identity the keystore falls back to
+        # takserver.jks - the Let's Encrypt cert, which has no clientAuth EKU - and
+        # federation is silently impossible with nothing in the log to explain why.
+        if { [ -n "$${TAK_FEDERATION_PEERS:-}" ] || [ "$${TAK_FEDERATION_ENABLED:-false}" = "true" ]; } \
+             && [ ! -s /fed_certs/tls.crt ]; then
           echo "Requesting a federation identity from cfssl"
           # CSR + /sign rather than /newcert: newcert crashes this cfssl build (the
           # connection closes with an empty reply and the container restarts). /sign
