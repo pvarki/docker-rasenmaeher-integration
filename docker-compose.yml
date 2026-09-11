@@ -176,7 +176,7 @@ services:
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
-      MW_KEYTYPE: "rsa"
+      MW_KEYTYPE: "ecdsa"
       MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,cryptpad"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
@@ -438,7 +438,7 @@ services:
       RELEASE_TAG: ${RELEASE_TAG:-260822}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
-      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
     networks:
       - apinet
       - kcnet
@@ -1033,7 +1033,7 @@ services:
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       TI_MTX_SERVER_FQDN: *mtxdomain
-      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-RSA}}"
+      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
 
     labels:
         - "autoheal=true"

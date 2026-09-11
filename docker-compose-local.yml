@@ -192,7 +192,7 @@ services:
       MW_LE_EMAIL: "notusedwithmkcert@example.com"
       MW_LE_TEST: "true"
       MW_MKCERT: "true"
-      MW_KEYTYPE: "rsa"
+      MW_KEYTYPE: "ecdsa"
     ports:
       - "80:80" # For letsencrypt
     volumes:
@@ -493,7 +493,7 @@ services:
       RELEASE_TAG: "local"
       RELEASE_STATUS: "alpha"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
     networks:
       - apinet
       - kcnet
@@ -1169,7 +1169,7 @@ services:
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
       TI_PRODUCT_HTTPS_PORT: *productport
-      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-RSA}}"
+      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
