@@ -1156,7 +1156,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.1-260912-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.2-260912-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -1170,7 +1170,7 @@ services:
       TI_LOG_LEVEL: "10"
       TI_MTX_SERVER_FQDN: *mtxdomain
       TI_PRODUCT_HTTPS_PORT: *productport
-      TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
+      TI_TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
