@@ -1029,8 +1029,8 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIXME: Remove PR tag when merged
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.16.0-260912-pr154${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
