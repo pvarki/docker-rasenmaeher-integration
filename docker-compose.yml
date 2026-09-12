@@ -104,7 +104,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260823${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-2609121715${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -131,6 +131,7 @@ x-takserver_env: &takserver_env
   # The passwords here are just for takservers internal PKCS12 containers because it can't deal with PEM
   TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:?must be defined} # pragma: allowlist secret
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
+  TAK_HTTPS_KEYSTORE_FILENAME: ${TAK_HTTPS_KEYSTORE_FILENAME:-/opt/tak/data/certs/files/takserver-https.jks}
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:?must be defined} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
@@ -157,7 +158,7 @@ x-matrix_env: &matrix_env
 services:
   miniwerk:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.10.0-260613${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.11.0-260912${DOCKER_TAG_EXTRA:-}
     environment:
       MW_DOMAIN: *serverdomain
       MW_RASENMAEHER__API_PORT: *apiport
@@ -176,7 +177,7 @@ services:
       MW_LE_EMAIL: ${MW_LE_EMAIL?LE contact email must be defined}
       MW_LE_TEST: ${MW_LE_TEST:-true}  # see example_env.sh
       MW_MKCERT: ${MW_MKCERT:-false}  # When LetEncrypt cannot be used set to "true"
-      MW_KEYTYPE: "rsa"
+      MW_KEYTYPE: "ecdsa"
       MW_PRODUCTS: "tak,kc,bl,mtx,matrix,synapse,cryptpad"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
     volumes:
@@ -414,7 +415,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.0-260822${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.2-260912${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -435,10 +436,10 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-260822}
+      RELEASE_TAG: ${RELEASE_TAG:-260912}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
-      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-RSA}"
+      RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
     networks:
       - apinet
       - kcnet
@@ -540,7 +541,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kraftwerk-helper-tool:1.3.0-260513${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kraftwerk-helper-tool:1.4.0-260912${DOCKER_TAG_EXTRA:-}
     command: ["help"]
     volumes:
       - ca_public:/ca_public
@@ -893,6 +894,7 @@ services:
     volumes:
       - ./takserver/update:/opt/tak/webcontent/update
       - kraftwerk_shared_tak:/pvarki
+      - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
       - le_certs:/le_certs
       - ca_public:/ca_public
@@ -919,7 +921,8 @@ services:
       - ocspnet
     ports:
       - '8089:8089'
-      - '8090-8094:8090-8094' # Reserved for data feeds
+      - '8090:8090'
+      - '8091-8094:8091-8094' # Reserved for data feeds
       - '8443:8443'
       - "9000-9002:9000-9002"  # Federation
     command: ./opt/scripts/start-tak.sh config
@@ -1027,12 +1030,14 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.14.3-260822${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       TI_MTX_SERVER_FQDN: *mtxdomain
+      TI_TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
+
     labels:
         - "autoheal=true"
     network_mode: "service:takconfig"
