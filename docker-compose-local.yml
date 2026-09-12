@@ -142,6 +142,7 @@ x-takserver_env: &takserver_env
   # The passwords here are just for takservers internal PKCS12 containers because it can't deal with PEM
   TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:-takservercertpass} # pragma: allowlist secret
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
+  TAK_HTTPS_KEYSTORE_FILENAME: ${TAK_HTTPS_KEYSTORE_FILENAME:-/opt/tak/data/certs/files/takserver-https.jks}
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:-takcacertpw} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
@@ -1047,7 +1048,7 @@ services:
     ports:
       - '8089:8089'
       - '8090:8090'
-      - '8090-8094:8090-8094' # Reserved for data feeds
+      - '8091-8094:8091-8094' # Reserved for data feeds
       - '8443:8443'
       - "9000-9002:9000-9002"  # Federation
       - '8080:8080'  # NOTE: Do *NOT* expose this in production, this is non-tls port for debugging
