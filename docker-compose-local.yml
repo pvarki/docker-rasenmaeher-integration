@@ -114,6 +114,7 @@ x-takbuilds: &takbuildinfo  # FIXME: remove the PR from tag when merged
     target: run
     args:
       TAK_RELEASE: 5.8-RELEASE-69
+      JAVA_RUNTIME_IMAGE: &takjre ${TAK_JAVA_RUNTIME_IMAGE:-eclipse-temurin:17-jre-noble}
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
@@ -1165,6 +1166,7 @@ services:
       target: production
       args:
         TAKSERVER_IMAGE: *takimage
+        JAVA_RUNTIME_IMAGE: *takjre
     network_mode: "service:takconfig"
     environment:
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-local}"
