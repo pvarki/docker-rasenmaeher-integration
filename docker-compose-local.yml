@@ -1018,6 +1018,7 @@ services:
     volumes:
       - ./takserver/update:/opt/tak/webcontent/update
       - kraftwerk_shared_tak:/pvarki
+      - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
       - le_certs:/le_certs
       - ca_public:/ca_public
