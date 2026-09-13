@@ -107,7 +107,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-2609121715-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260913-slim-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
@@ -1053,7 +1053,7 @@ services:
       - "9000-9002:9000-9002"  # Federation
       - '8080:8080'  # NOTE: Do *NOT* expose this in production, this is non-tls port for debugging
       - "8003:8003"  # NOTE: Do *NOT* expose this in production, this is the port for takrmapi
-    command: ./opt/scripts/start-tak.sh config
+    command: /opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1077,7 +1077,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh messaging
+    command: /opt/scripts/start-tak.sh messaging
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1101,7 +1101,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh api
+    command: /opt/scripts/start-tak.sh api
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1124,7 +1124,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh retention
+    command: /opt/scripts/start-tak.sh retention
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1147,7 +1147,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh pm
+    command: /opt/scripts/start-tak.sh pm
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1158,7 +1158,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.16.0-260912-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile

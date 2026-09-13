@@ -104,7 +104,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-2609121715${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260913-slim${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -436,7 +436,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-260912}
+      RELEASE_TAG: ${RELEASE_TAG:-260913}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
@@ -925,7 +925,7 @@ services:
       - '8091-8094:8091-8094' # Reserved for data feeds
       - '8443:8443'
       - "9000-9002:9000-9002"  # Federation
-    command: ./opt/scripts/start-tak.sh config
+    command: /opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -949,7 +949,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh messaging
+    command: /opt/scripts/start-tak.sh messaging
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -973,7 +973,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh api
+    command: /opt/scripts/start-tak.sh api
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -996,7 +996,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh retention
+    command: /opt/scripts/start-tak.sh retention
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1019,7 +1019,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh pm
+    command: /opt/scripts/start-tak.sh pm
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1030,7 +1030,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.16.0-260912${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
