@@ -579,10 +579,13 @@ services:
       NGINX_SYNAPSE_UPSTREAM: "synapse"
       NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+        aliases:
+          - *serverdomain
+          - *mtlsdomain
+      ocspnet:
     ports:
       - "${NGINX_HTTP_PORT:-8015}:${NGINX_HTTP_PORT:-8015}"
       - "${NGINX_HTTPS_PORT:-4439}:${NGINX_HTTPS_PORT:-4439}"

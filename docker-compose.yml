@@ -511,10 +511,13 @@ services:
       NGINX_SYNAPSE_UPSTREAM: "synapse"
       NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+        aliases:
+          - *serverdomain
+          - *mtlsdomain
+      ocspnet:
     ports:
       - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
     depends_on:
