@@ -104,7 +104,7 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo  # FIXME: remove the PR from tag when merged
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260913-pr134{DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${TAKSERVER_IMAGE:-${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-260913-pr134${DOCKER_TAG_EXTRA:-}}"
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
@@ -128,6 +128,7 @@ x-cfssl_env: &cfssl_env
 
 x-takserver_env: &takserver_env
   TAK_SERVER_ADDRESS: *takdomain
+  TAK_IGNITE_SEEDS: ${TAK_IGNITE_SEEDS:-takmsg-ignite:47500}
   # The passwords here are just for takservers internal PKCS12 containers because it can't deal with PEM
   TAKSERVER_CERT_PASS: &takserver_cert_pass ${TAKSERVER_CERT_PASS:?must be defined} # pragma: allowlist secret
   TAKSERVER_KEYSTORE_PASS: *takserver_cert_pass
@@ -904,6 +905,7 @@ services:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      TAK_IGNITE_BIND_ADDRESS: takconfig-ignite
     depends_on:
       takinit:
           condition: service_completed_successfully
@@ -915,53 +917,63 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
-      - taknet
-      - dbnet
-      - intranet
-      - ocspnet
-    ports:
-      - '8089:8089'
-      - '8090:8090'
-      - '8091-8094:8091-8094' # Reserved for data feeds
-      - '8443:8443'
-      - "9000-9002:9000-9002"  # Federation
+      taknet:
+        aliases: [takconfig-ignite]
+      dbnet:
+      intranet:
+      ocspnet:
     command: /opt/scripts/start-tak.sh config
     healthcheck:
-      test: 'true'  # FIXME
+      test: [CMD, /usr/bin/python3, /opt/scripts/healthcheck.py, config]
       interval: 5s
       timeout: 5s
-      retries: 3
-      start_period: 60s
+      retries: 6
+      start_period: 180s
     restart: unless-stopped
 
   takmsg:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      TAK_IGNITE_BIND_ADDRESS: takmsg-ignite
     depends_on:
       postgres:
         condition: service_healthy
       takconfig:
-        condition: service_healthy
+        # Messaging hosts Ignite; configuration waits for it to join.
+        condition: service_started
     volumes:
       - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
-    network_mode: "service:takconfig"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      taknet:
+        aliases: [takmsg-ignite]
+      dbnet:
+      intranet:
+      ocspnet:
+    ports:
+      - '8089:8089'
+      - '8090:8090'
+      - '8091-8094:8091-8094' # Reserved for data feeds
+      - "9000-9002:9000-9002"  # Federation
     command: /opt/scripts/start-tak.sh messaging
     healthcheck:
-      test: 'true'  # FIXME
+      test: [CMD, /usr/bin/python3, /opt/scripts/healthcheck.py, messaging]
       interval: 5s
       timeout: 5s
-      retries: 3
-      start_period: 60s
+      retries: 6
+      start_period: 180s
     restart: unless-stopped
 
   takapi:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      TAK_IGNITE_BIND_ADDRESS: takapi-ignite
     depends_on:
       postgres:
         condition: service_healthy
@@ -972,20 +984,30 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
-    network_mode: "service:takconfig"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      taknet:
+        aliases: [takapi-ignite]
+      dbnet:
+      intranet:
+      ocspnet:
+    ports:
+      - '8443:8443'
     command: /opt/scripts/start-tak.sh api
     healthcheck:
-      test: 'true'  # FIXME
+      test: [CMD, /usr/bin/python3, /opt/scripts/healthcheck.py, api]
       interval: 5s
       timeout: 5s
-      retries: 3
-      start_period: 60s
+      retries: 6
+      start_period: 180s
     restart: unless-stopped
 
   takreten:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      TAK_IGNITE_BIND_ADDRESS: takreten-ignite
     depends_on:
       postgres:
         condition: service_healthy
@@ -995,20 +1017,28 @@ services:
       - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
-    network_mode: "service:takconfig"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      taknet:
+        aliases: [takreten-ignite]
+      dbnet:
+      intranet:
+      ocspnet:
     command: /opt/scripts/start-tak.sh retention
     healthcheck:
-      test: 'true'  # FIXME
+      test: [CMD, /usr/bin/python3, /opt/scripts/healthcheck.py, retention]
       interval: 5s
       timeout: 5s
-      retries: 3
-      start_period: 60s
+      retries: 6
+      start_period: 180s
     restart: unless-stopped
 
   takplug:
     <<: [*logging, *takbuildinfo]
     environment:
       <<: [*takdbconfig_env, *takserver_env]
+      TAK_IGNITE_BIND_ADDRESS: takplug-ignite
     depends_on:
       postgres:
         condition: service_healthy
@@ -1018,29 +1048,47 @@ services:
       - ./takserver/update:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
-    network_mode: "service:takconfig"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      taknet:
+        aliases: [takplug-ignite]
+      dbnet:
+      intranet:
+      ocspnet:
     command: /opt/scripts/start-tak.sh pm
     healthcheck:
-      test: 'true'  # FIXME
+      test: [CMD, /usr/bin/python3, /opt/scripts/healthcheck.py, pm]
       interval: 5s
       timeout: 5s
-      retries: 3
-      start_period: 60s
+      retries: 6
+      start_period: 180s
     restart: unless-stopped
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912${DOCKER_TAG_EXTRA:-}
+    image: ${TAKRMAPI_IMAGE:-${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912${DOCKER_TAG_EXTRA:-}}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       TI_MTX_SERVER_FQDN: *mtxdomain
+      TI_TAK_IGNITE_HOST: takmsg-ignite
+      TI_TAK_IGNITE_BIND_ADDRESS: takrmapi-ignite
+      TI_TAK_MESSAGING_API_HOST: https://takapi-ignite
       TI_TAK_CERTS_KTYPE: "${TAK_CERTS_KTYPE:-${RM_CERT_KEY_TYPE:-EC}}"
 
     labels:
         - "autoheal=true"
-    network_mode: "service:takconfig"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      taknet:
+        aliases: [takrmapi-ignite]
+      productnet:
+        aliases: [takrmapi-http]
+      intranet:
+      ocspnet:
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -1085,7 +1133,7 @@ services:
       NGINX_FP_UPSTREAM_PORT: "8001"
       NGINX_BL_UPSTREAM: "blapi"
       NGINX_BL_UPSTREAM_PORT: "3000"
-      NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
+      NGINX_TAK_UPSTREAM: "takrmapi-http"
       NGINX_TAK_UPSTREAM_PORT: "8003"
       NGINX_RMMTX_UPSTREAM: "rmmtx"
       NGINX_RMMTX_UPSTREAM_PORT: "8005"
