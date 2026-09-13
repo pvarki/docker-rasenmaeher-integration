@@ -136,6 +136,22 @@ x-takserver_env: &takserver_env
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
 
+x-scep_env: &scep_env
+  # The responder reaches RASENMAEHER the way any mTLS client does, through the front proxy, which
+  # validates our client certificate and passes the DN on. It holds no token and no admin identity.
+  RMSCEP_RMAPI_URL: "https://mtls.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}"
+  # Not a secret: it sits in the MDM's own configuration and travels in every device's request.
+  # Leave it empty and the responder runs but refuses to enrol anything.
+  RMSCEP_CHALLENGE: ${RMSCEP_CHALLENGE:-}
+  RMSCEP_CERT: /data/persistent/public/rmscep.pem
+  RMSCEP_KEY: /data/persistent/private/rmscep.key
+  RMSCEP_CA_CHAIN_PATH: /ca_public/ca_chain.pem
+  RMSCEP_DATA_DIR: /data/persistent
+  LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
+
+x-scepbuilds: &scepbuildinfo
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-scep-server:1.0.0-260912${DOCKER_TAG_EXTRA:-}
+
 x-logging: &logging
   logging:
     driver: syslog
@@ -509,11 +525,20 @@ services:
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
       NGINX_SYNAPSE_UPSTREAM: "synapse"
       NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
+      # The image defaults these to the same values, so a deployment without the responder still
+      # starts; set here so the wiring is visible next to the service it points at.
+      NGINX_SCEP_UPSTREAM: "rmscep"
+      NGINX_SCEP_UPSTREAM_PORT: "8000"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+      ocspnet:
+      # The responder talks back to rasenmaeher through this proxy, as any mTLS client does, so it
+      # needs the mtls name here. It is on no other network: it cannot reach rmapi directly.
+      scepnet:
+        aliases:
+          - "mtls.${SERVER_DOMAIN:?domain must be defined}"
     ports:
       - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
     depends_on:
@@ -1066,6 +1091,58 @@ services:
 # End: TAK #
 ############
 
+####################
+# Begin: SCEP/MDM  #
+####################
+  # Obtains our client identity from the deployment CA and exits. Separate so the long running
+  # responder never sits on the CA network: anything there can have a certificate signed for an
+  # arbitrary subject, which is not a privilege an internet facing parser should keep.
+  scepinit:
+    <<: [*logging, *scepbuildinfo]
+    command: ["rmscep", "obtain-cert", "--signer-url", "http://ocsprest:8887", "--common-name", "rmscep"]
+    environment:
+      <<: *scep_env
+    networks:
+      - canet
+    volumes:
+      - rmscep_data:/data/persistent
+      - ca_public:/ca_public
+    depends_on:
+      cfssl:
+        condition: service_healthy
+      ocsprest:
+        condition: service_healthy
+
+  # SCEP responder. The MDM proxies each device's certificate request here; the phone never
+  # reaches us. Holds no rasenmaeher credential beyond a client certificate whose CN rasenmaeher
+  # permits to complete enrolments an admin already planned.
+  rmscep:
+    <<: [*logging, *scepbuildinfo]
+    labels:
+        - "autoheal=true"
+    environment:
+      <<: *scep_env
+    networks:
+      - scepnet
+    volumes:
+      - rmscep_data:/data/persistent
+      - ca_public:/ca_public
+    depends_on:
+      scepinit:
+        condition: service_completed_successfully
+    healthcheck:
+      # Deliberately only about itself. Probing rasenmaeher from here would have autoheal restart
+      # this container every time rasenmaeher hiccuped.
+      test: 'rmscep healthcheck || exit 1'
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+##################
+# End: SCEP/MDM  #
+##################
+
 #############################
 # BEGIN: consolidated NGinx #
 #############################
@@ -1165,6 +1242,7 @@ services:
 ####################
 networks:
   productnet:
+  scepnet:
   apinet:
   kcnet:
   canet:
@@ -1175,6 +1253,7 @@ networks:
 
 volumes:
   kraftwerk_data:
+  rmscep_data:
   kwinit_data:
   kraftwerk_shared_fake:
   kraftwerk_shared_matrix:
