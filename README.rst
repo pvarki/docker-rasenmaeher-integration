@@ -11,6 +11,24 @@ Docker compositions, helpers etc to bring it all together into something resembl
 
 Codename RASENMAEHER because infantry jokes.
 
+TAK container networking
+------------------------
+
+The TAK roles and takrmapi use separate container IPs on ``taknet``. Messaging
+publishes CoT and federation ports, while API publishes HTTPS. The product proxy
+reaches takrmapi through ``takrmapi-http`` on ``productnet``. Dedicated network
+aliases keep Ignite and HTTP traffic on interfaces reachable by their peers.
+
+Build TAK Server and takrmapi from the matching submodule revisions before using
+this layout; older images depend on the shared network namespace. The local
+composition builds both. ``TAKSERVER_IMAGE`` and ``TAKRMAPI_IMAGE`` can select
+explicit image tags for either composition. CoreConfig, certificates and
+federation trust remain on their existing persistent volumes.
+
+See ``takserver/README.rst`` for discovery settings, readiness and standalone use.
+Use a distinct Compose project name and host ports when testing alongside other
+deployments.
+
 What is this anyway?
 --------------------
 
