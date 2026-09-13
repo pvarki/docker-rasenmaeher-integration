@@ -456,6 +456,10 @@ services:
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
+      # The SCEP responder's own certificate CN. It may complete a device enrolment an admin
+      # already planned, and nothing else. Deliberately not a product CN: those skip role checks,
+      # can have any CSR signed whatever its subject, and cannot be revoked at the edge.
+      RM_MDM_AGENT_CNS: "rmscep"
     networks:
       - apinet
       - kcnet
