@@ -46,3 +46,34 @@ Leave it empty and the responder runs but refuses to enrol anything.
 
 The endpoint is rate limited in nginx, and the upstream is resolved per request, so a responder
 that is down or absent costs a 502 on ``/scep`` and nothing else.
+
+What the devices get
+--------------------
+
+A phone that enrols is not useful until it has the deployment's applications, the permissions they
+need, and a browser willing to present the certificate. That is stated to the MDM once, from
+``mdm/template.json``::
+
+    docker compose run --rm \
+      -e RMSCEP_MDM_URL=https://<your mdm> \
+      -e RMSCEP_MDM_TOKEN_FILE=/run/secrets/mdm_token \
+      -v /path/to/token:/run/secrets/mdm_token:ro \
+      rmscep rmscep mdm-apply
+
+The token is passed at run time and never mounted into the running responder. Something that
+holds an MDM's API token, and can therefore reach every device a unit owns, has no business also
+being an internet facing parser.
+
+``mdm/template.json`` is deployment data, not responder code. The responder knows no package name
+at all, and a test enforces that, so changing what is installed is an edit to that file and
+nothing else.
+
+**Applications install at enrolment and at no other time.** This is a property of managed Android,
+not a choice. A device that has already joined will not pick up a template applied afterwards: it
+has to enrol again, under a callsign that has not been spent. Arm the team first, then enrol.
+
+Two halves make the browser present the certificate, and both are in the template. The policy's
+key selection rules settle which key may be used, without which a certificate installed by the
+MDM belongs to the installing app and nothing else can see it. The browser's own
+``AutoSelectCertificateForUrls`` then settles whether it sends one at all; with no matching entry
+it silently declines, and the proxy answers that exactly as it answers a missing certificate.

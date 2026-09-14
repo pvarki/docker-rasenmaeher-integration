@@ -151,6 +151,13 @@ x-scep_env: &scep_env
   RMSCEP_CA_CHAIN_PATH: /ca_public/ca_chain.pem
   RMSCEP_DATA_DIR: /data/persistent
   LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
+  # For the operator's `rmscep mdm-apply`, which states what devices need to whatever MDM the
+  # unit runs. The responder never uses these and deliberately holds no MDM token: the token is
+  # supplied at run time, not mounted into an internet facing service.
+  RMSCEP_DOMAIN: ${SERVER_DOMAIN:?domain must be defined}
+  RMSCEP_MDM_TEMPLATE: /mdm/template.json
+  RMSCEP_MDM_TEAM: ${RMSCEP_MDM_TEAM:-rmscep}
+  RMSCEP_MDM_URL: ${RMSCEP_MDM_URL:-}
 
 x-scepbuilds: &scepbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-scep-server:feat-mvp-deployment${DOCKER_TAG_EXTRA:-}
@@ -1134,6 +1141,9 @@ services:
     volumes:
       - rmscep_data:/data/persistent
       - ca_public:/ca_public
+      # What this deployment installs, as data. Read only: the responder never applies it, the
+      # operator does, with `docker compose run --rm rmscep rmscep mdm-apply`.
+      - ./mdm/template.json:/mdm/template.json:ro
     depends_on:
       scepinit:
         condition: service_completed_successfully

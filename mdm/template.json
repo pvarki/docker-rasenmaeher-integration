@@ -1,0 +1,68 @@
+{
+  "_comment": [
+    "What this deployment's devices need, stated for whatever MDM the unit runs.",
+    "",
+    "This file is deployment data, not responder code: the SCEP responder deliberately knows no",
+    "package name, so changing what is installed is an edit here and nothing else. Apply it with",
+    "  docker compose run --rm rmscep rmscep mdm-apply",
+    "",
+    "Placeholders filled in at apply time: {domain}, {mtls_url}, {key_alias}.",
+    "",
+    "APPS INSTALL AT ENROLMENT AND AT NO OTHER TIME on managed Android. A device that has already",
+    "joined will not pick up a change here; it has to enrol again, under a callsign that has not",
+    "been spent."
+  ],
+  "apps": [
+    {
+      "_comment": "The browser is installed, not assumed: a work profile does not inherit the personal profile's copy, and the launcher link below is a browser shortcut, so without it that install fails and takes the rest of the enrolment burst with it.",
+      "config": {
+        "AutoSelectCertificateForUrls": [
+          "{\"pattern\":\"{mtls_url}\",\"filter\":{}}"
+        ],
+        "_comment": "choosePrivateKeyRules in the policy settles WHICH key may be used. The browser still decides whether to send one at all, and with no matching entry here it declines rather than prompting, which the server answers as mtls_fail and looks exactly like a missing certificate. Both halves are needed. The value is a list of JSON strings, which is the schema, not a mistake."
+      },
+      "package": "com.android.chrome",
+      "preinstall": true
+    },
+    {
+      "_comment": "ATAK-CIV. Large, and Play unpacks the enrolment set together, so on a device short of space the whole burst can fail.",
+      "package": "com.atakmap.app.civ",
+      "preinstall": true
+    },
+    {
+      "_comment": "Element Classic rather than Element X: X accepts no managed configuration at all, so its homeserver cannot be pushed and the user would type it once per device.",
+      "config": {
+        "im.vector.app.serverConfigDefaultHomeserverUrlString": "https://synapse.{domain}"
+      },
+      "package": "im.vector.app",
+      "preinstall": true
+    }
+  ],
+  "link_app": {
+    "_comment": "A launcher icon so nobody has to know where the server lives. It is a browser shortcut, so it only works alongside the browser and the certificate.",
+    "title": "Deploy App",
+    "url": "{mtls_url}/"
+  },
+  "policy": {
+    "advancedSecurityOverrides": {
+      "untrustedAppsPolicy": "ALLOW_INSTALL_DEVICE_WIDE"
+    },
+    "choosePrivateKeyRules": [
+      {
+        "privateKeyAlias": "{key_alias}",
+        "urlPattern": "{mtls_url}"
+      },
+      {
+        "packageNames": [
+          "com.android.chrome",
+          "com.atakmap.app.civ",
+          "im.vector.app"
+        ],
+        "privateKeyAlias": "{key_alias}",
+        "urlPattern": "{mtls_url}"
+      }
+    ],
+    "defaultPermissionPolicy": "GRANT",
+    "privateKeySelectionEnabled": true
+  }
+}
