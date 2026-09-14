@@ -77,3 +77,40 @@ key selection rules settle which key may be used, without which a certificate in
 MDM belongs to the installing app and nothing else can see it. The browser's own
 ``AutoSelectCertificateForUrls`` then settles whether it sends one at all; with no matching entry
 it silently declines, and the proxy answers that exactly as it answers a missing certificate.
+
+Enrolling a device, in the order that works
+-------------------------------------------
+
+Three facts about managed Android decide this order, and each was learned by getting it wrong.
+
+**Applications install at enrolment and at no other time.** The group a device joins must already
+carry them before it joins. Arming afterwards does nothing, and the device has to enrol again.
+
+**A configuration profile reaches a device when the PROFILE changes, not when the device arrives.**
+A profile uploaded before a device joined is never delivered to it. So a first enrolment always
+needs one forced re-upload afterwards, which is what ``--force-policy`` is for.
+
+**A policy rewritten while applications are installing stops them installing.** Replacing the
+profile rewrites the device's whole platform policy, and one that keeps changing never settles long
+enough for the store to finish. The two facts above pull in opposite directions, which is the trap.
+
+So, per device:
+
+1. ``rmscep mdm-apply`` once per deployment, before any device enrols. Applications, the device
+   policy and the browser configuration all land on the group.
+2. Plan the callsign in RASENMAEHER.
+3. Enrol the device, and then **leave it alone**. Do not move it between groups, do not re-apply,
+   do not force anything, until the applications have finished arriving.
+4. Only then set the device's per-device attribute to the callsign. It cannot be set earlier,
+   because the device has no record until it has enrolled, and the certificate subject is built
+   from it.
+5. Only then ``rmscep mdm-apply --force-policy``. That is what makes the profile change, which is
+   what delivers it, which is what makes the device ask for its certificate.
+
+Between steps 3 and 4 the device will ask for a certificate with an empty subject and be refused.
+That is harmless and expected: the responder refuses it before it ever asks RASENMAEHER, so the
+callsign is not spent and the device simply tries again.
+
+A device that has already enrolled cannot be rescued by repeating any of this. Give it a fresh
+callsign and enrol it again, because the one it holds is spent and its new key will not match the
+certificate that callsign already has.
