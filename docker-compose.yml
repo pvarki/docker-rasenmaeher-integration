@@ -107,7 +107,10 @@ x-takbuilds: &takbuildinfo
   image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-2609121715${DOCKER_TAG_EXTRA:-}"
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617${DOCKER_TAG_EXTRA:-}
+# Four images below are branch-slug tags, not versions: this feature ships from unmerged branches
+# on purpose while the deployment model is rewritten. Only a workflow_dispatch on the branch ref
+# emits such a tag; pushing does not rebuild it. Swap back to version tags if the branches land.
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:feat-scep-location${DOCKER_TAG_EXTRA:-}
   labels:
       - "autoheal=true"
 
@@ -135,6 +138,29 @@ x-takserver_env: &takserver_env
   CA_PASS: &tak_ca_pass ${TAK_CA_PASS:?must be defined} # pragma: allowlist secret
   KEYSTORE_PASS: *tak_ca_pass
   TAK_OCSP_ENABLE: "true"
+
+x-scep_env: &scep_env
+  # The responder reaches RASENMAEHER the way any mTLS client does, through the front proxy, which
+  # validates our client certificate and passes the DN on. It holds no token and no admin identity.
+  RMSCEP_RMAPI_URL: "https://mtls.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}"
+  # Not a secret: it sits in the MDM's own configuration and travels in every device's request.
+  # Leave it empty and the responder runs but refuses to enrol anything.
+  RMSCEP_CHALLENGE: ${RMSCEP_CHALLENGE:-}
+  RMSCEP_CERT: /data/persistent/public/rmscep.pem
+  RMSCEP_KEY: /data/persistent/private/rmscep.key
+  RMSCEP_CA_CHAIN_PATH: /ca_public/ca_chain.pem
+  RMSCEP_DATA_DIR: /data/persistent
+  LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
+  # For the operator's `rmscep mdm-apply`, which states what devices need to whatever MDM the
+  # unit runs. The responder never uses these and deliberately holds no MDM token: the token is
+  # supplied at run time, not mounted into an internet facing service.
+  RMSCEP_DOMAIN: ${SERVER_DOMAIN:?domain must be defined}
+  RMSCEP_MDM_TEMPLATE: /mdm/template.json
+  RMSCEP_MDM_TEAM: ${RMSCEP_MDM_TEAM:-rmscep}
+  RMSCEP_MDM_URL: ${RMSCEP_MDM_URL:-}
+
+x-scepbuilds: &scepbuildinfo
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-scep-server:feat-mvp-deployment${DOCKER_TAG_EXTRA:-}
 
 x-logging: &logging
   logging:
@@ -415,7 +441,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.2-260912${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:feat-mdm-enrolment-agent${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -440,6 +466,10 @@ services:
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
+      # The SCEP responder's own certificate CN. It may complete a device enrolment an admin
+      # already planned, and nothing else. Deliberately not a product CN: those skip role checks,
+      # can have any CSR signed whatever its subject, and cannot be revoked at the edge.
+      RM_MDM_AGENT_CNS: "rmscep"
     networks:
       - apinet
       - kcnet
@@ -481,7 +511,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260617${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:feat-scep-location${DOCKER_TAG_EXTRA:-}
     volumes:
       - nginx_templates:/deliver
 
@@ -509,11 +539,20 @@ services:
       NGINX_TEMPLATE_DIR: "templates_rasenmaeher"
       NGINX_SYNAPSE_UPSTREAM: "synapse"
       NGINX_SYNAPSE_UPSTREAM_PORT: "8008"
+      # The image defaults these to the same values, so a deployment without the responder still
+      # starts; set here so the wiring is visible next to the service it points at.
+      NGINX_SCEP_UPSTREAM: "rmscep"
+      NGINX_SCEP_UPSTREAM_PORT: "8000"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+      ocspnet:
+      # The responder talks back to rasenmaeher through this proxy, as any mTLS client does, so it
+      # needs the mtls name here. It is on no other network: it cannot reach rmapi directly.
+      scepnet:
+        aliases:
+          - "mtls.${SERVER_DOMAIN:?domain must be defined}"
     ports:
       - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
     depends_on:
@@ -1066,6 +1105,61 @@ services:
 # End: TAK #
 ############
 
+####################
+# Begin: SCEP/MDM  #
+####################
+  # Obtains our client identity from the deployment CA and exits. Separate so the long running
+  # responder never sits on the CA network: anything there can have a certificate signed for an
+  # arbitrary subject, which is not a privilege an internet facing parser should keep.
+  scepinit:
+    <<: [*logging, *scepbuildinfo]
+    command: ["rmscep", "obtain-cert", "--signer-url", "http://ocsprest:8887", "--common-name", "rmscep"]
+    environment:
+      <<: *scep_env
+    networks:
+      - canet
+    volumes:
+      - rmscep_data:/data/persistent
+      - ca_public:/ca_public
+    depends_on:
+      cfssl:
+        condition: service_healthy
+      ocsprest:
+        condition: service_healthy
+
+  # SCEP responder. The MDM proxies each device's certificate request here; the phone never
+  # reaches us. Holds no rasenmaeher credential beyond a client certificate whose CN rasenmaeher
+  # permits to complete enrolments an admin already planned.
+  rmscep:
+    <<: [*logging, *scepbuildinfo]
+    labels:
+        - "autoheal=true"
+    environment:
+      <<: *scep_env
+    networks:
+      - scepnet
+    volumes:
+      - rmscep_data:/data/persistent
+      - ca_public:/ca_public
+      # What this deployment installs, as data. Read only: the responder never applies it, the
+      # operator does, with `docker compose run --rm rmscep rmscep mdm-apply`.
+      - ./mdm/template.json:/mdm/template.json:ro
+    depends_on:
+      scepinit:
+        condition: service_completed_successfully
+    healthcheck:
+      # Deliberately only about itself. Probing rasenmaeher from here would have autoheal restart
+      # this container every time rasenmaeher hiccuped.
+      test: 'rmscep healthcheck || exit 1'
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+##################
+# End: SCEP/MDM  #
+##################
+
 #############################
 # BEGIN: consolidated NGinx #
 #############################
@@ -1165,6 +1259,7 @@ services:
 ####################
 networks:
   productnet:
+  scepnet:
   apinet:
   kcnet:
   canet:
@@ -1175,6 +1270,7 @@ networks:
 
 volumes:
   kraftwerk_data:
+  rmscep_data:
   kwinit_data:
   kraftwerk_shared_fake:
   kraftwerk_shared_matrix:
