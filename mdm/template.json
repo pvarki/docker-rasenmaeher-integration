@@ -38,6 +38,19 @@
       "preinstall": true
     }
   ],
+  "certificate": {
+    "_comment": [
+      "The template the MDM fills in per device. Its subject is security configuration, not",
+      "cosmetics: the common name is the callsign, and the second attribute carries",
+      "<callsign>@<approvecode>, which is what proves the MDM assigned this device this",
+      "callsign. Without it the last gate is a guessable name on a public endpoint.",
+      "Set the per-host field to CALLSIGN@CODE; the MDM renders the local part into the CN.",
+      "The name becomes the Android keystore alias, so it is per deployment, not per device."
+    ],
+    "authority": "RMSCEP",
+    "name": "rmscep",
+    "subject": "CN=$FLEET_VAR_HOST_END_USER_IDP_USERNAME_LOCAL_PART,OU=$FLEET_VAR_HOST_END_USER_IDP_USERNAME"
+  },
   "link_app": {
     "_comment": "A launcher icon so nobody has to know where the server lives. It is a browser shortcut, so it only works alongside the browser and the certificate.",
     "title": "Deploy App",
