@@ -158,6 +158,9 @@ x-scep_env: &scep_env
   RMSCEP_MDM_TEMPLATE: /mdm/template.json
   RMSCEP_MDM_TEAM: ${RMSCEP_MDM_TEAM:-rmscep}
   RMSCEP_MDM_URL: ${RMSCEP_MDM_URL:-}
+  # How often the reconciler asks again for devices named after they enrolled. Only the
+  # reconciler reads this; the responder has no MDM credential to act on it with.
+  RMSCEP_MDM_RECONCILE_INTERVAL: ${RMSCEP_MDM_RECONCILE_INTERVAL:-300}
 
 x-scepbuilds: &scepbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-scep-server:feat-mvp-deployment${DOCKER_TAG_EXTRA:-}
@@ -1156,6 +1159,32 @@ services:
       retries: 3
       start_period: 30s
     restart: unless-stopped
+  # A device enrols before anyone has named it, because the MDM has no host to name until it does.
+  # Its certificate subject cannot be filled in yet, that first attempt fails, and nothing retries
+  # it -- so an operator who does everything right still ends up with a device that has no
+  # certificate. This asks again for those, and only those.
+  #
+  # Separate from the responder on purpose. This one holds the MDM's API token, and something
+  # holding that has no business also being an internet facing parser. Opt in with
+  # COMPOSE_PROFILES=mdm once RMSCEP_MDM_URL and the token file are set.
+  scepreconcile:
+    <<: [*logging, *scepbuildinfo]
+    profiles: ["mdm"]
+    command:
+      - /bin/sh
+      - -c
+      - 'while true; do rmscep mdm-reconcile || true; sleep "${RMSCEP_MDM_RECONCILE_INTERVAL:-300}"; done'
+    environment:
+      <<: *scep_env
+      RMSCEP_MDM_TOKEN_FILE: /mdm/token
+    networks:
+      - scepnet
+    volumes:
+      - ./mdm/template.json:/mdm/template.json:ro
+      # The MDM API token, mounted only here. Not in the repository: see mdm/README.
+      - ${RMSCEP_MDM_TOKEN_PATH:-./mdm/.token}:/mdm/token:ro
+    restart: unless-stopped
+
 ##################
 # End: SCEP/MDM  #
 ##################
