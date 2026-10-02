@@ -113,7 +113,7 @@ x-takbuilds: &takbuildinfo
     dockerfile: Dockerfile
     target: run
     args:
-      TAK_RELEASE: 5.8-RELEASE-84
+      TAK_RELEASE: 5.8-RELEASE-84  # Remember to change also takserver_dist
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
@@ -638,7 +638,7 @@ services:
       - kcinit_data:/data/persistent
 
   takserver_dist:  # Here to help CI copy images to alternate registries without adding special logic
-    image: ${HUB_DOCKER_REPO:-docker.io/}pvarki/tak-server-dist:${TAK_RELEASE:-5.7-RELEASE-43}
+    image: ${HUB_DOCKER_REPO:-docker.io/}pvarki/tak-server-dist:${TAK_RELEASE:-5.8-RELEASE-84}
     command: ["true"]
 
 ###################
