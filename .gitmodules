@@ -43,3 +43,6 @@
 [submodule "nginx"]
 	path = nginx
 	url = git@github.com:pvarki/docker-nginx.git
+[submodule "scep"]
+	path = scep
+	url = git@github.com:pvarki/python-rasenmaeher-scep.git
