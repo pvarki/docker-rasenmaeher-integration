@@ -473,6 +473,10 @@ services:
       # already planned, and nothing else. Deliberately not a product CN: those skip role checks,
       # can have any CSR signed whatever its subject, and cannot be revoked at the edge.
       RM_MDM_AGENT_CNS: "rmscep"
+      # So the admin UI can show what to type into the MDM. Not a secret: the same value sits in
+      # the MDM's configuration and the MDM hands it to every device. What decides whether a
+      # device may have a callsign is the per-enrolment code in its certificate request.
+      RM_MDM_SCEP_CHALLENGE: ${RMSCEP_CHALLENGE:-}
     networks:
       - apinet
       - kcnet
