@@ -12,3 +12,4 @@ Components
    Nginx <nginx.rst>
    OpenLDAP <openldap.rst>
    PG Init <pg_init.rst>
+   SCEP <scep.rst>

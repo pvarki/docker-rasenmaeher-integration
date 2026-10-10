@@ -24,3 +24,8 @@ export RMMTX_SRT_PUB_PASSWORD="mesimayra"  # pragma: allowlist secret
 export RMMTX_SRT_READ_PASSWORD="gerbiili"  # pragma: allowlist secret
 export RMCRYPTPAD_DATABASE_PASSWORD="saukko"  # pragma: allowlist secret
 export RMCRYPTPAD_OIDC_CLIENT_SECRET="naali"  # pragma: allowlist secret
+# SCEP challenge for MDM driven device enrolment. NOT a secret: it ends up in the MDM's own
+# configuration and travels in every device's certificate request. Leave it empty and the SCEP
+# responder still runs but refuses to enrol anything, which is what you want until a unit is
+# actually using an MDM. Generate one with: python3 -c 'import secrets;print(secrets.token_urlsafe(18))'
+export RMSCEP_CHALLENGE=""
