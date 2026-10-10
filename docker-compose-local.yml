@@ -23,6 +23,7 @@ x-kc_dbconfig_env: &kcdbconfig_env
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_NAME: &rmdbname ${RM_DATABASE_NAME:-raesenmaeher}
   RM_DATABASE_HOST: postgres
+  RM_DATABASE_DRIVER: "postgresql+psycopg2"
   RM_DATABASE_USER: &rmdbuser ${RM_DATABASE_USER:-raesenmaeher}
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
