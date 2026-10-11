@@ -23,6 +23,7 @@ x-kc_dbconfig_env: &kcdbconfig_env
 x-raesenmaeher_dbconfig_env: &rmdbconfig_env
   RM_DATABASE_NAME: &rmdbname ${RM_DATABASE_NAME:-raesenmaeher}
   RM_DATABASE_HOST: postgres
+  RM_DATABASE_DRIVER: "postgresql+psycopg2"
   RM_DATABASE_USER: &rmdbuser ${RM_DATABASE_USER:-raesenmaeher}
   RM_DATABASE_PASSWORD: &rmdbpass ${RM_DATABASE_PASSWORD:-raesenmaeherpwd} # pragma: allowlist secret
 
@@ -33,6 +34,7 @@ x-ldap_admin_env: &ldap_admin_env
 x-mtxauthz_dbconfig_env: &rmmtx_dbconfig_env
   RMMTX_DATABASE_DATABASE: &rmmtx_dbname ${RMMTX_DATABASE_DATABASE:-rmmtx}
   RMMTX_DATABASE_HOST: postgres
+  RMMTX_DATABASE_DRIVER: "postgresql+psycopg2"
   RMMTX_DATABASE_USER: &rmmtx_dbuser ${RMMTX_DATABASE_USER:-rmmtx}
   RMMTX_DATABASE_PASSWORD: &rmmtx_dbpass ${RMMTX_DATABASE_PASSWORD:-mtxauthzdbpwd} # pragma: allowlist secret
   RMMTX_API_PASSWORD: &rmmtx_apipass ${RMMTX_API_PASSWORD:-mtxauthzapipwd} # pragma: allowlist secret
@@ -107,13 +109,13 @@ x-keycloakinit_users_env: &keycloakinit_users_env
   KEYCLOAK_PASSWORD: *kcadminpass # pragma: allowlist secret
 
 x-takbuilds: &takbuildinfo
-  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.69-2609121715-local${DOCKER_TAG_EXTRA:-}"
+  image: &takimage "${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-server:5.8.84-261011-local${DOCKER_TAG_EXTRA:-}"
   build:
     context: ./takserver
     dockerfile: Dockerfile
     target: run
     args:
-      TAK_RELEASE: 5.8-RELEASE-69
+      TAK_RELEASE: 5.8-RELEASE-84  # Remember to change also takserver_dist
 
 x-nginxbuilds: &nginxbuildinfo
   image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
@@ -532,7 +534,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.6.2-260811-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.7.4-261010-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
@@ -638,7 +640,7 @@ services:
       - kcinit_data:/data/persistent
 
   takserver_dist:  # Here to help CI copy images to alternate registries without adding special logic
-    image: ${HUB_DOCKER_REPO:-docker.io/}pvarki/tak-server-dist:${TAK_RELEASE:-5.7-RELEASE-43}
+    image: ${HUB_DOCKER_REPO:-docker.io/}pvarki/tak-server-dist:${TAK_RELEASE:-5.8-RELEASE-84}
     command: ["true"]
 
 ###################
@@ -1053,7 +1055,7 @@ services:
       - "9000-9002:9000-9002"  # Federation
       - '8080:8080'  # NOTE: Do *NOT* expose this in production, this is non-tls port for debugging
       - "8003:8003"  # NOTE: Do *NOT* expose this in production, this is the port for takrmapi
-    command: ./opt/scripts/start-tak.sh config
+    command: /opt/scripts/start-tak.sh config
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1077,7 +1079,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh messaging
+    command: /opt/scripts/start-tak.sh messaging
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1101,7 +1103,7 @@ services:
       - ca_public:/ca_public
       - le_certs:/le_certs
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh api
+    command: /opt/scripts/start-tak.sh api
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1124,7 +1126,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh retention
+    command: /opt/scripts/start-tak.sh retention
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1147,7 +1149,7 @@ services:
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
-    command: ./opt/scripts/start-tak.sh pm
+    command: /opt/scripts/start-tak.sh pm
     healthcheck:
       test: 'true'  # FIXME
       interval: 5s
@@ -1158,7 +1160,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.15.4-260912-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.17.0-260916local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
