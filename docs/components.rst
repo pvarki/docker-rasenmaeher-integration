@@ -13,3 +13,4 @@ Components
    OpenLDAP <openldap.rst>
    PG Init <pg_init.rst>
    SCEP <scep.rst>
+   Connecting an MDM <mdm-integration-howto.md>
