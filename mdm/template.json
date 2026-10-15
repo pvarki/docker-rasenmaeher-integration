@@ -1,0 +1,82 @@
+{
+  "_comment": [
+    "What this deployment's devices need, stated for whatever MDM the unit runs.",
+    "",
+    "This file is deployment data, not responder code: the SCEP responder deliberately knows no",
+    "package name, so changing what is installed is an edit here and nothing else. Apply it with",
+    "  docker compose run --rm rmscep rmscep mdm-apply",
+    "",
+    "Placeholders filled in at apply time: {domain}, {mtls_url}, {key_alias}.",
+    "",
+    "APPS INSTALL AT ENROLMENT AND AT NO OTHER TIME on managed Android. A device that has already",
+    "joined will not pick up a change here; it has to enrol again, under a callsign that has not",
+    "been spent."
+  ],
+  "apps": [
+    {
+      "_comment": "The browser is installed, not assumed: a work profile does not inherit the personal profile's copy, and the launcher link below is a browser shortcut, so without it that install fails and takes the rest of the enrolment burst with it.",
+      "config": {
+        "AutoSelectCertificateForUrls": [
+          "{\"pattern\":\"{mtls_url}\",\"filter\":{}}"
+        ],
+        "_comment": "choosePrivateKeyRules in the policy settles WHICH key may be used. The browser still decides whether to send one at all, and with no matching entry here it declines rather than prompting, which the server answers as mtls_fail and looks exactly like a missing certificate. Both halves are needed. The value is a list of JSON strings, which is the schema, not a mistake."
+      },
+      "package": "com.android.chrome",
+      "preinstall": true
+    },
+    {
+      "_comment": "ATAK-CIV. Large, and Play unpacks the enrolment set together, so on a device short of space the whole burst can fail.",
+      "package": "com.atakmap.app.civ",
+      "preinstall": true
+    },
+    {
+      "_comment": "Element Classic rather than Element X: X accepts no managed configuration at all, so its homeserver cannot be pushed and the user would type it once per device.",
+      "config": {
+        "im.vector.app.serverConfigDefaultHomeserverUrlString": "https://synapse.{domain}"
+      },
+      "package": "im.vector.app",
+      "preinstall": true
+    }
+  ],
+  "certificate": {
+    "_comment": [
+      "The template the MDM fills in per device. Its subject is security configuration, not",
+      "cosmetics: the common name is the callsign, and the second attribute carries",
+      "<callsign>@<approvecode>, which is what proves the MDM assigned this device this",
+      "callsign. Without it the last gate is a guessable name on a public endpoint.",
+      "Set the per-host field to CALLSIGN@CODE; the MDM renders the local part into the CN.",
+      "The name becomes the Android keystore alias, so it is per deployment, not per device."
+    ],
+    "authority": "RMSCEP",
+    "name": "rmscep",
+    "subject": "CN=$FLEET_VAR_HOST_END_USER_IDP_USERNAME_LOCAL_PART,OU=$FLEET_VAR_HOST_END_USER_IDP_USERNAME"
+  },
+  "link_app": {
+    "_comment": "A launcher icon so nobody has to know where the server lives. It is a browser shortcut, so it only works alongside the browser and the certificate.",
+    "title": "Deploy App",
+    "url": "{mtls_url}/"
+  },
+  "policy": {
+    "_comment_key": "urlPattern is a java.util.regex pattern matched against the WHOLE URL, so it needs the trailing .* -- a browser asks for https://host/ and a pattern stopping at the host matches nothing, the device offers no key, and the server answers mtls_fail exactly as if no certificate existed.",
+    "advancedSecurityOverrides": {
+      "untrustedAppsPolicy": "ALLOW_INSTALL_DEVICE_WIDE"
+    },
+    "choosePrivateKeyRules": [
+      {
+        "privateKeyAlias": "{key_alias}",
+        "urlPattern": "{mtls_url}.*"
+      },
+      {
+        "packageNames": [
+          "com.android.chrome",
+          "com.atakmap.app.civ",
+          "im.vector.app"
+        ],
+        "privateKeyAlias": "{key_alias}",
+        "urlPattern": "{mtls_url}.*"
+      }
+    ],
+    "defaultPermissionPolicy": "GRANT",
+    "privateKeySelectionEnabled": true
+  }
+}
