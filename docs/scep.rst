@@ -10,6 +10,10 @@ The responder is `python-rasenmaeher-scep`_, composed here as ``rmscep``.
 
 .. _python-rasenmaeher-scep: https://github.com/pvarki/python-rasenmaeher-scep
 
+Why SCEP and not EST, which is meant to replace it, is recorded in
+:doc:`mdm-enrolment-protocol-choice`. The procedure for connecting an actual MDM is
+:doc:`mdm-integration-howto`.
+
 How it fits together
 --------------------
 

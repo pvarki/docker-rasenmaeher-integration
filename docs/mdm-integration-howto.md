@@ -9,8 +9,9 @@ FleetDM is the worked example because it is the one with a driver. Everything in
 applies to any MDM that can act as a SCEP client, which is almost all of them.
 
 This page is the procedure. {doc}`scep` is the architecture: what the containers are, why the
-responder holds no MDM token, and what `RM_MDM_AGENT_CNS` buys. Read that if you want to know
-*why*; read this if you want a working device.
+responder holds no MDM token, and what `RM_MDM_AGENT_CNS` buys.
+{doc}`mdm-enrolment-protocol-choice` is why this is SCEP and not EST. Read those if you want to
+know *why*; read this if you want a working device.
 
 :::{important}
 **Two things decide almost every failure in this document, and neither is ours.**
