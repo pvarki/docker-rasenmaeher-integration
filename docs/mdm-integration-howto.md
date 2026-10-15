@@ -40,12 +40,19 @@ running inside the MDM.
 Worth understanding before you start, because it explains why half of this is automatic and half
 is a page of typing.
 
-**Enrolment is standard.** It is RFC 8894 (SCEP) plus one convention about the certificate
-subject. Any MDM that can be pointed at a SCEP CA satisfies it, with no code from us.
+**Enrolment is standard, and nothing about it is Fleet-specific.** It is RFC 8894 (SCEP) plus
+one convention about the certificate subject (*Appendix A*). Any MDM that can be pointed at a
+SCEP CA satisfies it, with no code from us and no driver. This is the half that matters and the
+half that is genuinely portable.
 
-**Everything else is not.** Pushing applications, policy and per-app configuration has no
-standard. Every MDM has its own API and always will. That part is a driver — we have one for
-Fleet — or a person following instructions.
+**Configuring the MDM is not standard.** Registering a SCEP CA, pushing applications, policy and
+per-app configuration — every MDM words these differently and there is no cross-MDM API. This is
+irreducibly per-MDM.
+
+What *is* negotiable is whether a human does it. Where the MDM has an API we drive it, so
+`mdm-apply` registers the CA and everything else without anyone opening a console. Where it does
+not, `--mdm manual` prints the same decisions as instructions. Either way the device half is
+unchanged, and an MDM with no driver is slower to set up, not unsupported.
 
 So `rmscep mdm-apply` has two modes. Against Fleet it does the work. Against anything else it
 prints what to type:
@@ -136,27 +143,7 @@ That callsign is now spent. Plan a different one for the real device.
 
 ## Part 2A — Connect FleetDM
 
-### 2A.1 Register the SCEP CA — by hand, once
-
-:::{important}
-`mdm-apply` does **not** create the certificate authority. It looks for one by name and fails
-with `no certificate authority named 'RMSCEP'` if it is missing. This step is manual and there
-is no way around it.
-:::
-
-In Fleet, add a certificate authority:
-
-| Field | Value |
-|---|---|
-| Type | Custom SCEP proxy (`custom_scep_proxy`) |
-| Name | `RMSCEP` — must match `certificate.authority` in `mdm/template.json` |
-| URL | `https://<domain>/scep` |
-| Challenge | your `RMSCEP_CHALLENGE` |
-
-Fleet fetches `GetCACert` when you save, so a wrong URL fails immediately. That makes saving it
-the cheapest end-to-end proof you have.
-
-### 2A.2 Give the driver a token
+### 2A.1 Give the driver a token
 
 Fleet's API token is supplied at run time and never mounted into the running responder.
 Something that can reach every device a unit owns has no business also being an internet-facing
@@ -170,7 +157,7 @@ printf '%s' '<fleet api token>' > ./mdm/.token
 `mdm/.token` is the path `docker-compose.yml` expects (`RMSCEP_MDM_TOKEN_PATH`). Keep it out of
 git.
 
-### 2A.3 State what the deployment needs
+### 2A.2 State what the deployment needs
 
 ```bash
 docker compose run --rm \
@@ -182,14 +169,18 @@ docker compose run --rm \
 
 Validate first with `--dry-run` if you are editing the template.
 
-This creates the team if needed (`RMSCEP_MDM_TEAM`, default `rmscep`), makes the apps available
-and marks them install-at-enrolment, uploads the device policy, publishes the launcher web app,
-and creates the certificate template pointing at the `RMSCEP` authority.
+This registers this deployment as a SCEP certificate authority named `RMSCEP` (repointing it if
+the URL or challenge changed), creates the team if needed (`RMSCEP_MDM_TEAM`, default `rmscep`),
+makes the apps available and marks them install-at-enrolment, uploads the device policy,
+publishes the launcher web app, and creates the certificate template.
+
+Nothing has to be typed into the Fleet console. Fleet fetches `GetCACert` when the authority is
+saved, so if the responder is unreachable this is where you find out.
 
 **Do this before any device enrols.** Applications land on the *group*, and a device only picks
 them up as it joins.
 
-### 2A.4 Turn on the reconciler
+### 2A.3 Turn on the reconciler
 
 ```bash
 COMPOSE_PROFILES=mdm docker compose up -d scepreconcile
@@ -297,8 +288,10 @@ from then on.
 
 ### 4.3 Rotating the challenge
 
-Change `RMSCEP_CHALLENGE` in `.env`, restart `rmscep`, and update the CA in the MDM. Devices
-already holding certificates are unaffected; the challenge is only used at enrolment.
+Change `RMSCEP_CHALLENGE` in `.env`, restart `rmscep`, and run `mdm-apply` again — it repoints
+the authority with the new challenge. On an MDM without an API for that, edit the CA in its
+console. Devices already holding certificates are unaffected; the challenge is only used at
+enrolment.
 
 ---
 
@@ -308,7 +301,7 @@ already holding certificates are unaffected; the challenge is only used at enrol
 |---|---|
 | `GetCACaps` returns HTML with HTTP 200 | `location /scep` missing from the proxy; the request fell through to the SPA |
 | Saving the CA in the MDM fails | Wrong URL, or the responder is not healthy. Fix before anything else |
-| `no certificate authority named 'RMSCEP'` | Part 2A.1 was skipped, or the name does not match `certificate.authority` |
+| `no certificate authority named 'RMSCEP'` | `mdm-apply` was run without a SCEP URL to create it from — check `RMSCEP_DOMAIN`. On an MDM with no API for this, create it in the console and match `certificate.authority` |
 | Certificate profile stuck at `failed`, host is named | Expected on first enrolment. The reconciler fixes it; `--force-certificate` does it now |
 | Certificate profile `failed`, host is **not** named | Name it first (Part 3 step 5). Forcing achieves nothing |
 | Device enrolled but no apps | They were not on the group when it joined. Fresh callsign, enrol again |
