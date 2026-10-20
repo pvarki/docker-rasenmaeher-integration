@@ -14,4 +14,4 @@ Components
    PG Init <pg_init.rst>
    SCEP <scep.rst>
    Connecting an MDM <mdm-integration-howto.md>
-   Why SCEP, and not EST <mdm-enrolment-protocol-choice.md>
+   Why SCEP, and not EST or CMP <mdm-enrolment-protocol-choice.md>
