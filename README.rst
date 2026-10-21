@@ -231,7 +231,6 @@ Directories that are submodules
 
   - api https://github.com/pvarki/python-rasenmaeher-api
   - cfssl https://github.com/pvarki/docker-rasenmaeher-cfssl
-  - fpintegration https://github.com/pvarki/python-rasenmaeher-rmfpapi
   - keycloak https://github.com/pvarki/docker-keycloak
   - kw_product_init https://github.com/pvarki/golang-kraftwerk-init-helper-cli
   - openldap https://github.com/pvarki/docker-openldap
