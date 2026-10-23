@@ -118,7 +118,7 @@ x-takbuilds: &takbuildinfo
       TAK_RELEASE: 5.8-RELEASE-84  # Remember to change also takserver_dist
 
 x-nginxbuilds: &nginxbuildinfo
-  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
+  image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-server:1.31.1-261021-local${DOCKER_TAG_EXTRA:-}
   build:
     context: ./nginx
     dockerfile: Dockerfile
@@ -201,7 +201,6 @@ services:
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
-      - kraftwerk_shared_fake:/pvarkishares/fake
       - kraftwerk_shared_matrix:/pvarkishares/matrix
       - kraftwerk_shared_tak:/pvarkishares/tak
       - kraftwerk_shared_bl:/pvarkishares/bl
@@ -534,7 +533,7 @@ services:
   # FIXME: New UI does not use the VITE_THEME ENV variable, figure out the correct:tm: way to deliver desired asset sets
   rmui:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.7.4-261010-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-ui-${VITE_THEME:-default}-worker:2.7.5-261021-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./uiv2
       dockerfile: Dockerfile
@@ -547,7 +546,7 @@ services:
 
   nginx_templates:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-260617-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/nginx-templates-worker:1.31.1-261021-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -623,7 +622,6 @@ services:
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
-      - kraftwerk_shared_fake:/pvarki
       - kwinit_data:/data/persistent
 
   kcinit:  # Mostly to make sure it's built
@@ -1214,8 +1212,6 @@ services:
       NGINX_HOST: *serverdomain
       NGINX_HTTPS_PORT: *productport
       NGINX_EPHEMERAL_HTTPS_PORT: *productephemeralport
-      NGINX_FP_UPSTREAM: "rmfpapi"
-      NGINX_FP_UPSTREAM_PORT: "8001"
       NGINX_BL_UPSTREAM: "blapi"
       NGINX_BL_UPSTREAM_PORT: "3000"
       NGINX_TAK_UPSTREAM: "takconfig"  # Due to the sidecar thing we must use the config container as host
@@ -1292,7 +1288,6 @@ networks:
 volumes:
   kraftwerk_data:
   kwinit_data:
-  kraftwerk_shared_fake:
   kraftwerk_shared_matrix:
   kraftwerk_shared_tak:
   kraftwerk_shared_rasenmaeher:
@@ -1302,7 +1297,6 @@ volumes:
   openldap_data:
   keycloak_data:
   rmapi_data:
-  rmfpapi_data:
   matrix_data:
   ca_public:
   le_certs:

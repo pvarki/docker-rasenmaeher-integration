@@ -32,7 +32,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
       target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && uv sync --frozen && uvicorn --host 0.0.0.0 --port 8000 --log-level debug --factory rasenmaeher_api.web.application:get_app --reload"]
     healthcheck:
       test: '/bin/bash -c "source /root/.profile && rasenmaeher_api healthcheck" || exit 1'
       interval: 5s
@@ -108,7 +108,7 @@ services:
       rmuidev:
         condition: service_healthy
 
-  kwinit_prod:  # For building the go executable needed by rmfpapi
+  kwinit_prod:  # Builds pvarki/kw_product_init:latest that the blapi and rmmtx builds copy from
     image: pvarki/kw_product_init:${PVARKI_VERSION_TAG:-latest}${DOCKER_TAG_EXTRA:-}
     logging:
       options:
@@ -119,22 +119,6 @@ services:
       target: production
     command: ["help"]
 
-  rmfpapi:
-    image: pvarki/rmfpapi:devel_shell${DOCKER_TAG_EXTRA:-}
-    logging:
-      options:
-        max-size: 50m
-    build:
-      context: ./fpintegration
-      dockerfile: Dockerfile
-      target: devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && uvicorn --host 0.0.0.0 --port 8001 --log-level debug --factory rmfpapi.app:get_app --reload"]
-    volumes:
-      - "./fpintegration:/app"
-    depends_on:
-      rmnginx:
-        condition: service_healthy
-
   takrmapi:
     image: pvarki/takrmapi:devel_shell${DOCKER_TAG_EXTRA:-}
     logging:
@@ -144,7 +128,7 @@ services:
       context: ./takintegration
       dockerfile: Dockerfile
       target: integ_devel_shell
-    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && poetry install && mkdir -p /ui_files/tak && cp -r /ui_build/* /ui_files/tak/ && (pnpm --dir /ui build --outDir /ui_files/tak --watch &) && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
+    command: ["-c", "source /root/.profile && /app/docker/container-init.sh && uv sync --frozen && mkdir -p /ui_files/tak && cp -r /ui_build/* /ui_files/tak/ && (pnpm --dir /ui build --outDir /ui_files/tak --watch &) && uvicorn --host 0.0.0.0 --port 8003 --log-level debug --factory takrmapi.app:get_app --reload"]
     volumes:
       - "./takintegration:/app"
       - "./takintegration/ui:/ui"
@@ -181,8 +165,6 @@ services:
     depends_on:
       nginx_templates:
         condition: service_completed_successfully
-      rmfpapi:
-        condition: service_healthy
       blapi:
         condition: service_healthy
       takrmapi:
