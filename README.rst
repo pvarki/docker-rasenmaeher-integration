@@ -301,6 +301,8 @@ for auto-reloading development mode for some containers::
 We also provide pre-built images for local composition if you only want to test things and not build
 your own changes. In that case remove the "PVARKI_DOCKER_REPO=localhost:5050/" part from the alias.
 
+When using with podman you need to add `DNS_RESOLVER_IP=10.89.0.1` to the command or to `.env`
+
 If you only want to build some images you can use the pull above to get the CI built ones
 and then copy them to local registry (ignore errors for keycloak-config-cli, mediamtx and autoheal)::
 
