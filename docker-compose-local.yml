@@ -196,8 +196,6 @@ services:
       MW_LE_TEST: "true"
       MW_MKCERT: "true"
       MW_KEYTYPE: "ecdsa"
-    ports:
-      - "80:80" # For letsencrypt
     volumes:
       - kraftwerk_data:/data/persistent
       - kraftwerk_shared_rasenmaeher:/pvarkishares/rasenmaeher
