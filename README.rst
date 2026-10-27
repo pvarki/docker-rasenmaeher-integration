@@ -281,12 +281,17 @@ Due to buildkit bugs with cache your need to run local registry::
 
 TLDR::
 
+    docker compose -f docker-compose-local.yml pull
+    docker compose -f docker-compose-local.yml up -d
+
+Or if you need/want to build images locally::
+
     alias rmlocal="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmlocal -f docker-compose-local.yml"
     rmlocal build takinit miniwerk rmnginx --pull --push
     rmlocal build --pull
     rmlocal up
 
-or::
+for auto-reloading development mode for some containers::
 
     alias rmdev="PVARKI_DOCKER_REPO=localhost:5050/ docker compose -p rmdev -f docker-compose-local.yml -f docker-compose-dev.yml"
     rmdev build takinit miniwerk rmnginx --pull --push
@@ -295,6 +300,13 @@ or::
 
 We also provide pre-built images for local composition if you only want to test things and not build
 your own changes. In that case remove the "PVARKI_DOCKER_REPO=localhost:5050/" part from the alias.
+
+When using with podman you need to add `DNS_RESOLVER_IP=10.89.0.1` to the command or to `.env`
+
+If you only want to build some images you can use the pull above to get the CI built ones
+and then copy them to local registry (ignore errors for keycloak-config-cli, mediamtx and autoheal)::
+
+    ORIG_REPO=ghcr.io/ ACR_REPO=localhost:5050 .github/retag_push_ext_images.sh
 
 OpenLDAP and keycloak-init sometimes fail on first start, just run up again.
 
@@ -315,11 +327,11 @@ Gaining first admin access in dev and production mode
 
 In dev mode::
 
-    docker exec -it rmdev-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+    rmdev exec -it rmapi /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
 
 In local mode::
 
-    docker exec -it rmlocal-rmapi-1 /bin/bash -c "source /.venv/bin/activate && rasenmaeher_api addcode"
+    rmlocal exec -it rmapi /bin/bash -c "rasenmaeher_api addcode"
 
 Under local/dev mode, the UI runs at https://localmaeher.dev.pvarki.fi:4439.
 

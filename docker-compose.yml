@@ -438,7 +438,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-261021}
+      RELEASE_TAG: ${RELEASE_TAG:-261026}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
@@ -894,7 +894,7 @@ services:
       - taknet
       - dbnet
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - kraftwerk_shared_tak:/pvarki
       - takrmapi_data:/data/persistent
       - tak_data:/opt/tak/data
@@ -910,7 +910,7 @@ services:
       takinit:
           condition: service_completed_successfully
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -946,7 +946,7 @@ services:
       takconfig:
         condition: service_healthy
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -970,7 +970,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
       - le_certs:/le_certs
@@ -994,7 +994,7 @@ services:
       takmsg:
         condition: service_healthy
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
@@ -1017,7 +1017,7 @@ services:
       takapi:
         condition: service_healthy
     volumes:
-      - ./takserver/update:/opt/tak/webcontent/update
+      - ${TAK_UPDATE_DIR:-./takserver/update}:/opt/tak/webcontent/update
       - tak_data:/opt/tak/data
       - ca_public:/ca_public
     network_mode: "service:takconfig"
