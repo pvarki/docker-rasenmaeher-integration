@@ -268,12 +268,11 @@ fresh callsign and enrol it again.
 
 In Deploy App: **User management → MDM**. It is deliberately the last item in that group.
 
-- **Add devices** takes one callsign, a numbered series (`KORPPI1`…`KORPPI10`), or a pasted CSV
-  list — units mostly use their own names (`KORPPI`, `KIRVES`), so all three exist.
-- Each planned device shows the name to give the MDM: `CALLSIGN@CODE`. Copy it, or export the
-  table as CSV for a hundred phones.
-- **Connection** shows the SCEP URL and the challenge, so an admin never has to read them off
-  the server.
+- Type or paste callsigns, one per line, and press **Add**. A callsign is 3-30 letters A-Z or
+  digits; any refused stay in the box, with the reason.
+- Each planned device shows the name to give the MDM, `CALLSIGN@CODE`, with a copy button.
+- The SCEP URL and the challenge are not shown here: `rmscep mdm-apply` puts both into the MDM,
+  and `--mdm manual` prints them for any other MDM.
 
 A device planned here is marked, so it does not clutter the approve-users queue a human
 enrolment lands in. Nobody can approve it by hand, either — only the agent may complete it, and
