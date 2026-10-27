@@ -142,6 +142,10 @@ Replace "intput-secure-password" with a good passphrase that is unique for each 
 
     python -c 'import uuid; print(uuid.uuid4())'
 
+To generate secret for MAS_ENCRYPTION_SECRET you can use for example::
+
+    openssl rand -hex 32
+
 If you wish to use one deployment for longer than the *design lifetime* of 1-2 months you can change the following
 env variables. But do understand that this is **not recommended** and has **security implications**. If you do this
 **you** take **responsibility** to go through all Dockerfiles and compositions to understand **exactly** how things are done
