@@ -716,6 +716,8 @@ services:
         condition: service_healthy
       rmnginx:
         condition: service_healthy
+      matrixrmapi:
+        condition: service_started  # Matrix health requires MAS to be running.
     networks:
       - dbnet
       - intranet
@@ -725,6 +727,7 @@ services:
     volumes:
       - kraftwerk_shared_matrix:/pvarki
       - mas_data:/data
+      - matrix_data:/matrix_data:ro
       - ca_public:/ca_public
       - ./mas_runtime/prepare_manifest.sh:/prepare_manifest.sh:ro
     entrypoint: ["/bin/bash", "/prepare_manifest.sh"]
