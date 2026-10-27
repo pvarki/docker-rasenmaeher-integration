@@ -1,3 +1,4 @@
+# shortcut: nginx main updates do not reach this override, remove it when upstream includes MAS routes.
 
 ssl_certificate /le_certs/${NGINX_CERT_NAME}/fullchain.pem;
 ssl_certificate_key /le_certs/${NGINX_CERT_NAME}/privkey.pem;

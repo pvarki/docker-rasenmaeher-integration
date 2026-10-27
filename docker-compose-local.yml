@@ -171,12 +171,16 @@ x-matrix_env: &matrix_env
   KCREALM: *kc_realm
   SYNAPSE_MACAROON_SECRET_KEY: ${SYNAPSE_MACAROON_SECRET_KEY:-secretsynapsemacaroonkey}
   SYNAPSE_BOT_USERNAME: matrixrmapi-bot
+  SYNAPSE_PUBLIC_BASEURL: "https://synapse.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/"
+  DEPLOYMENT_NAME: ${DEPLOYMENT_NAME:-localmaeher}
+  MAS_ENDPOINT: "http://mas:8081"
 
 # Shared secret between Synapse and MAS (delegated auth)
 x-mas_synapse_env: &mas_synapse_env
   MAS_SYNAPSE_SECRET: ${MAS_SYNAPSE_SECRET:-massynapsesharedsecret} # pragma: allowlist secret
 
 x-mas_admin_client_env: &mas_admin_client_env
+  MAS_ADMIN_CLIENT_ID: ${MAS_ADMIN_CLIENT_ID:-00000000000000000000000001}
   MAS_ADMIN_CLIENT_SECRET: ${MAS_ADMIN_CLIENT_SECRET:-masadminclientsecret} # pragma: allowlist secret
 
 services:
@@ -222,7 +226,7 @@ services:
 
   jwtcopy:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.10.0-260613-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/miniwerk-tool:1.11.0-260912-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./miniwerk
       dockerfile: Dockerfile
@@ -474,7 +478,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.2-260912-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.3-260916-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -627,7 +631,7 @@ services:
 
   kwinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kraftwerk-helper-tool:1.4.0-260912-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/kraftwerk-helper-tool:1.4.1-261027-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kw_product_init
       dockerfile: Dockerfile
@@ -640,7 +644,7 @@ services:
 
   kcinit:  # Mostly to make sure it's built
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-helper-tool:1.1.2-260630-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/keycloak-helper-tool:1.1.3-261027-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./kc_client_init
       dockerfile: Dockerfile
@@ -660,7 +664,7 @@ services:
 ###################
   matrixrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.2.2-260702-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.3.2-260822-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./matrixrmapi
       dockerfile: Dockerfile
@@ -679,7 +683,6 @@ services:
       - ca_public:/ca_public
       - kraftwerk_shared_matrix:/pvarki
       - matrix_data:/data/persistent
-      - matrix_oidc_vol:/data/persistent/oidc
       - ui_files:/ui_files
     depends_on:
       rmnginx:
@@ -694,7 +697,7 @@ services:
 
   mas:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mas:1.18.0-d${RELEASE_TAG:-2.9.0}-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mas-server:1.0.0-260708-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mas
       dockerfile: Dockerfile
@@ -707,30 +710,37 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_healthy
-      matrixrmapi:
-        condition: service_started  # produces /config/registration.json and mas_admin_client_id
+      rmapi:
+        condition: service_healthy
     networks:
       - dbnet
       - intranet
+      - kcnet
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
-      - matrix_oidc_vol:/config
+      - kraftwerk_shared_matrix:/pvarki
       - mas_data:/data
       - ca_public:/ca_public
+      - ./mas_runtime/prepare_manifest.sh:/prepare_manifest.sh:ro
+    entrypoint: ["/bin/bash", "/prepare_manifest.sh"]
     environment:
       <<: [*matrix_env, *masdbconfig_env, *mas_synapse_env, *mas_admin_client_env]
       MAS_ENCRYPTION_SECRET: ${MAS_ENCRYPTION_SECRET:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef} # pragma: allowlist secret
+      MAS_PUBLIC_BASE: "https://mas.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/"
+      MAS_WEB_BIND: "[::]:8080"
+      MAS_SYNAPSE_ENDPOINT: "http://synapse:8008"
+      KC_ISSUER: "https://kc.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:9443/realms/${KCP_REALM:-RASENMAEHER}"
     healthcheck:
       test: 'curl -fSs http://localhost:8081/health || exit 1'
       interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 120s  # first boot waits for matrixrmapi's OIDC client registration
+      start_period: 120s
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.1.2-260630-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.0-260708-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./synapse
       dockerfile: Dockerfile
@@ -817,7 +827,7 @@ services:
 ###################
   rmmtx:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.6.3-260818-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/mediamtx-integration:1.7.0-261027-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./mtxauthz
       dockerfile: Dockerfile
@@ -927,7 +937,7 @@ services:
 
   rmcryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.1-260722-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.2-260921-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -976,7 +986,7 @@ services:
 
   rmcryptpad_ui_sync:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.0-260614-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-integration:1.0.2-260921-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: rmcryptpad/Dockerfile
@@ -993,7 +1003,7 @@ services:
 
   cryptpad:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260614-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/cryptpad-server:2025.9.4-260921-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./cryptpad
       dockerfile: docker/cryptpad/Dockerfile
@@ -1209,7 +1219,7 @@ services:
 
   takrmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.17.0-260916-local${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.17.0-260921-local${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
@@ -1366,5 +1376,4 @@ volumes:
   cryptpad_data:
   cryptpad_files:
   ui_files:
-  matrix_oidc_vol:
   mas_data:

@@ -11,6 +11,7 @@ export MAS_ENCRYPTION_SECRET="0123456789abcdef0123456789abcdef0123456789abcdef01
 export MAS_SYNAPSE_SECRET="saukko"  # pragma: allowlist secret
 export MAS_ADMIN_CLIENT_SECRET="liikeri"  # pragma: allowlist secret
 export SERVER_DOMAIN="localmaeher.dev.pvarki.fi"
+export DEPLOYMENT_NAME="localmaeher"
 export CFSSL_CA_NAME="localmaeher"
 export MW_LE_EMAIL="example@example.com"
 export MW_LE_TEST="true"  # switch to false when you are ready for production
