@@ -9,7 +9,10 @@ if [ -z "${ORIG_REPO}" ]
 then
   ORIG_REPO=docker.io/
 fi
-export HUB_DOCKER_REPO=${ORIG_REPO}
+if [ -z "${HUB_DOCKER_REPO}" ]
+then
+  export HUB_DOCKER_REPO=${ORIG_REPO}
+fi
 # shellcheck disable=SC2086
 for IMGNAME in $(docker compose -f docker-compose-local.yml ${EXTRA_ARGS} config --format json | jq -r '.services[].image' | sort | uniq | grep "${ORIG_REPO}")
 do
