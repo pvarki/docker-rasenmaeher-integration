@@ -372,7 +372,6 @@ Set on RASENMAEHER, already in `docker-compose.yml`:
 | Setting | Value | Notes |
 |---|---|---|
 | `RM_MDM_AGENT_CNS` | `rmscep` | Which certificate CN may complete a planned enrolment. Deliberately not a product CN |
-| `RM_MDM_SCEP_CHALLENGE` | `${RMSCEP_CHALLENGE}` | So the admin UI can show it |
 
 Commands:
 
