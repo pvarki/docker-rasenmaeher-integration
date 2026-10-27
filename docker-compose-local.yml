@@ -597,10 +597,12 @@ services:
       NGINX_MAS_UPSTREAM: "mas"
       NGINX_MAS_UPSTREAM_PORT: "8080"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+        aliases:
+          - *mtlsdomain
+      ocspnet:
     ports:
       - "${NGINX_HTTP_PORT:-8015}:${NGINX_HTTP_PORT:-8015}"
       - "${NGINX_HTTPS_PORT:-4439}:${NGINX_HTTPS_PORT:-4439}"
@@ -711,6 +713,8 @@ services:
       keycloak:
         condition: service_healthy
       rmapi:
+        condition: service_healthy
+      rmnginx:
         condition: service_healthy
     networks:
       - dbnet

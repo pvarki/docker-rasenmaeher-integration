@@ -531,10 +531,12 @@ services:
       NGINX_MAS_UPSTREAM: "mas"
       NGINX_MAS_UPSTREAM_PORT: "8080"
     networks:
-      - apinet
-      - kcnet
-      - intranet
-      - ocspnet
+      apinet:
+      kcnet:
+      intranet:
+        aliases:
+          - *mtlsdomain
+      ocspnet:
     ports:
       - "${NGINX_HTTPS_PORT:-443}:${NGINX_HTTPS_PORT:-443}"
     depends_on:
@@ -658,6 +660,8 @@ services:
       keycloak:
         condition: service_healthy
       rmapi:
+        condition: service_healthy
+      rmnginx:
         condition: service_healthy
     networks:
       - dbnet
