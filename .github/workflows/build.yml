@@ -77,6 +77,34 @@ jobs:
           detailed_summary: true
           check_name: 'api unit tests'
 
+  compose-pulls:
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v5
+    - name: rmlocal pull
+      run: docker compose -f docker-compose-local.yml pull
+    - name: prod pull
+      continue-on-error: true  # prod images may not have been built yet
+      run: |
+        source example_env.sh
+        docker compose -f docker-compose.yml pull
+
   rmlocal:
     runs-on: arc-runner-set
     if: github.ref != 'refs/heads/main'
