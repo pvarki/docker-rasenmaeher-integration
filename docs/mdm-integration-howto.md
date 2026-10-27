@@ -105,7 +105,28 @@ docker compose logs scepinit
 `rmscep` must reach `healthy`. Its healthcheck is deliberately only about itself — it does not
 probe RASENMAEHER, or every hiccup over there would restart this container.
 
-### 1.3 Prove the responder before you touch the MDM
+### 1.3 Warm up OCSP, or the first quarter hour looks broken
+
+:::{important}
+**A freshly issued responder certificate fails mTLS until the OCSP responder has signed a status
+for it.** The mTLS host runs `ssl_ocsp leaf`, `scepinit` signs through ocsprest without
+triggering a refresh, and the refresher runs on its own interval. So for roughly the first
+fifteen minutes of a new deployment every enrolment answers 503, and the proxy redirects to
+`/error?code=mtls_fail&exta=FAILED:certificate status request failed`.
+
+Nothing is wrong. Force the refresh rather than waiting:
+
+```bash
+docker compose exec ocsprest ocsprest ocsp
+```
+:::
+
+That 503 is deliberate and worth recognising: the responder answers a transient failure as 503
+rather than as a signed refusal, because a signed refusal is final and would tell the device to
+stop trying. `exta=NONE` in that redirect means no certificate was presented at all;
+`exta=FAILED:...` means one was presented and its status could not be checked, which is this.
+
+### 1.4 Prove the responder before you touch the MDM
 
 Do this now. If it fails, nothing in Part 2 can work, and debugging it through an MDM is
 miserable because a failing MDM sends no request at all and your logs stay silent.
@@ -302,6 +323,10 @@ enrolment.
 | `GetCACaps` returns HTML with HTTP 200 | `location /scep` missing from the proxy; the request fell through to the SPA |
 | Saving the CA in the MDM fails | Wrong URL, or the responder is not healthy. Fix before anything else |
 | `no certificate authority named 'RMSCEP'` | `mdm-apply` was run without a SCEP URL to create it from — check `RMSCEP_DOMAIN`. On an MDM with no API for this, create it in the console and match `certificate.authority` |
+| Every enrolment answers 503 on a new deployment | OCSP has no status for the responder's certificate yet. `docker compose exec ocsprest ocsprest ocsp` (*1.3*) |
+| Proxy redirects with `exta=FAILED:certificate status request failed` | Same thing: a certificate was presented and its status could not be checked |
+| Proxy redirects with `exta=NONE` | No client certificate was presented at all — a different fault from the one above |
+| The launcher icon opens the wrong deployment | A web app for that title already existed in the MDM. Fleet cannot change a web app's url, so the icon is identified by its url: a moved deployment publishes its own and leaves the old one orphaned |
 | Certificate profile stuck at `failed`, host is named | Expected on first enrolment. The reconciler fixes it; `--force-certificate` does it now |
 | Certificate profile `failed`, host is **not** named | Name it first (Part 3 step 5). Forcing achieves nothing |
 | Device enrolled but no apps | They were not on the group when it joined. Fresh callsign, enrol again |
