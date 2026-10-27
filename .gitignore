@@ -34,3 +34,4 @@ venv/*
 build
 build/*
 .env
+DEPENDENCY_UPDATE_HANDOFF.md
