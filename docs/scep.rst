@@ -43,10 +43,11 @@ Two containers
 Configuration
 -------------
 
-``RMSCEP_CHALLENGE`` is the only thing an operator sets, in ``.env``. It is **not a secret**: it
-ends up in the MDM's own configuration and travels in every device's request. It keeps noise off
-the endpoint; the control is that an admin planned the callsign, and that lives in RASENMAEHER.
-Leave it empty and the responder runs but refuses to enrol anything.
+Nothing for an operator to set. RASENMAEHER makes the SCEP challenge and keeps device enrolment
+closed until an admin opens it on the MDM page, for 24 hours at a time; the responder passes each
+device's challenge on and RASENMAEHER checks it. The challenge is **not a secret**: it ends up in
+the MDM's own configuration and travels in every device's request. It keeps noise off the
+endpoint; the control is that an admin planned the callsign.
 
 The endpoint is rate limited in nginx, and the upstream is resolved per request, so a responder
 that is down or absent costs a 502 on ``/scep`` and nothing else.

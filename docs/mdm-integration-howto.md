@@ -68,13 +68,13 @@ That changes nothing and talks to nothing. It is the honest version of "works wi
 
 ## Part 1 — Start fresh
 
-### 1.1 Set the challenge
+### 1.1 Open enrolment when you are ready
 
-In `.env` on the deployment:
-
-```bash
-RMSCEP_CHALLENGE=<some long random string>
-```
+There is nothing to set in `.env`. RASENMAEHER makes the challenge and keeps device enrolment
+**closed** until an admin opens it in Deploy App: **User management → MDM**, **Open for 24
+hours**. It closes itself when the time runs out, or press **Close now**. The same page shows the
+SCEP URL and the challenge, with copy buttons. `selftest` and `mdm-apply` below take the
+challenge as `RMSCEP_CHALLENGE`.
 
 :::{note}
 **The challenge is not a secret.** It sits in the MDM's own configuration and travels in every
@@ -85,7 +85,8 @@ The control is that an admin planned the callsign, and that the request carries
 *that* callsign. Treating the challenge as the gate is the mistake this design exists to avoid.
 :::
 
-Leave it empty and the responder starts, answers, and refuses to enrol anything.
+While enrolment is closed the responder starts and answers, and RASENMAEHER refuses every device
+before it looks at the request.
 
 ### 1.2 Bring the stack up
 
@@ -144,11 +145,12 @@ through to the SPA and you get 200 with an HTML page. Assert on the *body*, not 
 
 Then the real thing, which exercises the whole path including RASENMAEHER:
 
-1. Plan a throwaway callsign in Deploy App (*Part 4.1*), and note its code.
+1. Open enrolment and plan a throwaway callsign in Deploy App (*Part 4.1*), and note its code.
 2. Run:
 
 ```bash
-docker compose run --rm rmscep rmscep selftest SELFTEST1 --code A1B2C3D4
+docker compose run --rm -e RMSCEP_CHALLENGE=<challenge from the MDM page> \
+  rmscep rmscep selftest SELFTEST1 --code A1B2C3D4
 ```
 
 `--code` is the approval code on its own. The tool builds `<callsign>@<code>` itself — the
@@ -183,6 +185,7 @@ git.
 
 ```bash
 docker compose run --rm \
+  -e RMSCEP_CHALLENGE=<challenge from the MDM page> \
   -e RMSCEP_MDM_URL=https://<your fleet> \
   -e RMSCEP_MDM_TOKEN_FILE=/mdm/token \
   -v "$PWD/mdm/.token:/mdm/token:ro" \
@@ -258,13 +261,14 @@ So, per device:
 1. **`mdm-apply` has already run** for this deployment. (Part 2.)
 2. **Plan the callsign** in Deploy App and note the device name it gives you —
    `CALLSIGN@CODE`. (Part 4.1.)
-3. **Enrol the phone** in the MDM as usual.
-4. **Leave it alone.** Do not move it between groups, do not re-apply, do not force anything,
+3. **Open enrolment** on the same page, unless it already is.
+4. **Enrol the phone** in the MDM as usual.
+5. **Leave it alone.** Do not move it between groups, do not re-apply, do not force anything,
    until the applications have finished arriving.
-5. **Name the host.** In Fleet this is the host's IdP email
+6. **Name the host.** In Fleet this is the host's IdP email
    (`PUT /api/latest/fleet/hosts/<id>/device_mapping`, `source: "idp"`). Set it to
    `CALLSIGN@CODE` exactly. It cannot be set earlier, because there was no host to name.
-6. **Make the profile change**, which is what delivers it:
+7. **Make the profile change**, which is what delivers it:
    ```bash
    docker compose run --rm ... rmscep rmscep mdm-apply --force-certificate
    ```
@@ -292,8 +296,8 @@ In Deploy App: **User management → MDM**. It is deliberately the last item in 
 - Type or paste callsigns, one per line, and press **Add**. A callsign is 3-30 letters A-Z or
   digits; any refused stay in the box, with the reason.
 - Each planned device shows the name to give the MDM, `CALLSIGN@CODE`, with a copy button.
-- The SCEP URL and the challenge are not shown here: `rmscep mdm-apply` puts both into the MDM,
-  and `--mdm manual` prints them for any other MDM.
+- The page also shows the SCEP URL and the challenge, with copy buttons, and opens device
+  enrolment for 24 hours or closes it. Nothing enrols while it is closed.
 
 A device planned here is marked, so it does not clutter the approve-users queue a human
 enrolment lands in. Nobody can approve it by hand, either — only the agent may complete it, and
@@ -307,12 +311,13 @@ a test enforces that — so this file is the whole of it.
 Remember that existing devices will not pick up the change. It applies to devices that enrol
 from then on.
 
-### 4.3 Rotating the challenge
+### 4.3 Turning enrolment off
 
-Change `RMSCEP_CHALLENGE` in `.env`, restart `rmscep`, and run `mdm-apply` again — it repoints
-the authority with the new challenge. On an MDM without an API for that, edit the CA in its
-console. Devices already holding certificates are unaffected; the challenge is only used at
-enrolment.
+Press **Close now** on the MDM page, or let the 24 hours run out. While enrolment is closed,
+RASENMAEHER refuses every device before it looks at the request, so nothing behind it can be
+guessed at. The challenge stays the same from one window to the next, so reopening needs no
+change in the MDM. There is no way to rotate it yet; it is not a secret. Devices already holding
+certificates are unaffected.
 
 ---
 
@@ -328,7 +333,7 @@ enrolment.
 | Proxy redirects with `exta=NONE` | No client certificate was presented at all — a different fault from the one above |
 | The launcher icon opens the wrong deployment | A web app for that title already existed in the MDM. Fleet cannot change a web app's url, so the icon is identified by its url: a moved deployment publishes its own and leaves the old one orphaned |
 | Certificate profile stuck at `failed`, host is named | Expected on first enrolment. The reconciler fixes it; `--force-certificate` does it now |
-| Certificate profile `failed`, host is **not** named | Name it first (Part 3 step 5). Forcing achieves nothing |
+| Certificate profile `failed`, host is **not** named | Name it first (Part 3 step 6). Forcing achieves nothing |
 | Device enrolled but no apps | They were not on the group when it joined. Fresh callsign, enrol again |
 | Browser says `mtls_fail` | Both halves are needed: `choosePrivateKeyRules` says which key *may* be used, `AutoSelectCertificateForUrls` says whether the browser *sends* one. With no match the browser silently declines, which looks identical to having no certificate |
 | `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** URL. It needs a trailing `.*` — a browser asks for `https://host/`, and a pattern stopping at the host matches nothing |
@@ -385,7 +390,6 @@ Set on the deployment, in `.env`:
 
 | Setting | Default | Notes |
 |---|---|---|
-| `RMSCEP_CHALLENGE` | *(empty)* | Required. Not a secret. Empty means nothing enrols |
 | `RMSCEP_MDM_TEAM` | `rmscep` | The group devices join |
 | `RMSCEP_MDM_URL` | *(empty)* | Only for `mdm-apply` / the reconciler |
 | `RMSCEP_MDM_RECONCILE_INTERVAL` | `300` | Seconds |

@@ -145,9 +145,6 @@ x-scep_env: &scep_env
   # The responder reaches RASENMAEHER the way any mTLS client does, through the front proxy, which
   # validates our client certificate and passes the DN on. It holds no token and no admin identity.
   RMSCEP_RMAPI_URL: "https://mtls.${SERVER_DOMAIN:?domain must be defined}:${NGINX_HTTPS_PORT:-443}"
-  # Not a secret: it sits in the MDM's own configuration and travels in every device's request.
-  # Leave it empty and the responder runs but refuses to enrol anything.
-  RMSCEP_CHALLENGE: ${RMSCEP_CHALLENGE:-}
   RMSCEP_CERT: /data/persistent/public/rmscep.pem
   RMSCEP_KEY: /data/persistent/private/rmscep.key
   RMSCEP_CA_CHAIN_PATH: /ca_public/ca_chain.pem
