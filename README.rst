@@ -38,6 +38,10 @@ Needed DNS Records
 
 These need to point to your WAN address.
 
+The pre-commit hook generates ``.well-known/required_subdomains.txt`` from miniwerk's
+Compose settings using its certificate domain rules. Each entry is a prefix to
+append to your deployment domain; the deployment domain itself is also required.
+
   - domain
   - kc.domain
   - tak.domain
