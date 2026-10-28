@@ -9,7 +9,7 @@ repos:
 -   repo: local
     hooks:
     -   id: required-compose-settings
-        name: Update required Compose environment and host ports
+        name: Update required Compose environment, host ports and subdomains
         entry: python3 .github/scripts/required_compose_settings.py
         language: system
         always_run: true

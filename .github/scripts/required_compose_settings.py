@@ -46,11 +46,29 @@ def extract(compose: dict[str, Any]) -> tuple[list[str], list[str]]:
     return sorted(required), sorted(ports, key=lambda port: (int(port.split("-", 1)[0].split("/", 1)[0]), port))
 
 
+def extract_subdomains(compose: dict[str, Any]) -> list[str]:
+    """Return relative DNS names using miniwerk's MWConfig.fqdns certificate rules."""
+    environment = compose["services"]["miniwerk"]["environment"]
+    products = {name.strip() for name in environment["MW_PRODUCTS"].split(",") if name.strip()}
+    prefixes = {name.strip() for name in environment.get("MW_SUBDOMAINS", "mtls").split(",")}
+    subdomains = prefixes | products | {"kc"}
+    subdomains.update(f"{prefix}.{product}" for prefix in prefixes for product in products | {"kc"})
+    if "cryptpad" in products:
+        subdomains.update(("rmcryptpad", "sandbox.cryptpad", "mtls.sandbox.cryptpad"))
+    return sorted(subdomains)
+
+
 def main() -> int:
     """Refresh the checked-in deployment lists."""
-    required, ports = extract(yaml.safe_load(Path("docker-compose.yml").read_text(encoding="utf-8")))
+    compose = yaml.safe_load(Path("docker-compose.yml").read_text(encoding="utf-8"))
+    required, ports = extract(compose)
+    subdomains = extract_subdomains(compose)
     changed = False
-    for name, values in (("required_env.txt", required), ("required_ports.txt", ports)):
+    for name, values in (
+        ("required_env.txt", required),
+        ("required_ports.txt", ports),
+        ("required_subdomains.txt", subdomains),
+    ):
         path = Path(".well-known") / name
         content = "\n".join(values) + "\n"
         if not path.exists() or path.read_text(encoding="utf-8") != content:
