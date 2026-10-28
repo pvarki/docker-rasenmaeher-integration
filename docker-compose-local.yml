@@ -477,8 +477,8 @@ services:
         condition: service_healthy
 
   rmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.4-261027-local${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIXME: Switch -pr160 -local when it is merged
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.20.0-261027-pr194${DOCKER_TAG_EXTRA:-}
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -1231,8 +1231,8 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.17.3-261029-local${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIXME: switch -pr160 to -local when it is merged
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.18.0-261027-pr160${DOCKER_TAG_EXTRA:-}
     build:
       context: ./takintegration
       dockerfile: Dockerfile
