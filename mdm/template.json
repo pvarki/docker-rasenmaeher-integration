@@ -54,14 +54,14 @@
     "url": "{mtls_url}/"
   },
   "policy": {
-    "_comment_key": "urlPattern is a java.util.regex pattern matched against the WHOLE URL, so it needs the trailing .* -- a browser asks for https://host/ and a pattern stopping at the host matches nothing, the device offers no key, and the server answers mtls_fail exactly as if no certificate existed.",
+    "_comment_key": "urlPattern is a java.util.regex pattern matched against the WHOLE string the app passes. Chrome passes host:port with no scheme (mtls.example.fi:443), so a pattern starting https:// matches nothing, the device offers no key, and the server answers mtls_fail exactly as if no certificate existed. This one takes both forms and still only the mTLS host.",
     "advancedSecurityOverrides": {
       "untrustedAppsPolicy": "ALLOW_INSTALL_DEVICE_WIDE"
     },
     "choosePrivateKeyRules": [
       {
         "privateKeyAlias": "{key_alias}",
-        "urlPattern": "{mtls_url}.*"
+        "urlPattern": "(https://)?mtls\\.{domain}(:443)?(/.*)?"
       },
       {
         "packageNames": [
@@ -70,7 +70,7 @@
           "im.vector.app"
         ],
         "privateKeyAlias": "{key_alias}",
-        "urlPattern": "{mtls_url}.*"
+        "urlPattern": "(https://)?mtls\\.{domain}(:443)?(/.*)?"
       }
     ],
     "defaultPermissionPolicy": "GRANT",

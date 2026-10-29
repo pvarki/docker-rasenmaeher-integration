@@ -315,7 +315,7 @@ certificates are unaffected.
 | Certificate profile `failed`, nothing in our logs | The subject did not resolve on that phone, so no request was sent. A personally owned phone may not report its serial number; use a value the MDM has for it |
 | Device enrolled but no apps | They were not on the group when it joined. Enrol it again, under a new name |
 | Browser says `mtls_fail` | Both halves are needed: `choosePrivateKeyRules` says which key *may* be used, `AutoSelectCertificateForUrls` says whether the browser *sends* one. With no match the browser silently declines, which looks identical to having no certificate |
-| `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** URL. It needs a trailing `.*` — a browser asks for `https://host/`, and a pattern stopping at the host matches nothing |
+| `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** string the app passes. Chrome passes `host:port` with no scheme, so a pattern starting `https://` matches nothing; the template's pattern takes both forms |
 | Second certificate will not install | The template name is the Android keystore alias. A second key will not install over an existing alias. Keep the name stable, per deployment |
 | Enrolment refused | Enrolment is closed, another key already has the name, or the name is not 3-30 letters A-Z or digits |
 | Everything 504s after about two days | Unrelated to MDM — the Linkerd issuer wedge. Restart in the documented order |
