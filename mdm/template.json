@@ -41,7 +41,7 @@
   "certificate": {
     "_comment": [
       "The template the MDM fills in per device. Its common name becomes the device's callsign,",
-      "so it has to be a value the MDM knows when the device enrols: 3-30 letters A-Z or digits.",
+      "so it has to be a value the MDM knows when the device enrols: 3-32 letters, digits or inner hyphens.",
       "The name becomes the Android keystore alias, so it is per deployment, not per device."
     ],
     "authority": "RMSCEP",

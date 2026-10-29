@@ -317,7 +317,7 @@ certificates are unaffected.
 | Browser says `mtls_fail` | Both halves are needed: `choosePrivateKeyRules` says which key *may* be used, `AutoSelectCertificateForUrls` says whether the browser *sends* one. With no match the browser silently declines, which looks identical to having no certificate |
 | `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** string the app passes. Chrome passes `host:port` with no scheme, so a pattern starting `https://` matches nothing; the template's pattern takes both forms |
 | Second certificate will not install | The template name is the Android keystore alias. A second key will not install over an existing alias. Keep the name stable, per deployment |
-| Enrolment refused | Enrolment is closed, another key already has the name, or the name is not 3-30 letters A-Z or digits |
+| Enrolment refused | Enrolment is closed, another key already has the name, or the name is not 3-32 letters, digits or inner hyphens |
 | Everything 504s after about two days | Unrelated to MDM — the Linkerd issuer wedge. Restart in the documented order |
 
 A refusal from the responder is **final by design**: the device is meant to stop rather than
@@ -335,7 +335,7 @@ CN=<callsign>
 ```
 
 The common name becomes the device's callsign, in Deploy App and in every product. Exactly one
-CN, 3-30 letters A-Z or digits, and not a name somebody else already has. Other attributes are
+CN, 3-32 letters, digits or hyphens with none at either end, and not a name somebody else already has. Other attributes are
 the MDM's business; the signer copies the subject into the certificate as it is.
 
 In Fleet's variable syntax:
