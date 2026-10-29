@@ -31,7 +31,7 @@ Arm everything first. Enrol second. There is no third chance.
 |---|---|
 | A deployment with a public DNS name and a working `mtls.<domain>` | The MDM reaches `/scep` over HTTPS; devices present their certificate to the mTLS host |
 | Admin access to an MDM | Someone has to register a certificate authority in it |
-| An admin login to Deploy App | Callsigns are planned there, and nowhere else |
+| An admin login to Deploy App | Enrolment is opened there, and nowhere else |
 
 You do **not** need: an app on the phone, a VPN, Google Play private hosting, or anything of ours
 running inside the MDM.
@@ -71,7 +71,7 @@ That changes nothing and talks to nothing. It is the honest version of "works wi
 ### 1.1 Open enrolment when you are ready
 
 There is nothing to set in `.env`. RASENMAEHER makes the challenge and keeps device enrolment
-**closed** until an admin opens it in Deploy App: **User management → MDM**, **Open for 24
+**closed** until an admin opens it in Deploy App: **User management → MDM**, **Open for 2
 hours**. It closes itself when the time runs out, or press **Close now**. The same page shows the
 SCEP URL and the challenge, with copy buttons. `selftest` and `mdm-apply` below take the
 challenge as `RMSCEP_CHALLENGE`.
@@ -80,9 +80,9 @@ challenge as `RMSCEP_CHALLENGE`.
 **The challenge is not a secret.** It sits in the MDM's own configuration and travels in every
 device's certificate request. It keeps casual noise off a public endpoint; it is not the control.
 
-The control is that an admin planned the callsign, and that the request carries
-`<callsign>@<approval code>` — the code is what proves the MDM was told to give *this* device
-*that* callsign. Treating the challenge as the gate is the mistake this design exists to avoid.
+**The window is the control.** The MDM decides who a device is: the common name of its request
+becomes its callsign. So while enrolment is open, whoever holds the challenge can enrol a device
+under any free name. Open it only while phones are being enrolled.
 :::
 
 While enrolment is closed the responder starts and answers, and RASENMAEHER refuses every device
@@ -145,23 +145,20 @@ through to the SPA and you get 200 with an HTML page. Assert on the *body*, not 
 
 Then the real thing, which exercises the whole path including RASENMAEHER:
 
-1. Open enrolment and plan a throwaway callsign in Deploy App (*Part 4.1*), and note its code.
+1. Open enrolment in Deploy App (*Part 4.1*).
 2. Run:
 
 ```bash
 docker compose run --rm -e RMSCEP_CHALLENGE=<challenge from the MDM page> \
-  rmscep rmscep selftest SELFTEST1 --code A1B2C3D4
+  rmscep rmscep selftest SELFTEST1
 ```
 
-`--code` is the approval code on its own. The tool builds `<callsign>@<code>` itself — the
-`CALLSIGN@CODE` form is what you give the *MDM*, not this.
-
 This generates a key, builds a real PKCSReq, and checks the certificate that comes back
-certifies the key it generated. A pass means the responder, the challenge, the planned callsign
-and RASENMAEHER's signing path are all good, and anything still broken afterwards is on the
-MDM's side of the contract.
+certifies the key it generated. A pass means the responder, the challenge, the open window and
+RASENMAEHER's signing path are all good, and anything still broken afterwards is on the MDM's side
+of the contract.
 
-That callsign is now spent. Plan a different one for the real device.
+`SELFTEST1` is now a user. Remove it under **User management**; the name stays spent.
 
 ---
 
@@ -211,9 +208,10 @@ them up as it joins.
 COMPOSE_PROFILES=mdm docker compose up -d scepreconcile
 ```
 
-Why this exists is in *Part 3*. In short: a device enrols before anyone has named it, so its
-first certificate request always fails, and Fleet never retries a failed certificate profile.
-The reconciler asks again — only for hosts that are now named *and* still failing.
+Only needed when the subject is built from a field somebody fills in by hand after enrolment:
+the device's first certificate request then goes out with an empty name and fails, and Fleet
+never retries a failed certificate profile. The reconciler asks again once the field is set. With
+the template's serial number the first request already succeeds.
 
 ---
 
@@ -229,17 +227,17 @@ managed configuration.
 
 Three things to get right, because they are where ports go wrong:
 
-**The subject is the contract.** The common name must be the callsign. Some *other* attribute
-must carry `<callsign>@<approval code>`. See *Appendix A*.
+**The subject is the contract.** Its common name becomes the device's callsign. See
+*Appendix A*.
 
-**The MDM must let you set a per-device string, after enrolment.** The subject is built from it,
-and it cannot be set before the device exists.
+**The MDM must know a per-device value when the device enrols.** The subject is built from it,
+and nobody should have to type it in per device.
 
 **The policy fields are Android Management API.** They carry to any Android EMM built on AMAPI
 and mean nothing to one that is not, and nothing at all to iOS.
 
-If your MDM has no equivalent of a per-host operator-set string, this design does not fit it,
-and that is worth knowing on day one rather than after a day of configuration.
+If your MDM cannot put any per-device value into the subject, this design does not fit it, and
+that is worth knowing on day one rather than after a day of configuration.
 
 ---
 
@@ -256,52 +254,34 @@ Three facts decide this order, and each was learned by getting it wrong.
 Facts 2 and 3 pull in opposite directions. That is the trap, and it is why "force it until it
 works" makes things worse.
 
-So, per device:
+So:
 
 1. **`mdm-apply` has already run** for this deployment. (Part 2.)
-2. **Plan the callsign** in Deploy App and note the device name it gives you —
-   `CALLSIGN@CODE`. (Part 4.1.)
-3. **Open enrolment** on the same page, unless it already is.
-4. **Enrol the phone** in the MDM as usual.
-5. **Leave it alone.** Do not move it between groups, do not re-apply, do not force anything,
+2. **Open enrolment** in Deploy App. (Part 4.1.)
+3. **Enrol the phones** in the MDM as usual, as many at once as you have hands for.
+4. **Leave them alone.** Do not move them between groups, do not re-apply, do not force anything,
    until the applications have finished arriving.
-6. **Name the host.** In Fleet this is the host's IdP email
-   (`PUT /api/latest/fleet/hosts/<id>/device_mapping`, `source: "idp"`). Set it to
-   `CALLSIGN@CODE` exactly. It cannot be set earlier, because there was no host to name.
-7. **Make the profile change**, which is what delivers it:
-   ```bash
-   docker compose run --rm ... rmscep rmscep mdm-apply --force-certificate
-   ```
-   Or just wait — the reconciler does this on its own within `RMSCEP_MDM_RECONCILE_INTERVAL`
-   (default 300s).
-
-Between steps 3 and 5 the device asks for a certificate with an unresolved subject and is
-refused. **That is expected and harmless**: the responder refuses it before asking RASENMAEHER,
-so the callsign is not spent and the device simply tries again.
+5. **Watch them arrive** on the MDM page, each under the name the MDM gave it: with the template,
+   its serial number. Close enrolment when the last one is in.
 
 :::{warning}
-A device that has already enrolled cannot be rescued by repeating any of this. Its callsign is
-spent and its new key will not match the certificate that callsign already holds. Give it a
-fresh callsign and enrol it again.
+A reset device cannot take its name back. The name is held by the device's old key, and removing
+that user spends the name for good. With the serial number as the name, give a reset phone a
+different subject in the MDM.
 :::
 
 ---
 
 ## Part 4 — Running it day to day
 
-### 4.1 Planning callsigns
+### 4.1 The MDM page
 
 In Deploy App: **User management → MDM**. It is deliberately the last item in that group.
 
-- Type or paste callsigns, one per line, and press **Add**. A callsign is 3-30 letters A-Z or
-  digits; any refused stay in the box, with the reason.
-- Each planned device shows the name to give the MDM, `CALLSIGN@CODE`, with a copy button.
-- The page also shows the SCEP URL and the challenge, with copy buttons, and opens device
-  enrolment for 24 hours or closes it. Nothing enrols while it is closed.
-
-A device planned here is marked, so it does not clutter the approve-users queue a human
-enrolment lands in. Nobody can approve it by hand, either — only the agent may complete it, and
-only with the device's own request.
+- It shows the SCEP URL and the challenge, with copy buttons, and opens device enrolment for 2
+  hours or closes it. Nothing enrols while it is closed.
+- It lists the phones that have enrolled, under the names the MDM gave them, and refreshes while
+  open. A phone that should not be there is removed under **User management**, like any user.
 
 ### 4.2 Changing what gets installed
 
@@ -313,10 +293,10 @@ from then on.
 
 ### 4.3 Turning enrolment off
 
-Press **Close now** on the MDM page, or let the 24 hours run out. While enrolment is closed,
+Press **Close now** on the MDM page, or let the 2 hours run out. While enrolment is closed,
 RASENMAEHER refuses every device before it looks at the request, so nothing behind it can be
 guessed at. The challenge stays the same from one window to the next, so reopening needs no
-change in the MDM. There is no way to rotate it yet; it is not a secret. Devices already holding
+change in the MDM. There is no way to rotate it yet, which is why the window is the control. Devices already holding
 certificates are unaffected.
 
 ---
@@ -332,13 +312,12 @@ certificates are unaffected.
 | Proxy redirects with `exta=FAILED:certificate status request failed` | Same thing: a certificate was presented and its status could not be checked |
 | Proxy redirects with `exta=NONE` | No client certificate was presented at all — a different fault from the one above |
 | The launcher icon opens the wrong deployment | A web app for that title already existed in the MDM. Fleet cannot change a web app's url, so the icon is identified by its url: a moved deployment publishes its own and leaves the old one orphaned |
-| Certificate profile stuck at `failed`, host is named | Expected on first enrolment. The reconciler fixes it; `--force-certificate` does it now |
-| Certificate profile `failed`, host is **not** named | Name it first (Part 3 step 6). Forcing achieves nothing |
-| Device enrolled but no apps | They were not on the group when it joined. Fresh callsign, enrol again |
+| Certificate profile `failed`, nothing in our logs | The subject did not resolve on that phone, so no request was sent. A personally owned phone may not report its serial number; use a value the MDM has for it |
+| Device enrolled but no apps | They were not on the group when it joined. Enrol it again, under a new name |
 | Browser says `mtls_fail` | Both halves are needed: `choosePrivateKeyRules` says which key *may* be used, `AutoSelectCertificateForUrls` says whether the browser *sends* one. With no match the browser silently declines, which looks identical to having no certificate |
 | `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** URL. It needs a trailing `.*` — a browser asks for `https://host/`, and a pattern stopping at the host matches nothing |
 | Second certificate will not install | The template name is the Android keystore alias. A second key will not install over an existing alias. Keep the name stable, per deployment |
-| Enrolment refused, callsign was planned | The code is missing or wrong in the subject. Check the per-host string is exactly `CALLSIGN@CODE` |
+| Enrolment refused | Enrolment is closed, another key already has the name, or the name is not 3-30 letters A-Z or digits |
 | Everything 504s after about two days | Unrelated to MDM — the Linkerd issuer wedge. Restart in the documented order |
 
 A refusal from the responder is **final by design**: the device is meant to stop rather than
@@ -352,37 +331,26 @@ reach RASENMAEHER — and is deliberately not a signed refusal.
 The whole of what an MDM must produce, for anyone porting this.
 
 ```
-CN=<callsign>, <any other attribute>=<callsign>@<approval code>
+CN=<callsign>
 ```
 
-The common name is the callsign and nothing else. Exactly one CN; it is compared exactly, not as
-a substring, because the mTLS edge authorises on the CN it reads off the certificate.
+The common name becomes the device's callsign, in Deploy App and in every product. Exactly one
+CN, 3-30 letters A-Z or digits, and not a name somebody else already has. Other attributes are
+the MDM's business; the signer copies the subject into the certificate as it is.
 
-Any attribute *other* than the common name must carry `<callsign>@<approval code>`. Which one is
-the MDM's business — OU is used in the template because every MDM's subject template can write
-it. The code is what proves the MDM assigned this device this callsign; without it the last gate
-on a public endpoint is a short, guessable name.
-
-In Fleet's variable syntax that is:
+In Fleet's variable syntax:
 
 ```
-CN=$FLEET_VAR_HOST_END_USER_IDP_USERNAME_LOCAL_PART,OU=$FLEET_VAR_HOST_END_USER_IDP_USERNAME
+CN=$FLEET_VAR_HOST_HARDWARE_SERIAL
 ```
 
-— the host's IdP email is set to `CALLSIGN@CODE`, and Fleet renders the local part into the CN.
-Your MDM will spell this differently. What has to be true is that it can put an operator-set,
-per-device string into the subject.
+Your MDM will spell this differently. What has to be true is that it knows the value when the
+device enrols.
 
 A request may not ask for more than a device identity: no extended key usage beyond client
 authentication, no subject alternative names, no `CA:TRUE`. The request arrives from a public
 endpoint and its contents are entirely the caller's choice, so the shape of what gets issued
 cannot be one of the things they choose.
-
-:::{note}
-The approval code ends up in the issued certificate, because the signer copies the request's
-subject verbatim. It is spent by then and inert, but it is a known wart rather than a design
-intent.
-:::
 
 ## Appendix B — Settings
 
@@ -399,7 +367,7 @@ Set on RASENMAEHER, already in `docker-compose.yml`:
 
 | Setting | Value | Notes |
 |---|---|---|
-| `RM_MDM_AGENT_CNS` | `rmscep` | Which certificate CN may complete a planned enrolment. Deliberately not a product CN |
+| `RM_MDM_AGENT_CNS` | `rmscep` | Which certificate CN may enrol devices while enrolment is open. Deliberately not a product CN |
 
 Commands:
 
@@ -410,5 +378,5 @@ Commands:
 | `rmscep mdm-apply --mdm manual` | Prints what to configure by hand. Changes nothing |
 | `rmscep mdm-apply --dry-run` | Validates the template and stops |
 | `rmscep mdm-apply --force-policy` | Re-uploads the policy, to reach a host that just joined |
-| `rmscep mdm-apply --force-certificate` | Asks again for hosts named after they enrolled |
+| `rmscep mdm-apply --force-certificate` | Asks again for hosts whose subject was filled in after they enrolled |
 | `rmscep mdm-reconcile` | The same, but only when it would change something |
