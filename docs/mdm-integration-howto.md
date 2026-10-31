@@ -73,12 +73,16 @@ That changes nothing and talks to nothing. It is the honest version of "works wi
 There is nothing to set in `.env`. RASENMAEHER makes the challenge and keeps device enrolment
 **closed** until an admin opens it in Deploy App: **User management → MDM**, **Open for 2
 hours**. It closes itself when the time runs out, or press **Close now**. The same page shows the
-SCEP URL and the challenge, with copy buttons. `selftest` and `mdm-apply` below take the
-challenge as `RMSCEP_CHALLENGE`.
+SCEP URL and the challenge, with copy buttons. Every opening makes a new challenge, so give it to
+the MDM each time, before devices enrol. `selftest` and `mdm-apply` below take the challenge as
+`RMSCEP_CHALLENGE`; in Fleet's console it is the challenge of the custom SCEP CA under
+**Settings → Integrations → Certificate enrollment**.
 
 :::{note}
-**The challenge is not a secret.** It sits in the MDM's own configuration and travels in every
-device's certificate request. It keeps casual noise off a public endpoint; it is not the control.
+**The challenge is what lets a device in while enrolment is open.** It sits in the MDM's own
+configuration and travels in every device's certificate request, so it cannot be kept from
+everything that enrolled. That is why every window gets a new one: a copied challenge is worth
+only the window it came from.
 
 **The window is the control.** The MDM decides who a device is: the common name of its request
 becomes its callsign. So while enrolment is open, whoever holds the challenge can enrol a device
@@ -295,9 +299,8 @@ from then on.
 
 Press **Close now** on the MDM page, or let the 2 hours run out. While enrolment is closed,
 RASENMAEHER refuses every device before it looks at the request, so nothing behind it can be
-guessed at. The challenge stays the same from one window to the next, so reopening needs no
-change in the MDM. There is no way to rotate it yet, which is why the window is the control. Devices already holding
-certificates are unaffected.
+guessed at. Reopening makes a new challenge, so give it to the MDM before devices enrol again.
+Devices already holding certificates are unaffected.
 
 ---
 
