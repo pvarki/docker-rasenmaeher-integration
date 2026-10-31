@@ -38,6 +38,10 @@ Needed DNS Records
 
 These need to point to your WAN address.
 
+The pre-commit hook generates ``.well-known/required_subdomains.txt`` from miniwerk's
+Compose settings using its certificate domain rules. Each entry is a prefix to
+append to your deployment domain; the deployment domain itself is also required.
+
   - domain
   - kc.domain
   - tak.domain
@@ -115,7 +119,11 @@ Example .env-file with the minimal information needed::
     TAK_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     SYNAPSE_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
     SYNAPSE_MACAROON_SECRET_KEY="input-secure-password"  # pragma: allowlist secret
-    SYNAPSE_REGISTRATION_SECRET="input-secure-password"  # pragma: allowlist secret
+    MAS_DATABASE_PASSWORD="input-secure-password"  # pragma: allowlist secret
+    MAS_ENCRYPTION_SECRET="input-32-byte-hex-string"  # pragma: allowlist secret
+    MAS_SYNAPSE_SECRET="input-secure-password"  # pragma: allowlist secret
+    MAS_ADMIN_CLIENT_SECRET="input-secure-password"  # pragma: allowlist secret
+    DEPLOYMENT_NAME="input-deployment-name"
     SERVER_DOMAIN="input-domain"
     CFSSL_CA_NAME="input-ca-name"
     MW_LE_EMAIL="input-email-for-lets-encrypt"
@@ -137,6 +145,10 @@ Example .env-file with the minimal information needed::
 Replace "intput-secure-password" with a good passphrase that is unique for each replacment. You can generate an UUID with::
 
     python -c 'import uuid; print(uuid.uuid4())'
+
+To generate secret for MAS_ENCRYPTION_SECRET you can use for example::
+
+    openssl rand -hex 32
 
 If you wish to use one deployment for longer than the *design lifetime* of 1-2 months you can change the following
 env variables. But do understand that this is **not recommended** and has **security implications**. If you do this
