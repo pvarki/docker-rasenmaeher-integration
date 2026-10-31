@@ -175,6 +175,11 @@ jobs:
         export RMAPI_INTEGRATION_API_TIMEOUT=8
         dcloc up --wait || (dcloc logs && exit 1)
       continue-on-error: true
+    - name: Show container healthchecks after startup failure
+      if: ${{ steps.compose_up_second.outcome == 'failure' }}
+      run: |
+        docker compose -p rmlocal -f docker-compose-local.yml ps -aq |
+          xargs -r docker inspect --format '{{.Name}} {{json .State.Health}}'
     - name: add test users
       id: add_test_users
       run: |
