@@ -5,8 +5,9 @@ enrol through whatever MDM a unit already runs and come back as provisioned Depl
 a client certificate whose private key was generated on the phone, and no application of ours
 installed to get it there.
 
-FleetDM is the worked example because it is the one with a driver. Everything in *Part 2B*
-applies to any MDM that can act as a SCEP client, which is almost all of them.
+Configuring the MDM is that MDM's business: a connector of its own where one exists, or an
+operator at its console (*Part 2*). Everything else here applies to any MDM that can act as a SCEP
+client, which is almost all of them.
 
 This page is the procedure. {doc}`scep` is the architecture: what the containers are, why the
 responder holds no MDM token, and what `RM_MDM_AGENT_CNS` buys.
@@ -41,7 +42,7 @@ running inside the MDM.
 Worth understanding before you start, because it explains why half of this is automatic and half
 is a page of typing.
 
-**Enrolment is standard, and nothing about it is Fleet-specific.** It is RFC 8894 (SCEP) plus
+**Enrolment is standard, and nothing about it is specific to an MDM.** It is RFC 8894 (SCEP) plus
 one convention about the certificate subject (*Appendix A*). Any MDM that can be pointed at a
 SCEP CA satisfies it, with no code from us and no driver. This is the half that matters and the
 half that is genuinely portable.
@@ -50,19 +51,11 @@ half that is genuinely portable.
 per-app configuration — every MDM words these differently and there is no cross-MDM API. This is
 irreducibly per-MDM.
 
-What *is* negotiable is whether a human does it. Where the MDM has an API we drive it, so
-`mdm-apply` registers the CA and everything else without anyone opening a console. Where it does
-not, `--mdm manual` prints the same decisions as instructions. Either way the device half is
-unchanged, and an MDM with no driver is slower to set up, not unsupported.
-
-So `rmscep mdm-apply` has two modes. Against Fleet it does the work. Against anything else it
-prints what to type:
-
-```bash
-docker compose run --rm rmscep rmscep mdm-apply --mdm manual
-```
-
-That changes nothing and talks to nothing. It is the honest version of "works with any MDM".
+What *is* negotiable is whether a human does it. Where an MDM has an API, a connector of its own
+can drive it. A connector lives in its own repository and runs on an operator's machine, never in
+this stack, because it holds a token that reaches every device a unit owns. Where there is no
+connector, an operator configures the same things by hand (*Part 2*). Either way the device half
+is unchanged, and an MDM with no connector is slower to set up, not unsupported.
 
 ---
 
@@ -74,9 +67,8 @@ There is nothing to set in `.env`. RASENMAEHER makes the challenge and keeps dev
 **closed** until an admin opens it in Deploy App: **User management → MDM**, **Open for 2
 hours**. It closes itself when the time runs out, or press **Close now**. The same page shows the
 SCEP URL and the challenge, with copy buttons. Every opening makes a new challenge, so give it to
-the MDM each time, before devices enrol. `selftest` and `mdm-apply` below take the challenge as
-`RMSCEP_CHALLENGE`; in Fleet's console it is the challenge of the custom SCEP CA under
-**Settings → Integrations → Certificate enrollment**.
+the MDM each time, before devices enrol. `selftest` below takes the challenge as
+`RMSCEP_CHALLENGE`.
 
 :::{note}
 **The challenge is what lets a device in while enrolment is open.** It sits in the MDM's own
@@ -166,76 +158,41 @@ of the contract.
 
 ---
 
-## Part 2A — Connect FleetDM
+## Part 2 — Connect the MDM
 
-### 2A.1 Give the driver a token
+If your MDM has a connector, follow the connector's own guide: it does the steps below for you.
+Otherwise configure them by hand, on the group this deployment's devices join rather than on the
+whole estate, and **before any device enrols**:
 
-Fleet's API token is supplied at run time and never mounted into the running responder.
-Something that can reach every device a unit owns has no business also being an internet-facing
-parser.
+1. **A SCEP certificate authority:** URL `https://<domain>/scep`, and the challenge from the MDM
+   page. Most MDMs fetch `GetCACert` when the CA is saved, so a wrong URL fails right there.
+2. **A certificate template** issued by that authority, with the subject from *Appendix A*. Its
+   name becomes the Android keystore alias. A second key will not install over an existing alias,
+   so pick the name once per deployment and keep it.
+3. **A device policy** that lets the browser and the apps use that key on the mTLS host, and grants
+   their permissions. In Android Management API terms:
 
-```bash
-install -m 0600 /dev/null ./mdm/.token
-printf '%s' '<fleet api token>' > ./mdm/.token
-```
+   ```json
+   {
+     "privateKeySelectionEnabled": true,
+     "choosePrivateKeyRules": [
+       {"privateKeyAlias": "<template name>", "urlPattern": "(https://)?mtls\\.<domain>(:443)?(/.*)?"}
+     ],
+     "defaultPermissionPolicy": "GRANT"
+   }
+   ```
 
-`mdm/.token` is the path `docker-compose.yml` expects (`RMSCEP_MDM_TOKEN_PATH`). Keep it out of
-git.
-
-### 2A.2 State what the deployment needs
-
-```bash
-docker compose run --rm \
-  -e RMSCEP_CHALLENGE=<challenge from the MDM page> \
-  -e RMSCEP_MDM_URL=https://<your fleet> \
-  -e RMSCEP_MDM_TOKEN_FILE=/mdm/token \
-  -v "$PWD/mdm/.token:/mdm/token:ro" \
-  rmscep rmscep mdm-apply
-```
-
-Validate first with `--dry-run` if you are editing the template.
-
-This registers this deployment as a SCEP certificate authority named `RMSCEP` (repointing it if
-the URL or challenge changed), creates the team if needed (`RMSCEP_MDM_TEAM`, default `rmscep`),
-makes the apps available and marks them install-at-enrolment, uploads the device policy,
-publishes the launcher web app, and creates the certificate template.
-
-Nothing has to be typed into the Fleet console. Fleet fetches `GetCACert` when the authority is
-saved, so if the responder is unreachable this is where you find out.
-
-**Do this before any device enrols.** Applications land on the *group*, and a device only picks
-them up as it joins.
-
-### 2A.3 Turn on the reconciler
-
-```bash
-COMPOSE_PROFILES=mdm docker compose up -d scepreconcile
-```
-
-Only needed when the subject is built from a field somebody fills in by hand after enrolment:
-the device's first certificate request then goes out with an empty name and fails, and Fleet
-never retries a failed certificate profile. The reconciler asks again once the field is set. With
-the template's serial number the first request already succeeds.
-
----
-
-## Part 2B — Connect any other MDM
-
-```bash
-docker compose run --rm rmscep rmscep mdm-apply --mdm manual
-```
-
-It prints, in order, exactly what to configure: the SCEP CA, the certificate template and its
-subject, the device policy as Android Management API JSON, and the applications with their
-managed configuration.
+4. **The applications**, installed at enrolment: a browser, told to send the certificate with the
+   managed setting `AutoSelectCertificateForUrls` = `["{\"pattern\":\"https://mtls.<domain>\",\"filter\":{}}"]`,
+   and a launcher link to `https://mtls.<domain>/`, plus whatever the deployment's users need.
 
 Three things to get right, because they are where ports go wrong:
 
 **The subject is the contract.** Its common name becomes the device's callsign. See
 *Appendix A*.
 
-**The MDM must know a per-device value when the device enrols.** The subject is built from it,
-and nobody should have to type it in per device.
+**The MDM must know a per-device value when the device asks**, or the device must be named in the
+MDM before it asks. Nobody should have to type a name into a subject per device.
 
 **The policy fields are Android Management API.** They carry to any Android EMM built on AMAPI
 and mean nothing to one that is not, and nothing at all to iOS.
@@ -260,18 +217,17 @@ works" makes things worse.
 
 So:
 
-1. **`mdm-apply` has already run** for this deployment. (Part 2.)
+1. **The MDM is configured** for this deployment. (Part 2.)
 2. **Open enrolment** in Deploy App. (Part 4.1.)
 3. **Enrol the phones** in the MDM as usual, as many at once as you have hands for.
 4. **Leave them alone.** Do not move them between groups, do not re-apply, do not force anything,
    until the applications have finished arriving.
-5. **Watch them arrive** on the MDM page, each under the name the MDM gave it: with the template,
-   its serial number. Close enrolment when the last one is in.
+5. **Watch them arrive** on the MDM page, each under the name the MDM gave it. Close enrolment when the last one is in.
 
 :::{warning}
 A reset device cannot take its name back. The name is held by the device's old key, and removing
-that user spends the name for good. With the serial number as the name, give a reset phone a
-different subject in the MDM.
+that user spends the name for good. An MDM that names phones by serial number has to give a
+reset phone a different subject.
 :::
 
 ---
@@ -289,8 +245,8 @@ In Deploy App: **User management → MDM**. It is deliberately the last item in 
 
 ### 4.2 Changing what gets installed
 
-Edit `mdm/template.json` and run `mdm-apply` again. The responder knows no package name at all —
-a test enforces that — so this file is the whole of it.
+Change it in the MDM, or in its connector. The responder knows no package name at all — a test
+enforces that — so nothing here changes.
 
 Remember that existing devices will not pick up the change. It applies to devices that enrol
 from then on.
@@ -310,16 +266,14 @@ Devices already holding certificates are unaffected.
 |---|---|
 | `GetCACaps` returns HTML with HTTP 200 | `location /scep` missing from the proxy; the request fell through to the SPA |
 | Saving the CA in the MDM fails | Wrong URL, or the responder is not healthy. Fix before anything else |
-| `no certificate authority named 'RMSCEP'` | `mdm-apply` was run without a SCEP URL to create it from — check `RMSCEP_DOMAIN`. On an MDM with no API for this, create it in the console and match `certificate.authority` |
 | Every enrolment answers 503 on a new deployment | OCSP has no status for the responder's certificate yet. `docker compose exec ocsprest ocsprest ocsp` (*1.3*) |
 | Proxy redirects with `exta=FAILED:certificate status request failed` | Same thing: a certificate was presented and its status could not be checked |
 | Proxy redirects with `exta=NONE` | No client certificate was presented at all — a different fault from the one above |
-| The launcher icon opens the wrong deployment | A web app for that title already existed in the MDM. Fleet cannot change a web app's url, so the icon is identified by its url: a moved deployment publishes its own and leaves the old one orphaned |
 | Certificate profile `failed`, nothing in our logs | The subject did not resolve on that phone, so no request was sent. A personally owned phone may not report its serial number; use a value the MDM has for it |
 | Device enrolled but no apps | They were not on the group when it joined. Enrol it again, under a new name |
 | Browser says `mtls_fail` | Both halves are needed: `choosePrivateKeyRules` says which key *may* be used, `AutoSelectCertificateForUrls` says whether the browser *sends* one. With no match the browser silently declines, which looks identical to having no certificate |
-| `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** string the app passes. Chrome passes `host:port` with no scheme, so a pattern starting `https://` matches nothing; the template's pattern takes both forms |
-| Second certificate will not install | The template name is the Android keystore alias. A second key will not install over an existing alias. Keep the name stable, per deployment |
+| `urlPattern` seems not to match | It is a `java.util.regex` pattern matched against the **whole** string the app passes. Chrome passes `host:port` with no scheme, so a pattern starting `https://` matches nothing; the pattern in *Part 2* takes both forms |
+| Second certificate will not install | The certificate template's name is the Android keystore alias. A second key will not install over an existing alias. Keep the name stable, per deployment |
 | Enrolment refused | Enrolment is closed, another key already has the name, or the name is not 3-32 letters, digits or inner hyphens |
 | Everything 504s after about two days | Unrelated to MDM — the Linkerd issuer wedge. Restart in the documented order |
 
@@ -341,14 +295,8 @@ The common name becomes the device's callsign, in Deploy App and in every produc
 CN, 3-32 letters, digits or hyphens with none at either end, and not a name somebody else already has. Other attributes are
 the MDM's business; the signer copies the subject into the certificate as it is.
 
-In Fleet's variable syntax:
-
-```
-CN=$FLEET_VAR_HOST_HARDWARE_SERIAL
-```
-
-Your MDM will spell this differently. What has to be true is that it knows the value when the
-device enrols.
+What has to be true is that the MDM knows the value when the device asks: a per-device value it
+has at enrolment, or a name somebody gave the device in the MDM before it asked.
 
 A request may not ask for more than a device identity: no extended key usage beyond client
 authentication, no subject alternative names, no `CA:TRUE`. The request arrives from a public
@@ -356,15 +304,6 @@ endpoint and its contents are entirely the caller's choice, so the shape of what
 cannot be one of the things they choose.
 
 ## Appendix B — Settings
-
-Set on the deployment, in `.env`:
-
-| Setting | Default | Notes |
-|---|---|---|
-| `RMSCEP_MDM_TEAM` | `rmscep` | The group devices join |
-| `RMSCEP_MDM_URL` | *(empty)* | Only for `mdm-apply` / the reconciler |
-| `RMSCEP_MDM_RECONCILE_INTERVAL` | `300` | Seconds |
-| `RMSCEP_MDM_TOKEN_PATH` | `./mdm/.token` | Mounted only into `scepreconcile` |
 
 Set on RASENMAEHER, already in `docker-compose.yml`:
 
@@ -377,10 +316,3 @@ Commands:
 | Command | Does |
 |---|---|
 | `rmscep selftest <callsign>` | Proves the responder end to end, without an MDM |
-| `rmscep mdm-apply` | States the template to Fleet |
-| `rmscep mdm-apply --mdm manual` | Prints what to configure by hand. Changes nothing |
-| `rmscep mdm-apply --dry-run` | Validates the template and stops |
-| `rmscep mdm-apply --prep-team <team>` | Also sets up a team to enrol and name phones in: the same apps and launcher, no certificate |
-| `rmscep mdm-apply --force-policy` | Re-uploads the policy, to reach a host that just joined |
-| `rmscep mdm-apply --force-certificate` | Asks again for hosts whose subject was filled in after they enrolled |
-| `rmscep mdm-reconcile` | The same, but only when it would change something |
