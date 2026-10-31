@@ -377,6 +377,7 @@ Commands:
 | `rmscep mdm-apply` | States the template to Fleet |
 | `rmscep mdm-apply --mdm manual` | Prints what to configure by hand. Changes nothing |
 | `rmscep mdm-apply --dry-run` | Validates the template and stops |
+| `rmscep mdm-apply --prep-team <team>` | Also sets up a team to enrol and name phones in: the same apps and launcher, no certificate |
 | `rmscep mdm-apply --force-policy` | Re-uploads the policy, to reach a host that just joined |
 | `rmscep mdm-apply --force-certificate` | Asks again for hosts whose subject was filled in after they enrolled |
 | `rmscep mdm-reconcile` | The same, but only when it would change something |
