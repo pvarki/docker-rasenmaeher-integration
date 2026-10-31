@@ -173,7 +173,7 @@ x-matrix_env: &matrix_env
   SYNAPSE_BOT_USERNAME: matrixrmapi-bot
   SYNAPSE_PUBLIC_BASEURL: "https://synapse.${SERVER_DOMAIN:-localmaeher.dev.pvarki.fi}:${NGINX_HTTPS_PORT:-4439}/"
   DEPLOYMENT_NAME: ${DEPLOYMENT_NAME:-localmaeher}
-  MAS_ENDPOINT: "http://mas:8081"
+  MAS_ENDPOINT: "http://mas:8080"
 
 # Shared secret between Synapse and MAS (delegated auth)
 x-mas_synapse_env: &mas_synapse_env
