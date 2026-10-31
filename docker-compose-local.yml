@@ -538,7 +538,13 @@ services:
       miniwerk:
         condition: service_completed_successfully
     healthcheck:
-      test: 'rasenmaeher_api healthcheck || exit 1'
+      test:  # FIXME: Make a separate healthcheck script that does not import anything outside standard library
+        - CMD
+        - python3
+        - -c
+        - >-
+          import json, sys, urllib.request;
+          sys.exit(json.load(urllib.request.urlopen("http://127.0.0.1:8000/api/v1/healthcheck", timeout=2))["healthcheck"] != "success")
       interval: 5s
       timeout: 5s
       retries: 3
