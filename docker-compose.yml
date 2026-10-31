@@ -430,8 +430,8 @@ services:
         condition: service_healthy
 
   rmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.19.4-261027${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIXME: Remove the -pr194 -part when it is merged
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.20.0-261027-pr194${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -452,7 +452,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-261027}
+      RELEASE_TAG: ${RELEASE_TAG:-261031}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
@@ -1099,8 +1099,8 @@ services:
     restart: unless-stopped
 
   takrmapi:
-    <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.17.3-261029${DOCKER_TAG_EXTRA:-}
+    <<: *logging  # FIXME: Remove the -pr160 -part when it is merged
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/tak-integration:1.18.0-261027-pr160${DOCKER_TAG_EXTRA:-}
     environment:
       UVICORN_LOG_LEVEL: "info"
       TI_LOG_LEVEL: "20"
