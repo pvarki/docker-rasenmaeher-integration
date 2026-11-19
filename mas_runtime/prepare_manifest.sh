@@ -2,9 +2,11 @@
 set -euo pipefail
 
 # MAS registers as part of the Matrix product, using its existing mTLS identity.
+# matrixrmapi creates it after MAS starts. Wait instead of exiting: Docker reports an exited
+# container as unhealthy, and "docker compose up" then does not start the remaining services.
 if [[ ! -s /matrix_data/public/mtlsclient.pem || ! -s /matrix_data/private/mtlsclient.key ]]; then
-  echo "Matrix mTLS identity is not ready; retrying on container restart." >&2
-  exit 1
+  echo "Matrix mTLS identity is not ready; waiting for matrixrmapi to create it." >&2
+  until [[ -s /matrix_data/public/mtlsclient.pem && -s /matrix_data/private/mtlsclient.key ]]; do sleep 1; done
 fi
 mkdir -p /data/public /data/private
 ln -sf /matrix_data/public/mtlsclient.pem /data/public/mtlsclient.pem

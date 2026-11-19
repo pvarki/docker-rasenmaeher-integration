@@ -33,7 +33,7 @@ def test_mas_registration_proxy(filename: str) -> None:
 
 @pytest.mark.parametrize("missing", [None, "public/mtlsclient.pem", "private/mtlsclient.key"])
 def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
-    """Require both credentials and link them without copying stale identities."""
+    """Wait for both credentials and link them without copying stale identities."""
     script = (REPO_ROOT / "mas_runtime" / "prepare_manifest.sh").read_text(encoding="utf-8")
     for directory in ("matrix_data", "data", "pvarki"):
         (tmp_path / directory).mkdir()
@@ -46,18 +46,24 @@ def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
         if filename != missing:
             path.write_text("test identity", encoding="utf-8")
     (tmp_path / "pvarki" / "kraftwerk-init.json").write_text("{}", encoding="utf-8")
-    result = subprocess.run(
+    with subprocess.Popen(
         ["bash", "-c", script],
         env={**os.environ, "KCDOMAIN": "kc.example.test", "KCREALM": "test"},
-        capture_output=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
         text=True,
-        check=False,
-    )
-    if missing:
-        assert result.returncode != 0
-        assert "Matrix mTLS identity is not ready" in result.stderr
-        return
-    assert result.returncode == 0, result.stderr
+    ) as process:
+        try:
+            if missing:
+                # An exit would make Compose see MAS as unhealthy and skip the remaining services.
+                with pytest.raises(subprocess.TimeoutExpired):
+                    process.wait(timeout=2)
+                (tmp_path / "matrix_data" / missing).write_text("test identity", encoding="utf-8")
+            _, stderr = process.communicate(timeout=10)
+        finally:
+            process.kill()
+    assert process.returncode == 0, stderr
+    assert ("Matrix mTLS identity is not ready" in stderr) == bool(missing)
     for filename in ("public/mtlsclient.pem", "private/mtlsclient.key"):
         link = tmp_path / "data" / filename
         source = tmp_path / "matrix_data" / filename
