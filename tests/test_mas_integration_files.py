@@ -29,6 +29,9 @@ def test_mas_registration_proxy(filename: str) -> None:
     credentials = next(volume for volume in mas["volumes"] if volume["target"] == "/matrix_data")
     assert credentials["source"] == "matrix_data"
     assert credentials["read_only"] is True
+    if "autoheal" in services:
+        # matrixrmapi stays unhealthy if Synapse was not up when its Matrix init gave up.
+        assert "autoheal=true" in services["matrixrmapi"]["labels"]
 
 
 @pytest.mark.parametrize("missing", [None, "public/mtlsclient.pem", "private/mtlsclient.key"])
