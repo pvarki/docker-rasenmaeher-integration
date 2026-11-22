@@ -580,6 +580,8 @@ services:
     volumes:
       - nginx_templates:/nginx_templates
       - ./mas_nginx/templates_rasenmaeher/default.conf.template:/nginx_templates/templates_rasenmaeher/default.conf.template:ro
+      - ./nginx/includes/acme_limit_zones.conf:/nginx_templates/includes/acme_limit_zones.conf:ro
+      - ./nginx/includes/acme_limits.conf:/nginx_templates/includes/acme_limits.conf:ro
       - ca_public:/ca_public
       - le_certs:/le_certs
       - rmui_files:/rmui_files
