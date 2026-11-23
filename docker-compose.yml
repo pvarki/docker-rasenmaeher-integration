@@ -699,7 +699,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.1-261027${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.2-261123${DOCKER_TAG_EXTRA:-}
     restart: unless-stopped
     depends_on:
       keycloak-init:
@@ -722,6 +722,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - synapse_data:/data/persistent
     environment:
       <<: [*matrix_env, *synapsedbconfig_env, *mas_synapse_env]
     healthcheck:
@@ -1278,3 +1279,4 @@ volumes:
   cryptpad_files:
   ui_files:
   mas_data:
+  synapse_data:
