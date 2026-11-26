@@ -85,3 +85,11 @@ def test_synapse_internal_apis_stay_internal(template_dir: str) -> None:
     deny, catch_all = synapse_server.split("    location / {", maxsplit=1)
     assert "location ~ ^/_synapse/(?!client/) {\n        return 403;" in deny
     assert "$synapse_backend" in catch_all
+
+
+def test_mas_trusts_local_keycloak_ca() -> None:
+    """MAS fetches Keycloak's metadata over HTTPS; locally that certificate comes from mkcert."""
+    script = (REPO_ROOT / "mas_runtime" / "prepare_manifest.sh").read_text(encoding="utf-8")
+    trust, _ = script.split("exec /usr/bin/tini", maxsplit=1)
+    assert "cp /ca_public/miniwerk_ca.pem /usr/local/share/ca-certificates/miniwerk_ca.crt" in trust
+    assert "update-ca-certificates" in trust

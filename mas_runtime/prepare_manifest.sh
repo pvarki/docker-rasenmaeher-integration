@@ -20,4 +20,10 @@ jq --arg base "https://${KCDOMAIN}:9443" --arg realm "$KCREALM" \
   "$manifest" > "$tmp"
 jq -e '.rasenmaeher.kc.base_uri and .rasenmaeher.kc.realm and .oidc.client_registration.client_name' "$tmp" > /dev/null
 mv "$tmp" "$manifest"
+
+# Local environment fix: trust the mkcert CA that signs Keycloak's certificate.
+if [[ -s /ca_public/miniwerk_ca.pem ]]; then
+  cp /ca_public/miniwerk_ca.pem /usr/local/share/ca-certificates/miniwerk_ca.crt
+  update-ca-certificates
+fi
 exec /usr/bin/tini -- /opt/mas/scripts/mas-entrypoint.sh
