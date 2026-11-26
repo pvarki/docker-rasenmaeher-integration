@@ -74,3 +74,14 @@ def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
         assert link.resolve() == source
         source.write_text("renewed identity", encoding="utf-8")
         assert link.read_text(encoding="utf-8") == "renewed identity"
+
+
+@pytest.mark.parametrize("template_dir", ["templates_rasenmaeher", "templates_rasenmaeher_uidev"])
+def test_synapse_internal_apis_stay_internal(template_dir: str) -> None:
+    """Only /_synapse/client is public; matrixrmapi and MAS use synapse:8008 directly."""
+    template = (REPO_ROOT / "mas_nginx" / template_dir / "default.conf.template").read_text(encoding="utf-8")
+    _, synapse_server = template.split("server_name synapse.${NGINX_HOST};", maxsplit=1)
+    synapse_server, _ = synapse_server.split("\nserver {", maxsplit=1)
+    deny, catch_all = synapse_server.split("    location / {", maxsplit=1)
+    assert "location ~ ^/_synapse/(?!client/) {\n        return 403;" in deny
+    assert "$synapse_backend" in catch_all

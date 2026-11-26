@@ -203,6 +203,13 @@ server {
         proxy_read_timeout                  900;
     }
 
+    # Internal-only Synapse APIs (/_synapse/admin, /_synapse/mas, ...).
+    # matrixrmapi and MAS reach them on synapse:8008 directly; only
+    # /_synapse/client is meant for the outside.
+    location ~ ^/_synapse/(?!client/) {
+        return 403;
+    }
+
     location / {
         resolver ${DNS_RESOLVER_IP} valid=30s ipv6=off;
 
