@@ -431,7 +431,7 @@ services:
 
   rmapi:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.20.0-261027${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/rasenmaeher-api:1.20.2-261121${DOCKER_TAG_EXTRA:-}
     labels:
         - "autoheal=true"
     environment:
@@ -452,7 +452,7 @@ services:
       RM_KC_REALM: *kc_realm
       RM_LOG_LEVEL: "INFO"
       RM_INTEGRATION_API_TIMEOUT: ${RMAPI_INTEGRATION_API_TIMEOUT:-5} # Might need to raise this with slower/older CPU
-      RELEASE_TAG: ${RELEASE_TAG:-261031}
+      RELEASE_TAG: ${RELEASE_TAG:-261121}
       RELEASE_STATUS: ${RELEASE_STATUS:-}
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
       RM_CERT_KEY_TYPE: "${RM_CERT_KEY_TYPE:-EC}"
@@ -627,6 +627,8 @@ services:
   matrixrmapi:
     <<: *logging
     image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/matrix-integration:1.5.0-261031${DOCKER_TAG_EXTRA:-}
+    labels:
+        - "autoheal=true"  # Matrix init gives up if Synapse starts late; a restart retries it.
     environment:
       <<: [*matrix_env, *mas_admin_client_env]
       LOG_CONSOLE_FORMATTER: "${LOG_CONSOLE_FORMATTER:-ecs}"
@@ -697,7 +699,7 @@ services:
 
   synapse:
     <<: *logging
-    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.1-261027${DOCKER_TAG_EXTRA:-}
+    image: ${PVARKI_DOCKER_REPO:-ghcr.io/}pvarki/synapse-server:1.2.2-261123${DOCKER_TAG_EXTRA:-}
     restart: unless-stopped
     depends_on:
       keycloak-init:
@@ -720,6 +722,7 @@ services:
     volumes:
       - ca_public:/ca_public
       - le_certs:/le_certs
+      - synapse_data:/data/persistent
     environment:
       <<: [*matrix_env, *synapsedbconfig_env, *mas_synapse_env]
     healthcheck:
@@ -1276,3 +1279,4 @@ volumes:
   cryptpad_files:
   ui_files:
   mas_data:
+  synapse_data:

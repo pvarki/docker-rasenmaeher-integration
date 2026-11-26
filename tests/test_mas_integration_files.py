@@ -29,11 +29,14 @@ def test_mas_registration_proxy(filename: str) -> None:
     credentials = next(volume for volume in mas["volumes"] if volume["target"] == "/matrix_data")
     assert credentials["source"] == "matrix_data"
     assert credentials["read_only"] is True
+    if "autoheal" in services:
+        # matrixrmapi stays unhealthy if Synapse was not up when its Matrix init gave up.
+        assert "autoheal=true" in services["matrixrmapi"]["labels"]
 
 
 @pytest.mark.parametrize("missing", [None, "public/mtlsclient.pem", "private/mtlsclient.key"])
 def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
-    """Require both credentials and link them without copying stale identities."""
+    """Wait for both credentials and link them without copying stale identities."""
     script = (REPO_ROOT / "mas_runtime" / "prepare_manifest.sh").read_text(encoding="utf-8")
     for directory in ("matrix_data", "data", "pvarki"):
         (tmp_path / directory).mkdir()
@@ -46,18 +49,24 @@ def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
         if filename != missing:
             path.write_text("test identity", encoding="utf-8")
     (tmp_path / "pvarki" / "kraftwerk-init.json").write_text("{}", encoding="utf-8")
-    result = subprocess.run(
+    with subprocess.Popen(
         ["bash", "-c", script],
         env={**os.environ, "KCDOMAIN": "kc.example.test", "KCREALM": "test"},
-        capture_output=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
         text=True,
-        check=False,
-    )
-    if missing:
-        assert result.returncode != 0
-        assert "Matrix mTLS identity is not ready" in result.stderr
-        return
-    assert result.returncode == 0, result.stderr
+    ) as process:
+        try:
+            if missing:
+                # An exit would make Compose see MAS as unhealthy and skip the remaining services.
+                with pytest.raises(subprocess.TimeoutExpired):
+                    process.wait(timeout=2)
+                (tmp_path / "matrix_data" / missing).write_text("test identity", encoding="utf-8")
+            _, stderr = process.communicate(timeout=10)
+        finally:
+            process.kill()
+    assert process.returncode == 0, stderr
+    assert ("Matrix mTLS identity is not ready" in stderr) == bool(missing)
     for filename in ("public/mtlsclient.pem", "private/mtlsclient.key"):
         link = tmp_path / "data" / filename
         source = tmp_path / "matrix_data" / filename
@@ -65,3 +74,22 @@ def test_mas_bootstrap_identity(tmp_path: Path, missing: str | None) -> None:
         assert link.resolve() == source
         source.write_text("renewed identity", encoding="utf-8")
         assert link.read_text(encoding="utf-8") == "renewed identity"
+
+
+@pytest.mark.parametrize("template_dir", ["templates_rasenmaeher", "templates_rasenmaeher_uidev"])
+def test_synapse_internal_apis_stay_internal(template_dir: str) -> None:
+    """Only /_synapse/client is public; matrixrmapi and MAS use synapse:8008 directly."""
+    template = (REPO_ROOT / "mas_nginx" / template_dir / "default.conf.template").read_text(encoding="utf-8")
+    _, synapse_server = template.split("server_name synapse.${NGINX_HOST};", maxsplit=1)
+    synapse_server, _ = synapse_server.split("\nserver {", maxsplit=1)
+    deny, catch_all = synapse_server.split("    location / {", maxsplit=1)
+    assert "location ~ ^/_synapse/(?!client/) {\n        return 403;" in deny
+    assert "$synapse_backend" in catch_all
+
+
+def test_mas_trusts_local_keycloak_ca() -> None:
+    """MAS fetches Keycloak's metadata over HTTPS; locally that certificate comes from mkcert."""
+    script = (REPO_ROOT / "mas_runtime" / "prepare_manifest.sh").read_text(encoding="utf-8")
+    trust, _ = script.split("exec /usr/bin/tini", maxsplit=1)
+    assert "cp /ca_public/miniwerk_ca.pem /usr/local/share/ca-certificates/miniwerk_ca.crt" in trust
+    assert "update-ca-certificates" in trust
